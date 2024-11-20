@@ -297,7 +297,7 @@ export default defineComponent({
     const addCustomerModalRef = ref<null | HTMLElement>(null);
     const loading = ref<boolean>(false);
     const formData = ref<Customer>({
-      Code:"",
+      Code:"0",
       Name: "",
       LastName:"",
       Email: "",

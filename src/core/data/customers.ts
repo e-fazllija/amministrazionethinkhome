@@ -40,13 +40,13 @@ export class Customer{
 
 createMap(mapper, Object, Customer);
 
-const getCustomers = (filterRequest: string) => {
+const getCustomers = (filterRequest: string) : Promise<Array<Customer>> => {
    return ApiService.get(
     `https://localhost:7267/api/Customers/Get?currentPage=0&filterRequest=${filterRequest}`,
     ""
   )
     .then(({ data }) => {
-      const result = data.data as Partial<Customer>
+      const result = data.Data as Partial<Array<Customer>>
       return result;
     })
     .catch(({ response }) => {
@@ -55,7 +55,7 @@ const getCustomers = (filterRequest: string) => {
     });
 };
 
-const getCustomer = (id) => {
+const getCustomer = (id: number) : Promise<Customer> => {
   return ApiService.get(`https://localhost:7267/api/Customers/GetById?id=${id}`, "")
     .then(({ data }) => {
       const result = data as Partial<Customer>;

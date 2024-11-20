@@ -105,32 +105,32 @@
         :checkbox-enabled="true"
         checkbox-label="id"
       >
-        <template v-slot:name="{ row: customer }">
-          {{ customer.name }}
+        <template v-slot:Name="{ row: customer }">
+          {{ customer.Name }}
         </template>
-        <template v-slot:lastName="{ row: customer }">
-          {{ customer.lastName }}
+        <template v-slot:LastName="{ row: customer }">
+          {{ customer.LastName }}
         </template>
-        <template v-slot:email="{ row: customer }">
+        <template v-slot:Email="{ row: customer }">
           <a href="#" class="text-gray-600 text-hover-primary mb-1">
-            {{ customer.email }}
+            {{ customer.Email }}
           </a>
         </template>
-        <template v-slot:phone="{ row: customer }">
-          {{ customer.phone }}
+        <template v-slot:Phone="{ row: customer }">
+          {{ customer.Phone }}
         </template>
-        <template v-slot:date="{ row: customer }">
-          {{ customer.date }}
+        <template v-slot:Date="{ row: customer }">
+          {{ customer.Date }}
         </template>
           <template v-slot:actions="{ row: customer }">
                    <button class="btn btn-light-info me-1" data-bs-toggle="modal"
                         data-bs-target="#kt_modal_update_customer"
-                        @click="selectId(customer.id)">Dettagli</button>
+                        @click="selectId(customer.Id)">Dettagli</button>
 
                         <!-- <button class="btn btn-light-info me-1" 
                         @click="toggleUpdateModal(true, customer.id)">Dettagli</button> -->
 
-                  <button @click="deleteItem(customer.id)" class="btn btn-light-danger me-1">Elimina</button>
+                  <button @click="deleteItem(customer.Id)" class="btn btn-light-danger me-1">Elimina</button>
               </template>
           <!--begin::Menu-->
           <div
@@ -145,7 +145,7 @@
 
   <ExportCustomerModal></ExportCustomerModal>
   <AddCustomerModal></AddCustomerModal>
-  <UpdateCustomerModal :Id="selectedId" id="updateCustomerModal" ref="updateCustomerModal"></UpdateCustomerModal>
+  <UpdateCustomerModal :Id="selectedId"></UpdateCustomerModal>
 </template>
 
 <script lang="ts">
@@ -175,25 +175,25 @@ export default defineComponent({
     const tableHeader = ref([
       {
         columnName: "Nome",
-        columnLabel: "name",
+        columnLabel: "Name",
         sortEnabled: true,
         columnWidth: 175,
       },
       {
         columnName: "Cognome",
-        columnLabel: "lastName",
+        columnLabel: "LastName",
         sortEnabled: true,
         columnWidth: 175,
       },
       {
         columnName: "Email",
-        columnLabel: "email",
+        columnLabel: "Email",
         sortEnabled: true,
         columnWidth: 230,
       },
       {
         columnName: "Telefono",
-        columnLabel: "phone",
+        columnLabel: "Phone",
         sortEnabled: true,
         columnWidth: 175,
       },
@@ -205,7 +205,7 @@ export default defineComponent({
       // },
       {
         columnName: "Data Creazione",
-        columnLabel: "date",
+        columnLabel: "Date",
         sortEnabled: true,
         columnWidth: 225,
       },
@@ -218,10 +218,11 @@ export default defineComponent({
     ]);
     const selectedIds = ref<Array<number>>([]);
     let selectedId = ref(0);
-    const tableData = ref();
+    const tableData = ref<Array<Customer>>();
     const initCustomers = ref([]);
       async function getItems(filterRequest: string) {
           tableData.value = await getCustomers(filterRequest);
+        
       };
 
     onMounted(() => {

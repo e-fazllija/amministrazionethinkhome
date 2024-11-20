@@ -312,16 +312,16 @@
         State: "",
         // country: "US",
       });
-//     watch(() => props.Id, async (first, second) => {
-//         if (second > 0){
-// console.log(props.Id)
-//             formData.value = await getCustomer(props.Id) as Customer
-
-//         }
-//         else{
-
-//         }
-//     })
+      
+      watch(() => props.Id, async (first, second) => {
+          if (first > 0){
+            formData.value = await getCustomer(props.Id)
+              console.log(formData.value)
+          }
+          else{
+            formData.value = null;
+          }
+      })
 
       const rules = ref({
         Name: [
