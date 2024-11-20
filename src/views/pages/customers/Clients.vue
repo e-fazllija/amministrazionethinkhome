@@ -14,7 +14,7 @@
             v-model="search"
             @input="searchItems()"
             class="form-control form-control-solid w-250px ps-15"
-            placeholder="Search Customers"
+            placeholder="Ricerca Clienti"
           />
         </div>
         <!--end::Search-->
@@ -108,62 +108,44 @@
         <template v-slot:name="{ row: customer }">
           {{ customer.name }}
         </template>
+        <template v-slot:lastName="{ row: customer }">
+          {{ customer.lastName }}
+        </template>
         <template v-slot:email="{ row: customer }">
           <a href="#" class="text-gray-600 text-hover-primary mb-1">
             {{ customer.email }}
           </a>
         </template>
-        <template v-slot:company="{ row: customer }">
-          {{ customer.company }}
-        </template>
-        <template v-slot:paymentMethod="{ row: customer }">
-          <img :src="customer.payment.icon" class="w-35px me-3" alt="" />{{
-            customer.payment.ccnumber
-          }}
+        <template v-slot:phone="{ row: customer }">
+          {{ customer.phone }}
         </template>
         <template v-slot:date="{ row: customer }">
           {{ customer.date }}
         </template>
-        <template v-slot:actions="{ row: customer }">
-          <a
-            href="#"
-            class="btn btn-sm btn-light btn-active-light-primary"
-            data-kt-menu-trigger="click"
-            data-kt-menu-placement="bottom-end"
-            data-kt-menu-flip="top-end"
-            >Actions
-            <KTIcon icon-name="down" icon-class="fs-5 m-0" />
-          </a>
+          <template v-slot:actions="{ row: customer }">
+                   <button class="btn btn-light-info me-1" data-bs-toggle="modal"
+                        data-bs-target="#kt_modal_update_customer"
+                        @click="selectId(customer.id)">Dettagli</button>
+
+                        <!-- <button class="btn btn-light-info me-1" 
+                        @click="toggleUpdateModal(true, customer.id)">Dettagli</button> -->
+
+                  <button @click="deleteItem(customer.id)" class="btn btn-light-danger me-1">Elimina</button>
+              </template>
           <!--begin::Menu-->
           <div
             class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semobold fs-7 w-125px py-4"
             data-kt-menu="true"
           >
-            <!--begin::Menu item-->
-            <div class="menu-item px-3">
-              <router-link
-                to="/apps/customers/customer-details"
-                class="menu-link px-3"
-                >View</router-link
-              >
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Menu item-->
-            <div class="menu-item px-3">
-              <a @click="deleteCustomer(customer.id)" class="menu-link px-3"
-                >Delete</a
-              >
-            </div>
             <!--end::Menu item-->
           </div>
-          <!--end::Menu-->
-        </template>
       </Datatable>
     </div>
   </div>
 
   <ExportCustomerModal></ExportCustomerModal>
   <AddCustomerModal></AddCustomerModal>
+  <UpdateCustomerModal :Id="selectedId" id="updateCustomerModal" ref="updateCustomerModal"></UpdateCustomerModal>
 </template>
 
 <script lang="ts">
@@ -172,11 +154,13 @@ import { defineComponent, onMounted, ref } from "vue";
 import Datatable from "@/components/kt-datatable/KTDataTable.vue";
 import type { Sort } from "@/components/kt-datatable//table-partials/models";
 import ExportCustomerModal from "@/components/modals/forms/ExportCustomerModal.vue";
-import AddCustomerModal from "@/components/modals/forms/AddCustomerModal.vue";
-import type { ICustomer } from "@/core/data/customers";
-import customers from "@/core/data/customers";
+import AddCustomerModal from "@/components/modals/forms/customer/AddCustomerModal.vue";
 import arraySort from "array-sort";
 import { MenuComponent } from "@/assets/ts/components";
+import { getCustomers, Customer } from "@/core/data/customers";
+import UpdateCustomerModal from "@/components/modals/forms/customer/UpdateCustomerModal.vue";
+
+ 
 
 export default defineComponent({
   name: "clients",
@@ -184,12 +168,20 @@ export default defineComponent({
     Datatable,
     ExportCustomerModal,
     AddCustomerModal,
+    UpdateCustomerModal,
   },
   setup() {
+    let updateCustomerModal = ref (null);
     const tableHeader = ref([
       {
-        columnName: "Customer Name",
+        columnName: "Nome",
         columnLabel: "name",
+        sortEnabled: true,
+        columnWidth: 175,
+      },
+      {
+        columnName: "Cognome",
+        columnLabel: "lastName",
         sortEnabled: true,
         columnWidth: 175,
       },
@@ -200,37 +192,41 @@ export default defineComponent({
         columnWidth: 230,
       },
       {
-        columnName: "Company",
-        columnLabel: "company",
+        columnName: "Telefono",
+        columnLabel: "phone",
         sortEnabled: true,
         columnWidth: 175,
       },
+      // {
+      //   columnName: "Payment Method",
+      //   columnLabel: "paymentMethod",
+      //   sortEnabled: true,
+      //   columnWidth: 175,
+      // },
       {
-        columnName: "Payment Method",
-        columnLabel: "paymentMethod",
-        sortEnabled: true,
-        columnWidth: 175,
-      },
-      {
-        columnName: "Created Date",
+        columnName: "Data Creazione",
         columnLabel: "date",
         sortEnabled: true,
         columnWidth: 225,
       },
       {
-        columnName: "Actions",
+        columnName: "Azioni",
         columnLabel: "actions",
         sortEnabled: false,
         columnWidth: 135,
       },
     ]);
     const selectedIds = ref<Array<number>>([]);
-
-    const tableData = ref<Array<ICustomer>>(customers);
-    const initCustomers = ref<Array<ICustomer>>([]);
+    let selectedId = ref(0);
+    const tableData = ref();
+    const initCustomers = ref([]);
+      async function getItems(filterRequest: string) {
+          tableData.value = await getCustomers(filterRequest);
+      };
 
     onMounted(() => {
-      initCustomers.value.splice(0, tableData.value.length, ...tableData.value);
+      // initCustomers.value.splice(0, tableData.value.length, ...tableData.value);
+      getItems("");
     });
 
     const deleteFewCustomers = () => {
@@ -242,7 +238,7 @@ export default defineComponent({
 
     const deleteCustomer = (id: number) => {
       for (let i = 0; i < tableData.value.length; i++) {
-        if (tableData.value[i].id === id) {
+        if (tableData.value[i].Id === id) {
           tableData.value.splice(i, 1);
         }
       }
@@ -252,7 +248,7 @@ export default defineComponent({
     const searchItems = () => {
       tableData.value.splice(0, tableData.value.length, ...initCustomers.value);
       if (search.value !== "") {
-        let results: Array<ICustomer> = [];
+        let results: Array<Customer> = [];
         for (let j = 0; j < tableData.value.length; j++) {
           if (searchingFunc(tableData.value[j], search.value)) {
             results.push(tableData.value[j]);
@@ -274,27 +270,51 @@ export default defineComponent({
       return false;
     };
 
+    const deleteItem = (id: number) => {
+      for (let i = 0; i < tableData.value.length; i++) {
+      if (tableData.value[i].id === id) {
+      tableData.value.splice(i, 1);}
+      }
+      MenuComponent.reinitialization(); 
+};
     const sort = (sort: Sort) => {
       const reverse: boolean = sort.order === "asc";
       if (sort.label) {
         arraySort(tableData.value, sort.label, { reverse });
       }
     };
+
+    const selectId = (id: number) => {
+      selectedId.value = id;
+    };
+
     const onItemSelect = (selectedItems: Array<number>) => {
       selectedIds.value = selectedItems;
     };
 
+    function toggleUpdateModal(value, id){
+      console.log(id)
+      selectedId.value = id;
+      updateCustomerModal.value.show = value
+    };
+
     return {
+      updateCustomerModal,
+      toggleUpdateModal,
       tableData,
       tableHeader,
       deleteCustomer,
       search,
       searchItems,
+      selectedId,
       selectedIds,
       deleteFewCustomers,
       sort,
       onItemSelect,
       getAssetPath,
+      deleteItem,
+      selectId,
+      
     };
   },
 });

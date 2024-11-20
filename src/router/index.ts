@@ -30,7 +30,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/pages/properties/Properties.vue"),
         meta: {
           pageTitle: "Immobili",
-          breadcrumbs: ["Properties"],
+          breadcrumbs: ["Immobili"],
         },
       },
       {
@@ -158,34 +158,6 @@ const routes: Array<RouteRecordRaw> = [
             },
           },
         ],
-      },
-      {
-        path: "/apps/customers/getting-started",
-        name: "apps-customers-getting-started",
-        component: () => import("@/views/apps/customers/GettingStarted.vue"),
-        meta: {
-          pageTitle: "Getting Started",
-          breadcrumbs: ["Apps", "Customers"],
-        },
-      },
-      {
-        path: "/apps/customers/customers-listing",
-        name: "apps-customers-listing",
-        component: () => import("@/views/apps/customers/CustomersListing.vue"),
-        meta: {
-          pageTitle: "Customers Listing",
-          breadcrumbs: ["Apps", "Customers"],
-        },
-      },
-    
-      {
-        path: "/apps/customers/customer-details",
-        name: "apps-customers-details",
-        component: () => import("@/views/apps/customers/CustomerDetails.vue"),
-        meta: {
-          pageTitle: "Customers Details",
-          breadcrumbs: ["Apps", "Customers"],
-        },
       },
       {
         path: "/apps/subscriptions/getting-started",

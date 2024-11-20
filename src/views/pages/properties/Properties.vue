@@ -14,7 +14,7 @@
             v-model="search"
             @input="searchItems()"
             class="form-control form-control-solid w-250px ps-15"
-            placeholder="Search Customers"
+            placeholder="Cerca Immobile"
           />
         </div>
         <!--end::Search-->
@@ -60,7 +60,7 @@
         >
           <div class="fw-bold me-5">
             <span class="me-2">{{ selectedIds.length }}</span
-            >Selected
+            >Seleziona
           </div>
           <button
             type="button"
@@ -105,21 +105,17 @@
         :checkbox-enabled="true"
         checkbox-label="id"
       >
-        <template v-slot:name="{ row: properties }">
-          {{ properties.name }}
+        <template v-slot:category="{ row: properties }">
+          {{ properties.category }}
         </template>
-        <template v-slot:email="{ row: properties }">
-          <a href="#" class="text-gray-600 text-hover-primary mb-1">
-            {{ properties.email }}
-          </a>
+        <template v-slot:address="{ row: properties }">
+          {{ properties.address }}
         </template>
-        <template v-slot:company="{ row: properties }">
-          {{ properties.company }}
+        <template v-slot:price="{ row: properties }">
+          {{ properties.price }}
         </template>
-        <template v-slot:paymentMethod="{ row: properties }">
-          <img :src="properties.payment.icon" class="w-35px me-3" alt="" />{{
-            properties.payment.ccnumber
-          }}
+        <template v-slot:state="{ row: properties }">
+          {{ properties.state }}
         </template>
         <template v-slot:date="{ row: properties }">
           {{ properties.date }}
@@ -142,7 +138,7 @@
             <!--begin::Menu item-->
             <div class="menu-item px-3">
               <router-link
-                to="/apps/customers/customer-details"
+                to="/pages/properties/Properties"
                 class="menu-link px-3"
                 >View</router-link
               >
@@ -173,13 +169,13 @@ import Datatable from "@/components/kt-datatable/KTDataTable.vue";
 import type { Sort } from "@/components/kt-datatable//table-partials/models";
 import ExportCustomerModal from "@/components/modals/forms/ExportCustomerModal.vue";
 import AddPropertyModal from "@/components/modals/forms/AddPropertyModal.vue";
-import type { ICustomer } from "@/core/data/customers";
-import customers from "@/core/data/customers";
+import type { IProperty } from "@/core/data/property";
+import property from "@/core/data/property";
 import arraySort from "array-sort";
 import { MenuComponent } from "@/assets/ts/components";
 
 export default defineComponent({
-  name: "properties",
+  name: "property",
   components: {
     Datatable,
     ExportCustomerModal,
@@ -188,26 +184,26 @@ export default defineComponent({
   setup() {
     const tableHeader = ref([
       {
-        columnName: "Customer Name",
-        columnLabel: "name",
+        columnName: "Categoria",
+        columnLabel: "category",
         sortEnabled: true,
         columnWidth: 175,
       },
       {
-        columnName: "Email",
-        columnLabel: "email",
+        columnName: "indirizzo",
+        columnLabel: "address",
         sortEnabled: true,
         columnWidth: 230,
       },
       {
-        columnName: "Company",
-        columnLabel: "company",
+        columnName: "Prezzo",
+        columnLabel: "price",
         sortEnabled: true,
         columnWidth: 175,
       },
       {
-        columnName: "Payment Method",
-        columnLabel: "paymentMethod",
+        columnName: "Stato",
+        columnLabel: "state",
         sortEnabled: true,
         columnWidth: 175,
       },
@@ -226,11 +222,11 @@ export default defineComponent({
     ]);
     const selectedIds = ref<Array<number>>([]);
 
-    const tableData = ref<Array<ICustomer>>(customers);
-    const initCustomers = ref<Array<ICustomer>>([]);
+    const tableData = ref<Array<IProperty>>(property);
+    const initProperty = ref<Array<IProperty>>([]);
 
     onMounted(() => {
-      initCustomers.value.splice(0, tableData.value.length, ...tableData.value);
+      initProperty.value.splice(0, tableData.value.length, ...tableData.value);
     });
 
     const deleteFewCustomers = () => {
@@ -250,9 +246,9 @@ export default defineComponent({
 
     const search = ref<string>("");
     const searchItems = () => {
-      tableData.value.splice(0, tableData.value.length, ...initCustomers.value);
+      tableData.value.splice(0, tableData.value.length, ...initProperty.value);
       if (search.value !== "") {
-        let results: Array<ICustomer> = [];
+        let results: Array<IProperty> = [];
         for (let j = 0; j < tableData.value.length; j++) {
           if (searchingFunc(tableData.value[j], search.value)) {
             results.push(tableData.value[j]);

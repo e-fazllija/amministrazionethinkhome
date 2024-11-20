@@ -1,885 +1,99 @@
-import { getAssetPath } from "@/core/helpers/assets";
+import ApiService from "@/core/services/ApiService";
+import { createMapper, createMap } from '@automapper/core';
+import { AutoMap, classes } from '@automapper/classes';
 
-interface ICustomer {
-  id: number;
-  name: string;
-  email: string;
-  company: string;
-  payment: {
-    icon: string;
-    ccnumber: string;
-    label: string;
-  };
-  date: string;
+export const mapper = createMapper({
+  strategyInitializer: classes(),
+});
+
+export class Customer{
+  @AutoMap() Id?: number;
+  @AutoMap() Code: string;
+  @AutoMap() Name: string;
+  @AutoMap() LastName: string;
+  @AutoMap() Email: string;
+  @AutoMap() Phone: number;
+  @AutoMap() Description: string;
+  @AutoMap() AdressLine: string;
+  @AutoMap() Town: string;
+  @AutoMap() State: string;
+  @AutoMap() CreationDate?: Date;
+  @AutoMap() UpdateDate?: Date;
+  constructor(Id:number,Code:string,Name:string,LastName:string,Email:string,Phone: number,
+    Description: string,AdressLine: string,Town: string,State: string,CreationDate: Date,UpdateDate: Date){
+    this.Id=Id;
+    this.Code=Code;
+    this.Name=Name;
+    this.LastName=LastName;
+    this.Email=Email;
+    this.Phone=Phone;
+    this.Description=Description;
+    this.AdressLine=AdressLine;
+    this.Town=Town;
+    this.State=State;
+    this.CreationDate=CreationDate;
+    this.UpdateDate=UpdateDate;
+
+  }
 }
 
-const customers: Array<ICustomer> = [
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Emma Smith",
-    email: "e.smith@kpmg.com.au",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "14 Dec 2020, 8:43 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Melody Macy",
-    email: "melody@altbox.com",
-    company: "Google",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "01 Dec 2020, 10:12 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Max Smith",
-    email: "max@kt.com",
-    company: "Bistro Union",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "12 Nov 2020, 2:01 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Sean Bean",
-    email: "sean@dellito.com",
-    company: "Astro Limited",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "21 Oct 2020, 5:54 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Brian Cox",
-    email: "brian@exchange.com",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "19 Oct 2020, 7:32 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Mikaela Collins",
-    email: "mikaela@pexcom.com",
-    company: "Keenthemes",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "23 Sep 2020, 12:37 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Francis Mitcham",
-    email: "f.mitcham@kpmg.com.au",
-    company: "Paypal",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "11 Sep 2020, 3:15 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Olivia Wild",
-    email: "olivia@corpmail.com",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "03 Sep 2020, 1:08 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Neil Owen",
-    email: "owen.neil@gmail.com",
-    company: "Paramount",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "01 Sep 2020, 4:58 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Dan Wilson",
-    email: "dam@consilting.com",
-    company: "Trinity Studio",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "18 Aug 2020, 3:34 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Emma Bold",
-    email: "emma@intenso.com",
-    company: "B&T Legal Services",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "14 Aug 2020, 1:21 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Ana Crown",
-    email: "ana.cf@limtel.com",
-    company: "Paysafe Security",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "11 Aug 2020, 5:13 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Emma Smith",
-    email: "e.smith@kpmg.com.au",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "14 Dec 2020, 8:43 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Melody Macy",
-    email: "melody@altbox.com",
-    company: "Google",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "01 Dec 2020, 10:12 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Max Smith",
-    email: "max@kt.com",
-    company: "Bistro Union",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "12 Nov 2020, 2:01 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Sean Bean",
-    email: "sean@dellito.com",
-    company: "Astro Limited",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "21 Oct 2020, 5:54 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Brian Cox",
-    email: "brian@exchange.com",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "19 Oct 2020, 7:32 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Mikaela Collins",
-    email: "mikaela@pexcom.com",
-    company: "Keenthemes",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "23 Sep 2020, 12:37 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Francis Mitcham",
-    email: "f.mitcham@kpmg.com.au",
-    company: "Paypal",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "11 Sep 2020, 3:15 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Olivia Wild",
-    email: "olivia@corpmail.com",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "03 Sep 2020, 1:08 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Neil Owen",
-    email: "owen.neil@gmail.com",
-    company: "Paramount",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "01 Sep 2020, 4:58 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Dan Wilson",
-    email: "dam@consilting.com",
-    company: "Trinity Studio",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "18 Aug 2020, 3:34 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Emma Bold",
-    email: "emma@intenso.com",
-    company: "B&T Legal Services",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "14 Aug 2020, 1:21 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Ana Crown",
-    email: "ana.cf@limtel.com",
-    company: "Paysafe Security",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "11 Aug 2020, 5:13 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Emma Smith",
-    email: "e.smith@kpmg.com.au",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "14 Dec 2020, 8:43 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Melody Macy",
-    email: "melody@altbox.com",
-    company: "Google",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "01 Dec 2020, 10:12 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Max Smith",
-    email: "max@kt.com",
-    company: "Bistro Union",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "12 Nov 2020, 2:01 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Sean Bean",
-    email: "sean@dellito.com",
-    company: "Astro Limited",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "21 Oct 2020, 5:54 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Brian Cox",
-    email: "brian@exchange.com",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "19 Oct 2020, 7:32 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Mikaela Collins",
-    email: "mikaela@pexcom.com",
-    company: "Keenthemes",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "23 Sep 2020, 12:37 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Francis Mitcham",
-    email: "f.mitcham@kpmg.com.au",
-    company: "Paypal",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "11 Sep 2020, 3:15 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Olivia Wild",
-    email: "olivia@corpmail.com",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "03 Sep 2020, 1:08 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Neil Owen",
-    email: "owen.neil@gmail.com",
-    company: "Paramount",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "01 Sep 2020, 4:58 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Dan Wilson",
-    email: "dam@consilting.com",
-    company: "Trinity Studio",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "18 Aug 2020, 3:34 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Emma Bold",
-    email: "emma@intenso.com",
-    company: "B&T Legal Services",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "14 Aug 2020, 1:21 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Ana Crown",
-    email: "ana.cf@limtel.com",
-    company: "Paysafe Security",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "11 Aug 2020, 5:13 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Emma Smith",
-    email: "e.smith@kpmg.com.au",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "14 Dec 2020, 8:43 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Melody Macy",
-    email: "melody@altbox.com",
-    company: "Google",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "01 Dec 2020, 10:12 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Max Smith",
-    email: "max@kt.com",
-    company: "Bistro Union",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "12 Nov 2020, 2:01 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Sean Bean",
-    email: "sean@dellito.com",
-    company: "Astro Limited",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "21 Oct 2020, 5:54 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Brian Cox",
-    email: "brian@exchange.com",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "19 Oct 2020, 7:32 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Mikaela Collins",
-    email: "mikaela@pexcom.com",
-    company: "Keenthemes",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "23 Sep 2020, 12:37 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Francis Mitcham",
-    email: "f.mitcham@kpmg.com.au",
-    company: "Paypal",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "11 Sep 2020, 3:15 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Olivia Wild",
-    email: "olivia@corpmail.com",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "03 Sep 2020, 1:08 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Neil Owen",
-    email: "owen.neil@gmail.com",
-    company: "Paramount",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "01 Sep 2020, 4:58 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Dan Wilson",
-    email: "dam@consilting.com",
-    company: "Trinity Studio",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "18 Aug 2020, 3:34 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Emma Bold",
-    email: "emma@intenso.com",
-    company: "B&T Legal Services",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "14 Aug 2020, 1:21 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Ana Crown",
-    email: "ana.cf@limtel.com",
-    company: "Paysafe Security",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "11 Aug 2020, 5:13 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Emma Smith",
-    email: "e.smith@kpmg.com.au",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "14 Dec 2020, 8:43 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Melody Macy",
-    email: "melody@altbox.com",
-    company: "Google",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "01 Dec 2020, 10:12 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Max Smith",
-    email: "max@kt.com",
-    company: "Bistro Union",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "12 Nov 2020, 2:01 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Sean Bean",
-    email: "sean@dellito.com",
-    company: "Astro Limited",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "21 Oct 2020, 5:54 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Brian Cox",
-    email: "brian@exchange.com",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "19 Oct 2020, 7:32 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Mikaela Collins",
-    email: "mikaela@pexcom.com",
-    company: "Keenthemes",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "23 Sep 2020, 12:37 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Francis Mitcham",
-    email: "f.mitcham@kpmg.com.au",
-    company: "Paypal",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "11 Sep 2020, 3:15 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Olivia Wild",
-    email: "olivia@corpmail.com",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "03 Sep 2020, 1:08 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Neil Owen",
-    email: "owen.neil@gmail.com",
-    company: "Paramount",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "01 Sep 2020, 4:58 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Dan Wilson",
-    email: "dam@consilting.com",
-    company: "Trinity Studio",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "18 Aug 2020, 3:34 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Emma Bold",
-    email: "emma@intenso.com",
-    company: "B&T Legal Services",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "14 Aug 2020, 1:21 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Ana Crown",
-    email: "ana.cf@limtel.com",
-    company: "Paysafe Security",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "11 Aug 2020, 5:13 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Emma Smith",
-    email: "e.smith@kpmg.com.au",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "14 Dec 2020, 8:43 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Melody Macy",
-    email: "melody@altbox.com",
-    company: "Google",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "01 Dec 2020, 10:12 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Max Smith",
-    email: "max@kt.com",
-    company: "Bistro Union",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "12 Nov 2020, 2:01 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Sean Bean",
-    email: "sean@dellito.com",
-    company: "Astro Limited",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "21 Oct 2020, 5:54 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Brian Cox",
-    email: "brian@exchange.com",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "19 Oct 2020, 7:32 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Mikaela Collins",
-    email: "mikaela@pexcom.com",
-    company: "Keenthemes",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "23 Sep 2020, 12:37 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Francis Mitcham",
-    email: "f.mitcham@kpmg.com.au",
-    company: "Paypal",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "11 Sep 2020, 3:15 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Olivia Wild",
-    email: "olivia@corpmail.com",
-    company: "-",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "03 Sep 2020, 1:08 am",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Neil Owen",
-    email: "owen.neil@gmail.com",
-    company: "Paramount",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "01 Sep 2020, 4:58 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Dan Wilson",
-    email: "dam@consilting.com",
-    company: "Trinity Studio",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/visa.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "visa",
-    },
-    date: "18 Aug 2020, 3:34 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Emma Bold",
-    email: "emma@intenso.com",
-    company: "B&T Legal Services",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/mastercard.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "mastercard",
-    },
-    date: "14 Aug 2020, 1:21 pm",
-  },
-  {
-    id: Math.floor(Math.random() * 99999) + 1,
-    name: "Ana Crown",
-    email: "ana.cf@limtel.com",
-    company: "Paysafe Security",
-    payment: {
-      icon: getAssetPath("media/svg/card-logos/american-express.svg"),
-      ccnumber: "**** " + Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
-      label: "american_express",
-    },
-    date: "11 Aug 2020, 5:13 pm",
-  },
-];
 
-export type { ICustomer };
+createMap(mapper, Object, Customer);
 
-export default customers;
+const getCustomers = (filterRequest: string) => {
+   return ApiService.get(
+    `https://localhost:7267/api/Customers/Get?currentPage=0&filterRequest=${filterRequest}`,
+    ""
+  )
+    .then(({ data }) => {
+      const result = data.data as Partial<Customer>
+      return result;
+    })
+    .catch(({ response }) => {
+      console.error(response);
+      return [];
+    });
+};
+
+const getCustomer = (id) => {
+  return ApiService.get(`https://localhost:7267/api/Customers/GetById?id=${id}`, "")
+    .then(({ data }) => {
+      const result = data as Partial<Customer>;
+      return result;
+    })
+    .catch(({ response }) => {
+      console.log(response);
+      return undefined;
+    });
+};
+
+const createCustomer = async (formData:Customer) => {
+  return ApiService.post("https://localhost:7267/api/Customers/Create", formData)
+    .then(({ data }) => {
+      const result = data as Partial<Customer>;
+      return result;
+    })
+    .catch(({ response }) => {
+      console.log(response);
+      return undefined;
+    });
+};
+
+const deleteCustomer = (id) => {
+  return ApiService.get(`https://localhost:7267/api/Customers/GetById?id=${id}`, "")
+    .then(({ data }) => {
+      const result = data as Partial<Customer>;
+      return result;
+    })
+    .catch(({ response }) => {
+      console.log(response);
+      return undefined;
+    });
+};
+
+
+
+export { getCustomers, getCustomer, createCustomer, deleteCustomer }
+ 
+
+// export default customers;

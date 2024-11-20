@@ -13,7 +13,7 @@
         <!--begin::Modal header-->
         <div class="modal-header" id="kt_modal_add_customer_header">
           <!--begin::Modal title-->
-          <h2 class="fw-bold">Add a Customer</h2>
+          <h2 class="fw-bold">Aggiungi Cliente</h2>
           <!--end::Modal title-->
 
           <!--begin::Close-->
@@ -50,13 +50,13 @@
               <!--begin::Input group-->
               <div class="fv-row mb-7">
                 <!--begin::Label-->
-                <label class="required fs-6 fw-semobold mb-2">Name</label>
+                <label class="required fs-6 fw-semobold mb-2">Nome</label>
                 <!--end::Label-->
 
                 <!--begin::Input-->
                 <el-form-item prop="name">
                   <el-input
-                    v-model="formData.name"
+                    v-model="formData.Name"
                     type="text"
                     placeholder=""
                   />
@@ -64,7 +64,23 @@
                 <!--end::Input-->
               </div>
               <!--end::Input group-->
+              <!--begin::Input group-->
+              <div class="fv-row mb-7">
+                <!--begin::Label-->
+                <label class="required fs-6 fw-semobold mb-2">Cognome</label>
+                <!--end::Label-->
 
+                <!--begin::Input-->
+                <el-form-item prop="lastName">
+                  <el-input
+                    v-model="formData.LastName"
+                    type="text"
+                    placeholder=""
+                  />
+                </el-form-item>
+                <!--end::Input-->
+              </div>
+              <!--end::Input group-->
               <!--begin::Input group-->
               <div class="fv-row mb-7">
                 <!--begin::Label-->
@@ -74,14 +90,36 @@
                   <i
                     class="fas fa-exclamation-circle ms-1 fs-7"
                     data-bs-toggle="tooltip"
-                    title="Email address must be active"
+                    title="indirizzo email non valido"
                   ></i>
                 </label>
                 <!--end::Label-->
 
                 <!--begin::Input-->
                 <el-form-item prop="email">
-                  <el-input v-model="formData.email" />
+                  <el-input v-model="formData.Email" />
+                </el-form-item>
+                <!--end::Input-->
+              </div>
+              <!--end::Input group-->
+               <!--begin::Input group-->
+               <div class="fv-row mb-7">
+                <!--begin::Label-->
+                <label class="fs-6 fw-semobold mb-2">
+                  <span class="required">Telefono</span>
+
+                  <i
+                    class="fas fa-exclamation-circle ms-1 fs-7"
+                    data-bs-toggle="tooltip"
+                    title="numero di telefono non valido "
+                  ></i>
+                </label>
+                <!--end::Label-->
+
+                <!--begin::Input-->
+                <el-form-item prop="phone">
+                  <el-input v-model="formData.Phone" 
+                  type= "number" />
                 </el-form-item>
                 <!--end::Input-->
               </div>
@@ -90,12 +128,12 @@
               <!--begin::Input group-->
               <div class="fv-row mb-15">
                 <!--begin::Label-->
-                <label class="fs-6 fw-semobold mb-2">Description</label>
+                <label class="fs-6 fw-semobold mb-2">Note</label>
                 <!--end::Label-->
 
                 <!--begin::Input-->
                 <el-form-item prop="description">
-                  <el-input v-model="formData.description" type="text" />
+                  <el-input v-model="formData.Description" type="text" />
                 </el-form-item>
                 <!--end::Input-->
               </div>
@@ -108,9 +146,8 @@
                 href="#kt_modal_add_customer_billing_info"
                 role="button"
                 aria-expanded="false"
-                aria-controls="kt_customer_view_details"
-              >
-                Shipping Information
+                aria-controls="kt_customer_view_details">
+                Maggiori Informazioni
                 <span class="ms-2 rotate-180">
                   <KTIcon icon-name="down" icon-class="fs-3" />
                 </span>
@@ -125,14 +162,12 @@
                 <!--begin::Input group-->
                 <div class="d-flex flex-column mb-7 fv-row">
                   <!--begin::Label-->
-                  <label class="required fs-6 fw-semobold mb-2"
-                    >Address Line 1</label
-                  >
+                  <label >Indirizzo</label>
                   <!--end::Label-->
 
                   <!--begin::Input-->
                   <el-form-item prop="addressLine">
-                    <el-input v-model="formData.addressLine" />
+                    <el-input v-model="formData.AdressLine" />
                   </el-form-item>
                   <!--end::Input-->
                 </div>
@@ -141,24 +176,12 @@
                 <!--begin::Input group-->
                 <div class="d-flex flex-column mb-7 fv-row">
                   <!--begin::Label-->
-                  <label class="fs-6 fw-semobold mb-2">Address Line 2</label>
-                  <!--end::Label-->
-
-                  <!--begin::Input-->
-                  <el-input v-model="formData.addressLine2" />
-                  <!--end::Input-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="d-flex flex-column mb-7 fv-row">
-                  <!--begin::Label-->
-                  <label class="required fs-6 fw-semobold mb-2">Town</label>
+                  <label >Comune</label>
                   <!--end::Label-->
 
                   <!--begin::Input-->
                   <el-form-item prop="town">
-                    <el-input v-model="formData.town" />
+                    <el-input v-model="formData.Town" />
                   </el-form-item>
                   <!--end::Input-->
                 </div>
@@ -169,41 +192,24 @@
                   <!--begin::Col-->
                   <div class="col-md-6 fv-row">
                     <!--begin::Label-->
-                    <label class="required fs-6 fw-semobold mb-2"
-                      >State / Province</label
-                    >
+                    <label >Provincia</label>
                     <!--end::Label-->
 
                     <!--begin::Input-->
                     <el-form-item prop="state">
-                      <el-input v-model="formData.state" />
+                      <el-input v-model="formData.State" />
                     </el-form-item>
                     <!--end::Input-->
                   </div>
                   <!--end::Col-->
 
-                  <!--begin::Col-->
-                  <div class="col-md-6 fv-row">
-                    <!--begin::Label-->
-                    <label class="required fs-6 fw-semobold mb-2"
-                      >Post Code</label
-                    >
-                    <!--end::Label-->
-
-                    <!--begin::Input-->
-                    <el-form-item prop="postCode">
-                      <el-input v-model="formData.postCode" />
-                    </el-form-item>
-                    <!--end::Input-->
-                  </div>
-                  <!--end::Col-->
                 </div>
                 <!--end::Input group-->
 
                 <!--begin::Input group-->
-                <div class="d-flex flex-column mb-7 fv-row">
+                <!-- <div class="d-flex flex-column mb-7 fv-row"> -->
                   <!--begin::Label-->
-                  <label class="fs-6 fw-semobold mb-2">
+                  <!-- <label class="fs-6 fw-semobold mb-2">
                     <span class="required">Country</span>
 
                     <i
@@ -211,11 +217,11 @@
                       data-bs-toggle="tooltip"
                       title="Country of origination"
                     ></i>
-                  </label>
+                  </label> -->
                   <!--end::Label-->
 
                   <!--begin::Input-->
-                  <el-select v-model="formData.country">
+                  <!-- <el-select v-model="formData.country">
                     <el-option value="">Select a Country...</el-option>
                     <el-option
                       v-for="(item, i) in countries"
@@ -224,59 +230,9 @@
                     >
                       {{ item.name }}
                     </el-option>
-                  </el-select>
+                  </el-select> -->
                   <!--end::Input-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="fv-row mb-7">
-                  <!--begin::Wrapper-->
-                  <div class="d-flex flex-stack">
-                    <!--begin::Label-->
-                    <div class="me-5">
-                      <!--begin::Label-->
-                      <label class="fs-6 fw-semobold"
-                        >Use as a billing adderess?</label
-                      >
-                      <!--end::Label-->
-
-                      <!--begin::Input-->
-                      <div class="fs-7 fw-semobold text-muted">
-                        If you need more info, please check budget planning
-                      </div>
-                      <!--end::Input-->
-                    </div>
-                    <!--end::Label-->
-
-                    <!--begin::Switch-->
-                    <label
-                      class="form-check form-switch form-check-custom form-check-solid"
-                    >
-                      <!--begin::Input-->
-                      <input
-                        class="form-check-input"
-                        name="billing"
-                        type="checkbox"
-                        value="1"
-                        id="kt_modal_add_customer_billing"
-                        checked
-                      />
-                      <!--end::Input-->
-
-                      <!--begin::Label-->
-                      <span
-                        class="form-check-label fw-semobold text-muted"
-                        for="kt_modal_add_customer_billing"
-                      >
-                        Yes
-                      </span>
-                      <!--end::Label-->
-                    </label>
-                    <!--end::Switch-->
-                  </div>
-                  <!--begin::Wrapper-->
-                </div>
+                <!-- </div> -->
                 <!--end::Input group-->
               </div>
               <!--end::Billing form-->
@@ -293,7 +249,7 @@
               id="kt_modal_add_customer_cancel"
               class="btn btn-light me-3"
             >
-              Discard
+              Annulla
             </button>
             <!--end::Button-->
 
@@ -304,11 +260,11 @@
               type="submit"
             >
               <span v-if="!loading" class="indicator-label">
-                Submit
+                Crea
                 <KTIcon icon-name="arrow-right" icon-class="fs-2 me-2 me-0" />
               </span>
               <span v-if="loading" class="indicator-progress">
-                Please wait...
+                Attendere...
                 <span
                   class="spinner-border spinner-border-sm align-middle ms-2"
                 ></span>
@@ -330,6 +286,8 @@ import { defineComponent, ref } from "vue";
 import { hideModal } from "@/core/helpers/dom";
 import { countries } from "@/core/data/countries";
 import Swal from "sweetalert2/dist/sweetalert2.js";
+import {createCustomer, Customer } from "@/core/data/customers";
+
 
 export default defineComponent({
   name: "add-customer-modal",
@@ -338,80 +296,74 @@ export default defineComponent({
     const formRef = ref<null | HTMLFormElement>(null);
     const addCustomerModalRef = ref<null | HTMLElement>(null);
     const loading = ref<boolean>(false);
-    const formData = ref({
-      name: "Sean Bean",
-      email: "sean@dellito.com",
-      description: "",
-      addressLine: "101, Collins Street",
-      addressLine2: "",
-      town: "Melbourne",
-      state: "Victoria",
-      postCode: "3000",
-      country: "US",
+    const formData = ref<Customer>({
+      Code:"",
+      Name: "",
+      LastName:"",
+      Email: "",
+      Phone:null,
+      Description: "",
+      AdressLine: "",
+      Town: "",
+      State: "",
+      // country: "US",
     });
 
     const rules = ref({
-      name: [
+      Name: [
         {
           required: true,
-          message: "Customer name is required",
+          message: "Nome obligatorio",
           trigger: "change",
         },
       ],
-      email: [
+      LastName: [
         {
           required: true,
-          message: "Customer email is required",
+          message: "Cognome obligatorio",
           trigger: "change",
         },
       ],
-      addressLine: [
+      Email: [
         {
           required: true,
-          message: "Address 1 is required",
+          message: "Email obligatorio",
           trigger: "change",
         },
       ],
-      town: [
+      Phone: [
         {
           required: true,
-          message: "Town is required",
+          message: "Telefono obligatorio",
           trigger: "change",
         },
       ],
-      state: [
-        {
-          required: true,
-          message: "State is required",
-          trigger: "change",
-        },
-      ],
-      postCode: [
-        {
-          required: true,
-          message: "Post code is required",
-          trigger: "change",
-        },
-      ],
+      
+      // postCode: [
+      //   {
+      //     required: false,
+      //     message: "Post code is required",
+      //     trigger: "change",
+      //   },
+      // ],
     });
 
     const submit = () => {
       if (!formRef.value) {
         return;
       }
-
-      formRef.value.validate((valid: boolean) => {
+      formRef.value.validate(async (valid: boolean) => {
         if (valid) {
           loading.value = true;
-
+        await createCustomer(formData.value);
           setTimeout(() => {
             loading.value = false;
 
             Swal.fire({
-              text: "Form has been successfully submitted!",
-              icon: "success",
+              text: "Il modulo è stato inviato con successo!",
+              icon: "Successo",
               buttonsStyling: false,
-              confirmButtonText: "Ok, got it!",
+              confirmButtonText: "Ok!",
               heightAuto: false,
               customClass: {
                 confirmButton: "btn btn-primary",
@@ -422,10 +374,10 @@ export default defineComponent({
           }, 2000);
         } else {
           Swal.fire({
-            text: "Sorry, looks like there are some errors detected, please try again.",
+            text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
             icon: "error",
             buttonsStyling: false,
-            confirmButtonText: "Ok, got it!",
+            confirmButtonText: "Ok",
             heightAuto: false,
             customClass: {
               confirmButton: "btn btn-primary",

@@ -47,14 +47,13 @@ class ApiService {
   /**
    * @description send the GET HTTP request
    * @param resource: string
-   * @param slug: string
    * @returns Promise<AxiosResponse>
    */
   public static get(
     resource: string,
-    slug = "" as string
+    response_type
   ): Promise<AxiosResponse> {
-    return ApiService.vueInstance.axios.get(`${resource}/${slug}`);
+    return ApiService.vueInstance.axios.get(`${resource}`, { responseType: response_type});
   }
 
   /**
