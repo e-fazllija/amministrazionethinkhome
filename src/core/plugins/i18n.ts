@@ -64,6 +64,7 @@ const messages = {
     gettingStarted: "Getting Started",
     properties: "Immobili",
     clients: "Clienti",
+    agents:"Agenti",
     customersListing: "Customers Listing",
     customerDetails: "Customers Details",
     calendarApp: "Calendar",

@@ -18,6 +18,12 @@ const MainMenuConfig: Array<MenuItem> = [
         bootstrapIcon: "bi-app-indicator",
       },
       {
+        heading: "Agenti",
+        route: "/agents",
+        keenthemesIcon: "element-11",
+        bootstrapIcon: "bi-app-indicator",
+      },
+      {
         heading: "Immobili",
         route: "/properties",
         keenthemesIcon: "element-11",

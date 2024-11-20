@@ -1,8 +1,8 @@
 <template>
     <div
       class="modal fade"
-      id="kt_modal_update_customer"
-      ref="updateCustomerModalRef"
+      id="kt_modal_update_agent"
+      ref="updateAgentModalRef"
       tabindex="-1"
       aria-hidden="true"
     >
@@ -11,14 +11,14 @@
         <!--begin::Modal content-->
         <div class="modal-content">
           <!--begin::Modal header-->
-          <div class="modal-header" id="kt_modal_update_customer_header">
+          <div class="modal-header" id="kt_modal_update_agent_header">
             <!--begin::Modal title-->
-            <h2 class="fw-bold">Aggiorna Cliente</h2>
+            <h2 class="fw-bold">Aggiorna Agente</h2>
             <!--end::Modal title-->
 
             <!--begin::Close-->
             <div
-              id="kt_modal_update_customer_close"
+              id="kt_modal_update_agent_close"
               data-bs-dismiss="modal"
               class="btn btn-icon btn-sm btn-active-icon-primary"
             >
@@ -39,12 +39,12 @@
               <!--begin::Scroll-->
               <div
                 class="scroll-y me-n7 pe-7"
-                id="kt_modal_update_customer_scroll"
+                id="kt_modal_update_agent_scroll"
                 data-kt-scroll="true"
                 data-kt-scroll-activate="{default: false, lg: true}"
                 data-kt-scroll-max-height="auto"
-                data-kt-scroll-dependencies="#kt_modal_update_customer_header"
-                data-kt-scroll-wrappers="#kt_modal_update_customer_scroll"
+                data-kt-scroll-dependencies="#kt_modal_update_agent_header"
+                data-kt-scroll-wrappers="#kt_modal_update_agent_scroll"
                 data-kt-scroll-offset="300px"
               >
                 <!--begin::Input group-->
@@ -143,10 +143,10 @@
                 <div
                   class="fw-bold fs-3 rotate collapsible mb-7"
                   data-bs-toggle="collapse"
-                  href="#kt_modal_update_customer_billing_info"
+                  href="#kt_modal_update_agent_billing_info"
                   role="button"
                   aria-expanded="false"
-                  aria-controls="kt_customer_view_details">
+                  aria-controls="kt_agent_view_details">
                   Maggiori Informazioni
                   <span class="ms-2 rotate-180">
                     <KTIcon icon-name="down" icon-class="fs-3" />
@@ -156,7 +156,7 @@
 
                 <!--begin::Billing form-->
                 <div
-                  id="kt_modal_update_customer_billing_info"
+                  id="kt_modal_update_agent_billing_info"
                   class="collapse show"
                 >
                   <!--begin::Input group-->
@@ -246,7 +246,7 @@
               <!--begin::Button-->
               <button
                 type="reset"
-                id="kt_modal_update_customer_cancel"
+                id="kt_modal_update_agent_cancel"
                 class="btn btn-light me-3"
               >
                 Annulla
@@ -286,18 +286,18 @@
   import { hideModal } from "@/core/helpers/dom";
   import { countries } from "@/core/data/countries";
   import Swal from "sweetalert2/dist/sweetalert2.js";
-  import {createCustomer, Customer, getCustomer } from "@/core/data/customers";
+  import {createAgent, Agent, getAgent } from "@/core/data/agents";
 
 
   export default defineComponent({
-    name: "update-customer-modal",
+    name: "update-agent-modal",
     components: {},
     props:{Id:{type:Number,Required:true}},
     setup(props) {
       const formRef = ref<null | HTMLFormElement>(null);
-      const updateCustomerModalRef = ref<null | HTMLElement>(null);
+      const updateAgentModalRef = ref<null | HTMLElement>(null);
       const loading = ref<boolean>(false);
-      const formData = ref<Customer>({
+      const formData = ref<Agent>({
         Id:0,
         Code:"",
         Name: "",
@@ -310,16 +310,16 @@
         State: "",
         // country: "US",
       });
-      
-      watch(() => props.Id, async (first, second) => {
-          if (first > 0){
-            formData.value = await getCustomer(props.Id)
-              console.log(formData.value)
-          }
-          else{
-            formData.value = null;
-          }
-      })
+//     watch(() => props.Id, async (first, second) => {
+//         if (second > 0){
+// console.log(props.Id)
+//             formData.value = await getCustomer(props.Id) as Customer
+
+//         }
+//         else{
+
+//         }
+//     })
 
       const rules = ref({
         Name: [
@@ -367,7 +367,7 @@
         formRef.value.validate(async (valid: boolean) => {
           if (valid) {
             loading.value = true;
-          await createCustomer(formData.value);
+          await createAgent(formData.value);
             setTimeout(() => {
               loading.value = false;
 
@@ -381,7 +381,7 @@
                   confirmButton: "btn btn-primary",
                 },
               }).then(() => {
-                hideModal(updateCustomerModalRef.value);
+                hideModal(updateAgentModalRef.value);
               });
             }, 2000);
           } else {
@@ -406,7 +406,7 @@
         submit,
         formRef,
         loading,
-        updateCustomerModalRef,
+        updateAgentModalRef,
         getAssetPath,
         countries,
       };
