@@ -11,12 +11,12 @@
       <!--begin::Heading-->
       <div class="text-center mb-10">
         <!--begin::Title-->
-        <h1 class="text-dark mb-3">Forgot Password ?</h1>
+        <h1 class="text-dark mb-3">Password Dimenticata?</h1>
         <!--end::Title-->
 
         <!--begin::Link-->
         <div class="text-gray-400 fw-semobold fs-4">
-          Enter your email to reset your password.
+          Inserisci la tua email per fare il reset della password!
         </div>
         <!--end::Link-->
       </div>
@@ -48,9 +48,9 @@
           id="kt_password_reset_submit"
           class="btn btn-lg btn-primary fw-bold me-4"
         >
-          <span class="indicator-label"> Submit </span>
+          <span class="indicator-label"> Invia </span>
           <span class="indicator-progress">
-            Please wait...
+            Attendere...
             <span
               class="spinner-border spinner-border-sm align-middle ms-2"
             ></span>
@@ -58,7 +58,7 @@
         </button>
 
         <router-link to="/sign-up" class="btn btn-lg btn-light-primary fw-bold"
-          >Cancel</router-link
+          >Cancella</router-link
         >
       </div>
       <!--end::Actions-->
@@ -105,7 +105,7 @@ export default defineComponent({
       // Send login request
       await store.forgotPassword(values);
 
-      const error = Object.values(store.errors);
+      const error = store.errors;
 
       if (!error) {
         Swal.fire({
@@ -120,7 +120,7 @@ export default defineComponent({
         });
       } else {
         Swal.fire({
-          text: error[0] as string,
+          text: error as string,
           icon: "error",
           buttonsStyling: false,
           confirmButtonText: "Try again!",

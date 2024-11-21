@@ -685,7 +685,7 @@
           <!--end::Indicator label-->
           <!--begin::Indicator progress-->
           <span class="indicator-progress"
-            >Please wait...
+            >Attendere...
             <span
               class="spinner-border spinner-border-sm align-middle ms-2"
             ></span

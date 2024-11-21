@@ -55,12 +55,12 @@
             class="form-control form-control-lg form-control-solid"
             type="text"
             placeholder=""
-            name="first_name"
+            name="name"
             autocomplete="off"
           />
           <div class="fv-plugins-message-container">
             <div class="fv-help-block">
-              <ErrorMessage name="first_name" />
+              <ErrorMessage name="name" />
             </div>
           </div>
         </div>
@@ -73,12 +73,12 @@
             class="form-control form-control-lg form-control-solid"
             type="text"
             placeholder=""
-            name="last_name"
+            name="lastname"
             autocomplete="off"
           />
           <div class="fv-plugins-message-container">
             <div class="fv-help-block">
-              <ErrorMessage name="last_name" />
+              <ErrorMessage name="lastname" />
             </div>
           </div>
         </div>
@@ -242,8 +242,8 @@ export default defineComponent({
     const submitButton = ref<HTMLButtonElement | null>(null);
 
     const registration = Yup.object().shape({
-      first_name: Yup.string().required().label("Name"),
-      last_name: Yup.string().required().label("Surname"),
+      name: Yup.string().required().label("Name"),
+      lastname: Yup.string().required().label("Surname"),
       email: Yup.string().min(4).required().email().label("Email"),
       password: Yup.string().required().label("Password"),
       password_confirmation: Yup.string()
@@ -273,7 +273,7 @@ export default defineComponent({
       // Send login request
       await store.register(values);
 
-      const error = Object.values(store.errors);
+      const error = store.errors;
 
       if (!error) {
         Swal.fire({
@@ -291,7 +291,7 @@ export default defineComponent({
         });
       } else {
         Swal.fire({
-          text: error[0] as string,
+          text: error as string,
           icon: "error",
           buttonsStyling: false,
           confirmButtonText: "Try again!",

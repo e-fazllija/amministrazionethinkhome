@@ -119,16 +119,17 @@
 </template>
 
 <script lang="ts">
-import { getAssetPath } from "@/core/helpers/assets";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onBeforeMount } from "vue";
 import { ErrorMessage, Field, Form as VForm } from "vee-validate";
 import { useAuthStore, type User } from "@/stores/auth";
-import { useRouter } from "vue-router";
 import Swal from "sweetalert2/dist/sweetalert2.js";
+import { useRoute, useRouter } from 'vue-router'
+
+import { getAssetPath } from "@/core/helpers/assets";
 import * as Yup from "yup";
 
 export default defineComponent({
-  name: "sign-in",
+  name: "email-confirmation",
   components: {
     Field,
     VForm,
@@ -136,12 +137,49 @@ export default defineComponent({
   },
   setup() {
     const store = useAuthStore();
+    const route = useRoute();
     const router = useRouter();
-
     const submitButton = ref<HTMLButtonElement | null>(null);
 
-    //Create form validation object
-    const login = Yup.object().shape({
+    onBeforeMount(async () => {
+      store.verifyCredentials(route.params.email as string, route.params.token as string)
+      .then(() => {
+        return;
+      }).then(() => {
+        const error = store.errors;
+        if(!error){
+          console.log("success")
+          Swal.fire({
+              text: "Complimenti le tue credenziali sono state attivate!",
+              icon: "success",
+              buttonsStyling: false,
+              confirmButtonText: "Accedi!",
+              heightAuto: false,
+              customClass: {
+                confirmButton: "btn fw-semobold btn-light-primary",
+              },
+            }).then(() => {
+              router.push({ name: "sign-in" });
+            });
+        }else {
+          console.log("error")
+          Swal.fire({
+              text: error as string,
+              icon: "error",
+              buttonsStyling: false,
+              confirmButtonText: "Continua!",
+              heightAuto: false,
+              customClass: {
+                confirmButton: "btn fw-semobold btn-light-danger",
+              },
+            });
+      }
+      }).catch((error) => {
+        console.log(error)
+      })
+    })
+//Create form validation object
+const login = Yup.object().shape({
       email: Yup.string().email().required().label("Email"),
       password: Yup.string().min(4).required().label("Password"),
     });
@@ -200,9 +238,9 @@ export default defineComponent({
     };
 
     return {
+      submitButton,
       onSubmitLogin,
       login,
-      submitButton,
       getAssetPath,
     };
   },

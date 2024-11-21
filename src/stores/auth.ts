@@ -4,43 +4,46 @@ import ApiService from "@/core/services/ApiService";
 import JwtService from "@/core/services/JwtService";
 
 export interface User {
+  username: string;
   name: string;
-  surname: string;
+  lastname: string;
   email: string;
+  role: string;
   password: string;
-  api_token: string;
+  token: string;
 }
 
 export const useAuthStore = defineStore("auth", () => {
-  const errors = ref({});
+  const errors = ref("");
   const user = ref<User>({} as User);
   const isAuthenticated = ref(!!JwtService.getToken());
 
   function setAuth(authUser: User) {
     isAuthenticated.value = true;
     user.value = authUser;
-    errors.value = {};
-    JwtService.saveToken(user.value.api_token);
+    errors.value = "";
+    JwtService.saveToken(user.value.Token);
   }
 
   function setError(error: any) {
-    errors.value = { ...error };
+    errors.value = error;
   }
 
   function purgeAuth() {
     isAuthenticated.value = false;
     user.value = {} as User;
-    errors.value = [];
+    errors.value = "";
     JwtService.destroyToken();
   }
 
-  function login(credentials: User) {
-    return ApiService.post("login", credentials)
+  async function login(credentials: User) {
+    await ApiService.post("auth/Login", credentials)
       .then(({ data }) => {
         setAuth(data);
       })
       .catch(({ response }) => {
-        setError(response.data.errors);
+        console.log(response.data.Message)
+        setError(response.data.Message);
       });
   }
 
@@ -49,12 +52,15 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   function register(credentials: User) {
-    return ApiService.post("register", credentials)
+    credentials.role = "Admin";
+    credentials.username = credentials.lastname + credentials.name;
+    console.log(credentials)
+    return ApiService.post("auth/register", credentials)
       .then(({ data }) => {
         setAuth(data);
       })
       .catch(({ response }) => {
-        setError(response.data.errors);
+        setError(response.Error);
       });
   }
 
@@ -64,24 +70,34 @@ export const useAuthStore = defineStore("auth", () => {
         setError({});
       })
       .catch(({ response }) => {
-        setError(response.data.errors);
+        setError(response.data.Message);
       });
   }
 
   function verifyAuth() {
     if (JwtService.getToken()) {
       ApiService.setHeader();
-      ApiService.post("verify_token", { api_token: JwtService.getToken() })
+      ApiService.post("auth/VerifyToken", { api_token: JwtService.getToken() })
         .then(({ data }) => {
           setAuth(data);
         })
         .catch(({ response }) => {
-          setError(response.data.errors);
+          setError(response.data.Message);
           purgeAuth();
         });
     } else {
       purgeAuth();
     }
+  }
+
+  async function verifyCredentials(email: string, token: string) {
+      await ApiService.post("auth/ConfirmCredentials", { Email: email, Token: token })
+      .then((data) => {
+        console.log(data)
+      })
+      .catch(({ response }) => {
+        setError(response.data.Message);
+      });
   }
 
   return {
@@ -93,5 +109,6 @@ export const useAuthStore = defineStore("auth", () => {
     register,
     forgotPassword,
     verifyAuth,
+    verifyCredentials
   };
 });

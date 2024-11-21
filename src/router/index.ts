@@ -436,6 +436,15 @@ const routes: Array<RouteRecordRaw> = [
           pageTitle: "Password reset",
         },
       },
+      {
+        path: "/email-confirmation/:email/:token(.*)",
+        name: "email_confirmation",
+        component: () =>
+          import("@/views/crafted/authentication/basic-flow/EmailConfirmation.vue"),
+        meta: {
+          pageTitle: "Password reset",
+        },
+      },
     ],
   },
   {

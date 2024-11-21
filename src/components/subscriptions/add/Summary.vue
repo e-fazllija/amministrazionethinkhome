@@ -120,7 +120,7 @@
           <!--begin::Indicator-->
           <span class="indicator-label">Create Subscription</span>
           <span class="indicator-progress"
-            >Please wait...
+            >Attendere...
             <span
               class="spinner-border spinner-border-sm align-middle ms-2"
             ></span

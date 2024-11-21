@@ -1,6 +1,7 @@
 import ApiService from "@/core/services/ApiService";
 import { createMapper, createMap } from '@automapper/core';
 import { AutoMap, classes } from '@automapper/classes';
+import JwtService from "@/core/services/JwtService";
 
 export const mapper = createMapper({
   strategyInitializer: classes(),
@@ -19,8 +20,9 @@ export class Customer{
   @AutoMap() State: string;
   @AutoMap() CreationDate?: Date;
   @AutoMap() UpdateDate?: Date;
+  @AutoMap() Token: string;
   constructor(Id:number,Code:string,Name:string,LastName:string,Email:string,Phone: number,
-    Description: string,AdressLine: string,Town: string,State: string,CreationDate: Date,UpdateDate: Date){
+    Description: string,AdressLine: string,Town: string,State: string,CreationDate: Date,UpdateDate: Date, Token: string){
     this.Id=Id;
     this.Code=Code;
     this.Name=Name;
@@ -33,7 +35,7 @@ export class Customer{
     this.State=State;
     this.CreationDate=CreationDate;
     this.UpdateDate=UpdateDate;
-
+    this.Token = Token;
   }
 }
 
@@ -68,6 +70,7 @@ const getCustomer = (id: number) : Promise<Customer> => {
 };
 
 const createCustomer = async (formData:Customer) => {
+  formData.Token = JwtService.getToken()
   return ApiService.post("https://localhost:7267/api/Customers/Create", formData)
     .then(({ data }) => {
       const result = data as Partial<Customer>;

@@ -36,7 +36,7 @@
             <KTIcon icon-name="arrow-right" icon-class="fs-3 ms-2 me-0" />
           </span>
           <span class="indicator-progress">
-            Please wait...
+            Attendere...
             <span
               class="spinner-border spinner-border-sm align-middle ms-2"
             ></span>

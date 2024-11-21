@@ -1199,7 +1199,7 @@
           >
             <span class="indicator-label"> Save Changes </span>
             <span class="indicator-progress">
-              Please wait...
+              Attendere...
               <span
                 class="spinner-border spinner-border-sm align-middle ms-2"
               ></span>
@@ -1308,7 +1308,7 @@
                 >
                   <span class="indicator-label"> Update Email </span>
                   <span class="indicator-progress">
-                    Please wait...
+                    Attendere...
                     <span
                       class="spinner-border spinner-border-sm align-middle ms-2"
                     ></span>
@@ -1438,7 +1438,7 @@
                 >
                   <span class="indicator-label"> Update Password </span>
                   <span class="indicator-progress">
-                    Please wait...
+                    Attendere...
                     <span
                       class="spinner-border spinner-border-sm align-middle ms-2"
                     ></span>
@@ -1638,7 +1638,7 @@
         >
           <span class="indicator-label"> Save Changes </span>
           <span class="indicator-progress">
-            Please wait...
+            Attendere...
             <span
               class="spinner-border spinner-border-sm align-middle ms-2"
             ></span>
@@ -1885,7 +1885,7 @@
           >
             <span class="indicator-label"> Save Changes </span>
             <span class="indicator-progress">
-              Please wait...
+              Attendere...
               <span
                 class="spinner-border spinner-border-sm align-middle ms-2"
               ></span>
@@ -2133,7 +2133,7 @@
           >
             <span class="indicator-label"> Save Changes </span>
             <span class="indicator-progress">
-              Please wait...
+              Attendere...
               <span
                 class="spinner-border spinner-border-sm align-middle ms-2"
               ></span>
@@ -2233,7 +2233,7 @@
           >
             <span class="indicator-label"> Deactivate Account </span>
             <span class="indicator-progress">
-              Please wait...
+              Attendere...
               <span
                 class="spinner-border spinner-border-sm align-middle ms-2"
               ></span>
