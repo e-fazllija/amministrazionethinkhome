@@ -35,6 +35,12 @@ const MainMenuConfig: Array<MenuItem> = [
         keenthemesIcon: "element-11",
         bootstrapIcon: "bi-app-indicator",
       },
+      {
+        heading: "Agenzie",
+        route: "/agencies",
+        keenthemesIcon: "element-11",
+        bootstrapIcon: "bi-app-indicator",
+      },
       // {
       //   heading: "layoutBuilder",
       //   route: "/builder",

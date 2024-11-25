@@ -205,35 +205,6 @@
 
                   </div>
                   <!--end::Input group-->
-
-                  <!--begin::Input group-->
-                  <!-- <div class="d-flex flex-column mb-7 fv-row"> -->
-                    <!--begin::Label-->
-                    <!-- <label class="fs-6 fw-semobold mb-2">
-                      <span class="required">Country</span>
-
-                      <i
-                        class="fas fa-exclamation-circle ms-1 fs-7"
-                        data-bs-toggle="tooltip"
-                        title="Country of origination"
-                      ></i>
-                    </label> -->
-                    <!--end::Label-->
-
-                    <!--begin::Input-->
-                    <!-- <el-select v-model="formData.country">
-                      <el-option value="">Select a Country...</el-option>
-                      <el-option
-                        v-for="(item, i) in countries"
-                        :key="`countries-select-option-${i}`"
-                        :value="item.code"
-                      >
-                        {{ item.name }}
-                      </el-option>
-                    </el-select> -->
-                    <!--end::Input-->
-                  <!-- </div> -->
-                  <!--end::Input group-->
                 </div>
                 <!--end::Billing form-->
               </div>
@@ -284,7 +255,6 @@
   import { getAssetPath } from "@/core/helpers/assets";
   import { defineComponent, ref, watch } from "vue";
   import { hideModal } from "@/core/helpers/dom";
-  import { countries } from "@/core/data/countries";
   import Swal from "sweetalert2/dist/sweetalert2.js";
   import {createCustomer, Customer, getCustomer } from "@/core/data/customers";
 
@@ -407,8 +377,7 @@
         formRef,
         loading,
         updateCustomerModalRef,
-        getAssetPath,
-        countries,
+        getAssetPath
       };
     },
   });

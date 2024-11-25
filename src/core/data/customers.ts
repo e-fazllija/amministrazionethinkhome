@@ -20,7 +20,7 @@ export class Customer{
   @AutoMap() State: string;
   @AutoMap() CreationDate?: Date;
   @AutoMap() UpdateDate?: Date;
-  @AutoMap() Token: string;
+  @AutoMap() Token?: string;
   constructor(Id:number,Code:string,Name:string,LastName:string,Email:string,Phone: number,
     Description: string,AdressLine: string,Town: string,State: string,CreationDate: Date,UpdateDate: Date, Token: string){
     this.Id=Id;

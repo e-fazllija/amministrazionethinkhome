@@ -40,8 +40,8 @@ export class Agent{
 
 createMap(mapper, Object, Agent);
 
-const getAgents = (filterRequest: string): Promise<Array<Agent>> => {
-   return ApiService.get(
+const getAgents = async (filterRequest: string): Promise<Array<Agent>> => {
+   return await ApiService.get(
     `https://localhost:7267/api/Agents/Get?currentPage=0&filterRequest=${filterRequest}`,
     ""
   )

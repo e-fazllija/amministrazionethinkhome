@@ -49,11 +49,11 @@ class ApiService {
    * @param resource: string
    * @returns Promise<AxiosResponse>
    */
-  public static get(
+  public static async get(
     resource: string,
     response_type
   ): Promise<AxiosResponse> {
-    return ApiService.vueInstance.axios.get(`${resource}`, { responseType: response_type});
+    return await ApiService.vueInstance.axios.get(`${resource}`, { responseType: response_type});
   }
 
   /**
@@ -62,8 +62,8 @@ class ApiService {
    * @param params: AxiosRequestConfig
    * @returns Promise<AxiosResponse>
    */
-  public static post(resource: string, params: any): Promise<AxiosResponse> {
-    return ApiService.vueInstance.axios.post(`${resource}`, params);
+  public static async post(resource: string, params: any): Promise<AxiosResponse> {
+    return await ApiService.vueInstance.axios.post(`${resource}`, params);
   }
 
   /**
@@ -73,12 +73,12 @@ class ApiService {
    * @param params: AxiosRequestConfig
    * @returns Promise<AxiosResponse>
    */
-  public static update(
+  public static async update(
     resource: string,
     slug: string,
     params: any
   ): Promise<AxiosResponse> {
-    return ApiService.vueInstance.axios.put(`${resource}/${slug}`, params);
+    return await ApiService.vueInstance.axios.put(`${resource}/${slug}`, params);
   }
 
   /**
@@ -87,8 +87,8 @@ class ApiService {
    * @param params: AxiosRequestConfig
    * @returns Promise<AxiosResponse>
    */
-  public static put(resource: string, params: any): Promise<AxiosResponse> {
-    return ApiService.vueInstance.axios.put(`${resource}`, params);
+  public static async put(resource: string, params: any): Promise<AxiosResponse> {
+    return await ApiService.vueInstance.axios.put(`${resource}`, params);
   }
 
   /**
@@ -96,8 +96,8 @@ class ApiService {
    * @param resource: string
    * @returns Promise<AxiosResponse>
    */
-  public static delete(resource: string): Promise<AxiosResponse> {
-    return ApiService.vueInstance.axios.delete(resource);
+  public static async delete(resource: string): Promise<AxiosResponse> {
+    return await ApiService.vueInstance.axios.delete(resource);
   }
 }
 

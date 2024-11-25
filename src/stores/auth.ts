@@ -4,13 +4,23 @@ import ApiService from "@/core/services/ApiService";
 import JwtService from "@/core/services/JwtService";
 
 export interface User {
-  username: string;
-  name: string;
-  lastname: string;
-  email: string;
-  role: string;
-  password: string;
-  token: string;
+  Id: string,
+  Username: string;
+  Code?: string;
+  Name: string;
+  Lastname: string;
+  Email: string;
+  Role: string;
+  Password: string;
+  Token: string;
+  PhoneNumber: number;
+  MobilePhoneNumber?: number;
+  Referent?: string;
+  Address: string;
+  Town: string;
+  Region?: string;
+  CreationDate?: Date;
+  UpdateDate?: Date;
 }
 
 export const useAuthStore = defineStore("auth", () => {
@@ -37,12 +47,11 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   async function login(credentials: User) {
-    await ApiService.post("auth/Login", credentials)
+    return await ApiService.post("auth/Login", credentials)
       .then(({ data }) => {
         setAuth(data);
       })
       .catch(({ response }) => {
-        console.log(response.data.Message)
         setError(response.data.Message);
       });
   }
@@ -51,11 +60,9 @@ export const useAuthStore = defineStore("auth", () => {
     purgeAuth();
   }
 
-  function register(credentials: User) {
-    credentials.role = "Admin";
-    credentials.username = credentials.lastname + credentials.name;
-    console.log(credentials)
-    return ApiService.post("auth/register", credentials)
+  async function register(credentials: User) {
+    credentials.Username = credentials.Lastname + credentials.Name;
+    return await ApiService.post("auth/register", credentials)
       .then(({ data }) => {
         setAuth(data);
       })
