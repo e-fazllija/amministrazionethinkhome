@@ -79,6 +79,18 @@ const createAgent = async (formData:Agent) => {
     });
 };
 
+const updateAgent = async (formData:Agent) => {
+  return ApiService.post("https://localhost:7267/api/Agents/Update", formData)
+    .then(({ data }) => {
+      const result = data as Partial<Agent>;
+      return result;
+    })
+    .catch(({ response }) => {
+      console.log(response);
+      return undefined;
+    });
+};
+
 const deleteAgent = (id) => {
   return ApiService.get(`https://localhost:7267/api/Agents/GetById?id=${id}`, "")
     .then(({ data }) => {
@@ -93,7 +105,7 @@ const deleteAgent = (id) => {
 
 
 
-export { getAgents, getAgent, createAgent, deleteAgent }
+export { getAgents, getAgent, createAgent, deleteAgent, updateAgent }
  
 
 // export default agents;

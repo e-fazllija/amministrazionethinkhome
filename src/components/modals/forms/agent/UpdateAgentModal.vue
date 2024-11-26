@@ -4,7 +4,7 @@
       id="kt_modal_update_agent"
       ref="updateAgentModalRef"
       tabindex="-1"
-      aria-hidden="true"
+      aria-hidden="false"
     >
       <!--begin::Modal dialog-->
       <div class="modal-dialog modal-dialog-centered mw-650px">
@@ -286,7 +286,7 @@
   import { hideModal } from "@/core/helpers/dom";
   import { countries } from "@/core/data/countries";
   import Swal from "sweetalert2/dist/sweetalert2.js";
-  import {createAgent, Agent, getAgent } from "@/core/data/agents";
+  import {updateAgent, Agent, getAgent } from "@/core/data/agents";
 
 
   export default defineComponent({
@@ -310,16 +310,17 @@
         State: "",
         // country: "US",
       });
-//     watch(() => props.Id, async (first, second) => {
-//         if (second > 0){
-// console.log(props.Id)
-//             formData.value = await getCustomer(props.Id) as Customer
+            watch(() => props.Id, async (first, second) => {
+            if (second > 0){
+            console.log(props.Id)
+            formData.value = await getAgent(props.Id) as Agent
 
-//         }
-//         else{
+        }
+        else{
+          formData.value = null;
 
-//         }
-//     })
+        }
+    })
 
       const rules = ref({
         Name: [
@@ -367,7 +368,7 @@
         formRef.value.validate(async (valid: boolean) => {
           if (valid) {
             loading.value = true;
-          await createAgent(formData.value);
+          await updateAgent(formData.value);
             setTimeout(() => {
               loading.value = false;
 

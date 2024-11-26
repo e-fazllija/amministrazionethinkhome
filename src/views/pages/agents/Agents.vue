@@ -122,15 +122,15 @@
         <template v-slot:Date="{ row: agent }">
           {{ agent.Date }}
         </template>
-          <template v-slot:actions="{ row: agent }">
+          <template v-slot:Actions="{ row: agent }">
                    <button class="btn btn-light-info me-1" data-bs-toggle="modal"
                         data-bs-target="#kt_modal_update_agent"
-                        @click="selectId(agent.id)">Dettagli</button>
+                        @click="selectId(agent.Id)">Dettagli</button>
 
                         <!-- <button class="btn btn-light-info me-1" 
                         @click="toggleUpdateModal(true, agent.id)">Dettagli</button> -->
 
-                  <button @click="deleteItem(agent.id)" class="btn btn-light-danger me-1">Elimina</button>
+                  <button @click="deleteItem(agent.Id)" class="btn btn-light-danger me-1">Elimina</button>
               </template>
           <!--begin::Menu-->
           <div
@@ -145,7 +145,7 @@
 
   <ExportCustomerModal></ExportCustomerModal>
   <AddAgentModal></AddAgentModal>
-  <UpdateAgentModal :Id="selectedId" id="updateAgentModal" ref="updateAgentModal"></UpdateAgentModal>
+  <UpdateAgentModal :Id="selectedId"></UpdateAgentModal>
 </template>
 
 <script lang="ts">
@@ -175,25 +175,25 @@ export default defineComponent({
     const tableHeader = ref([
       {
         columnName: "Nome",
-        columnLabel: "name",
+        columnLabel: "Name",
         sortEnabled: true,
         columnWidth: 175,
       },
       {
         columnName: "Cognome",
-        columnLabel: "lastName",
+        columnLabel: "LastName",
         sortEnabled: true,
         columnWidth: 175,
       },
       {
         columnName: "Email",
-        columnLabel: "email",
+        columnLabel: "Email",
         sortEnabled: true,
         columnWidth: 230,
       },
       {
         columnName: "Telefono",
-        columnLabel: "phone",
+        columnLabel: "Phone",
         sortEnabled: true,
         columnWidth: 175,
       },
@@ -205,21 +205,21 @@ export default defineComponent({
       // },
       {
         columnName: "Data Creazione",
-        columnLabel: "date",
+        columnLabel: "Date",
         sortEnabled: true,
         columnWidth: 225,
       },
       {
         columnName: "Azioni",
-        columnLabel: "actions",
+        columnLabel: "Actions",
         sortEnabled: false,
         columnWidth: 135,
       },
     ]);
     const selectedIds = ref<Array<number>>([]);
     let selectedId = ref(0);
-    const tableData = ref();
-    const initAgents = ref([]);
+    const tableData = ref<Array<Agent>>();
+      const initAgents = ref([]);
       async function getItems(filterRequest: string) {
           tableData.value = await getAgents(filterRequest);
       };
@@ -272,7 +272,7 @@ export default defineComponent({
 
     const deleteItem = (id: number) => {
       for (let i = 0; i < tableData.value.length; i++) {
-      if (tableData.value[i].id === id) {
+      if (tableData.value[i].Id === id) {
       tableData.value.splice(i, 1);}
       }
       MenuComponent.reinitialization(); 

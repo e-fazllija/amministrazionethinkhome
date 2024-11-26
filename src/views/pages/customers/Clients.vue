@@ -103,7 +103,7 @@
         :header="tableHeader"
         :enable-items-per-page-dropdown="true"
         :checkbox-enabled="true"
-        checkbox-label="id"
+        checkbox-label="Id"
       >
         <template v-slot:Name="{ row: customer }">
           {{ customer.Name }}
@@ -122,7 +122,7 @@
         <template v-slot:Date="{ row: customer }">
           {{ customer.Date }}
         </template>
-          <template v-slot:actions="{ row: customer }">
+          <template v-slot:Actions="{ row: customer }">
                    <button class="btn btn-light-info me-1" data-bs-toggle="modal"
                         data-bs-target="#kt_modal_update_customer"
                         @click="selectId(customer.Id)">Dettagli</button>
@@ -130,7 +130,7 @@
                         <!-- <button class="btn btn-light-info me-1" 
                         @click="toggleUpdateModal(true, customer.id)">Dettagli</button> -->
 
-                  <button @click="deleteItem(customer.Id)" class="btn btn-light-danger me-1">Elimina</button>
+                  <button @click="confirmDeleteCustomer(customer.Id)" class="btn btn-light-danger me-1">Elimina</button>
               </template>
           <!--begin::Menu-->
           <div
@@ -157,8 +157,10 @@ import ExportCustomerModal from "@/components/modals/forms/ExportCustomerModal.v
 import AddCustomerModal from "@/components/modals/forms/customer/AddCustomerModal.vue";
 import arraySort from "array-sort";
 import { MenuComponent } from "@/assets/ts/components";
-import { getCustomers, Customer } from "@/core/data/customers";
+import { getCustomers, Customer, deleteCustomer } from "@/core/data/customers";
 import UpdateCustomerModal from "@/components/modals/forms/customer/UpdateCustomerModal.vue";
+import ApiService from "@/core/services/ApiService";
+import Swal from "sweetalert2";
 
  
 
@@ -211,7 +213,7 @@ export default defineComponent({
       },
       {
         columnName: "Azioni",
-        columnLabel: "actions",
+        columnLabel: "Actions",
         sortEnabled: false,
         columnWidth: 135,
       },
@@ -237,13 +239,48 @@ export default defineComponent({
       selectedIds.value.length = 0;
     };
 
-    const deleteCustomer = (id: number) => {
-      for (let i = 0; i < tableData.value.length; i++) {
-        if (tableData.value[i].Id === id) {
-          tableData.value.splice(i, 1);
-        }
+    const confirmDeleteCustomer = (Id) => {
+           if (!Id) {console.error("ID non valido per l'eliminazione.");
+           return;
+           }
+         Swal.fire({
+          text: "Sei sicuro di voler eliminare questo cliente?",
+          icon: "warning",
+          showCancelButton: true,
+          buttonsStyling: false,
+          confirmButtonText: "Sì, elimina!",
+          cancelButtonText: "Annulla",
+          customClass: {
+          confirmButton: "btn btn-danger", 
+          cancelButton: "btn btn-secondary", 
+          },
+          heightAuto: false,
+          }).then((result) => {
+          if (result.isConfirmed) {deleteCustomer(Id);
+          } else {
+          console.log("Eliminazione annullata dall'utente.");
+          }
+       });
+     };
+
+    const deleteCustomer = async (Id) => {
+    try {
+      const response = await  ApiService.delete(`https://localhost:7267/api/Customers/Delete?id=${Id}`);
+      if (response.status === 200 || response.status === 204) {
+        getItems("");
+      } else {
+        console.error('Errore durante l\'eliminazione del cliente:', response.status);
       }
+    } catch (error) {
+      if (error.response) {
+        console.error('Errore nella risposta dell\'API:', error.response.data);
+      } else {
+        console.error('Errore generico:', error.message);
+      }
+     }
+     return undefined;
     };
+
 
     const search = ref<string>("");
     const searchItems = () => {
@@ -273,7 +310,7 @@ export default defineComponent({
 
     const deleteItem = (id: number) => {
       for (let i = 0; i < tableData.value.length; i++) {
-      if (tableData.value[i].id === id) {
+      if (tableData.value[i].Id === id) {
       tableData.value.splice(i, 1);}
       }
       MenuComponent.reinitialization(); 
@@ -315,6 +352,8 @@ export default defineComponent({
       getAssetPath,
       deleteItem,
       selectId,
+      confirmDeleteCustomer,
+      getItems,
       
     };
   },

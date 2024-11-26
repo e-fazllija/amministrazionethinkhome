@@ -4,7 +4,7 @@
       id="kt_modal_update_customer"
       ref="updateCustomerModalRef"
       tabindex="-1"
-      aria-hidden="true"
+      aria-hidden="false"
     >
       <!--begin::Modal dialog-->
       <div class="modal-dialog modal-dialog-centered mw-650px">
@@ -256,7 +256,7 @@
   import { defineComponent, ref, watch } from "vue";
   import { hideModal } from "@/core/helpers/dom";
   import Swal from "sweetalert2/dist/sweetalert2.js";
-  import {createCustomer, Customer, getCustomer } from "@/core/data/customers";
+  import {updateCustomer, Customer, getCustomer, deleteCustomer } from "@/core/data/customers";
 
 
   export default defineComponent({
@@ -268,7 +268,7 @@
       const updateCustomerModalRef = ref<null | HTMLElement>(null);
       const loading = ref<boolean>(false);
       const formData = ref<Customer>({
-        Id:0,
+        Id:null,
         Code:"",
         Name: "",
         LastName:"",
@@ -337,7 +337,7 @@
         formRef.value.validate(async (valid: boolean) => {
           if (valid) {
             loading.value = true;
-          await createCustomer(formData.value);
+          await updateCustomer(formData.value);
             setTimeout(() => {
               loading.value = false;
 
@@ -369,6 +369,10 @@
           }
         });
       };
+
+      
+     
+     
 
       return {
         formData,
