@@ -68,6 +68,7 @@ const getCustomer = (id: number) : Promise<Customer> => {
 };
 
 const createCustomer = async (formData:Customer) => {
+  console.log(formData)
   return ApiService.post("https://localhost:7267/api/Customers/Create", formData)
     .then(({ data }) => {
       const result = data as Partial<Customer>;
@@ -79,8 +80,20 @@ const createCustomer = async (formData:Customer) => {
     });
 };
 
-const deleteCustomer = (id) => {
-  return ApiService.get(`https://localhost:7267/api/Customers/GetById?id=${id}`, "")
+const updateCustomer = async (formData:Customer) => {
+  return ApiService.post("https://localhost:7267/api/Customers/Update", formData)
+    .then(({ data }) => {
+      const result = data as Partial<Customer>;
+      return result;
+    })
+    .catch(({ response }) => {
+      console.log(response);
+      return undefined;
+    });
+};
+
+const deleteCustomer = async (id: number) => {
+  return ApiService.post("https://localhost:7267/api/Customers/Delete", { Id: id })
     .then(({ data }) => {
       const result = data as Partial<Customer>;
       return result;
@@ -92,8 +105,7 @@ const deleteCustomer = (id) => {
 };
 
 
-
-export { getCustomers, getCustomer, createCustomer, deleteCustomer }
+export { getCustomers, getCustomer, createCustomer, updateCustomer, deleteCustomer, }
  
 
 // export default customers;

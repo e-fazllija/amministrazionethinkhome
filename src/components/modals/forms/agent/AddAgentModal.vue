@@ -4,7 +4,7 @@
     id="kt_modal_add_agent"
     ref="addAgentModalRef"
     tabindex="-1"
-    aria-hidden="true"
+    aria-hidden="false"
   >
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-650px">
@@ -47,6 +47,24 @@
               data-kt-scroll-wrappers="#kt_modal_add_agent_scroll"
               data-kt-scroll-offset="300px"
             >
+            <!--begin::Input group-->
+            <div class="fv-row mb-7">
+                <!--begin::Label-->
+                <label class="required fs-6 fw-semobold mb-2">Code</label>
+                <!--end::Label-->
+
+                <!--begin::Input-->
+                <el-form-item prop="code">
+                  <el-input
+                    v-model="formData.Code"
+                    type="number"
+                    placeholder=""
+                  />
+                </el-form-item>
+                <!--end::Input-->
+              </div>
+              <!--end::Input group-->
+
               <!--begin::Input group-->
               <div class="fv-row mb-7">
                 <!--begin::Label-->
@@ -64,6 +82,7 @@
                 <!--end::Input-->
               </div>
               <!--end::Input group-->
+
               <!--begin::Input group-->
               <div class="fv-row mb-7">
                 <!--begin::Label-->
@@ -294,10 +313,10 @@ export default defineComponent({
   components: {},
   setup() {
     const formRef = ref<null | HTMLFormElement>(null);
-    const addCustomerModalRef = ref<null | HTMLElement>(null);
+    const addAgentModalRef = ref<null | HTMLElement>(null);
     const loading = ref<boolean>(false);
     const formData = ref<Agent>({
-      Code:"",
+      Code:null,
       Name: "",
       LastName:"",
       Email: "",

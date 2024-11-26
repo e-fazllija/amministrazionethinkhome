@@ -47,6 +47,27 @@
               data-kt-scroll-wrappers="#kt_modal_add_customer_scroll"
               data-kt-scroll-offset="300px"
             >
+             <!--begin::Input group-->
+             <div class="fv-row mb-7">
+                <!--begin::Label-->
+                <label class="fs-6 fw-semobold mb-2">
+                  <span class="required">Codice</span>
+                  <i
+                    class="fas fa-exclamation-circle ms-1 fs-7"
+                    data-bs-toggle="tooltip"
+                    title="Codice non valido "
+                  ></i>
+                </label>
+                <!--end::Label-->
+
+                <!--begin::Input-->
+                <el-form-item prop="code">
+                  <el-input v-model="formData.Code" 
+                  type= "number" />
+                </el-form-item>
+                <!--end::Input-->
+              </div>
+              <!--end::Input group-->
               <!--begin::Input group-->
               <div class="fv-row mb-7">
                 <!--begin::Label-->
@@ -107,7 +128,6 @@
                 <!--begin::Label-->
                 <label class="fs-6 fw-semobold mb-2">
                   <span class="required">Telefono</span>
-
                   <i
                     class="fas fa-exclamation-circle ms-1 fs-7"
                     data-bs-toggle="tooltip"
@@ -287,6 +307,8 @@ import { hideModal } from "@/core/helpers/dom";
 import { countries } from "@/core/data/countries";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import {createCustomer, Customer } from "@/core/data/customers";
+import getItems from "@/views/pages/customers/Clients.vue";
+
 
 
 export default defineComponent({
@@ -297,7 +319,7 @@ export default defineComponent({
     const addCustomerModalRef = ref<null | HTMLElement>(null);
     const loading = ref<boolean>(false);
     const formData = ref<Customer>({
-      Code:"0",
+      Code:"",
       Name: "",
       LastName:"",
       Email: "",
@@ -310,6 +332,13 @@ export default defineComponent({
     });
 
     const rules = ref({
+      Code: [
+        {
+          required: true,
+          message: "Codice obligatorio",
+          trigger: "change",
+        },
+      ],
       Name: [
         {
           required: true,
@@ -358,7 +387,6 @@ export default defineComponent({
         await createCustomer(formData.value);
           setTimeout(() => {
             loading.value = false;
-
             Swal.fire({
               text: "Il modulo è stato inviato con successo!",
               icon: "Successo",
