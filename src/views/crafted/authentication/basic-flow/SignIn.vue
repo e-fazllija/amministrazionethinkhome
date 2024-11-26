@@ -169,7 +169,7 @@ export default defineComponent({
           text: "You have successfully logged in!",
           icon: "success",
           buttonsStyling: false,
-          confirmButtonText: "Ok, got it!",
+          confirmButtonText: "Continua!",
           heightAuto: false,
           customClass: {
             confirmButton: "btn fw-semobold btn-light-primary",
@@ -183,7 +183,7 @@ export default defineComponent({
           text: error as string,
           icon: "error",
           buttonsStyling: false,
-          confirmButtonText: "Try again!",
+          confirmButtonText: "Riprova!",
           heightAuto: false,
           customClass: {
             confirmButton: "btn fw-semobold btn-light-danger",

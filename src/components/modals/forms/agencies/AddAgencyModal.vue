@@ -73,7 +73,7 @@
                 <!--begin::Input-->
                 <el-form-item prop="lastName">
                   <el-input
-                    v-model="formData.Lastname"
+                    v-model="formData.LastName"
                     type="text"
                     placeholder=""
                   />
@@ -204,7 +204,7 @@
                   <!--end::Label-->
 
                   <!--begin::Input-->
-                  <el-form-item prop="town">
+                  <el-form-item prop="Town">
                     <el-input v-model="formData.Town" />
                   </el-form-item>
                   <!--end::Input-->
@@ -283,19 +283,19 @@ import { hideModal } from "@/core/helpers/dom";
 import { countries } from "@/core/data/countries";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import {createAgency, Agency } from "@/core/data/agencies";
-
+import { useAuthStore, type User } from "@/stores/auth";
 
 export default defineComponent({
   name: "add-agency-modal",
   components: {},
-  setup() {
+  setup(_, { emit }) {
     const formRef = ref<null | HTMLFormElement>(null);
     const addAgencyModalRef = ref<null | HTMLElement>(null);
     const loading = ref<boolean>(false);
+    const store = useAuthStore();
     const formData = ref<Agency>({
-      Code: "",
       Name: "",
-      Lastname: "",
+      LastName: "",
       Email: "",
       PhoneNumber: null,
       MobilePhoneNumber: null,
@@ -314,7 +314,7 @@ export default defineComponent({
           trigger: "change",
         },
       ],
-      Lastname: [
+      LastName: [
         {
           required: true,
           message: "Cognome obligatorio",
@@ -358,39 +358,40 @@ export default defineComponent({
       await formRef.value.validate(async (valid: boolean) => {
         if (valid) {
           loading.value = true;
-          formData.value.Password = Math.random().toString(36).slice(-8);
+          
           console.log(formData);
           formData.value.Role = "Agency"
           await createAgency(formData.value);
-          setTimeout(() => {
-            loading.value = false;
+          
+          const error = store.errors;
 
+          if (!error) {
             Swal.fire({
-              text: "Il modulo è stato inviato con successo!",
-              icon: "Successo",
+              text: "Operazione completata!",
+              icon: "success",
               buttonsStyling: false,
-              confirmButtonText: "Ok!",
+              confirmButtonText: "Continua!",
               heightAuto: false,
               customClass: {
-                confirmButton: "btn btn-primary",
+                confirmButton: "btn fw-semobold btn-light-primary",
               },
-            }).then(() => {
+            }).then(function () {
               hideModal(addAgencyModalRef.value);
+              emit('formAddSubmitted', formData.value);
             });
-          }, 2000);
-        } else {
-          Swal.fire({
-            text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
-            icon: "error",
-            buttonsStyling: false,
-            confirmButtonText: "Ok",
-            heightAuto: false,
-            customClass: {
-              confirmButton: "btn btn-primary",
-            },
-          });
-          return false;
-        }
+          } else {
+            Swal.fire({
+              text: error as string,
+              icon: "error",
+              buttonsStyling: false,
+              confirmButtonText: "Riprova!",
+              heightAuto: false,
+              customClass: {
+                confirmButton: "btn fw-semobold btn-light-danger",
+              },
+            });
+          }
+        } 
       });
     };
 

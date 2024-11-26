@@ -67,7 +67,7 @@ export const useAuthStore = defineStore("auth", () => {
         setAuth(data);
       })
       .catch(({ response }) => {
-        setError(response.Error);
+        setError(response.data.Message);
       });
   }
 

@@ -294,7 +294,7 @@ export default defineComponent({
   components: {},
   setup() {
     const formRef = ref<null | HTMLFormElement>(null);
-    const addCustomerModalRef = ref<null | HTMLElement>(null);
+    const addAgentModalRef = ref<null | HTMLElement>(null);
     const loading = ref<boolean>(false);
     const formData = ref<Agent>({
       Code:"",

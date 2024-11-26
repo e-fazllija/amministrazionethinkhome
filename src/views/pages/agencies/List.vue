@@ -14,7 +14,7 @@
             v-model="search"
             @input="searchItems()"
             class="form-control form-control-solid w-250px ps-15"
-            placeholder="Ricerca Clienti"
+            placeholder="Ricerca"
           />
         </div>
         <!--end::Search-->
@@ -29,7 +29,7 @@
           data-kt-customer-table-toolbar="base"
         >
           <!--begin::Export-->
-          <button
+          <!-- <button
             type="button"
             class="btn btn-light-primary me-3"
             data-bs-toggle="modal"
@@ -37,17 +37,17 @@
           >
             <KTIcon icon-name="exit-up" icon-class="fs-2" />
             Export
-          </button>
+          </button> -->
           <!--end::Export-->
           <!--begin::Add Agent-->
           <button
             type="button"
             class="btn btn-primary"
             data-bs-toggle="modal"
-            data-bs-target="#kt_modal_add_agent"
+            data-bs-target="#kt_modal_add_agency"
           >
             <KTIcon icon-name="plus" icon-class="fs-2" />
-            Aggiungi Agente
+            Aggiungi Agenzia
           </button>
           <!--end::Add Agent-->
         </div>
@@ -65,7 +65,7 @@
           <button
             type="button"
             class="btn btn-danger"
-            @click="deleteFewAgents()"
+            @click="deleteFewItems()"
           >
             Cancella Selezionati
           </button>
@@ -103,8 +103,11 @@
         :header="tableHeader"
         :enable-items-per-page-dropdown="true"
         :checkbox-enabled="true"
-        checkbox-label="id"
+        checkbox-label="Id"
       >
+      <template v-slot:UserName="{ row: agent }">
+          {{ agent.UserName }}
+        </template>
         <template v-slot:Name="{ row: agent }">
           {{ agent.Name }}
         </template>
@@ -116,21 +119,16 @@
             {{ agent.Email }}
           </a>
         </template>
-        <template v-slot:Phone="{ row: agent }">
-          {{ agent.Phone }}
+        <template v-slot:PhoneNumber="{ row: agent }">
+          {{ agent.PhoneNumber }}
         </template>
-        <template v-slot:Date="{ row: agent }">
-          {{ agent.Date }}
-        </template>
+        
           <template v-slot:actions="{ row: agent }">
                    <button class="btn btn-light-info me-1" data-bs-toggle="modal"
-                        data-bs-target="#kt_modal_update_agent"
-                        @click="selectId(agent.id)">Dettagli</button>
+                        data-bs-target="#kt_modal_update_agency"
+                        @click="selectId(agent.Id)">Dettagli</button>
 
-                        <!-- <button class="btn btn-light-info me-1" 
-                        @click="toggleUpdateModal(true, agent.id)">Dettagli</button> -->
-
-                  <button @click="deleteItem(agent.id)" class="btn btn-light-danger me-1">Elimina</button>
+                  <button @click="deleteItem(agent.Id)" class="btn btn-light-danger me-1">Elimina</button>
               </template>
           <!--begin::Menu-->
           <div
@@ -144,8 +142,8 @@
   </div>
 
   <ExportCustomerModal></ExportCustomerModal>
-  <AddAgentModal></AddAgentModal>
-  <UpdateAgentModal :Id="selectedId" id="updateAgentModal" ref="updateAgentModal"></UpdateAgentModal>
+  <AddAgencyModal @formAddSubmitted="getItems('')"></AddAgencyModal>
+  <UpdateAgencyModal :Id="selectedId" @formUpdateSubmitted="getItems('')"></UpdateAgencyModal>
 </template>
 
 <script lang="ts">
@@ -154,60 +152,52 @@ import { defineComponent, onMounted, ref } from "vue";
 import Datatable from "@/components/kt-datatable/KTDataTable.vue";
 import type { Sort } from "@/components/kt-datatable//table-partials/models";
 import ExportCustomerModal from "@/components/modals/forms/ExportCustomerModal.vue";
-import AddAgentModal from "@/components/modals/forms/agent/AddAgentModal.vue";
 import arraySort from "array-sort";
 import { MenuComponent } from "@/assets/ts/components";
-import { getAgencies, Agency } from "@/core/data/agencies";
-import UpdateAgentModal from "@/components/modals/forms/agent/UpdateAgentModal.vue";
-
- 
+import { getAgencies, deleteAgency, Agency } from "@/core/data/agencies";
+import AddAgencyModal from "@/components/modals/forms/agencies/AddAgencyModal.vue";
+import UpdateAgencyModal from "@/components/modals/forms/agencies/UpdateAgencyModal.vue";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 
 export default defineComponent({
-  name: "agents",
+  name: "agencies",
   components: {
     Datatable,
     ExportCustomerModal,
-    AddAgentModal,
-    UpdateAgentModal,
+    AddAgencyModal,
+    UpdateAgencyModal,
   },
   setup() {
-    let updateAgentModal = ref (null);
     const tableHeader = ref([
+    {
+        columnName: "UserName",
+        columnLabel: "UserName",
+        sortEnabled: true,
+        columnWidth: 175,
+      },
       {
         columnName: "Nome",
-        columnLabel: "name",
+        columnLabel: "Name",
         sortEnabled: true,
         columnWidth: 175,
       },
       {
         columnName: "Cognome",
-        columnLabel: "lastName",
+        columnLabel: "LastName",
         sortEnabled: true,
         columnWidth: 175,
       },
       {
         columnName: "Email",
-        columnLabel: "email",
+        columnLabel: "Email",
         sortEnabled: true,
         columnWidth: 230,
       },
       {
         columnName: "Telefono",
-        columnLabel: "phone",
+        columnLabel: "PhoneNumber",
         sortEnabled: true,
         columnWidth: 175,
-      },
-      // {
-      //   columnName: "Payment Method",
-      //   columnLabel: "paymentMethod",
-      //   sortEnabled: true,
-      //   columnWidth: 175,
-      // },
-      {
-        columnName: "Data Creazione",
-        columnLabel: "date",
-        sortEnabled: true,
-        columnWidth: 225,
       },
       {
         columnName: "Azioni",
@@ -216,12 +206,13 @@ export default defineComponent({
         columnWidth: 135,
       },
     ]);
-    const selectedIds = ref<Array<number>>([]);
-    let selectedId = ref(0);
+    const selectedIds = ref<Array<String>>([]);
+    let selectedId = ref<string>();
     const tableData = ref();
     const initAgents = ref([]);
+    
     async function getItems(filterRequest: string) {
-        tableData.value = await getAgencies(filterRequest);
+         tableData.value = await getAgencies(filterRequest);
     };
 
     onMounted(async () => {
@@ -229,9 +220,10 @@ export default defineComponent({
       getItems("");
     });
 
-    const deleteFewAgents = () => {
-      selectedIds.value.forEach((item) => {
-        deleteAgent(item);
+    const deleteFewItems = () => {
+      selectedIds.value.forEach(async (item) => {
+        await deleteAgency(item)
+        await getItems("");
       });
       selectedIds.value.length = 0;
     };
@@ -270,13 +262,24 @@ export default defineComponent({
       return false;
     };
 
-    const deleteItem = (id: number) => {
-      for (let i = 0; i < tableData.value.length; i++) {
-      if (tableData.value[i].id === id) {
-      tableData.value.splice(i, 1);}
-      }
-      MenuComponent.reinitialization(); 
-};
+    async function deleteItem(id: String){
+      Swal.fire({
+        text: "Confermare l'eliminazione?",
+        icon: "warning",
+        buttonsStyling: false,
+        confirmButtonText: "Continua!",
+        heightAuto: false,
+        customClass: {
+          confirmButton: "btn btn-danger",
+        },
+      }).then(async () => {
+        await deleteAgency(id)
+        await getItems("");
+        MenuComponent.reinitialization(); 
+      });
+      
+    }
+    
     const sort = (sort: Sort) => {
       const reverse: boolean = sort.order === "asc";
       if (sort.label) {
@@ -284,23 +287,15 @@ export default defineComponent({
       }
     };
 
-    const selectId = (id: number) => {
+    const selectId = (id: string) => {
       selectedId.value = id;
     };
 
-    const onItemSelect = (selectedItems: Array<number>) => {
+    const onItemSelect = (selectedItems: Array<String>) => {
       selectedIds.value = selectedItems;
     };
 
-    function toggleUpdateModal(value, id){
-      console.log(id)
-      selectedId.value = id;
-      updateAgentModal.value.show = value
-    };
-
     return {
-      updateAgentModal,
-      toggleUpdateModal,
       tableData,
       tableHeader,
       deleteAgent,
@@ -308,13 +303,13 @@ export default defineComponent({
       searchItems,
       selectedId,
       selectedIds,
-      deleteFewAgents,
+      deleteFewItems,
       sort,
       onItemSelect,
       getAssetPath,
       deleteItem,
       selectId,
-      
+      getItems
     };
   },
 });

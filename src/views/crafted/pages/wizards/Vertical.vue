@@ -393,7 +393,7 @@ export default defineComponent({
         text: "All is cool! Now you submit this form",
         icon: "success",
         buttonsStyling: false,
-        confirmButtonText: "Ok, got it!",
+        confirmButtonText: "Continua!",
         heightAuto: false,
         customClass: {
           confirmButton: "btn fw-semobold btn-light-primary",
