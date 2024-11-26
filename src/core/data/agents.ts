@@ -1,47 +1,27 @@
 import ApiService from "@/core/services/ApiService";
-import { createMapper, createMap } from '@automapper/core';
-import { AutoMap, classes } from '@automapper/classes';
+import { useAuthStore, type User } from "@/stores/auth";
+const store = useAuthStore();
 
-export const mapper = createMapper({
-  strategyInitializer: classes(),
-});
-
-export class Agent{
-  @AutoMap() Id?: number;
-  @AutoMap() Code: string;
-  @AutoMap() Name: string;
-  @AutoMap() LastName: string;
-  @AutoMap() Email: string;
-  @AutoMap() Phone: number;
-  @AutoMap() Description: string;
-  @AutoMap() AdressLine: string;
-  @AutoMap() Town: string;
-  @AutoMap() State: string;
-  @AutoMap() CreationDate?: Date;
-  @AutoMap() UpdateDate?: Date;
-  constructor(Id:number,Code:string,Name:string,LastName:string,Email:string,Phone: number,
-    Description: string,AdressLine: string,Town: string,State: string,CreationDate: Date,UpdateDate: Date){
-    this.Id=Id;
-    this.Code=Code;
-    this.Name=Name;
-    this.LastName=LastName;
-    this.Email=Email;
-    this.Phone=Phone;
-    this.Description=Description;
-    this.AdressLine=AdressLine;
-    this.Town=Town;
-    this.State=State;
-    this.CreationDate=CreationDate;
-    this.UpdateDate=UpdateDate;
-
-  }
+export class Agent {
+  Id?: number;
+  Name: string;
+  LastName: string;
+  Email: string;
+  PhoneNumber: number;
+  MobilePhoneNumber?: number;
+  Referent?: string;
+  Address: string;
+  Town: string;
+  Region?: string;
+  CreationDate?: Date;
+  UpdateDate?: Date;
+  Token?: string;
+  Role? = "Agent";
+  Password?: string;
 }
 
-
-createMap(mapper, Object, Agent);
-
-const getAgents = async (filterRequest: string): Promise<Array<Agent>> => {
-   return await ApiService.get(
+const getAgents = (filterRequest: string) : Promise<Array<Agent>> => {
+   return ApiService.get(
     `https://localhost:7267/api/Agents/Get?currentPage=0&filterRequest=${filterRequest}`,
     ""
   )
@@ -55,7 +35,7 @@ const getAgents = async (filterRequest: string): Promise<Array<Agent>> => {
     });
 };
 
-const getAgent = (id: number) : Promise<Agent> => {
+const getAgent = (id: String) : Promise<Agent> => {
   return ApiService.get(`https://localhost:7267/api/Agents/GetById?id=${id}`, "")
     .then(({ data }) => {
       const result = data as Partial<Agent>;
@@ -67,8 +47,15 @@ const getAgent = (id: number) : Promise<Agent> => {
     });
 };
 
-const createAgent = async (formData:Agent) => {
-  return ApiService.post("https://localhost:7267/api/Agents/Create", formData)
+const createAgent = async (formData: any) => {
+  const values = formData as User;
+  values.Password = "ThinkHome!24";
+  return await store.register(values);
+};
+
+const updateAgent = async (formData: any) => {
+  const values = formData as User;
+  return await ApiService.post("https://localhost:7267/api/Agents/Update", values)
     .then(({ data }) => {
       const result = data as Partial<Agent>;
       return result;
@@ -79,8 +66,9 @@ const createAgent = async (formData:Agent) => {
     });
 };
 
-const updateAgent = async (formData:Agent) => {
-  return ApiService.post("https://localhost:7267/api/Agents/Update", formData)
+const deleteAgent = async (id: String) => {
+  console.log(id)
+  return await ApiService.delete(`https://localhost:7267/api/Agents/Delete?id=${id}`)
     .then(({ data }) => {
       const result = data as Partial<Agent>;
       return result;
@@ -91,21 +79,4 @@ const updateAgent = async (formData:Agent) => {
     });
 };
 
-const deleteAgent = (id) => {
-  return ApiService.get(`https://localhost:7267/api/Agents/GetById?id=${id}`, "")
-    .then(({ data }) => {
-      const result = data as Partial<Agent>;
-      return result;
-    })
-    .catch(({ response }) => {
-      console.log(response);
-      return undefined;
-    });
-};
-
-
-
-export { getAgents, getAgent, createAgent, deleteAgent, updateAgent }
- 
-
-// export default agents;
+export { getAgents, getAgent, createAgent, updateAgent, deleteAgent }

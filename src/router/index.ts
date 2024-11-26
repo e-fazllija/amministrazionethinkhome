@@ -27,7 +27,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "agents",
         name: "agents",
-        component: () => import("@/views/pages/agents/Agents.vue"),
+        component: () => import("@/views/pages/agents/List.vue"),
         meta: {
           pageTitle: "Agenti",
           breadcrumbs: ["Agenti"],

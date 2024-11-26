@@ -14,7 +14,7 @@
             v-model="search"
             @input="searchItems()"
             class="form-control form-control-solid w-250px ps-15"
-            placeholder="Ricerca Clienti"
+            placeholder="Ricerca"
           />
         </div>
         <!--end::Search-->
@@ -29,7 +29,7 @@
           data-kt-customer-table-toolbar="base"
         >
           <!--begin::Export-->
-          <button
+          <!-- <button
             type="button"
             class="btn btn-light-primary me-3"
             data-bs-toggle="modal"
@@ -37,7 +37,7 @@
           >
             <KTIcon icon-name="exit-up" icon-class="fs-2" />
             Export
-          </button>
+          </button> -->
           <!--end::Export-->
           <!--begin::Add Agent-->
           <button
@@ -47,7 +47,7 @@
             data-bs-target="#kt_modal_add_agent"
           >
             <KTIcon icon-name="plus" icon-class="fs-2" />
-            Aggiungi Agente
+            Aggiungi Agenzia
           </button>
           <!--end::Add Agent-->
         </div>
@@ -65,7 +65,7 @@
           <button
             type="button"
             class="btn btn-danger"
-            @click="deleteFewAgents()"
+            @click="deleteFewItems()"
           >
             Cancella Selezionati
           </button>
@@ -103,8 +103,11 @@
         :header="tableHeader"
         :enable-items-per-page-dropdown="true"
         :checkbox-enabled="true"
-        checkbox-label="id"
+        checkbox-label="Id"
       >
+      <template v-slot:UserName="{ row: agent }">
+          {{ agent.UserName }}
+        </template>
         <template v-slot:Name="{ row: agent }">
           {{ agent.Name }}
         </template>
@@ -116,19 +119,14 @@
             {{ agent.Email }}
           </a>
         </template>
-        <template v-slot:Phone="{ row: agent }">
-          {{ agent.Phone }}
+        <template v-slot:PhoneNumber="{ row: agent }">
+          {{ agent.PhoneNumber }}
         </template>
-        <template v-slot:Date="{ row: agent }">
-          {{ agent.Date }}
-        </template>
-          <template v-slot:Actions="{ row: agent }">
+        
+          <template v-slot:actions="{ row: agent }">
                    <button class="btn btn-light-info me-1" data-bs-toggle="modal"
                         data-bs-target="#kt_modal_update_agent"
                         @click="selectId(agent.Id)">Dettagli</button>
-
-                        <!-- <button class="btn btn-light-info me-1" 
-                        @click="toggleUpdateModal(true, agent.id)">Dettagli</button> -->
 
                   <button @click="deleteItem(agent.Id)" class="btn btn-light-danger me-1">Elimina</button>
               </template>
@@ -144,8 +142,8 @@
   </div>
 
   <ExportCustomerModal></ExportCustomerModal>
-  <AddAgentModal></AddAgentModal>
-  <UpdateAgentModal :Id="selectedId"></UpdateAgentModal>
+  <AddAgentModal @formAddSubmitted="getItems('')"></AddAgentModal>
+  <UpdateAgentModal :Id="selectedId" @formUpdateSubmitted="getItems('')"></UpdateAgentModal>
 </template>
 
 <script lang="ts">
@@ -154,13 +152,12 @@ import { defineComponent, onMounted, ref } from "vue";
 import Datatable from "@/components/kt-datatable/KTDataTable.vue";
 import type { Sort } from "@/components/kt-datatable//table-partials/models";
 import ExportCustomerModal from "@/components/modals/forms/ExportCustomerModal.vue";
-import AddAgentModal from "@/components/modals/forms/agent/AddAgentModal.vue";
 import arraySort from "array-sort";
 import { MenuComponent } from "@/assets/ts/components";
-import { getAgents, Agent } from "@/core/data/agents";
-import UpdateAgentModal from "@/components/modals/forms/agent/UpdateAgentModal.vue";
-
- 
+import { getAgents, deleteAgent, Agent } from "@/core/data/agents";
+import AddAgentModal from "@/components/modals/forms/agents/AddAgentModal.vue";
+import UpdateAgentModal from "@/components/modals/forms/agents/UpdateAgentModal.vue";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 
 export default defineComponent({
   name: "agents",
@@ -171,8 +168,13 @@ export default defineComponent({
     UpdateAgentModal,
   },
   setup() {
-    let updateAgentModal = ref (null);
     const tableHeader = ref([
+    {
+        columnName: "UserName",
+        columnLabel: "UserName",
+        sortEnabled: true,
+        columnWidth: 175,
+      },
       {
         columnName: "Nome",
         columnLabel: "Name",
@@ -193,55 +195,37 @@ export default defineComponent({
       },
       {
         columnName: "Telefono",
-        columnLabel: "Phone",
+        columnLabel: "PhoneNumber",
         sortEnabled: true,
         columnWidth: 175,
       },
-      // {
-      //   columnName: "Payment Method",
-      //   columnLabel: "paymentMethod",
-      //   sortEnabled: true,
-      //   columnWidth: 175,
-      // },
-      {
-        columnName: "Data Creazione",
-        columnLabel: "Date",
-        sortEnabled: true,
-        columnWidth: 225,
-      },
       {
         columnName: "Azioni",
-        columnLabel: "Actions",
+        columnLabel: "actions",
         sortEnabled: false,
         columnWidth: 135,
       },
     ]);
-    const selectedIds = ref<Array<number>>([]);
-    let selectedId = ref(0);
-    const tableData = ref<Array<Agent>>();
-      const initAgents = ref([]);
-      async function getItems(filterRequest: string) {
-          tableData.value = await getAgents(filterRequest);
-      };
+    const selectedIds = ref<Array<String>>([]);
+    let selectedId = ref<string>();
+    const tableData = ref();
+    const initAgents = ref([]);
+    
+    async function getItems(filterRequest: string) {
+         tableData.value = await getAgents(filterRequest);
+    };
 
-    onMounted(() => {
+    onMounted(async () => {
       // initAgents.value.splice(0, tableData.value.length, ...tableData.value);
       getItems("");
     });
 
-    const deleteFewAgents = () => {
-      selectedIds.value.forEach((item) => {
-        deleteAgent(item);
+    const deleteFewItems = async () => {
+      selectedIds.value.forEach(async (item) => {
+        await deleteAgent(item)
       });
       selectedIds.value.length = 0;
-    };
-
-    const deleteAgent = (id: number) => {
-      for (let i = 0; i < tableData.value.length; i++) {
-        if (tableData.value[i].Id === id) {
-          tableData.value.splice(i, 1);
-        }
-      }
+      await getItems("");
     };
 
     const search = ref<string>("");
@@ -270,13 +254,24 @@ export default defineComponent({
       return false;
     };
 
-    const deleteItem = (id: number) => {
-      for (let i = 0; i < tableData.value.length; i++) {
-      if (tableData.value[i].Id === id) {
-      tableData.value.splice(i, 1);}
-      }
-      MenuComponent.reinitialization(); 
-};
+    async function deleteItem(id: string){
+      Swal.fire({
+        text: "Confermare l'eliminazione?",
+        icon: "warning",
+        buttonsStyling: false,
+        confirmButtonText: "Continua!",
+        heightAuto: false,
+        customClass: {
+          confirmButton: "btn btn-danger",
+        },
+      }).then(async () => {
+        await deleteAgent(id)
+        await getItems("");
+        MenuComponent.reinitialization(); 
+      });
+      
+    }
+    
     const sort = (sort: Sort) => {
       const reverse: boolean = sort.order === "asc";
       if (sort.label) {
@@ -284,23 +279,15 @@ export default defineComponent({
       }
     };
 
-    const selectId = (id: number) => {
+    const selectId = (id: string) => {
       selectedId.value = id;
     };
 
-    const onItemSelect = (selectedItems: Array<number>) => {
+    const onItemSelect = (selectedItems: Array<String>) => {
       selectedIds.value = selectedItems;
     };
 
-    function toggleUpdateModal(value, id){
-      console.log(id)
-      selectedId.value = id;
-      updateAgentModal.value.show = value
-    };
-
     return {
-      updateAgentModal,
-      toggleUpdateModal,
       tableData,
       tableHeader,
       deleteAgent,
@@ -308,13 +295,13 @@ export default defineComponent({
       searchItems,
       selectedId,
       selectedIds,
-      deleteFewAgents,
+      deleteFewItems,
       sort,
       onItemSelect,
       getAssetPath,
       deleteItem,
       selectId,
-      
+      getItems
     };
   },
 });

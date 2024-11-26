@@ -220,12 +220,12 @@ export default defineComponent({
       getItems("");
     });
 
-    const deleteFewItems = () => {
+    const deleteFewItems = async () => {
       selectedIds.value.forEach(async (item) => {
         await deleteAgency(item)
-        await getItems("");
       });
       selectedIds.value.length = 0;
+      await getItems("");
     };
 
     const deleteAgent = (id: number) => {
