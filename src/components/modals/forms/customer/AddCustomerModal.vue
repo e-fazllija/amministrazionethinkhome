@@ -222,37 +222,7 @@
                     <!--end::Input-->
                   </div>
                   <!--end::Col-->
-
                 </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <!-- <div class="d-flex flex-column mb-7 fv-row"> -->
-                  <!--begin::Label-->
-                  <!-- <label class="fs-6 fw-semobold mb-2">
-                    <span class="required">Country</span>
-
-                    <i
-                      class="fas fa-exclamation-circle ms-1 fs-7"
-                      data-bs-toggle="tooltip"
-                      title="Country of origination"
-                    ></i>
-                  </label> -->
-                  <!--end::Label-->
-
-                  <!--begin::Input-->
-                  <!-- <el-select v-model="formData.country">
-                    <el-option value="">Select a Country...</el-option>
-                    <el-option
-                      v-for="(item, i) in countries"
-                      :key="`countries-select-option-${i}`"
-                      :value="item.code"
-                    >
-                      {{ item.name }}
-                    </el-option>
-                  </el-select> -->
-                  <!--end::Input-->
-                <!-- </div> -->
                 <!--end::Input group-->
               </div>
               <!--end::Billing form-->
@@ -307,17 +277,16 @@ import { hideModal } from "@/core/helpers/dom";
 import { countries } from "@/core/data/countries";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import {createCustomer, Customer } from "@/core/data/customers";
-import getItems from "@/views/pages/customers/Clients.vue";
-
-
+import { useAuthStore, type User } from "@/stores/auth";
 
 export default defineComponent({
   name: "add-customer-modal",
   components: {},
-  setup() {
+  setup(_, { emit }) {
     const formRef = ref<null | HTMLFormElement>(null);
     const addCustomerModalRef = ref<null | HTMLElement>(null);
     const loading = ref<boolean>(false);
+    const store = useAuthStore();
     const formData = ref<Customer>({
       Code:"",
       Name: "",
@@ -328,7 +297,6 @@ export default defineComponent({
       AdressLine: "",
       Town: "",
       State: "",
-      // country: "US",
     });
 
     const rules = ref({
@@ -367,14 +335,6 @@ export default defineComponent({
           trigger: "change",
         },
       ],
-      
-      // postCode: [
-      //   {
-      //     required: false,
-      //     message: "Post code is required",
-      //     trigger: "change",
-      //   },
-      // ],
     });
 
     const submit = () => {
@@ -384,22 +344,26 @@ export default defineComponent({
       formRef.value.validate(async (valid: boolean) => {
         if (valid) {
           loading.value = true;
+
+        console.log(formData);
         await createCustomer(formData.value);
-          setTimeout(() => {
-            loading.value = false;
+
+        const error = store.errors;
+
+        if (!error) {
             Swal.fire({
               text: "Il modulo è stato inviato con successo!",
               icon: "Successo",
               buttonsStyling: false,
-              confirmButtonText: "Ok!",
+              confirmButtonText: "Continua!",
               heightAuto: false,
               customClass: {
-                confirmButton: "btn btn-primary",
+                confirmButton: "btn fw-semobold btn-light-primary",
               },
-            }).then(() => {
+            }).then(function () {
               hideModal(addCustomerModalRef.value);
+              emit('formAddSubmitted', formData.value);
             });
-          }, 2000);
         } else {
           Swal.fire({
             text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
@@ -411,10 +375,10 @@ export default defineComponent({
               confirmButton: "btn btn-primary",
             },
           });
-          return false;
         }
-      });
-    };
+      }
+    });
+  };
 
     return {
       formData,
