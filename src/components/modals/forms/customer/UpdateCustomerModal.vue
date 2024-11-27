@@ -256,7 +256,7 @@
   import { defineComponent, ref, watch } from "vue";
   import { hideModal } from "@/core/helpers/dom";
   import Swal from "sweetalert2/dist/sweetalert2.js";
-  import {updateCustomer, Customer, getCustomer, deleteCustomer } from "@/core/data/customers";
+  import {updateCustomer, Customer, getCustomer } from "@/core/data/customers";
 
 
   export default defineComponent({

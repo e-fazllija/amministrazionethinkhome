@@ -45,9 +45,18 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "properties",
         name: "properties",
-        component: () => import("@/views/pages/properties/Properties.vue"),
+        component: () => import("@/views/pages/properties/List.vue"),
         meta: {
           pageTitle: "Immobili",
+          breadcrumbs: ["Immobili"],
+        },
+      },
+      {
+        path: "property/:id",
+        name: "property",
+        component: () => import("@/views/pages/properties/Update.vue"),
+        meta: {
+          pageTitle: "Immobile",
           breadcrumbs: ["Immobili"],
         },
       },

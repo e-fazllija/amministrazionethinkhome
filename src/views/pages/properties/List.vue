@@ -29,7 +29,7 @@
           data-kt-customer-table-toolbar="base"
         >
           <!--begin::Export-->
-          <button
+          <!-- <button
             type="button"
             class="btn btn-light-primary me-3"
             data-bs-toggle="modal"
@@ -37,7 +37,7 @@
           >
             <KTIcon icon-name="exit-up" icon-class="fs-2" />
             Export
-          </button>
+          </button> -->
           <!--end::Export-->
           <!--begin::Add customer-->
           <button
@@ -65,7 +65,7 @@
           <button
             type="button"
             class="btn btn-danger"
-            @click="deleteFewCustomers()"
+            @click="deleteFewItems()"
           >
             Cancella
           </button>
@@ -105,55 +105,27 @@
         :checkbox-enabled="true"
         checkbox-label="id"
       >
-        <template v-slot:category="{ row: properties }">
-          {{ properties.category }}
+        <template v-slot:category="{ row: item }">
+          {{ item.category }}
         </template>
-        <template v-slot:address="{ row: properties }">
-          {{ properties.address }}
+        <template v-slot:Address="{ row: item }">
+          {{ item.Address }}
         </template>
-        <template v-slot:price="{ row: properties }">
-          {{ properties.price }}
+        <template v-slot:Price="{ row: item }">
+          {{ item.Price }}
         </template>
-        <template v-slot:state="{ row: properties }">
-          {{ properties.state }}
+        <template v-slot:State="{ row: item }">
+          {{ item.State }}
         </template>
-        <template v-slot:date="{ row: properties }">
-          {{ properties.date }}
+        <template v-slot:CreationDate="{ row: item }">
+          {{ item.CreationDate }}
         </template>
-        <template v-slot:actions="{ row: properties }">
-          <a
-            href="#"
-            class="btn btn-sm btn-light btn-active-light-primary"
-            data-kt-menu-trigger="click"
-            data-kt-menu-placement="bottom-end"
-            data-kt-menu-flip="top-end"
-            >Azioni
-            <KTIcon icon-name="down" icon-class="fs-5 m-0" />
-          </a>
-          <!--begin::Menu-->
-          <div
-            class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semobold fs-7 w-125px py-4"
-            data-kt-menu="true"
-          >
-            <!--begin::Menu item-->
-            <div class="menu-item px-3">
-              <router-link
-                to="/pages/properties/Properties"
-                class="menu-link px-3"
-                >View</router-link
-              >
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Menu item-->
-            <div class="menu-item px-3">
-              <a @click="deleteCustomer(properties.id)" class="menu-link px-3"
-                >Cancella</a
-              >
-            </div>
-            <!--end::Menu item-->
-          </div>
-          <!--end::Menu-->
-        </template>
+        <template v-slot:actions="{ row: item }">
+                   <router-link :to="{ name: 'property', params: { id: item.Id } }" class="btn btn-light-info me-1"
+                       >Dettagli</router-link>
+
+                  <button @click="deleteItem(item.Id)" class="btn btn-light-danger me-1">Elimina</button>
+              </template>
       </Datatable>
     </div>
   </div>
@@ -169,13 +141,13 @@ import Datatable from "@/components/kt-datatable/KTDataTable.vue";
 import type { Sort } from "@/components/kt-datatable//table-partials/models";
 import ExportCustomerModal from "@/components/modals/forms/ExportCustomerModal.vue";
 import AddPropertyModal from "@/components/modals/forms/AddPropertyModal.vue";
-import type { IProperty } from "@/core/data/property";
-import property from "@/core/data/property";
+import { getRealEstateProperties, deleteRealEstateProperty, RealEstateProperty } from "@/core/data/properties";
 import arraySort from "array-sort";
 import { MenuComponent } from "@/assets/ts/components";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 
 export default defineComponent({
-  name: "property",
+  name: "properties",
   components: {
     Datatable,
     ExportCustomerModal,
@@ -185,31 +157,31 @@ export default defineComponent({
     const tableHeader = ref([
       {
         columnName: "Categoria",
-        columnLabel: "category",
+        columnLabel: "Category",
         sortEnabled: true,
         columnWidth: 175,
       },
       {
-        columnName: "indirizzo",
-        columnLabel: "address",
+        columnName: "Indirizzo",
+        columnLabel: "Address",
         sortEnabled: true,
         columnWidth: 230,
       },
       {
         columnName: "Prezzo",
-        columnLabel: "price",
+        columnLabel: "Price",
         sortEnabled: true,
         columnWidth: 175,
       },
       {
-        columnName: "Stato",
-        columnLabel: "state",
+        columnName: "Città",
+        columnLabel: "Town",
         sortEnabled: true,
         columnWidth: 175,
       },
       {
-        columnName: "Created Date",
-        columnLabel: "date",
+        columnName: "Creato il",
+        columnLabel: "CreationDate",
         sortEnabled: true,
         columnWidth: 225,
       },
@@ -220,35 +192,33 @@ export default defineComponent({
         columnWidth: 135,
       },
     ]);
-    const selectedIds = ref<Array<number>>([]);
-
-    const tableData = ref<Array<IProperty>>(property);
-    const initProperty = ref<Array<IProperty>>([]);
-
-    onMounted(() => {
-      initProperty.value.splice(0, tableData.value.length, ...tableData.value);
-    });
-
-    const deleteFewCustomers = () => {
-      selectedIds.value.forEach((item) => {
-        deleteCustomer(item);
-      });
-      selectedIds.value.length = 0;
+    const selectedIds = ref<Array<Number>>([]);
+    let selectedId = ref<Number>();
+    const tableData = ref();
+    const initAgents = ref([]);
+    
+    async function getItems(filterRequest: string) {
+         tableData.value = await getRealEstateProperties(filterRequest);
     };
 
-    const deleteCustomer = (id: number) => {
-      for (let i = 0; i < tableData.value.length; i++) {
-        if (tableData.value[i].id === id) {
-          tableData.value.splice(i, 1);
-        }
-      }
+    onMounted(async () => {
+      // initAgents.value.splice(0, tableData.value.length, ...tableData.value);
+      getItems("");
+    });
+
+    const deleteFewItems = async () => {
+      selectedIds.value.forEach(async (item) => {
+        await deleteRealEstateProperty(item)
+      });
+      selectedIds.value.length = 0;
+      await getItems("");
     };
 
     const search = ref<string>("");
     const searchItems = () => {
-      tableData.value.splice(0, tableData.value.length, ...initProperty.value);
+      tableData.value.splice(0, tableData.value.length, ...initAgents.value);
       if (search.value !== "") {
-        let results: Array<IProperty> = [];
+        let results: Array<RealEstateProperty> = [];
         for (let j = 0; j < tableData.value.length; j++) {
           if (searchingFunc(tableData.value[j], search.value)) {
             results.push(tableData.value[j]);
@@ -270,12 +240,31 @@ export default defineComponent({
       return false;
     };
 
+    async function deleteItem(id: Number){
+      Swal.fire({
+        text: "Confermare l'eliminazione?",
+        icon: "warning",
+        buttonsStyling: false,
+        confirmButtonText: "Continua!",
+        heightAuto: false,
+        customClass: {
+          confirmButton: "btn btn-danger",
+        },
+      }).then(async () => {
+        await deleteRealEstateProperty(id)
+        await getItems("");
+        MenuComponent.reinitialization(); 
+      });
+      
+    }
+    
     const sort = (sort: Sort) => {
       const reverse: boolean = sort.order === "asc";
       if (sort.label) {
         arraySort(tableData.value, sort.label, { reverse });
       }
     };
+
     const onItemSelect = (selectedItems: Array<number>) => {
       selectedIds.value = selectedItems;
     };
@@ -283,11 +272,11 @@ export default defineComponent({
     return {
       tableData,
       tableHeader,
-      deleteCustomer,
+      deleteItem,
       search,
       searchItems,
       selectedIds,
-      deleteFewCustomers,
+      deleteFewItems,
       sort,
       onItemSelect,
       getAssetPath,

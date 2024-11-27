@@ -54,7 +54,7 @@
                 <!--end::Label-->
 
                 <!--begin::Input-->
-                <el-form-item prop="name">
+                <el-form-item prop="Name">
                   <el-input
                     v-model="formData.Name"
                     type="text"
@@ -71,7 +71,7 @@
                 <!--end::Label-->
 
                 <!--begin::Input-->
-                <el-form-item prop="lastName">
+                <el-form-item prop="LastName">
                   <el-input
                     v-model="formData.LastName"
                     type="text"
@@ -96,7 +96,7 @@
                 <!--end::Label-->
 
                 <!--begin::Input-->
-                <el-form-item prop="email">
+                <el-form-item prop="Email">
                   <el-input v-model="formData.Email" />
                 </el-form-item>
                 <!--end::Input-->
@@ -118,7 +118,7 @@
                 <!--end::Label-->
 
                 <!--begin::Input-->
-                <el-form-item prop="phone">
+                <el-form-item prop="PhoneNumber">
                   <el-input v-model="formData.PhoneNumber" 
                   type= "number" />
                 </el-form-item>
@@ -141,7 +141,7 @@
                 <!--end::Label-->
 
                 <!--begin::Input-->
-                <el-form-item prop="phone">
+                <el-form-item prop="MobilePhoneNumber">
                   <el-input v-model="formData.MobilePhoneNumber" 
                   type= "number" />
                 </el-form-item>
@@ -156,7 +156,7 @@
                 <!--end::Label-->
 
                 <!--begin::Input-->
-                <el-form-item prop="referent">
+                <el-form-item prop="Referent">
                   <el-input v-model="formData.Referent" type="text" />
                 </el-form-item>
                 <!--end::Input-->
@@ -190,7 +190,7 @@
                   <!--end::Label-->
 
                   <!--begin::Input-->
-                  <el-form-item prop="addressLine">
+                  <el-form-item prop="Address">
                     <el-input v-model="formData.Address" />
                   </el-form-item>
                   <!--end::Input-->
@@ -220,7 +220,7 @@
                     <!--end::Label-->
 
                     <!--begin::Input-->
-                    <el-form-item prop="state">
+                    <el-form-item prop="Region">
                       <el-input v-model="formData.Region" />
                     </el-form-item>
                     <!--end::Input-->

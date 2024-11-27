@@ -116,6 +116,7 @@ export const useAuthStore = defineStore("auth", () => {
     register,
     forgotPassword,
     verifyAuth,
-    verifyCredentials
+    verifyCredentials,
+    setError
   };
 });
