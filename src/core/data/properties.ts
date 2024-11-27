@@ -49,6 +49,7 @@ const getRealEstateProperties = (filterRequest: string) : Promise<Array<RealEsta
     ""
   )
     .then(({ data }) => {
+      console.log(data.Data)
       const result = data.Data as Partial<Array<RealEstateProperty>>
       return result;
     })
@@ -73,14 +74,13 @@ const getRealEstateProperty = (id: Number) : Promise<RealEstateProperty> => {
 const createRealEstateProperty = async (form: any) => {
   const values = form as RealEstateProperty;
   values.AgentId = store.user.Id;
-  console.log(JSON.stringify(values))
   const formData = new FormData();
   // Itera su tutte le proprietà dell'oggetto values
   for (const key in values) {
     if (key === "Files" && values.Files) {
       // Se la proprietà è Files, aggiungi i file uno per uno
       Array.from(values.Files).forEach((file) => {
-        formData.append("Photos", file); // Nome del campo nel backend è "Photos"
+        formData.append("Files", file); // Nome del campo nel backend è "Photos"
       });
     } else if (values[key as keyof RealEstateProperty] !== undefined) {
       // Per tutti gli altri campi, aggiungi il valore come stringa
@@ -89,6 +89,7 @@ const createRealEstateProperty = async (form: any) => {
   }
   return await ApiService.post("RealEstateProperty/Create", formData)
     .then(({ data }) => {
+      console.log(data)
       const result = data as Partial<RealEstateProperty>;
       return result;
     })
@@ -118,7 +119,6 @@ const updateRealEstateProperty = async (formData: any) => {
 };
 
 const deleteRealEstateProperty = async (id: Number) => {
-  console.log(id)
   return await ApiService.delete(`RealEstateProperty/Delete?id=${id}`)
     .then(({ data }) => {
       const result = data as Partial<RealEstateProperty>;

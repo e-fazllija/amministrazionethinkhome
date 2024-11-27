@@ -105,8 +105,8 @@
         :checkbox-enabled="true"
         checkbox-label="id"
       >
-        <template v-slot:category="{ row: item }">
-          {{ item.category }}
+        <template v-slot:Category="{ row: item }">
+          {{ item.Category }}
         </template>
         <template v-slot:Address="{ row: item }">
           {{ item.Address }}
@@ -114,12 +114,12 @@
         <template v-slot:Price="{ row: item }">
           {{ item.Price }}
         </template>
-        <template v-slot:State="{ row: item }">
-          {{ item.State }}
+        <template v-slot:Town="{ row: item }">
+          {{ item.Town }}
         </template>
-        <template v-slot:CreationDate="{ row: item }">
-          {{ item.CreationDate }}
-        </template>
+        <!-- <template v-slot:CreationDate="{ row: item }">
+          {{ item.CreationDate.substring(0, 10) }}
+        </template> -->
         <template v-slot:actions="{ row: item }">
                    <router-link :to="{ name: 'property', params: { id: item.Id } }" class="btn btn-light-info me-1"
                        >Dettagli</router-link>
@@ -131,7 +131,7 @@
   </div>
 
   <ExportCustomerModal></ExportCustomerModal>
-  <AddPropertyModal></AddPropertyModal>
+  <AddPropertyModal @formAddSubmitted="getItems('')"></AddPropertyModal>
 </template>
 
 <script lang="ts">
@@ -179,12 +179,12 @@ export default defineComponent({
         sortEnabled: true,
         columnWidth: 175,
       },
-      {
-        columnName: "Creato il",
-        columnLabel: "CreationDate",
-        sortEnabled: true,
-        columnWidth: 225,
-      },
+      // {
+      //   columnName: "Creato il",
+      //   columnLabel: "CreationDate",
+      //   sortEnabled: true,
+      //   columnWidth: 225,
+      // },
       {
         columnName: "Actions",
         columnLabel: "actions",
@@ -199,6 +199,7 @@ export default defineComponent({
     
     async function getItems(filterRequest: string) {
          tableData.value = await getRealEstateProperties(filterRequest);
+
     };
 
     onMounted(async () => {
@@ -280,6 +281,7 @@ export default defineComponent({
       sort,
       onItemSelect,
       getAssetPath,
+      getItems
     };
   },
 });
