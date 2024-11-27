@@ -65,7 +65,7 @@
           <button
             type="button"
             class="btn btn-danger"
-            @click="deleteFewCustomers()"
+            @click="deleteFewItems()"
           >
             Cancella Selezionati
           </button>
@@ -127,10 +127,7 @@
                         data-bs-target="#kt_modal_update_customer"
                         @click="selectId(customer.Id)">Dettagli</button>
 
-                        <!-- <button class="btn btn-light-info me-1" 
-                        @click="toggleUpdateModal(true, customer.id)">Dettagli</button> -->
-
-                  <button @click="confirmDeleteCustomer(customer.Id)" class="btn btn-light-danger me-1">Elimina</button>
+                  <button @click="deleteItem(customer.Id)" class="btn btn-light-danger me-1">Elimina</button>
               </template>
           <!--begin::Menu-->
           <div
@@ -144,8 +141,8 @@
   </div>
 
   <ExportCustomerModal></ExportCustomerModal>
-  <AddCustomerModal></AddCustomerModal>
-  <UpdateCustomerModal :Id="selectedId"></UpdateCustomerModal>
+  <AddCustomerModal @formAddSubmitted="getItems('')"></AddCustomerModal>
+  <UpdateCustomerModal :Id="selectedId" @formUpdateSubmitted="getItems('')"></UpdateCustomerModal>
 </template>
 
 <script lang="ts">
@@ -159,7 +156,6 @@ import arraySort from "array-sort";
 import { MenuComponent } from "@/assets/ts/components";
 import { getCustomers, Customer, deleteCustomer } from "@/core/data/customers";
 import UpdateCustomerModal from "@/components/modals/forms/customer/UpdateCustomerModal.vue";
-import ApiService from "@/core/services/ApiService";
 import Swal from "sweetalert2";
 
  
@@ -173,7 +169,6 @@ export default defineComponent({
     UpdateCustomerModal,
   },
   setup() {
-    let updateCustomerModal = ref (null);
     const tableHeader = ref([
       {
         columnName: "Nome",
@@ -232,55 +227,13 @@ export default defineComponent({
       getItems("");
     });
 
-    const deleteFewCustomers = () => {
-      selectedIds.value.forEach((item) => {
-        deleteCustomer(item);
+    const deleteFewItems = async () => {
+      selectedIds.value.forEach(async (item) => {
+        await deleteCustomer(item)
       });
       selectedIds.value.length = 0;
+      await getItems("");
     };
-
-    const confirmDeleteCustomer = (Id) => {
-           if (!Id) {console.error("ID non valido per l'eliminazione.");
-           return;
-           }
-         Swal.fire({
-          text: "Sei sicuro di voler eliminare questo cliente?",
-          icon: "warning",
-          showCancelButton: true,
-          buttonsStyling: false,
-          confirmButtonText: "Sì, elimina!",
-          cancelButtonText: "Annulla",
-          customClass: {
-          confirmButton: "btn btn-danger", 
-          cancelButton: "btn btn-secondary", 
-          },
-          heightAuto: false,
-          }).then((result) => {
-          if (result.isConfirmed) {deleteCustomer(Id);
-          } else {
-          console.log("Eliminazione annullata dall'utente.");
-          }
-       });
-     };
-
-    const deleteCustomer = async (Id) => {
-    try {
-      const response = await  ApiService.delete(`https://localhost:7267/api/Customers/Delete?id=${Id}`);
-      if (response.status === 200 || response.status === 204) {
-        getItems("");
-      } else {
-        console.error('Errore durante l\'eliminazione del cliente:', response.status);
-      }
-    } catch (error) {
-      if (error.response) {
-        console.error('Errore nella risposta dell\'API:', error.response.data);
-      } else {
-        console.error('Errore generico:', error.message);
-      }
-     }
-     return undefined;
-    };
-
 
     const search = ref<string>("");
     const searchItems = () => {
@@ -308,13 +261,23 @@ export default defineComponent({
       return false;
     };
 
-    const deleteItem = (id: number) => {
-      for (let i = 0; i < tableData.value.length; i++) {
-      if (tableData.value[i].Id === id) {
-      tableData.value.splice(i, 1);}
-      }
-      MenuComponent.reinitialization(); 
-};
+    async function deleteItem(id: number){
+      Swal.fire({
+        text: "Confermare l'eliminazione?",
+        icon: "warning",
+        buttonsStyling: false,
+        confirmButtonText: "Continua!",
+        heightAuto: false,
+        customClass: {
+          confirmButton: "btn btn-danger",
+        },
+      }).then(async () => {
+        await deleteCustomer(id)
+        await getItems("");
+        MenuComponent.reinitialization(); 
+      });
+    }
+
     const sort = (sort: Sort) => {
       const reverse: boolean = sort.order === "asc";
       if (sort.label) {
@@ -330,15 +293,7 @@ export default defineComponent({
       selectedIds.value = selectedItems;
     };
 
-    function toggleUpdateModal(value, id){
-      console.log(id)
-      selectedId.value = id;
-      updateCustomerModal.value.show = value
-    };
-
     return {
-      updateCustomerModal,
-      toggleUpdateModal,
       tableData,
       tableHeader,
       deleteCustomer,
@@ -346,15 +301,13 @@ export default defineComponent({
       searchItems,
       selectedId,
       selectedIds,
-      deleteFewCustomers,
+      deleteFewItems,
       sort,
       onItemSelect,
       getAssetPath,
       deleteItem,
       selectId,
-      confirmDeleteCustomer,
       getItems,
-      
     };
   },
 });

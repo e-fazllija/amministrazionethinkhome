@@ -1,11 +1,6 @@
 <template>
-    <div
-      class="modal fade"
-      id="kt_modal_update_customer"
-      ref="updateCustomerModalRef"
-      tabindex="-1"
-      aria-hidden="false"
-    >
+    <div class="modal fade" id="kt_modal_update_customer" ref="updateCustomerModalRef" tabindex="-1" aria-hidden="true">
+
       <!--begin::Modal dialog-->
       <div class="modal-dialog modal-dialog-centered mw-650px">
         <!--begin::Modal content-->
@@ -263,12 +258,12 @@
     name: "update-customer-modal",
     components: {},
     props:{Id:{type:Number,Required:true}},
-    setup(props) {
+    setup(props, { emit }) {
       const formRef = ref<null | HTMLFormElement>(null);
       const updateCustomerModalRef = ref<null | HTMLElement>(null);
       const loading = ref<boolean>(false);
       const formData = ref<Customer>({
-        Id:null,
+        Id:0,
         Code:"",
         Name: "",
         LastName:"",
@@ -320,14 +315,6 @@
             trigger: "change",
           },
         ],
-
-        // postCode: [
-        //   {
-        //     required: false,
-        //     message: "Post code is required",
-        //     trigger: "change",
-        //   },
-        // ],
       });
 
       const submit = () => {
@@ -336,16 +323,16 @@
         }
         formRef.value.validate(async (valid: boolean) => {
           if (valid) {
-            loading.value = true;
-          await updateCustomer(formData.value);
-            setTimeout(() => {
-              loading.value = false;
+          loading.value = true;
+          await updateCustomer(formData.value)
+          .then(() => {
+                loading.value = false;
 
               Swal.fire({
                 text: "Il modulo è stato inviato con successo!",
                 icon: "Successo",
                 buttonsStyling: false,
-                confirmButtonText: "Ok!",
+                confirmButtonText: "Continua!",
                 heightAuto: false,
                 customClass: {
                   confirmButton: "btn btn-primary",
@@ -353,27 +340,37 @@
               }).then(() => {
                 hideModal(updateCustomerModalRef.value);
               });
-            }, 2000);
-          } else {
-            Swal.fire({
-              text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
-              icon: "error",
-              buttonsStyling: false,
-              confirmButtonText: "Ok",
-              heightAuto: false,
-              customClass: {
-                confirmButton: "btn btn-primary",
-              },
+              emit('formUpdateSubmitted', formData.value);
+            })
+            .catch(({ response }) => {
+              console.log(response);
+              loading.value = false;
+              Swal.fire({
+                text: "Attenzione, si è verificato un errore.",
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Continua!",
+                heightAuto: false,
+                customClass: {
+                  confirmButton: "btn btn-primary",
+                },
+              });
             });
-            return false;
-          }
-        });
-      };
-
-      
-     
-     
-
+        } else {
+          Swal.fire({
+            text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: "Ok",
+            heightAuto: false,
+            customClass: {
+              confirmButton: "btn btn-primary",
+            },
+          });
+          return false;
+        }
+      });
+    };
       return {
         formData,
         rules,

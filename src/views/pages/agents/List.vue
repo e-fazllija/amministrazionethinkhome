@@ -269,7 +269,6 @@ export default defineComponent({
         await getItems("");
         MenuComponent.reinitialization(); 
       });
-      
     }
     
     const sort = (sort: Sort) => {

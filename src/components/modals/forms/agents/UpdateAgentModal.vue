@@ -232,13 +232,7 @@ import { updateAgent, Agent, getAgent } from "@/core/data/agents";
 export default defineComponent({
   name: "update-agent-modal",
   components: {},
-  props: {
-    Id:
-    {
-      type: String,
-      Required: true
-    }
-  },
+  props:{Id:{type: String,Required: true}},
   setup(props, { emit }) {
     const formRef = ref<null | HTMLFormElement>(null);
     const updateAgentModalRef = ref<null | HTMLElement>(null);
