@@ -26,7 +26,7 @@ const getAgents = (filterRequest: string) : Promise<Array<Agent>> => {
     ""
   )
     .then(({ data }) => {
-      const result = data.Data as Partial<Array<Agent>>
+      const result = data.Data.$values as Partial<Array<Agent>>
       return result;
     })
     .catch(({ response }) => {
