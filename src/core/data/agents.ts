@@ -18,6 +18,7 @@ export class Agent {
   Token?: string;
   Role? = "Agent";
   Password?: string;
+  AgencyId: string;
 }
 
 const getAgents = (filterRequest: string) : Promise<Array<Agent>> => {
@@ -30,8 +31,8 @@ const getAgents = (filterRequest: string) : Promise<Array<Agent>> => {
       return result;
     })
     .catch(({ response }) => {
-      console.error(response);
-      return [];
+      store.setError(response.data.Message, response.status);
+      return undefined;
     });
 };
 
@@ -42,7 +43,7 @@ const getAgent = (id: String) : Promise<Agent> => {
       return result;
     })
     .catch(({ response }) => {
-      console.log(response);
+      store.setError(response.data.Message, response.status);
       return undefined;
     });
 };
@@ -61,7 +62,7 @@ const updateAgent = async (formData: any) => {
       return result;
     })
     .catch(({ response }) => {
-      console.log(response);
+      store.setError(response.data.Message, response.status);
       return undefined;
     });
 };
@@ -74,7 +75,7 @@ const deleteAgent = async (id: String) => {
       return result;
     })
     .catch(({ response }) => {
-      console.log(response);
+      store.setError(response.data.Message, response.status);
       return undefined;
     });
 };

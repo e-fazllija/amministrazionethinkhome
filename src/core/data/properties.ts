@@ -38,7 +38,7 @@ export class RealEstateProperty {
   Description?: string;
   CreationDate?: Date;
   UpdateDate?: Date;
-  Photos?: Array<string>; 
+  Photos?: Array<RealEstatePropertyPhotos>; 
   CustomerId: number | 0;
   AgentId: string;
   Files?: FileList;
@@ -47,6 +47,15 @@ export class RealEstateProperty {
 export class InsertModel {
   Customers: Customer[];
   Users: User[];
+}
+
+export class RealEstatePropertyPhotos {
+  Id: number;
+  Url: string;
+  FileName: string;
+  Highlighted: boolean;
+  CreationDate?: Date;
+  UpdateDate?: Date;
 }
 
 const getRealEstateProperties = (filterRequest: string) : Promise<Array<RealEstateProperty>> => {
@@ -59,19 +68,21 @@ const getRealEstateProperties = (filterRequest: string) : Promise<Array<RealEsta
       return result;
     })
     .catch(({ response }) => {
-      console.error(response);
-      return [];
+      store.setError(response.data.Message, response.status);
+      return undefined;
     });
 };
 
 const getRealEstateProperty = (id: number) : Promise<RealEstateProperty> => {
   return ApiService.get(`RealEstateProperty/GetById?id=${id}`, "")
     .then(({ data }) => {
+      const photos = data.Photos.$values as Array<RealEstatePropertyPhotos>;
       const result = data as Partial<RealEstateProperty>;
+      result.Photos = photos;
       return result;
     })
     .catch(({ response }) => {
-      console.log(response);
+      store.setError(response.data.Message, response.status);
       return undefined;
     });
 };
@@ -79,14 +90,49 @@ const getRealEstateProperty = (id: number) : Promise<RealEstateProperty> => {
 const getToInsert = () : Promise<InsertModel> => {
   return ApiService.get(`RealEstateProperty/GetToInsert`, "")
     .then(({ data }) => {
-      const result = data as Partial<InsertModel>;
+      const agents = data.Agents.$values as Array<User>;
+      const customers = data.Customers.$values as Array<Customer>;
+      const result = <InsertModel>({
+        Users: agents,
+        Customers: customers
+      })
       return result;
     })
     .catch(({ response }) => {
-      console.log(response);
+      store.setError(response.data.Message, response.status);
       return undefined;
     });
 };
+
+const setRealEstatePropertyPhotoHighlighted = (id : number) => {
+  const formData = new FormData();
+  formData.append("realEstatePropertyPhotoId", id.toString())
+  return ApiService.post(`RealEstateProperty/SetRealEstatePropertyPhotoHighlighted`, 
+    formData)
+  .then(({ data }) => {
+    return data;
+  })
+  .catch(({ response }) => {
+    store.setError(response.data.Message, response.status);
+    return undefined;
+  });
+}
+
+const uploadFiles = async (files: FileList, id: number) => {
+  const formData = new FormData();
+  formData.append("PropertyId", id.toString())
+  Array.from(files).forEach((file) => {
+    formData.append("Files", file);
+  });
+  return await ApiService.post("RealEstateProperty/UploadFiles", formData)
+  .then(({ data }) => {
+    return data;
+  })
+  .catch(({ response }) => {
+    store.setError(response.data.Message, response.status);
+    return undefined;
+  });
+}
 
 const createRealEstateProperty = async (form: any) => {
   const values = form as RealEstateProperty;
@@ -106,18 +152,11 @@ const createRealEstateProperty = async (form: any) => {
   }
   return await ApiService.post("RealEstateProperty/Create", formData)
     .then(({ data }) => {
-      console.log(data)
       const result = data as Partial<RealEstateProperty>;
       return result;
     })
     .catch(({ response }) => {
-      
-      if(response.data.status == 400){
-        store.setError(response.data.errors);
-        console.log(response.data.errors);
-      } else {
-        store.setError(response.data.errors);
-      }
+      store.setError(response.data.Message, response.status);
       return undefined;
     });
 };
@@ -130,7 +169,7 @@ const updateRealEstateProperty = async (formData: any) => {
       return result;
     })
     .catch(({ response }) => {
-      console.log(response);
+      store.setError(response.data.Message, response.status);
       return undefined;
     });
 };
@@ -142,9 +181,29 @@ const deleteRealEstateProperty = async (id: Number) => {
       return result;
     })
     .catch(({ response }) => {
-      console.log(response);
+      store.setError(response.data.Message, response.status);
       return undefined;
     });
 };
 
-export { getRealEstateProperties, getRealEstateProperty, createRealEstateProperty, updateRealEstateProperty, deleteRealEstateProperty, getToInsert }
+const deletePhoto = async (id: number) => {
+  return await ApiService.delete(`RealEstateProperty/DeletePhoto?id=${id}`)
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+}
+
+export { 
+  getRealEstateProperties, 
+  getRealEstateProperty, 
+  createRealEstateProperty, 
+  updateRealEstateProperty, 
+  deleteRealEstateProperty, 
+  getToInsert, 
+  setRealEstatePropertyPhotoHighlighted, 
+  deletePhoto,
+  uploadFiles }

@@ -353,7 +353,7 @@ export default defineComponent({
         if (!error) {
             Swal.fire({
               text: "Il modulo è stato inviato con successo!",
-              icon: "Successo",
+              icon: "success",
               buttonsStyling: false,
               confirmButtonText: "Continua!",
               heightAuto: false,

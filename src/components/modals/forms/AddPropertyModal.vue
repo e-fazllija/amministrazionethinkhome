@@ -42,6 +42,39 @@
               data-kt-scroll-wrappers="#kt_modal_add_property_scroll"
               data-kt-scroll-offset="300px">
 
+              <!--begin::Input group-->
+              <div class="d-flex flex-column mb-7 fv-row">
+                    <!--begin::Label-->
+                    <label class="fs-6 fw-semobold mb-2">
+                      <span class="required">Agente</span>
+                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Seleziona una categoria di immobile"></i>
+                     </label>
+                   <!--end::Label-->
+                   <!--begin::Input-->
+                    <select class="form-control" v-model="formData.AgentId">
+                     <option v-for="(user, index) in inserModel.Users" :key="index" :value="user.Id">{{ user.Name }} {{ user.LastName }}</option>
+                    </select>
+                   <!--end::Input-->
+                  </div>
+                  <!--end::Input group-->
+
+                  <!--begin::Input group-->
+                  <div class="d-flex flex-column mb-7 fv-row">
+                    <!--begin::Label-->
+                    <label class="fs-6 fw-semobold mb-2">
+                      <span class="required">Cliente</span>
+                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Seleziona una categoria di immobile"></i>
+                     </label>
+                   <!--end::Label-->
+                   <!--begin::Input-->
+                   <select class="form-control" v-model="formData.CustomerId">
+                     <option v-for="(user, index) in inserModel.Customers" :key="index" :value="user.Id">{{ user.Name }} {{ user.LastName }}</option>
+                    </select>
+                   <!--end::Input-->
+                  </div>
+                <!--end::Input group-->
+
+
                 <!--begin::Billing toggle-->
                   <div
                    class="fw-bold fs-3 rotate collapsible mb-7"
@@ -103,7 +136,6 @@
                 <!--end::Label-->
                 <!--begin::Input-->
                 <select class="form-control" v-model="formData.Status">
-                  <option value="">Scegli tra vendita e affitto</option>
                   <option value="Vendita">Vendita</option>
                   <option value="Affitto">Affitto</option>
                 </select>
@@ -688,7 +720,7 @@ export default defineComponent({
       Typology: "Appartamento",
       InHome: false,
       Highlighted: false,
-      Status: "",
+      Status: "Vendita",
       AddressLine: "",
       Town: "",
       State: "",
@@ -721,8 +753,8 @@ export default defineComponent({
       Customers: [],
       Users: []
     });
-    const showTipologia = ref(false);
-    const typesavailable = ref<string[]>([]);
+    const showTipologia = ref(true);
+    
     const selectedFile = ref<FileList | null>(null);
     const onFileChanged = (event: Event) => {
     const target = event.target as HTMLInputElement;
@@ -738,35 +770,23 @@ export default defineComponent({
       Terreno: ["Edificabile", "Agricolo", "Non Edificabile"]
     };
 
+    const typesavailable = ref<string[]>(tipologiePerCategoria[formData.value.Category]);
+
     watch(
       () => formData.value.Category,
       (newCategoria) => {
-        if (newCategoria && tipologiePerCategoria[newCategoria]) {
-          typesavailable.value = tipologiePerCategoria[newCategoria];
+        if (newCategoria && tipologiePerCategoria[formData.value.Category]) {
+          typesavailable.value = tipologiePerCategoria[formData.value.Category];
           showTipologia.value = true;
         } else {
           showTipologia.value = false;
-          formData.value.Typology = ""; // Resetta il valore di tipologia
+          formData.value.Typology = "";
           typesavailable.value = [];
         }
       }
     );
 
     const rules = ref({
-      Category: [
-        {
-          required: true,
-          message: "E' obbligatorio",
-          trigger: "change",
-        },
-      ],
-      // Typology: [
-      //   {
-      //     required: true,
-      //     message: "E' obbligatorio",
-      //     trigger: "change",
-      //   },
-      // ],
       AddressLine: [
         {
           required: true,
@@ -827,7 +847,8 @@ export default defineComponent({
 
     onMounted(async () => {
       inserModel.value = await getToInsert();
-      console.log(inserModel.value)
+      formData.value.CustomerId = inserModel.value.Customers[0].Id;
+      formData.value.AgentId = store.user.Id;
     })
 
     const submit = async () => {
@@ -837,7 +858,6 @@ export default defineComponent({
       await formRef.value.validate( async (valid: boolean) => {
         if (valid) {
           loading.value = true;
-          console.log(JSON.stringify( formData.value))
           await createRealEstateProperty(formData.value);
 
           const error = store.errors;
@@ -853,6 +873,7 @@ export default defineComponent({
                 confirmButton: "btn fw-semobold btn-light-primary",
               },
             }).then(function () {
+              loading.value = false;
               hideModal(addPropertyModalRef.value);
               emit('formAddSubmitted', formData.value);
             });
@@ -887,6 +908,7 @@ export default defineComponent({
       typesavailable, 
       selectedFile,
       onFileChanged,
+      inserModel
     };
   },
 });

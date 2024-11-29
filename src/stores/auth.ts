@@ -21,6 +21,7 @@ export interface User {
   Region?: string;
   CreationDate?: Date;
   UpdateDate?: Date;
+  AgencyId?: string;
 }
 
 export const useAuthStore = defineStore("auth", () => {
@@ -35,8 +36,15 @@ export const useAuthStore = defineStore("auth", () => {
     JwtService.saveToken(user.value.Token);
   }
 
-  function setError(error: any) {
-    errors.value = error;
+  function setError(error: any, status?: number) {
+    if(status == 400){
+      errors.value = error;
+    } else if (status == 500) {
+      errors.value = error.Message;
+    } else {
+      errors.value = "Si è verificato un errore";
+    }
+    
   }
 
   function purgeAuth() {
@@ -64,7 +72,7 @@ export const useAuthStore = defineStore("auth", () => {
     credentials.Username = credentials.LastName + credentials.Name;
     return await ApiService.post("auth/register", credentials)
       .then(({ data }) => {
-        setAuth(data);
+        // setAuth(data);
       })
       .catch(({ response }) => {
         setError(response.data.Message);

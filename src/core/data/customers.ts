@@ -28,8 +28,8 @@ const getCustomers = (filterRequest: string) : Promise<Array<Customer>> => {
       return result;
     })
     .catch(({ response }) => {
-      console.error(response);
-      return [];
+      store.setError(response.data.Message, response.status);
+      return undefined;
     });
 };
 
@@ -40,7 +40,7 @@ const getCustomer = (id: number) : Promise<Customer> => {
       return result;
     })
     .catch(({ response }) => {
-      console.log(response);
+      store.setError(response.data.Message, response.status);
       return undefined;
     });
 };
@@ -52,7 +52,7 @@ const createCustomer = async (formData:Customer) => {
       return result;
     })
     .catch(({ response }) => {
-      console.log(response);
+      store.setError(response.data.Message, response.status);
       return undefined;
     });
 };
@@ -64,7 +64,7 @@ const updateCustomer = async (formData:Customer) => {
       return result;
     })
     .catch(({ response }) => {
-      console.log(response);
+      store.setError(response.data.Message, response.status);
       return undefined;
     });
 };
@@ -76,12 +76,9 @@ const deleteCustomer = async (id: number) => {
       return result;
     })
     .catch(({ response }) => {
-      console.log(response);
+      store.setError(response.data.Message, response.status);
       return undefined;
     });
 };
 
 export { getCustomers, getCustomer, createCustomer, updateCustomer, deleteCustomer }
- 
-
-// export default customers;
