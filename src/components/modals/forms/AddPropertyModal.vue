@@ -1,11 +1,5 @@
 <template>
-  <div
-    class="modal fade"
-    id="kt_modal_add_property"
-    ref="addPropertyModalRef"
-    tabindex="-1"
-    aria-hidden="true"
-  >
+  <div class="modal fade" id="kt_modal_add_property" ref="addPropertyModalRef" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-650px">
       <!--begin::Modal content-->
@@ -73,7 +67,6 @@
                    <!--end::Label-->
                    <!--begin::Input-->
                      <select class="form-control" v-model="formData.Category">
-                     <option value>Seleziona una Categoria...</option>
                      <option value="Residenziale">Residenziale</option>
                      <option value="Capannone">Capannone</option>
                      <option value="Negozi-Locale Commerciale">Negozi/Locale Commerciale</option>
@@ -691,8 +684,8 @@ export default defineComponent({
     const store = useAuthStore();
     const loading = ref<boolean>(false);
     const formData = ref<RealEstateProperty>({
-      Category: "",
-      Typology: "",
+      Category: "Residenziale",
+      Typology: "Appartamento",
       InHome: false,
       Highlighted: false,
       Status: "",
@@ -763,13 +756,13 @@ export default defineComponent({
           trigger: "change",
         },
       ],
-      Typology: [
-        {
-          required: true,
-          message: "E' obbligatorio",
-          trigger: "change",
-        },
-      ],
+      // Typology: [
+      //   {
+      //     required: true,
+      //     message: "E' obbligatorio",
+      //     trigger: "change",
+      //   },
+      // ],
       AddressLine: [
         {
           required: true,

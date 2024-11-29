@@ -1,855 +1,788 @@
 <template>
-    <!--begin::Basic info-->
-    <div class="card mb-5 mb-xl-10">
-        <!--begin::Card header-->
-        <div class="card-header border-0">
-            <!--begin::Card title-->
-            <div class="card-title m-0">
-                <h3 class="fw-bold m-0">Dettagli</h3>
-            </div>
-            <!--end::Card title-->
+  <!--begin::Basic info-->
+  <div class="card mb-5 mb-xl-10">
+    <!--begin::Card header-->
+    <div class="card-header border-0">
+      <!--begin::Card title-->
+      <div class="card-title m-0">
+        <h3 class="fw-bold m-0">Aggiorna Immobili</h3>
+      </div>
+      <!--end::Card title-->
+    </div>
+    <!--begin::Card header-->
+  </div>
+  <!--begin::Content-->
+  <div class="collapse show">
+    <!--begin::Form-->
+    <el-form
+          @submit.prevent="submit()"
+          :model="formData"
+          :rules="rules"
+          ref="formRef" 
+          enctype="multipart/form-data"
+           >
+      <!--begin::Card body-->
+      <div class="card-body border-top p-9">
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Categoria</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <select as="select" name="Category" class="form-select form-select-lg fw-semobold"
+              v-model="formData.Category">
+               <option value>Seleziona una Categoria...</option>
+               <option value="Residenziale">Residenziale</option>
+               <option value="Capannone">Capannone</option>
+               <option value="Negozi-Locale Commerciale">Negozi/Locale Commerciale</option>
+               <option value="Magazzino">Magazzino</option>
+               <option value="Garage">Garage</option>
+               <option value="Ufficio">Ufficio</option>
+               <option value="Terreno">Terreno</option>
+            </select>
+          </div>
+          <!--end::Col-->
         </div>
-        <!--begin::Card header-->
+        <!--end::Input group-->
+                 <!--begin::Input group Tipologia-->
+                 <div v-if="showTipologia" class="d-flex flex-column mb-7 fv-row">
+                   <label class="fs-6 fw-semobold mb-2">
+                   <span class="required">Tipologia</span>
+                   <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Seleziona una tipologia di immobile"></i>
+                   </label>
+                  <select class="form-control" v-model="formData.Typology">
+                    <option v-for="tipologia in typesavailable" :key="tipologia" :value="tipologia">
+                    {{ tipologia }}
+                    </option>
+                  </select>
+                </div>
+        <!--end::Input group Tipologia-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Stato vendita o affitto</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <select as="select" name="Status" class="form-select form-select-lg fw-semobold"
+              v-model="formData.Status">
+                  <option value="">Scegli tra vendita e affitto</option>
+                  <option value="Vendita">Vendita</option>
+                  <option value="Affitto">Affitto</option>
+                </select>
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+         <!--begin::Input group-->
+         <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Indirizzo</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.AddressLine" type="text"/>
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+       <!--begin::Input group-->
+       <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Comune</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.Town" type="text"/>
+         </div>
+         <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+      <!--begin::Input group-->
+       <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Provincia</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.State" type="text"/>
+         </div>
+         <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+      <!--begin::Input group-->
+       <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Codice Postale</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.PostCode" type="number"/>
+         </div>
+        <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+      <!--begin::Input group-->
+      <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Superficie commerciale (m²)</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.CommercialSurfaceate" type="number"/>
+         </div>
+         <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+       <!--begin::Input group-->
+       <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Piano</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <select as="select" name="Floor" class="form-select form-select-lg fw-semobold"
+              v-model="formData.Floor">
+                  <option value="">Scegli</option>
+                  <option value="Interrato -2">Interrato -2</option>
+                  <option value="Interrato -1">Interrato -1</option>
+                  <option value="Seminterrato">Seminterrato</option>
+                  <option value="Piano Terra">Piano Terra</option>
+                  <option value="Piano Rialzato">Piano Rialzato</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+            </select>
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Totale piani edificio</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.TotalBuildingfloors" type="number"/>
+         </div>
+         <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+      <!--begin::Input group-->
+      <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Ascensori</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.Elevators" type="number"/>
+         </div>
+         <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+      <!--begin::Input group-->
+      <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Altri dettagli</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.MoreDetails" type="text"/>
+         </div>
+         <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+      <!--begin::Input group-->
+      <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Camere da letto</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.Bedrooms" type="number"/>
+         </div>
+         <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+      <!--begin::Input group-->
+      <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Locali</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.WarehouseRooms" type="number"/>
+         </div>
+         <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+      <!--begin::Input group-->
+      <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Cucine</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.Kitchens" type="number"/>
+         </div>
+         <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+      <!--begin::Input group-->
+      <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Bagni</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.Bathrooms" type="number"/>
+         </div>
+         <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+      <!--begin::Input group-->
+      <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Arredamento</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <select as="select" name="Furniture" class="form-select form-select-lg fw-semobold"
+              v-model="formData.Furniture">
+                 <option value="">Seleziona il tipo di arredamento</option>
+                 <option value="Arredato">Arredato</option>
+                 <option value="Non Arredato">Non Arredato</option>
+                 <option value="Parzialmente Arredato">Parzialmente Arredato</option>
+                 <option value="Arredato Solo Cucina">Arredato Solo Cucina</option>
+            </select>
+           <!--end::Input-->
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+          <!--begin::Input group-->
+          <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Altre Caratteristiche</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.MoreDetails" type="text"/>
+         </div>
+         <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+      <!--begin::Input group-->
+      <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Posti Auto</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.ParkingSpaces" type="number"/>
+         </div>
+         <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+      <!--begin::Input group-->
+      <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Riscaldamento</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <select as="select" name="Heating" class="form-select form-select-lg fw-semobold"
+              v-model="formData.Heating">
+                <option value="Nessuno">Nessuno</option>
+                <option value="Autonomo">Autonomo</option>
+                <option value="Centralizzato">Centralizzato</option>
+            </select>
+            <!--end::Input-->
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Esposizione</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <select as="select" name="Exposure" class="form-select form-select-lg fw-semobold"
+              v-model="formData.Exposure">
+                <option value="">Selezionare l'esposizione</option>
+                <option value="Nord">Nord</option>
+                <option value="Sud">Sud</option>
+                <option value="Est">Est</option>
+                <option value="Ovest">Ovest</option>
+            </select>
+            <!--end::Input-->
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Classe energetica</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <select as="select" name="EnergyClass" class="form-select form-select-lg fw-semobold"
+              v-model="formData.EnergyClass">
+                 <option value="">Seleziona il tipo di Classe energetica</option>
+                 <option value="Proprietà Esente">Proprietà Esente</option>
+                 <option value="Non classificabile">Non classificabile</option>
+                 <option value="A4">A4</option>
+                 <option value="A3">A3</option>
+                 <option value="A2">A2</option>
+                 <option value="A1">A1</option>
+                 <option value="A+">A+</option>
+                 <option value="A">A</option>
+                 <option value="B">B</option>
+                 <option value="C">C</option>
+                 <option value="D">D</option>
+                 <option value="E">E</option>
+                 <option value="F">F</option>
+                 <option value="G">G</option>
+            </select>
+            <!--end::Input-->
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Indica il tipo di proprietà</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <select as="select" name="TypeOfProperty" class="form-select form-select-lg fw-semobold"
+              v-model="formData.TypeOfProperty">
+                 <option value="">Seleziona il tipo di proprietà</option>
+                 <option value="Intera Proprietà">Intera Proprietà</option>
+                 <option value="Nuda Proprietà">Nuda Proprietà</option>
+                 <option value="Parziale Proprietà">Parziale Proprietà</option>
+                 <option value="Usufrutto">Usufrutto</option>
+                 <option value="Multiproprietà">Multiproprietà</option>
+                 <option value="Diritto di Superficie">Diritto di Superficie</option>
+            </select>
+            <!--end::Input-->
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+         <!--begin::Input group-->
+         <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Stato dell'immobile</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <select as="select" name="StateOfTheProperty" class="form-select form-select-lg fw-semobold"
+              v-model="formData.StateOfTheProperty">
+                 <option value="">Seleziona lo Stato dell'immobile</option>
+                 <option value="Nuovo / In Costruzione">Nuovo / In Costruzione</option>
+                 <option value="Ottimo / Ristrutturato">Ottimo / Ristrutturato</option>
+                 <option value="Buono / Abitabile">Buono / Abitabile</option>
+                 <option value="Da Ristrutturare">Da Ristrutturare</option>
+            </select>
+            <!--end::Input-->
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Anno di costruzione</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.YearOfConstruction" type="number"/>
+         </div>
+         <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+      <!--begin::Input group-->
+      <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Prezzo</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.Price" type="number"/>
+         </div>
+         <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+      <!--begin::Input group-->
+      <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Spese condominiali</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.CondominiumExpenses" type="number"/>
+         </div>
+         <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+       <!--begin::Input group-->
+       <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Disponibilità</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <select as="select" name="Availability" class="form-select form-select-lg fw-semobold"
+              v-model="formData.Availability">
+                 <option value="">Seleziona la Disponibilità</option>
+                 <option value="Libero">Libero</option>
+                 <option value="Occupato">Occupato</option>
+            </select>
+            <!--end::Input-->
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+      <!--begin::Input group-->
+        <div class="row mb-6">
+         <!--begin::Label-->
+         <label class="col-lg-4 col-form-label required fw-semobold fs-6">Descrizione</label>
+         <!--end::Label-->
+         <!--begin::Input-->
+         <div class="col-lg-8 fv-row">
+           <input class="form-control form-control-lg fw-semobold" v-model="formData.Description" type="text"/>
+         </div>
+         <!--end::Input-->
+        </div>
+      <!--end::Input group-->
+
+      <div class="py-5">
+        <div class="rounded border p-10">
+            <div class="row">
+                <div class="col-lg-4">
+                    <!--begin::Card-->
+                    <div class="card  overlay">
+                        <div class="card-body p-0">
+                            <div class="overlay-wrapper">
+                                <img src="/Kurama/thinkhome/src/assets/images/about/pic16.jpg" alt="" class="w-100 card-rounded">
+                            </div>
+                            <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
+                                <a href="#" class="btn btn-primary btn-shadow">Explore</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Card-->
+                </div>
+
+                <div class="col-lg-4">
+                    <!--begin::Card-->
+                    <div class="card overlay">
+                        <div class="card-body p-0">
+                            <div class="overlay-wrapper">
+                                <img src="/Kurama/thinkhome/src/assets/images/about/pic16.jpg" alt="" class="w-100 card-rounded">
+                            </div>
+                            <div class="overlay-layer card-rounded bg-dark bg-opacity-25 align-items-end justify-content-center">
+                                <div class="d-flex flex-grow-1 flex-center  py-5">
+                                    <a href="#" class="btn btn-primary btn-shadow">Explore</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Card-->
+                </div>
+
+                <div class="col-lg-4">
+                    <!--begin::Card-->
+                    <div class="card overlay">
+                        <div class="card-body p-0">
+                            <div class="overlay-wrapper">
+                                <img src="/Kurama/thinkhome/src/assets/images/about/pic16.jpg" alt="" class="w-100 card-rounded">
+                            </div>
+                            <div class="overlay-layer card-rounded bg-dark bg-opacity-25 align-items-start justify-content-center">
+                                <div class="d-flex flex-grow-1 flex-center py-5">
+                                    <a href="#" class="btn btn-primary btn-shadow">Explore</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Card-->
+                </div>
+   </div>
+        </div>
     </div>
-    <!--begin::Content-->
-    <div class="collapse show">
-        <!--begin::Form-->
-        <form class="form" novalidate @submit.prevent="saveChanges()">
-            <!--begin::Card body-->
-            <div class="card-body border-top p-9">
 
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-semobold fs-6">Codice</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" name="code" class="form-control form-control-lg " placeholder="Codice"
-                            v-model="item.code" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-semobold fs-6">Nome</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" name="name" class="form-control form-control-lg " placeholder="Nome"
-                            v-model="item.name" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-semobold fs-6">Tipologia cliente</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <select as="select" name="customerType" class="form-select form-select-lg fw-semobold"
-                            v-model="item.customerType">
-                            <option v-for="option in CustomerTypes" :key="option.id" :value="option.name">{{ option.name
-                                }}
-                            </option>
-                        </select>
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-semobold fs-6">Modalità di pagamento</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <select as="select" name="paymentType" class="form-select form-select-lg fw-semobold"
-                            v-model="item.paymentType">
-                            <option v-for="option in PaymentTypes" :key="option.id" :value="option.name">{{ option.name
-                                }}
-                            </option>
-                        </select>
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-semobold fs-6">Modalità di consegna</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <select as="select" name="deliveryType" class="form-select form-select-lg fw-semobold"
-                            v-model="item.deliveryType">
-                            <option v-for="option in DeliveryTypes" :key="option.id" :value="option.name">{{ option.name
-                                }}
-                            </option>
-                        </select>
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-semobold fs-6">Indirizzo</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" name="address" class="form-control form-control-lg " placeholder="Indirizzo"
-                            v-model="item.address" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-semobold fs-6">CAP</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" name="supplierArticleCode" class="form-control form-control-lg "
-                            placeholder="CAP" v-model="item.zipCode" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-semobold fs-6">Città</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" name="city" class="form-control form-control-lg " placeholder="Città"
-                            v-model="item.city" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-semobold fs-6">Nazione</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" name="country" class="form-control form-control-lg " placeholder="Nazione"
-                            v-model="item.country" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-semobold fs-6">Provincia</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" name="province" class="form-control form-control-lg " placeholder="Provincia"
-                            v-model="item.province" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-semobold fs-6">Note</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Note"
-                            v-model="item.notes" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Indirizzo sede amministativa</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg "
-                            placeholder="Indirizzo sede amministativa" v-model="item.administrativeOfficeAddress" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Cap sede amministativa</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Cap sede amministativa"
-                            v-model="item.administrativeOfficeZipCode" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Città sede amministativa</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Città sede amministativa"
-                            v-model="item.administrativeOfficeCity" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Nazione sede amministativa</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg "
-                            placeholder="Nazione sede amministativa" v-model="item.administrativeOfficeCountry" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Provincia sede amministativa</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg "
-                            placeholder="Provincia sede amministativa" v-model="item.administrativeOfficeProvince" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Indirizzo sede operativa</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Indirizzo sede operativa"
-                            v-model="item.operatingOfficeAddress" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Cap sede operativa</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Cap sede operativa"
-                            v-model="item.operatingOfficeZipCode" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Città sede operativa</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Città sede operativa"
-                            v-model="item.operatingOfficeCity" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Nazione sede operativa</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Nazione sede operativa"
-                            v-model="item.operatingOfficeCountry" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Provincia sede operativa</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Provincia sede operativa"
-                            v-model="item.operatingOfficeProvince" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">P. IVA</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="P. IVA"
-                            v-model="item.vatNumber" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Codice ficale</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Codice ficale"
-                            v-model="item.fiscalCode" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Referente</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Referente"
-                            v-model="item.contactPerson" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Telefono</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Telefono"
-                            v-model="item.phone" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Cellulare</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Cellulare"
-                            v-model="item.mobile" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Email</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Email"
-                            v-model="item.email" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">PEC</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="PEC" v-model="item.pec" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Codice univoco</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Codice univoco"
-                            v-model="item.uniqueCode" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Agente di riferimento</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Agente di riferimento"
-                            v-model="item.referenceAgent" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Coordinate bancarie</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Coordinate bancarie"
-                            v-model="item.bankCoordinates" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Fax</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Fax" v-model="item.fax" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-semobold fs-6">Banca</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" class="form-control form-control-lg " placeholder="Banca" v-model="item.bank" />
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-            </div>
-            <!--begin::Actions-->
-            <div class="card-footer d-flex justify-content-end py-6 px-9">
-                <button type="button" @click="deleteItem()" class="btn btn-danger btn-active-light-primary me-2">
-                    Elimina
-                </button>
-
-                <!--begin::Button-->
-                <button :data-kt-indicator="loading ? 'on' : null" class="btn btn-lg btn-primary" type="submit">
-                    <span v-if="!loading" class="indicator-label">
-                        Salva modifiche
-                    </span>
-                    <span v-if="loading" class="indicator-progress">
-                        Attendere...
-                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                    </span>
-                </button>
-                <!--end::Button-->
-            </div>
-            <!--end::Actions-->
-        </form>
-        <!--end::Form-->
-    </div>
-    <!--end::Content-->
+      </div>
+      <!--begin::Actions-->
+      <div class="card-footer d-flex justify-content-end py-6 px-9">
+        <button type="button" @click="deleteItem()" class="btn btn-danger btn-active-light-primary me-2">
+          Elimina
+        </button>
+        <!--begin::Button-->
+        <button :data-kt-indicator="loading ? 'on' : null" class="btn btn-lg btn-primary" type="submit">
+            <span v-if="!loading" class="indicator-label">
+              Salva modifiche
+            </span>
+            <span v-if="loading" class="indicator-progress">
+              Attendere...
+              <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+            </span>
+        </button>
+        <!--end::Button-->
+      </div>
+      <!--end::Actions-->
+    </el-form>
+    <!--end::Form-->
+  </div>
+  <!--end::Content-->
 </template>
-  
+
 <script lang="ts">
 import { getAssetPath } from "@/core/helpers/assets";
-import { defineComponent, onMounted, ref } from "vue";
-import Dropdown3 from "@/components/dropdown/Dropdown3.vue";
-import NewCardModal from "@/components/modals/forms/NewCardModal.vue";
-import PaymentRecords from "@/components/customers/cards/overview/PaymentRecords.vue";
-import PaymentMethods from "@/components/customers/cards/overview/PaymentMethods.vue";
-import CreditBalance from "@/components/customers/cards/overview/CreditBalance.vue";
-import Invoices from "@/components/customers/cards/overview/Invoices.vue";
-
-import Events from "@/components/customers/cards/events-and-logs/Events.vue";
-import Logs from "@/components/customers/cards/events-and-logs/Logs.vue";
-
-import Earnings from "@/components/customers/cards/statments/Earnings.vue";
-import Statement from "@/components/customers/cards/statments/Statement.vue";
-
-import { useRoute, useRouter } from "vue-router";
-import { getCustomer } from "@/core/data/customers";
-import { getCustomerTypes } from "@/core/data/typologies/customerTypes";
-import type { ICustomerType } from "@/core/data/typologies/customerTypes";
-import { getDeliveryTypes } from "@/core/data/typologies/DeliveryTypes";
-import type { IDeliveryType } from "@/core/data/typologies/DeliveryTypes";
-import { getPaymentTypes } from "@/core/data/typologies/paymentTypes";
-import type { IPaymentType } from "@/core/data/typologies/paymentTypes";
-import ApiService from "@/core/services/ApiService";
+import { defineComponent, onMounted, ref, watch } from "vue";
 import Swal from "sweetalert2/dist/sweetalert2.js";
-
-interface IUpdate {
-    id,
-    address: String,
-    zipCode: String,
-    city: String,
-    country: String,
-    province: String,
-    administrativeOfficeAddress: String,
-    administrativeOfficeZipCode: String,
-    administrativeOfficeCity: String,
-    administrativeOfficeCountry: String,
-    administrativeOfficeProvince: String,
-    operatingOfficeAddress: String,
-    operatingOfficeZipCode: String,
-    operatingOfficeCity: String,
-    operatingOfficeCountry: String,
-    operatingOfficeProvince: String,
-    vatNumber: String,
-    fiscalCode: String,
-    contactPerson: String,
-    phone: String,
-    mobile: String,
-    email: String,
-    pec: String,
-    uniqueCode: String,
-    referenceAgent: String,
-    paymentTypeId: Number,
-    paymentType: String,
-    bankCoordinates: String,
-    notes: String,
-    fax: String,
-    bank: String,
-    deliveryTypeId: Number,
-    deliveryType: String,
-    customerType: String,
-    customerTypeId: Number,
-    code: String,
-    name: String
-}
+import { updateRealEstateProperty, RealEstateProperty, getRealEstateProperty } from "@/core/data/properties";
+import { useRoute, useRouter } from "vue-router";
 
 export default defineComponent({
-    name: "customer-details",
-    components: {
-        PaymentRecords,
-        PaymentMethods,
-        CreditBalance,
-        Invoices,
-        Events,
-        Logs,
-        Earnings,
-        Statement,
-        Dropdown3,
-        NewCardModal,
-    },
+    name: "update",
+    components: {},
     setup() {
-        const route = useRoute();
-        const router = useRouter();
-        const id = route.params.id;
-        let loading = ref<boolean>(true);
+      const route = useRoute();
+      const router = useRouter();
+      const id = parseInt(route.params.id[0]);  
+      const formRef = ref<null | HTMLFormElement>(null);
+      const updateModalRef = ref<null | HTMLElement>(null);
+      const typesavailable = ref<string[]>([]);
+      const showTipologia = ref(false);
+      const loading = ref<boolean>(false);
+      const onFileChanged = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      if (target.files && target.files.length > 0) {
+        formData.value.Files = target.files;
+        console.log(formData.value.Files)
+      }
+    };
+      const formData = ref<RealEstateProperty>({
+      Category: "",
+      Typology: "",
+      InHome: false,
+      Highlighted: false,
+      Status: "",
+      AddressLine: "",
+      Town: "",
+      State: "",
+      PostCode: "",
+      CommercialSurfaceate: 0,
+      TotalBuildingfloors: 0,
+      Elevators: 0,
+      MoreDetails: "",
+      Bedrooms: 0,
+      WarehouseRooms: 0,
+      Kitchens: 0,
+      Bathrooms: 0,
+      Furniture: "",
+      OtherFeatures: "",
+      ParkingSpaces: 0,
+      Heating: "",
+      Exposure: "",
+      EnergyClass: "",
+      TypeOfProperty: "",
+      StateOfTheProperty: "",
+      YearOfConstruction: 0,
+      Price: 0,
+      CondominiumExpenses: 0,
+      Availability: "",
+      Description: "",
+      CustomerId: 0,
+      AgentId: ""
+    });  
 
-        const item = ref<IUpdate>({
-            id: 0,
-            zipCode: "",
-            address: "",
-            city: "",
-            country: "",
-            province: "",
-            administrativeOfficeAddress: "",
-            administrativeOfficeZipCode: "",
-            administrativeOfficeCity: "",
-            administrativeOfficeCountry: "",
-            administrativeOfficeProvince: "",
-            operatingOfficeAddress: "",
-            operatingOfficeZipCode: "",
-            operatingOfficeCity: "",
-            operatingOfficeCountry: "",
-            operatingOfficeProvince: "",
-            vatNumber: "",
-            fiscalCode: "",
-            contactPerson: "",
-            phone: "",
-            mobile: "",
-            email: "",
-            pec: "",
-            uniqueCode: "",
-            referenceAgent: "",
-            paymentTypeId: 0,
-            paymentType: "",
-            bankCoordinates: "",
-            notes: "",
-            fax: "",
-            bank: "",
-            deliveryTypeId: 0,
-            deliveryType: "",
-            customerType: "",
-            customerTypeId: 0,
-            code: "",
-            name: ""
-        });
+      const rules = ref({
+      Category: [
+        {
+          required: true,
+          message: "E' obbligatorio",
+          trigger: "change",
+        },
+      ],
+      Typology: [
+        {
+          required: true,
+          message: "E' obbligatorio",
+          trigger: "change",
+        },
+      ],
+      AddressLine: [
+        {
+          required: true,
+          message: "E' obbligatorio",
+          trigger: "change",
+        },
+      ],
+      Town: [
+        {
+          required: true,
+          message: "E' obbligatorio",
+          trigger: "change",
+        },
+      ],
+      State: [
+        {
+          required: true,
+          message: "E' obbligatorio",
+          trigger: "change",
+        },
+      ],
+      PostCode: [
+        {
+          required: true,
+          message: "E' obbligatorio",
+          trigger: "change",
+        },
+      ],
+      CommercialSurfaceate: [
+        {
+          required: false,
+          message: "E' obbligatorio",
+          trigger: "change",
+        },
+      ],
+      Floor: [
+        {
+          required: false,
+          message: "E' obbligatorio",
+          trigger: "change",
+        },
+      ],
+      TotalBuildingfloors: [
+        {
+          required: false,
+          message: "E' obbligatorio",
+          trigger: "change",
+        },
+      ],
+      Price: [
+        {
+          required: true,
+          message: "E' obbligatorio",
+          trigger: "change",
+        },
+      ],
+    });
 
-        let CustomerTypes = ref<ICustomerType[]>([]);
-        let PaymentTypes = ref<IPaymentType[]>([]);
-        let DeliveryTypes = ref<IDeliveryType[]>([]);
+    onMounted(async() => {
+      console.log(id)
+     formData.value = await getRealEstateProperty(id)
+     console.log(formData.value)
 
-        async function getItem() {
-            CustomerTypes.value = await getCustomerTypes("");
-            PaymentTypes.value = await getPaymentTypes("");
-            DeliveryTypes.value = await getDeliveryTypes("");
+    })
 
-            const customer = await getCustomer(id);
-            
-            item.value = {
-                id: id,
-                code: customer?.code|| "",
-                name: customer?.name|| "",
-                customerTypeId: customer?.customerTypeId|| 0,
-                address: customer?.address|| "",
-                zipCode: customer?.zipCode|| "",
-                city: customer?.city|| "",
-                country: customer?.country|| "",
-                province: customer?.province|| "",
-                administrativeOfficeAddress: customer?.administrativeOfficeAddress|| "",
-                administrativeOfficeZipCode: customer?.administrativeOfficeZipCode|| "",
-                administrativeOfficeCity: customer?.administrativeOfficeCity|| "",
-                administrativeOfficeCountry: customer?.administrativeOfficeCountry || "",
-                administrativeOfficeProvince: customer?.administrativeOfficeProvince|| "",
-                operatingOfficeAddress: customer?.operatingOfficeAddress|| "",
-                operatingOfficeZipCode: customer?.operatingOfficeZipCode|| "",
-                operatingOfficeCity: customer?.operatingOfficeCity|| "",
-                operatingOfficeCountry: customer?.operatingOfficeCountry|| "",
-                operatingOfficeProvince: customer?.operatingOfficeProvince|| "",
-                vatNumber: customer?.vatNumber|| "",
-                fiscalCode: customer?.fiscalCode|| "",
-                contactPerson: customer?.contactPerson|| "",
-                phone: customer?.phone|| "",
-                mobile: customer?.mobile|| "", 
-                email: customer?.email|| "",
-                pec: customer?.pec || "",
-                uniqueCode: customer?.uniqueCode|| "",
-                referenceAgent: customer?.referenceAgent|| "",
-                paymentTypeId: customer?.paymentTypeId|| 0,
-                bankCoordinates: customer?.bankCoordinates|| "",
-                notes: customer?.notes|| "",
-                fax: customer?.fax|| "",
-                bank: customer?.bank|| "",
-                deliveryTypeId: customer?.deliveryTypeId || 0,
-                customerType: customer?.customerType?.name || "",
-                deliveryType: customer?.deliveryType?.name || "",
-                paymentType: customer?.paymentType?.name || "",
-            }
-            console.log(customer)
-            loading.value = false;
-        };
+    const submit = () => {
+        if (!formRef.value) {
+          return;
+        }
+        formRef.value.validate(async (valid: boolean) => {
+          if (valid) {
+          loading.value = true;
+          await updateRealEstateProperty(formData.value)
+          .then(() => {
+                loading.value = false;
 
-        onMounted(() => {
-            loading.value = true;
-            getItem();
-        });
-
-        const saveChanges = () => {
-            loading.value = true;
-            const customerType = CustomerTypes.value.find(option => option.name === item.value.customerType);
-            const paymentType = PaymentTypes.value.find(option => option.name === item.value.paymentType);
-            const deliveryType = DeliveryTypes.value.find(option => option.name === item.value.deliveryType);
-            if (customerType === undefined) {
-                Swal.fire({
-                    text: "Attenzione, selezionare la tipologia di cliente.",
-                    icon: "error",
-                    buttonsStyling: false,
-                    confirmButtonText: "Continua!",
-                    heightAuto: false,
-                    customClass: {
-                        confirmButton: "btn btn-primary",
-                    },
-                });
-                return;
-            }
-            if (paymentType === undefined) {
-                Swal.fire({
-                    text: "Attenzione, selezionare la modalità di pagamento.",
-                    icon: "error",
-                    buttonsStyling: false,
-                    confirmButtonText: "Continua!",
-                    heightAuto: false,
-                    customClass: {
-                        confirmButton: "btn btn-primary",
-                    },
-                });
-                return;
-            }
-            if (deliveryType === undefined) {
-                Swal.fire({
-                    text: "Attenzione, selezionare il metodo di consegna.",
-                    icon: "error",
-                    buttonsStyling: false,
-                    confirmButtonText: "Continua!",
-                    heightAuto: false,
-                    customClass: {
-                        confirmButton: "btn btn-primary",
-                    },
-                });
-                return;
-            }
-            
-            item.value.deliveryTypeId = deliveryType.id;
-            item.value.paymentTypeId = paymentType.id;
-            item.value.customerTypeId = customerType.id;
-
-            ApiService.post(`Customers/Update`, item.value)
-                .then(() => {
-                    setTimeout(() => {
-                        loading.value = false;
-
-                        Swal.fire({
-                            text: "Operazione completata!",
-                            icon: "success",
-                            buttonsStyling: false,
-                            confirmButtonText: "Continua!",
-                            heightAuto: false,
-                            customClass: {
-                                confirmButton: "btn btn-primary",
-                            },
-                        })
-                    }, 2000);
-                })
-                .catch(({ response }) => {
-                    console.log(response);
-                    loading.value = false;
-                    Swal.fire({
-                        text: "Attenzione, si è verificato un errore.",
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: "Continua!",
-                        heightAuto: false,
-                        customClass: {
-                            confirmButton: "btn btn-primary",
-                        },
-                    });
-                });
-        };
-
-        const deleteItem = () => {
-            loading.value = true;
-            ApiService.post(`Customers/Delete?id=${id}`, {})
-                .then(() => {
-                    setTimeout(() => {
-                        loading.value = false;
-
-                        Swal.fire({
-                            text: "Operazione completata!",
-                            icon: "success",
-                            buttonsStyling: false,
-                            confirmButtonText: "Continua!",
-                            heightAuto: false,
-                            customClass: {
-                                confirmButton: "btn btn-primary",
-                            },
-                        })
-                    }, 1000);
-                    router.push({ name: 'customers-list' })
-                })
-                .catch(({ response }) => {
-                    console.log(response);
-                });
-        };
-
-        return {
-            getAssetPath,
-            item,
-            saveChanges,
-            CustomerTypes,
-            PaymentTypes,
-            DeliveryTypes,
-            deleteItem,
-            loading
+              Swal.fire({
+                text: "Il modulo è stato inviato con successo!",
+                icon: "Successo",
+                buttonsStyling: false,
+                confirmButtonText: "Continua!",
+                heightAuto: false,
+                customClass: {
+                  confirmButton: "btn btn-primary",
+                },
+              }).then(() => {
+                router.push({ name: 'customers-list' })
+              });
+             })
+            .catch(({ response }) => {
+              console.log(response);
+              loading.value = false;
+              Swal.fire({
+                text: "Attenzione, si è verificato un errore.",
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Continua!",
+                heightAuto: false,
+                customClass: {
+                  confirmButton: "btn btn-primary",
+                },
+              });
+            });
+        } else {
+          Swal.fire({
+            text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: "Ok",
+            heightAuto: false,
+            customClass: {
+              confirmButton: "btn btn-primary",
+            },
+          });
+          return false;
+        }
+      });
+    };    
+       
+      return { 
+        formData,
+        rules,
+        submit,
+        formRef,
+        loading,
+        updateModalRef,
+        getAssetPath,
+        onFileChanged,
+        typesavailable,
+        showTipologia,
         };
     },
 });

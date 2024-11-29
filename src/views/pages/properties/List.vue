@@ -108,8 +108,8 @@
         <template v-slot:Category="{ row: item }">
           {{ item.Category }}
         </template>
-        <template v-slot:Address="{ row: item }">
-          {{ item.Address }}
+        <template v-slot:AddressLine="{ row: item }">
+          {{ item.AddressLine }}
         </template>
         <template v-slot:Price="{ row: item }">
           {{ item.Price }}
@@ -163,7 +163,7 @@ export default defineComponent({
       },
       {
         columnName: "Indirizzo",
-        columnLabel: "Address",
+        columnLabel: "AddressLine",
         sortEnabled: true,
         columnWidth: 230,
       },

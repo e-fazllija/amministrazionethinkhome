@@ -272,7 +272,7 @@ export default defineComponent({
           confirmButton: "btn btn-danger",
         },
       }).then(async () => {
-        await deleteCustomer(id)
+        await deleteCustomer(Id)
         await getItems("");
         MenuComponent.reinitialization(); 
       });

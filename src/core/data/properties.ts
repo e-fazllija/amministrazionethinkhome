@@ -49,7 +49,6 @@ const getRealEstateProperties = (filterRequest: string) : Promise<Array<RealEsta
     ""
   )
     .then(({ data }) => {
-      console.log(data.Data)
       const result = data.Data as Partial<Array<RealEstateProperty>>
       return result;
     })
@@ -59,7 +58,7 @@ const getRealEstateProperties = (filterRequest: string) : Promise<Array<RealEsta
     });
 };
 
-const getRealEstateProperty = (id: Number) : Promise<RealEstateProperty> => {
+const getRealEstateProperty = (id: number) : Promise<RealEstateProperty> => {
   return ApiService.get(`RealEstateProperty/GetById?id=${id}`, "")
     .then(({ data }) => {
       const result = data as Partial<RealEstateProperty>;
