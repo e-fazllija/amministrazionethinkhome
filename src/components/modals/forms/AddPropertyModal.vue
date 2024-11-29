@@ -668,11 +668,11 @@
 
 <script lang="ts">
 import { getAssetPath } from "@/core/helpers/assets";
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch, onMounted } from "vue";
 import { hideModal } from "@/core/helpers/dom";
 import { countries } from "@/core/data/countries";
 import Swal from "sweetalert2/dist/sweetalert2.js";
-import {createRealEstateProperty, RealEstateProperty } from "@/core/data/properties";
+import {createRealEstateProperty, RealEstateProperty, getToInsert, InsertModel } from "@/core/data/properties";
 import { useAuthStore } from "@/stores/auth";
 
 export default defineComponent({
@@ -716,6 +716,10 @@ export default defineComponent({
       Description: "",
       CustomerId: 0,
       AgentId: ""
+    });
+    const inserModel = ref<InsertModel>({
+      Customers: [],
+      Users: []
     });
     const showTipologia = ref(false);
     const typesavailable = ref<string[]>([]);
@@ -820,6 +824,11 @@ export default defineComponent({
         },
       ],
     });
+
+    onMounted(async () => {
+      inserModel.value = await getToInsert();
+      console.log(inserModel.value)
+    })
 
     const submit = async () => {
       if (!formRef.value) {

@@ -8,7 +8,7 @@ export interface User {
   Username: string;
   Code?: string;
   Name: string;
-  Lastname: string;
+  LastName: string;
   Email: string;
   Role: string;
   Password: string;
@@ -61,7 +61,7 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   async function register(credentials: User) {
-    credentials.Username = credentials.Lastname + credentials.Name;
+    credentials.Username = credentials.LastName + credentials.Name;
     return await ApiService.post("auth/register", credentials)
       .then(({ data }) => {
         setAuth(data);

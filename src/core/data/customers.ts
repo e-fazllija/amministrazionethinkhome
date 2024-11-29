@@ -69,8 +69,7 @@ const updateCustomer = async (formData:Customer) => {
     });
 };
 
-const deleteCustomer = async (id: String) => {
-  console.log(id)
+const deleteCustomer = async (id: number) => {
   return await ApiService.delete(`https://localhost:7267/api/Customers/Delete?id=${id}`)
     .then(({ data }) => {
       const result = data as Partial<Customer>;

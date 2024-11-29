@@ -119,9 +119,6 @@
         <template v-slot:Phone="{ row: customer }">
           {{ customer.Phone }}
         </template>
-        <template v-slot:Date="{ row: customer }">
-          {{ customer.Date }}
-        </template>
           <template v-slot:Actions="{ row: customer }">
                    <button class="btn btn-light-info me-1" data-bs-toggle="modal"
                         data-bs-target="#kt_modal_update_customer"
@@ -201,12 +198,6 @@ export default defineComponent({
       //   columnWidth: 175,
       // },
       {
-        columnName: "Data Creazione",
-        columnLabel: "Date",
-        sortEnabled: true,
-        columnWidth: 225,
-      },
-      {
         columnName: "Azioni",
         columnLabel: "Actions",
         sortEnabled: false,
@@ -217,10 +208,10 @@ export default defineComponent({
     let selectedId = ref(0);
     const tableData = ref<Array<Customer>>();
     const initCustomers = ref([]);
-      async function getItems(filterRequest: string) {
-          tableData.value = await getCustomers(filterRequest);
-        
-      };
+    async function getItems(filterRequest: string) {
+        tableData.value = await getCustomers(filterRequest);
+      
+    };
 
     onMounted(() => {
       // initCustomers.value.splice(0, tableData.value.length, ...tableData.value);
@@ -272,7 +263,7 @@ export default defineComponent({
           confirmButton: "btn btn-danger",
         },
       }).then(async () => {
-        await deleteCustomer(Id)
+        await deleteCustomer(id)
         await getItems("");
         MenuComponent.reinitialization(); 
       });

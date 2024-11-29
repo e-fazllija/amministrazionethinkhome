@@ -1,5 +1,6 @@
 import ApiService from "@/core/services/ApiService";
 import { useAuthStore, type User } from "@/stores/auth";
+import { Customer } from "./customers";
 const store = useAuthStore();
 
 export class RealEstateProperty {
@@ -43,6 +44,11 @@ export class RealEstateProperty {
   Files?: FileList;
 }
 
+export class InsertModel {
+  Customers: Customer[];
+  Users: User[];
+}
+
 const getRealEstateProperties = (filterRequest: string) : Promise<Array<RealEstateProperty>> => {
    return ApiService.get(
     `RealEstateProperty/Get?currentPage=0&filterRequest=${filterRequest}`,
@@ -62,6 +68,18 @@ const getRealEstateProperty = (id: number) : Promise<RealEstateProperty> => {
   return ApiService.get(`RealEstateProperty/GetById?id=${id}`, "")
     .then(({ data }) => {
       const result = data as Partial<RealEstateProperty>;
+      return result;
+    })
+    .catch(({ response }) => {
+      console.log(response);
+      return undefined;
+    });
+};
+
+const getToInsert = () : Promise<InsertModel> => {
+  return ApiService.get(`RealEstateProperty/GetToInsert`, "")
+    .then(({ data }) => {
+      const result = data as Partial<InsertModel>;
       return result;
     })
     .catch(({ response }) => {
@@ -129,4 +147,4 @@ const deleteRealEstateProperty = async (id: Number) => {
     });
 };
 
-export { getRealEstateProperties, getRealEstateProperty, createRealEstateProperty, updateRealEstateProperty, deleteRealEstateProperty }
+export { getRealEstateProperties, getRealEstateProperty, createRealEstateProperty, updateRealEstateProperty, deleteRealEstateProperty, getToInsert }
