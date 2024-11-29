@@ -49,7 +49,7 @@ const getRealEstateProperties = (filterRequest: string) : Promise<Array<RealEsta
     ""
   )
     .then(({ data }) => {
-      const result = data.Data.$values.$values as Partial<Array<RealEstateProperty>>
+      const result = data.Data.$values as Partial<Array<RealEstateProperty>>
       return result;
     })
     .catch(({ response }) => {
