@@ -68,7 +68,7 @@
               class="form-check-input"
               type="checkbox"
               value="2"
-              v-model="data.customer"
+              v-model="data.customers"
             />
             <span class="form-check-label user-select-none"> Customer </span>
           </label>

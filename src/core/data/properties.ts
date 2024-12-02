@@ -1,6 +1,6 @@
 import ApiService from "@/core/services/ApiService";
 import { useAuthStore, type User } from "@/stores/auth";
-import { Customer } from "./customers";
+import type { Customer } from "./customers";
 const store = useAuthStore();
 
 export class RealEstateProperty {
