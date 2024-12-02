@@ -74,7 +74,32 @@
                   </div>
                 <!--end::Input group-->
 
+                <!--begin::Input group-->
+                <div class="d-flex flex-column mb-7 fv-row">
+                  <!--begin::Label-->
+                  <label class="required fs-6 fw-semobold mb-2">Titolo</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <el-form-item prop="Title">
+                    <el-input v-model="formData.Title" type="text"/>
+                  </el-form-item>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
 
+                  <!--begin::Input group-->
+                  <div class="fv-row mb-15">
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-semobold mb-2">Descrizione</label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <el-form-item prop="Description">
+                          <el-input v-model="formData.Description" type="text" />
+                        </el-form-item>
+                        <!--end::Input-->
+                      </div>
+                      <!--end::Input group-->
+                      
                 <!--begin::Billing toggle-->
                   <div
                    class="fw-bold fs-3 rotate collapsible mb-7"
@@ -636,18 +661,6 @@
                       </div>
                       <!--end::Input group-->
 
-                        <!--begin::Input group-->
-                      <div class="fv-row mb-15">
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-semobold mb-2">Descrizione</label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <el-form-item prop="Description">
-                          <el-input v-model="formData.Description" type="text" />
-                        </el-form-item>
-                        <!--end::Input-->
-                      </div>
-                      <!--end::Input group-->
                     </div>
                     <!--begin::Input group-->
                     <div class="fv-row mb-15">
@@ -716,6 +729,7 @@ export default defineComponent({
     const store = useAuthStore();
     const loading = ref<boolean>(false);
     const formData = ref<RealEstateProperty>({
+      Title: "",
       Category: "Residenziale",
       Typology: "Appartamento",
       InHome: false,

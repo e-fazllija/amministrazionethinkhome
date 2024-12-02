@@ -5,6 +5,7 @@ const store = useAuthStore();
 
 export class RealEstateProperty {
   Id?: number;
+  Title: string;
   Category: string;
   Typology: string;
   InHome: boolean;
