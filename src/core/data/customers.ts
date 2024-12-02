@@ -20,7 +20,7 @@ export class Customer{
 
 const getCustomers = (filterRequest: string) : Promise<Array<Customer>> => {
    return ApiService.get(
-    `https://localhost:7267/api/Customers/Get?currentPage=0&filterRequest=${filterRequest}`,
+    `Customers/Get?currentPage=0&filterRequest=${filterRequest}`,
     ""
   )
     .then(({ data }) => {
@@ -34,7 +34,7 @@ const getCustomers = (filterRequest: string) : Promise<Array<Customer>> => {
 };
 
 const getCustomer = (id: number) : Promise<Customer> => {
-  return ApiService.get(`https://localhost:7267/api/Customers/GetById?id=${id}`, "")
+  return ApiService.get(`Customers/GetById?id=${id}`, "")
     .then(({ data }) => {
       const result = data as Partial<Customer>;
       return result;
@@ -46,7 +46,7 @@ const getCustomer = (id: number) : Promise<Customer> => {
 };
 
 const createCustomer = async (formData:Customer) => {
-  return ApiService.post("https://localhost:7267/api/Customers/Create", formData)
+  return ApiService.post("Customers/Create", formData)
     .then(({ data }) => {
       const result = data as Partial<Customer>;
       return result;
@@ -58,7 +58,7 @@ const createCustomer = async (formData:Customer) => {
 };
 
 const updateCustomer = async (formData:Customer) => {
-  return ApiService.post("https://localhost:7267/api/Customers/Update", formData)
+  return ApiService.post("Customers/Update", formData)
     .then(({ data }) => {
       const result = data as Partial<Customer>;
       return result;
@@ -70,7 +70,7 @@ const updateCustomer = async (formData:Customer) => {
 };
 
 const deleteCustomer = async (id: number) => {
-  return await ApiService.delete(`https://localhost:7267/api/Customers/Delete?id=${id}`)
+  return await ApiService.delete(`Customers/Delete?id=${id}`)
     .then(({ data }) => {
       const result = data as Partial<Customer>;
       return result;

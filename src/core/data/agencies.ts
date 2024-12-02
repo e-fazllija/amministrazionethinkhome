@@ -22,7 +22,7 @@ export class Agency {
 
 const getAgencies = (filterRequest: string) : Promise<Array<Agency>> => {
    return ApiService.get(
-    `https://localhost:7267/api/Agencies/Get?currentPage=0&filterRequest=${filterRequest}`,
+    `Agencies/Get?currentPage=0&filterRequest=${filterRequest}`,
     ""
   )
     .then(({ data }) => {
@@ -36,7 +36,7 @@ const getAgencies = (filterRequest: string) : Promise<Array<Agency>> => {
 };
 
 const getAgency = (id: String) : Promise<Agency> => {
-  return ApiService.get(`https://localhost:7267/api/Agencies/GetById?id=${id}`, "")
+  return ApiService.get(`Agencies/GetById?id=${id}`, "")
     .then(({ data }) => {
       const result = data as Partial<Agency>;
       return result;
@@ -55,7 +55,7 @@ const createAgency = async (formData: any) => {
 
 const updateAgency = async (formData: any) => {
   const values = formData as User;
-  return await ApiService.post("https://localhost:7267/api/Agencies/Update", values)
+  return await ApiService.post("Agencies/Update", values)
     .then(({ data }) => {
       const result = data as Partial<Agency>;
       return result;
@@ -67,8 +67,7 @@ const updateAgency = async (formData: any) => {
 };
 
 const deleteAgency = async (id: String) => {
-  console.log(id)
-  return await ApiService.delete(`https://localhost:7267/api/Agencies/Delete?id=${id}`)
+  return await ApiService.delete(`Agencies/Delete?id=${id}`)
     .then(({ data }) => {
       const result = data as Partial<Agency>;
       return result;

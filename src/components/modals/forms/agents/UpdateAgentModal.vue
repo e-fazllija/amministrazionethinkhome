@@ -248,7 +248,8 @@ export default defineComponent({
       Address: "",
       Town: "",
       Region: "",
-      Password: ""
+      Password: "",
+      AgencyId: ""
     });
 
     watch(() => props.Id, async (first, second) => {
@@ -345,6 +346,7 @@ export default defineComponent({
               });
             });
         } else {
+          loading.value = false;
           Swal.fire({
             text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
             icon: "error",

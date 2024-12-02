@@ -359,7 +359,6 @@ export default defineComponent({
         if (valid) {
           loading.value = true;
           
-          console.log(formData);
           formData.value.Role = "Agency"
           await createAgency(formData.value);
           
@@ -378,8 +377,10 @@ export default defineComponent({
             }).then(function () {
               hideModal(addAgencyModalRef.value);
               emit('formAddSubmitted', formData.value);
+              loading.value = false;
             });
           } else {
+            loading.value = false;
             Swal.fire({
               text: error as string,
               icon: "error",

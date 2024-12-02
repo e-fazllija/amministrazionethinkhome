@@ -338,6 +338,7 @@
                 },
               }).then(() => {
                 hideModal(updateCustomerModalRef.value);
+                loading.value = false;
               });
               emit('formUpdateSubmitted', formData.value);
             })
@@ -356,6 +357,7 @@
               });
             });
         } else {
+          loading.value = false;
           Swal.fire({
             text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
             icon: "error",

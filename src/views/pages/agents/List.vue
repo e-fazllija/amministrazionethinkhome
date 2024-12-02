@@ -47,7 +47,7 @@
             data-bs-target="#kt_modal_add_agent"
           >
             <KTIcon icon-name="plus" icon-class="fs-2" />
-            Aggiungi Agenzia
+            Aggiungi Agente
           </button>
           <!--end::Add Agent-->
         </div>

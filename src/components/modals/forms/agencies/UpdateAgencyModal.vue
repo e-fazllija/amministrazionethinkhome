@@ -351,6 +351,7 @@ export default defineComponent({
               });
             });
         } else {
+          loading.value = false;
           Swal.fire({
             text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
             icon: "error",

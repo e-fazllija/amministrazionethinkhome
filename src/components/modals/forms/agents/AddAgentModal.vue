@@ -48,6 +48,22 @@
               data-kt-scroll-offset="300px"
             >
               <!--begin::Input group-->
+              <div v-if="agencies" class="d-flex flex-column mb-7 fv-row">
+                <!--begin::Label-->
+                <label class="fs-6 fw-semobold mb-2">
+                  <span class="required">Agenzia</span>
+                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i>
+                  </label>
+                <!--end::Label-->
+                <!--begin::Input-->
+                <select class="form-control" v-model="formData.AgencyId">
+                  <option v-for="(agency, index) in agencies" :key="index" :value="agency.Id">{{ agency.Name }} {{ agency.LastName }}</option>
+                </select>
+                <!--end::Input-->
+              </div>
+              <!--end::Input group-->
+
+              <!--begin::Input group-->
               <div class="fv-row mb-7">
                 <!--begin::Label-->
                 <label class="required fs-6 fw-semobold mb-2">Nome</label>
@@ -278,11 +294,12 @@
 
 <script lang="ts">
 import { getAssetPath } from "@/core/helpers/assets";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import { hideModal } from "@/core/helpers/dom";
 import { countries } from "@/core/data/countries";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import {createAgent, Agent } from "@/core/data/agents";
+import {getAgencies } from "@/core/data/agencies";
 import { useAuthStore, type User } from "@/stores/auth";
 
 export default defineComponent({
@@ -303,7 +320,8 @@ export default defineComponent({
       Address: "",
       Town: "",
       Region: "",
-      Password: ""
+      Password: "",
+      AgencyId: ""
     });
 
     const rules = ref({
@@ -351,6 +369,18 @@ export default defineComponent({
       ]
     });
 
+    const agencies = ref();
+
+    async function getItems(filterRequest: string) {
+      agencies.value = await getAgencies(filterRequest);
+      formData.value.AgencyId = agencies.value[0].Id;
+      console.log(agencies.value)
+    };
+
+    onMounted(async () => {
+      getItems("");
+    });
+
     const submit = async () => {
       if (!formRef.value) {
         return;
@@ -359,7 +389,6 @@ export default defineComponent({
         if (valid) {
           loading.value = true;
           
-          console.log(formData);
           formData.value.Role = "Agent"
           formData.value.AgencyId = store.user.Id;
           await createAgent(formData.value);
@@ -379,8 +408,10 @@ export default defineComponent({
             }).then(function () {
               hideModal(addAgentModalRef.value);
               emit('formAddSubmitted', formData.value);
+              loading.value = false;
             });
           } else {
+            loading.value = false;
             Swal.fire({
               text: error as string,
               icon: "error",
@@ -405,6 +436,7 @@ export default defineComponent({
       addAgentModalRef,
       getAssetPath,
       countries,
+      agencies
     };
   },
 });

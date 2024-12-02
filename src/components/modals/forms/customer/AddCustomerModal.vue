@@ -345,7 +345,6 @@ export default defineComponent({
         if (valid) {
           loading.value = true;
 
-        console.log(formData);
         await createCustomer(formData.value);
 
         const error = store.errors;
@@ -363,8 +362,10 @@ export default defineComponent({
             }).then(function () {
               hideModal(addCustomerModalRef.value);
               emit('formAddSubmitted', formData.value);
+              loading.value = false;
             });
         } else {
+          loading.value = false;
           Swal.fire({
             text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
             icon: "error",

@@ -21,9 +21,13 @@ export class Agent {
   AgencyId: string;
 }
 
+export class InsertModel {
+  Users: User[];
+}
+
 const getAgents = (filterRequest: string) : Promise<Array<Agent>> => {
    return ApiService.get(
-    `https://localhost:7267/api/Agents/Get?currentPage=0&filterRequest=${filterRequest}`,
+    `Agents/Get?currentPage=0&filterRequest=${filterRequest}`,
     ""
   )
     .then(({ data }) => {
@@ -37,7 +41,7 @@ const getAgents = (filterRequest: string) : Promise<Array<Agent>> => {
 };
 
 const getAgent = (id: String) : Promise<Agent> => {
-  return ApiService.get(`https://localhost:7267/api/Agents/GetById?id=${id}`, "")
+  return ApiService.get(`Agents/GetById?id=${id}`, "")
     .then(({ data }) => {
       const result = data as Partial<Agent>;
       return result;
@@ -56,7 +60,7 @@ const createAgent = async (formData: any) => {
 
 const updateAgent = async (formData: any) => {
   const values = formData as User;
-  return await ApiService.post("https://localhost:7267/api/Agents/Update", values)
+  return await ApiService.post("Agents/Update", values)
     .then(({ data }) => {
       const result = data as Partial<Agent>;
       return result;
@@ -69,7 +73,7 @@ const updateAgent = async (formData: any) => {
 
 const deleteAgent = async (id: String) => {
   console.log(id)
-  return await ApiService.delete(`https://localhost:7267/api/Agents/Delete?id=${id}`)
+  return await ApiService.delete(`Agents/Delete?id=${id}`)
     .then(({ data }) => {
       const result = data as Partial<Agent>;
       return result;

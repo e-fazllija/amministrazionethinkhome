@@ -892,6 +892,7 @@ export default defineComponent({
               emit('formAddSubmitted', formData.value);
             });
         } else {
+          loading.value = false;
           Swal.fire({
             text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
             icon: "error",
