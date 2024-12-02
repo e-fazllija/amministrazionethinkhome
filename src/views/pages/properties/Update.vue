@@ -611,6 +611,7 @@ export default defineComponent({
     const showTipologia = ref(false);
     const loading = ref<boolean>(false);
     const formData = ref<RealEstateProperty>({
+      Title: "",
       Category: "",
       Typology: "",
       InHome: false,
