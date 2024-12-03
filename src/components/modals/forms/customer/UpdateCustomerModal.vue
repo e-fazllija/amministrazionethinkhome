@@ -66,9 +66,9 @@
                   <!--end::Label-->
 
                   <!--begin::Input-->
-                  <el-form-item prop="lastName">
+                  <el-form-item prop="LastName">
                     <el-input
-                      v-model="formData.Lastname"
+                      v-model="formData.LastName"
                       type="text"
                       placeholder=""
                     />
@@ -266,7 +266,7 @@
         Id:0,
         Code:"",
         Name: "",
-        Lastname:"",
+        LastName:"",
         Email: "",
         Phone:null,
         Description: "",
@@ -293,7 +293,7 @@
             trigger: "change",
           },
         ],
-        Lastname: [
+        LastName: [
           {
             required: true,
             message: "Cognome obligatorio",

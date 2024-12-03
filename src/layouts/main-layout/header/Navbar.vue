@@ -2,25 +2,22 @@
   <!--begin::Navbar-->
   <div class="app-navbar flex-shrink-0">
     <!--begin::Search-->
-    <div class="app-navbar-item align-items-stretch ms-1 ms-md-4">
+    <!-- <div class="app-navbar-item align-items-stretch ms-1 ms-md-4">
       <KTSearch />
-    </div>
+    </div> -->
     <!--end::Search-->
     <!--begin::Activities-->
-    <div class="app-navbar-item ms-1 ms-md-4">
-      <!--begin::Drawer toggle-->
-      <!-- <div
+    <!-- <div class="app-navbar-item ms-1 ms-md-4">
+     <div
         class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px"
         id="kt_activities_toggle"
       >
         <KTIcon icon-name="messages" icon-class="fs-2" />
-      </div> -->
-      <!--end::Drawer toggle-->
-    </div>
+      </div> 
+    </div> -->
     <!--end::Activities-->
     <!--begin::Notifications-->
-    <div class="app-navbar-item ms-1 ms-md-4">
-      <!--begin::Menu- wrapper-->
+    <!-- <div class="app-navbar-item ms-1 ms-md-4">
       <div
         class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px"
         data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
@@ -31,8 +28,7 @@
         <KTIcon icon-name="notification-status" icon-class="fs-2" />
       </div>
       <KTNotificationMenu />
-      <!--end::Menu wrapper-->
-    </div>
+    </div> -->
     <!--end::Notifications-->
     <!--begin::Chat-->
     <div class="app-navbar-item ms-1 ms-md-4">
@@ -95,7 +91,7 @@
         data-kt-menu-placement="bottom-end"
       >
         <img
-          :src="getAssetPath('media/avatars/300-3.jpg')"
+          :src="getAssetPath('media/avatars/blank.png')"
           class="rounded-3"
           alt="user"
         />
@@ -126,7 +122,7 @@
 import { getAssetPath } from "@/core/helpers/assets";
 import { computed, defineComponent } from "vue";
 import KTSearch from "@/layouts/main-layout/search/Search.vue";
-import KTNotificationMenu from "@/layouts/main-layout/menus/NotificationsMenu.vue";
+// import KTNotificationMenu from "@/layouts/main-layout/menus/NotificationsMenu.vue";
 // import KTQuickLinksMenu from "@/layouts/main-layout/menus/QuickLinksMenu.vue";
 import KTUserMenu from "@/layouts/main-layout/menus/UserAccountMenu.vue";
 import KTThemeModeSwitcher from "@/layouts/main-layout/theme-mode/ThemeModeSwitcher.vue";
@@ -137,7 +133,7 @@ export default defineComponent({
   name: "header-navbar",
   components: {
     KTSearch,
-    KTNotificationMenu,
+    // KTNotificationMenu,
     // KTQuickLinksMenu,
     KTUserMenu,
     KTThemeModeSwitcher,

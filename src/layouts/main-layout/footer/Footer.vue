@@ -11,17 +11,17 @@
     >
       <!--begin::Copyright-->
       <div class="text-dark order-2 order-md-1">
-        <span class="text-muted fw-semibold me-1">2022©</span>
+        <span class="text-muted fw-semibold me-1">2024</span>
         <a
           href="https://keenthemes.com"
           target="_blank"
           class="text-gray-800 text-hover-primary"
-          >Keenthemes</a
+          >ThinkHome</a
         >
       </div>
       <!--end::Copyright-->
       <!--begin::Menu-->
-      <ul class="menu menu-gray-600 menu-hover-primary fw-semibold order-1">
+      <!-- <ul class="menu menu-gray-600 menu-hover-primary fw-semibold order-1">
         <li class="menu-item">
           <a
             href="https://keenthemes.com"
@@ -46,7 +46,7 @@
             >Purchase</a
           >
         </li>
-      </ul>
+      </ul> -->
       <!--end::Menu-->
     </div>
     <!--end::Footer container-->

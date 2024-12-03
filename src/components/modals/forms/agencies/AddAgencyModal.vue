@@ -71,9 +71,9 @@
                 <!--end::Label-->
 
                 <!--begin::Input-->
-                <el-form-item prop="lastName">
+                <el-form-item prop="LastName">
                   <el-input
-                    v-model="formData.Lastname"
+                    v-model="formData.LastName"
                     type="text"
                     placeholder=""
                   />
@@ -295,7 +295,7 @@ export default defineComponent({
     const store = useAuthStore();
     const formData = ref<Agency>({
       Name: "",
-      Lastname: "",
+      LastName: "",
       Email: "",
       PhoneNumber: null,
       MobilePhoneNumber: null,
@@ -314,7 +314,7 @@ export default defineComponent({
           trigger: "change",
         },
       ],
-      Lastname: [
+      LastName: [
         {
           required: true,
           message: "Cognome obligatorio",

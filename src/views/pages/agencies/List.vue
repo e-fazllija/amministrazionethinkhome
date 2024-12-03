@@ -111,8 +111,8 @@
         <template v-slot:Name="{ row: agent }">
           {{ agent.Name }}
         </template>
-        <template v-slot:Lastname="{ row: agent }">
-          {{ agent.Lastname }}
+        <template v-slot:LastName="{ row: agent }">
+          {{ agent.LastName }}
         </template>
         <template v-slot:Email="{ row: agent }">
           <a href="#" class="text-gray-600 text-hover-primary mb-1">
@@ -128,7 +128,7 @@
                         data-bs-target="#kt_modal_update_agency"
                         @click="selectId(agent.Id)">Dettagli</button>
 
-                  <button @click="deleteItem(agent.Id)" class="btn btn-light-danger me-1">Elimina</button>
+                  <!-- <button @click="deleteItem(agent.Id)" class="btn btn-light-danger me-1">Elimina</button> -->
               </template>
           <!--begin::Menu-->
           <div
@@ -183,7 +183,7 @@ export default defineComponent({
       },
       {
         columnName: "Cognome",
-        columnLabel: "Lastname",
+        columnLabel: "LastName",
         sortEnabled: true,
         columnWidth: 175,
       },
