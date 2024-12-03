@@ -124,7 +124,7 @@
                         data-bs-target="#kt_modal_update_customer"
                         @click="selectId(customer.Id)">Dettagli</button>
 
-                  <button @click="deleteItem(customer.Id)" class="btn btn-light-danger me-1">Elimina</button>
+                  <!-- <button @click="deleteItem(customer.Id)" class="btn btn-light-danger me-1">Elimina</button> -->
               </template>
           <!--begin::Menu-->
           <div

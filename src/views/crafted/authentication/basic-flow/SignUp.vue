@@ -73,12 +73,12 @@
             class="form-control form-control-lg form-control-solid"
             type="text"
             placeholder=""
-            name="lastname"
+            name="LastName"
             autocomplete="off"
           />
           <div class="fv-plugins-message-container">
             <div class="fv-help-block">
-              <ErrorMessage name="lastname" />
+              <ErrorMessage name="LastName" />
             </div>
           </div>
         </div>
@@ -243,7 +243,7 @@ export default defineComponent({
 
     const registration = Yup.object().shape({
       name: Yup.string().required().label("Name"),
-      lastname: Yup.string().required().label("Surname"),
+      LastName: Yup.string().required().label("Surname"),
       email: Yup.string().min(4).required().email().label("Email"),
       password: Yup.string().required().label("Password"),
       password_confirmation: Yup.string()

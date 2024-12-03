@@ -160,32 +160,32 @@ const routes: Array<RouteRecordRaw> = [
           breadcrumbs: ["Pages", "Wizard"],
         },
       },
-      {
-        path: "/crafted/account",
-        name: "account",
-        component: () => import("@/views/crafted/account/Account.vue"),
-        meta: {
-          breadcrumbs: ["Crafted", "Account"],
-        },
-        children: [
-          {
-            path: "overview",
-            name: "account-overview",
-            component: () => import("@/views/crafted/account/Overview.vue"),
-            meta: {
-              pageTitle: "Overview",
-            },
-          },
-          {
-            path: "settings",
-            name: "account-settings",
-            component: () => import("@/views/crafted/account/Settings.vue"),
-            meta: {
-              pageTitle: "Settings",
-            },
-          },
-        ],
-      },
+      // {
+      //   path: "/crafted/account",
+      //   name: "account",
+      //   component: () => import("@/views/crafted/account/Account.vue"),
+      //   meta: {
+      //     breadcrumbs: ["Crafted", "Account"],
+      //   },
+      //   children: [
+      //     {
+      //       path: "overview",
+      //       name: "account-overview",
+      //       component: () => import("@/views/crafted/account/Overview.vue"),
+      //       meta: {
+      //         pageTitle: "Overview",
+      //       },
+      //     },
+      //     {
+      //       path: "settings",
+      //       name: "account-settings",
+      //       component: () => import("@/views/crafted/account/Settings.vue"),
+      //       meta: {
+      //         pageTitle: "Settings",
+      //       },
+      //     },
+      //   ],
+      // },
       {
         path: "/apps/subscriptions/getting-started",
         name: "apps-subscriptions-getting-started",
@@ -262,165 +262,165 @@ const routes: Array<RouteRecordRaw> = [
           breadcrumbs: ["Apps", "Chat"],
         },
       },
-      {
-        path: "/crafted/modals/general/invite-friends",
-        name: "modals-general-invite-friends",
-        component: () =>
-          import("@/views/crafted/modals/general/InviteFriends.vue"),
-        meta: {
-          pageTitle: "Invite Friends",
-          breadcrumbs: ["Crafted", "Modals", "General"],
-        },
-      },
-      {
-        path: "/crafted/modals/general/view-user",
-        name: "modals-general-view-user",
-        component: () => import("@/views/crafted/modals/general/ViewUsers.vue"),
-        meta: {
-          pageTitle: "View User",
-          breadcrumbs: ["Crafted", "Modals", "General"],
-        },
-      },
-      {
-        path: "/crafted/modals/general/upgrade-plan",
-        name: "modals-general-upgrade-plan",
-        component: () =>
-          import("@/views/crafted/modals/general/UpgradePlan.vue"),
-        meta: {
-          pageTitle: "Upgrade Plan",
-          breadcrumbs: ["Crafted", "Modals", "General"],
-        },
-      },
-      {
-        path: "/crafted/modals/general/share-and-earn",
-        name: "modals-general-share-and-earn",
-        component: () =>
-          import("@/views/crafted/modals/general/ShareAndEarn.vue"),
-        meta: {
-          pageTitle: "Share And Earn",
-          breadcrumbs: ["Crafted", "Modals", "General"],
-        },
-      },
-      {
-        path: "/crafted/modals/forms/new-target",
-        name: "modals-forms-new-target",
-        component: () => import("@/views/crafted/modals/forms/NewTarget.vue"),
-        meta: {
-          pageTitle: "New Target",
-          breadcrumbs: ["Crafted", "Modals", "Forms"],
-        },
-      },
-      {
-        path: "/crafted/modals/forms/new-card",
-        name: "modals-forms-new-card",
-        component: () => import("@/views/crafted/modals/forms/NewCard.vue"),
-        meta: {
-          pageTitle: "New Card",
-          breadcrumbs: ["Crafted", "Modals", "Forms"],
-        },
-      },
-      {
-        path: "/crafted/modals/forms/new-address",
-        name: "modals-forms-new-address",
-        component: () => import("@/views/crafted/modals/forms/NewAddress.vue"),
-        meta: {
-          pageTitle: "New Address",
-          breadcrumbs: ["Crafted", "Modals", "Forms"],
-        },
-      },
-      {
-        path: "/crafted/modals/forms/create-api-key",
-        name: "modals-forms-create-api-key",
-        component: () =>
-          import("@/views/crafted/modals/forms/CreateApiKey.vue"),
-        meta: {
-          pageTitle: "Create Api Key",
-          breadcrumbs: ["Crafted", "Modals", "Forms"],
-        },
-      },
-      {
-        path: "/crafted/modals/wizards/two-factor-auth",
-        name: "modals-wizards-two-factor-auth",
-        component: () =>
-          import("@/views/crafted/modals/wizards/TwoFactorAuth.vue"),
-        meta: {
-          pageTitle: "Two Factory Auth",
-          breadcrumbs: ["Crafted", "Modals", "Wizards"],
-        },
-      },
-      {
-        path: "/crafted/modals/wizards/create-app",
-        name: "modals-wizards-create-app",
-        component: () => import("@/views/crafted/modals/wizards/CreateApp.vue"),
-        meta: {
-          pageTitle: "Create App",
-          breadcrumbs: ["Crafted", "Modals", "Wizards"],
-        },
-      },
-      {
-        path: "/crafted/modals/wizards/create-account",
-        name: "modals-wizards-create-account",
-        component: () =>
-          import("@/views/crafted/modals/wizards/CreateAccount.vue"),
-        meta: {
-          pageTitle: "Create Account",
-          breadcrumbs: ["Crafted", "Modals", "Wizards"],
-        },
-      },
-      {
-        path: "/crafted/widgets/lists",
-        name: "widgets-list",
-        component: () => import("@/views/crafted/widgets/Lists.vue"),
-        meta: {
-          pageTitle: "Lists",
-          breadcrumbs: ["Crafted", "Widgets"],
-        },
-      },
-      {
-        path: "/crafted/widgets/statistics",
-        name: "widgets-statistics",
-        component: () => import("@/views/crafted/widgets/Statistics.vue"),
-        meta: {
-          pageTitle: "Statistics",
-          breadcrumbs: ["Crafted", "Widgets"],
-        },
-      },
-      {
-        path: "/crafted/widgets/charts",
-        name: "widgets-charts",
-        component: () => import("@/views/crafted/widgets/Charts.vue"),
-        meta: {
-          pageTitle: "Charts",
-          breadcrumbs: ["Crafted", "Widgets"],
-        },
-      },
-      {
-        path: "/crafted/widgets/mixed",
-        name: "widgets-mixed",
-        component: () => import("@/views/crafted/widgets/Mixed.vue"),
-        meta: {
-          pageTitle: "Mixed",
-          breadcrumbs: ["Crafted", "Widgets"],
-        },
-      },
-      {
-        path: "/crafted/widgets/tables",
-        name: "widgets-tables",
-        component: () => import("@/views/crafted/widgets/Tables.vue"),
-        meta: {
-          pageTitle: "Tables",
-          breadcrumbs: ["Crafted", "Widgets"],
-        },
-      },
-      {
-        path: "/crafted/widgets/feeds",
-        name: "widgets-feeds",
-        component: () => import("@/views/crafted/widgets/Feeds.vue"),
-        meta: {
-          pageTitle: "Feeds",
-          breadcrumbs: ["Crafted", "Widgets"],
-        },
-      },
+      // {
+      //   path: "/crafted/modals/general/invite-friends",
+      //   name: "modals-general-invite-friends",
+      //   component: () =>
+      //     import("@/views/crafted/modals/general/InviteFriends.vue"),
+      //   meta: {
+      //     pageTitle: "Invite Friends",
+      //     breadcrumbs: ["Crafted", "Modals", "General"],
+      //   },
+      // },
+      // {
+      //   path: "/crafted/modals/general/view-user",
+      //   name: "modals-general-view-user",
+      //   component: () => import("@/views/crafted/modals/general/ViewUsers.vue"),
+      //   meta: {
+      //     pageTitle: "View User",
+      //     breadcrumbs: ["Crafted", "Modals", "General"],
+      //   },
+      // },
+      // {
+      //   path: "/crafted/modals/general/upgrade-plan",
+      //   name: "modals-general-upgrade-plan",
+      //   component: () =>
+      //     import("@/views/crafted/modals/general/UpgradePlan.vue"),
+      //   meta: {
+      //     pageTitle: "Upgrade Plan",
+      //     breadcrumbs: ["Crafted", "Modals", "General"],
+      //   },
+      // },
+      // {
+      //   path: "/crafted/modals/general/share-and-earn",
+      //   name: "modals-general-share-and-earn",
+      //   component: () =>
+      //     import("@/views/crafted/modals/general/ShareAndEarn.vue"),
+      //   meta: {
+      //     pageTitle: "Share And Earn",
+      //     breadcrumbs: ["Crafted", "Modals", "General"],
+      //   },
+      // },
+      // {
+      //   path: "/crafted/modals/forms/new-target",
+      //   name: "modals-forms-new-target",
+      //   component: () => import("@/views/crafted/modals/forms/NewTarget.vue"),
+      //   meta: {
+      //     pageTitle: "New Target",
+      //     breadcrumbs: ["Crafted", "Modals", "Forms"],
+      //   },
+      // },
+      // {
+      //   path: "/crafted/modals/forms/new-card",
+      //   name: "modals-forms-new-card",
+      //   component: () => import("@/views/crafted/modals/forms/NewCard.vue"),
+      //   meta: {
+      //     pageTitle: "New Card",
+      //     breadcrumbs: ["Crafted", "Modals", "Forms"],
+      //   },
+      // },
+      // {
+      //   path: "/crafted/modals/forms/new-address",
+      //   name: "modals-forms-new-address",
+      //   component: () => import("@/views/crafted/modals/forms/NewAddress.vue"),
+      //   meta: {
+      //     pageTitle: "New Address",
+      //     breadcrumbs: ["Crafted", "Modals", "Forms"],
+      //   },
+      // },
+      // {
+      //   path: "/crafted/modals/forms/create-api-key",
+      //   name: "modals-forms-create-api-key",
+      //   component: () =>
+      //     import("@/views/crafted/modals/forms/CreateApiKey.vue"),
+      //   meta: {
+      //     pageTitle: "Create Api Key",
+      //     breadcrumbs: ["Crafted", "Modals", "Forms"],
+      //   },
+      // },
+      // {
+      //   path: "/crafted/modals/wizards/two-factor-auth",
+      //   name: "modals-wizards-two-factor-auth",
+      //   component: () =>
+      //     import("@/views/crafted/modals/wizards/TwoFactorAuth.vue"),
+      //   meta: {
+      //     pageTitle: "Two Factory Auth",
+      //     breadcrumbs: ["Crafted", "Modals", "Wizards"],
+      //   },
+      // },
+      // {
+      //   path: "/crafted/modals/wizards/create-app",
+      //   name: "modals-wizards-create-app",
+      //   component: () => import("@/views/crafted/modals/wizards/CreateApp.vue"),
+      //   meta: {
+      //     pageTitle: "Create App",
+      //     breadcrumbs: ["Crafted", "Modals", "Wizards"],
+      //   },
+      // },
+      // {
+      //   path: "/crafted/modals/wizards/create-account",
+      //   name: "modals-wizards-create-account",
+      //   component: () =>
+      //     import("@/views/crafted/modals/wizards/CreateAccount.vue"),
+      //   meta: {
+      //     pageTitle: "Create Account",
+      //     breadcrumbs: ["Crafted", "Modals", "Wizards"],
+      //   },
+      // },
+      // {
+      //   path: "/crafted/widgets/lists",
+      //   name: "widgets-list",
+      //   component: () => import("@/views/crafted/widgets/Lists.vue"),
+      //   meta: {
+      //     pageTitle: "Lists",
+      //     breadcrumbs: ["Crafted", "Widgets"],
+      //   },
+      // },
+      // {
+      //   path: "/crafted/widgets/statistics",
+      //   name: "widgets-statistics",
+      //   component: () => import("@/views/crafted/widgets/Statistics.vue"),
+      //   meta: {
+      //     pageTitle: "Statistics",
+      //     breadcrumbs: ["Crafted", "Widgets"],
+      //   },
+      // },
+      // {
+      //   path: "/crafted/widgets/charts",
+      //   name: "widgets-charts",
+      //   component: () => import("@/views/crafted/widgets/Charts.vue"),
+      //   meta: {
+      //     pageTitle: "Charts",
+      //     breadcrumbs: ["Crafted", "Widgets"],
+      //   },
+      // },
+      // {
+      //   path: "/crafted/widgets/mixed",
+      //   name: "widgets-mixed",
+      //   component: () => import("@/views/crafted/widgets/Mixed.vue"),
+      //   meta: {
+      //     pageTitle: "Mixed",
+      //     breadcrumbs: ["Crafted", "Widgets"],
+      //   },
+      // },
+      // {
+      //   path: "/crafted/widgets/tables",
+      //   name: "widgets-tables",
+      //   component: () => import("@/views/crafted/widgets/Tables.vue"),
+      //   meta: {
+      //     pageTitle: "Tables",
+      //     breadcrumbs: ["Crafted", "Widgets"],
+      //   },
+      // },
+      // {
+      //   path: "/crafted/widgets/feeds",
+      //   name: "widgets-feeds",
+      //   component: () => import("@/views/crafted/widgets/Feeds.vue"),
+      //   meta: {
+      //     pageTitle: "Feeds",
+      //     breadcrumbs: ["Crafted", "Widgets"],
+      //   },
+      // },
     ],
   },
   {

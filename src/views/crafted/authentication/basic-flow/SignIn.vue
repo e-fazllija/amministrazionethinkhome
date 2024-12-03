@@ -7,7 +7,7 @@
       id="kt_login_signin_form"
       @submit="onSubmitLogin"
       :validation-schema="login"
-      :initial-values="{ email: 'admin@demo.com', password: 'demo' }"
+      :initial-values="{ email: '', password: '' }"
     >
       <!--begin::Heading-->
       <div class="text-center mb-10">
@@ -166,7 +166,7 @@ export default defineComponent({
       if (!error) {
         console.log(store.user);
         Swal.fire({
-          text: "You have successfully logged in!",
+          text: "Accesso effettuato!",
           icon: "success",
           buttonsStyling: false,
           confirmButtonText: "Continua!",

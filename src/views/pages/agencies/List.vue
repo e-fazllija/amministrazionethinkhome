@@ -128,7 +128,7 @@
                         data-bs-target="#kt_modal_update_agency"
                         @click="selectId(agent.Id)">Dettagli</button>
 
-                  <button @click="deleteItem(agent.Id)" class="btn btn-light-danger me-1">Elimina</button>
+                  <!-- <button @click="deleteItem(agent.Id)" class="btn btn-light-danger me-1">Elimina</button> -->
               </template>
           <!--begin::Menu-->
           <div

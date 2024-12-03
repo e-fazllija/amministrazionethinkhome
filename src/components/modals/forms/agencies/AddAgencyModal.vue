@@ -71,7 +71,7 @@
                 <!--end::Label-->
 
                 <!--begin::Input-->
-                <el-form-item prop="lastName">
+                <el-form-item prop="LastName">
                   <el-input
                     v-model="formData.LastName"
                     type="text"

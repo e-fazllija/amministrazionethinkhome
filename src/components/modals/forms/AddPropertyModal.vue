@@ -774,7 +774,6 @@ export default defineComponent({
     const target = event.target as HTMLInputElement;
       if (target.files && target.files.length > 0) {
         formData.value.Files = target.files;
-        console.log(formData.value.Files)
       }
     };
 
@@ -861,8 +860,12 @@ export default defineComponent({
 
     onMounted(async () => {
       inserModel.value = await getToInsert();
-      formData.value.CustomerId = inserModel.value.Customers[0].Id;
-      formData.value.AgentId = store.user.Id;
+      if(inserModel.value.Customers.length > 0){
+        formData.value.CustomerId = inserModel.value.Customers[0].Id;
+      }
+      if(inserModel.value.Users.length > 0){
+        formData.value.AgentId = store.user.Id;
+      }
     })
 
     const submit = async () => {

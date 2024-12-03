@@ -9,20 +9,21 @@
           (themeMode === 'dark' && layout === 'light-sidebar')
         "
         alt="Logo"
-        :src="getAssetPath('media/logos/default-dark.svg')"
-        class="h-25px app-sidebar-logo-default"
+        :src="getAssetPath('media/logos/TH-6.jpg')"
+        class="h-50px app-sidebar-logo-default"
+        style="width: 150px;"
       />
       <img
         v-if="themeMode === 'light' && layout === 'light-sidebar'"
         alt="Logo"
-        :src="getAssetPath('media/logos/default.svg')"
+        :src="getAssetPath('media/logos/TH-4.jpg')"
         class="h-25px app-sidebar-logo-default"
       />
-      <img
+      <!-- <img
         alt="Logo"
         :src="getAssetPath('media/logos/default-small.svg')"
         class="h-20px app-sidebar-logo-minimize"
-      />
+      /> -->
     </router-link>
     <!--end::Logo image-->
     <!--begin::Sidebar toggle-->

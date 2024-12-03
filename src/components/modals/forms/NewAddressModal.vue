@@ -109,12 +109,12 @@
                   <Field
                     type="text"
                     class="form-control"
-                    :class="errors.lastName ? 'is-invalid' : ''"
+                    :class="errors.LastName ? 'is-invalid' : ''"
                     placeholder=""
-                    name="lastName"
-                    v-model="newAddressData.lastName"
+                    name="LastName"
+                    v-model="newAddressData.LastName"
                   />
-                  <ErrorMessage class="invalid-feedback" name="lastName" />
+                  <ErrorMessage class="invalid-feedback" name="LastName" />
                   <!--end::Input-->
                 </div>
                 <!--end::Col-->
@@ -361,7 +361,7 @@ import { countries } from "@/core/data/countries";
 
 interface NewAddressData {
   firstName: string;
-  lastName: string;
+  LastName: string;
   country: string;
   address1: string;
   address2: string;
@@ -383,7 +383,7 @@ export default defineComponent({
 
     const newAddressData = ref<NewAddressData>({
       firstName: "",
-      lastName: "",
+      LastName: "",
       country: "",
       address1: "",
       address2: "",
@@ -394,7 +394,7 @@ export default defineComponent({
 
     const validationSchema = Yup.object().shape({
       firstName: Yup.string().required().label("First name"),
-      lastName: Yup.string().required().label("Last name"),
+      LastName: Yup.string().required().label("Last name"),
       country: Yup.string().required().label("Country"),
       address1: Yup.string().required().label("Address Line 1"),
       address2: Yup.string().required().label("Address Line 2"),
