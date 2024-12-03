@@ -57,7 +57,7 @@
                 <!--end::Label-->
                 <!--begin::Input-->
                 <select class="form-control" v-model="formData.AgencyId">
-                  <option v-for="(agency, index) in agencies" :key="index" :value="agency.Id">{{ agency.Name }} {{ agency.LastName }}</option>
+                  <option v-for="(agency, index) in agencies" :key="index" :value="agency.Id">{{ agency.Name }} {{ agency.Lastname }}</option>
                 </select>
                 <!--end::Input-->
               </div>
@@ -87,9 +87,9 @@
                 <!--end::Label-->
 
                 <!--begin::Input-->
-                <el-form-item prop="LastName">
+                <el-form-item prop="Lastname">
                   <el-input
-                    v-model="formData.LastName"
+                    v-model="formData.Lastname"
                     type="text"
                     placeholder=""
                   />
@@ -312,7 +312,7 @@ export default defineComponent({
     const store = useAuthStore();
     const formData = ref<Agent>({
       Name: "",
-      LastName: "",
+      Lastname: "",
       Email: "",
       PhoneNumber: null,
       MobilePhoneNumber: null,
@@ -332,7 +332,7 @@ export default defineComponent({
           trigger: "change",
         },
       ],
-      LastName: [
+      Lastname: [
         {
           required: true,
           message: "Cognome obligatorio",

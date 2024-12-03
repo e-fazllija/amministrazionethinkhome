@@ -6,7 +6,7 @@ export class Customer{
   Id?: number;
   Code: string;
   Name: string;
-  LastName: string;
+  Lastname: string;
   Email: string;
   Phone: number;
   Description: string;

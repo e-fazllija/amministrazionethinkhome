@@ -108,8 +108,8 @@
         <template v-slot:Name="{ row: customer }">
           {{ customer.Name }}
         </template>
-        <template v-slot:LastName="{ row: customer }">
-          {{ customer.LastName }}
+        <template v-slot:Lastname="{ row: customer }">
+          {{ customer.Lastname }}
         </template>
         <template v-slot:Email="{ row: customer }">
           <a href="#" class="text-gray-600 text-hover-primary mb-1">
@@ -175,7 +175,7 @@ export default defineComponent({
       },
       {
         columnName: "Cognome",
-        columnLabel: "LastName",
+        columnLabel: "Lastname",
         sortEnabled: true,
         columnWidth: 175,
       },

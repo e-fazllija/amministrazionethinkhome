@@ -52,7 +52,7 @@
                    <!--end::Label-->
                    <!--begin::Input-->
                     <select class="form-control" v-model="formData.AgentId">
-                     <option v-for="(user, index) in inserModel.Users" :key="index" :value="user.Id">{{ user.Name }} {{ user.LastName }}</option>
+                     <option v-for="(user, index) in inserModel.Users" :key="index" :value="user.Id">{{ user.Name }} {{ user.Lastname }}</option>
                     </select>
                    <!--end::Input-->
                   </div>
@@ -68,7 +68,7 @@
                    <!--end::Label-->
                    <!--begin::Input-->
                    <select class="form-control" v-model="formData.CustomerId">
-                     <option v-for="(user, index) in inserModel.Customers" :key="index" :value="user.Id">{{ user.Name }} {{ user.LastName }}</option>
+                     <option v-for="(user, index) in inserModel.Customers" :key="index" :value="user.Id">{{ user.Name }} {{ user.Lastname }}</option>
                     </select>
                    <!--end::Input-->
                   </div>

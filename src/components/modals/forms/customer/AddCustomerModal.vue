@@ -94,7 +94,7 @@
                 <!--begin::Input-->
                 <el-form-item prop="lastName">
                   <el-input
-                    v-model="formData.LastName"
+                    v-model="formData.Lastname"
                     type="text"
                     placeholder=""
                   />
@@ -290,7 +290,7 @@ export default defineComponent({
     const formData = ref<Customer>({
       Code:"",
       Name: "",
-      LastName:"",
+      Lastname:"",
       Email: "",
       Phone:null,
       Description: "",
@@ -314,7 +314,7 @@ export default defineComponent({
           trigger: "change",
         },
       ],
-      LastName: [
+      Lastname: [
         {
           required: true,
           message: "Cognome obligatorio",
