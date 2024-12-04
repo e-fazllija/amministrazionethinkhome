@@ -374,7 +374,6 @@ export default defineComponent({
     async function getItems(filterRequest: string) {
       agencies.value = await getAgencies(filterRequest);
       formData.value.AgencyId = agencies.value[0].Id;
-      console.log(agencies.value)
     };
 
     onMounted(async () => {

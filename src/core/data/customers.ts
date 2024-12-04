@@ -20,6 +20,7 @@ export class Customer{
   CreationDate?: Date;
   UpdateDate?: Date;
   Token?: string;
+  Code: string;
   }
 
 const getCustomers = (filterRequest: string) : Promise<Array<Customer>> => {

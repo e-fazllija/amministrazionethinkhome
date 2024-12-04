@@ -216,8 +216,8 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      // initAgents.value.splice(0, tableData.value.length, ...tableData.value);
-      getItems("");
+      await getItems("");
+      initAgents.value.splice(0, tableData.value.length, ...tableData.value);
     });
 
     const deleteFewItems = async () => {
@@ -245,10 +245,14 @@ export default defineComponent({
 
     const searchingFunc = (obj: any, value: string): boolean => {
       for (let key in obj) {
-        if (!Number.isInteger(obj[key]) && !(typeof obj[key] === "object")) {
-          if (obj[key].indexOf(value) != -1) {
-            return true;
-          }
+        if (
+            !Number.isInteger(obj[key]) && 
+            !(typeof obj[key] === "object") && 
+            (typeof obj[key] === "string" || Array.isArray(obj[key]))
+        ) {
+            if (obj[key].indexOf(value) !== -1) {
+                return true;
+            }
         }
       }
       return false;
