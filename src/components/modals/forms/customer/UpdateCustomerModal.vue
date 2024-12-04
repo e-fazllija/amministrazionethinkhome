@@ -121,6 +121,81 @@
                 <!--end::Input group-->
 
                 <!--begin::Input group-->
+                <div class="row mb-6">
+                  <!--begin::Label-->
+                  <label class="col-lg-4 col-form-label required fw-semobold fs-6">Compratore</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <div class="col-lg-8 fv-row">
+                    <div class="form-check form-switch form-check-custom form-check-solid">
+                      <input class="form-check-input" type="checkbox" value="" v-model="formData.Buyer" />
+                    </div>
+                  </div>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                  <!--begin::Label-->
+                  <label class="col-lg-4 col-form-label required fw-semobold fs-6">Venditore</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <div class="col-lg-8 fv-row">
+                    <div class="form-check form-switch form-check-custom form-check-solid">
+                      <input class="form-check-input" type="checkbox" value="" v-model="formData.Seller" />
+                    </div>
+                  </div>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                  <!--begin::Label-->
+                  <label class="col-lg-4 col-form-label required fw-semobold fs-6">Costruttore</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <div class="col-lg-8 fv-row">
+                    <div class="form-check form-switch form-check-custom form-check-solid">
+                      <input class="form-check-input" type="checkbox" value="" v-model="formData.Builder" />
+                    </div>
+                  </div>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                  <!--begin::Label-->
+                  <label class="col-lg-4 col-form-label required fw-semobold fs-6">Altro</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <div class="col-lg-8 fv-row">
+                    <div class="form-check form-switch form-check-custom form-check-solid">
+                      <input class="form-check-input" type="checkbox" value="" v-model="formData.Other" />
+                    </div>
+                  </div>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+                
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                  <!--begin::Label-->
+                  <label class="col-lg-4 col-form-label required fw-semobold fs-6">Cliente gold</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <div class="col-lg-8 fv-row">
+                    <div class="form-check form-switch form-check-custom form-check-solid">
+                      <input class="form-check-input" type="checkbox" value="" v-model="formData.GoldCustomer" />
+                    </div>
+                  </div>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
                 <div class="fv-row mb-15">
                   <!--begin::Label-->
                   <label class="fs-6 fw-semobold mb-2">Note</label>
@@ -226,7 +301,7 @@
                 type="submit"
               >
                 <span v-if="!loading" class="indicator-label">
-                  Crea
+                  Salva
                   <KTIcon icon-name="arrow-right" icon-class="fs-2 me-2 me-0" />
                 </span>
                 <span v-if="loading" class="indicator-progress">
@@ -264,7 +339,11 @@
       const loading = ref<boolean>(false);
       const formData = ref<Customer>({
         Id:0,
-        Code:"",
+        Buyer: false,
+        Seller: false,
+        Builder: false,
+        Other: false,
+        GoldCustomer: false,
         Name: "",
         LastName:"",
         Email: "",

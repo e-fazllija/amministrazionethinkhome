@@ -104,18 +104,25 @@
         :enable-items-per-page-dropdown="true"
         :checkbox-enabled="true"
         checkbox-label="id"
+        :loading="loading"
       >
-        <template v-slot:Category="{ row: item }">
-          {{ item.Category }}
+        <template v-slot:Id="{ row: item }">
+          {{ item.Id }}
+        </template>
+        <template v-slot:CreationDate="{ row: item }">
+          {{ item.CreationDate.substring(0, 10).split('-').reverse().join('-') }}<br/>
+          {{ item.AssignmentEnd.substring(0, 10).split('-').reverse().join('-') }}
+        </template>
+        <template v-slot:CommercialSurfaceate="{ row: item }">
+          {{ item.CommercialSurfaceate }}
         </template>
         <template v-slot:AddressLine="{ row: item }">
-          {{ item.AddressLine }}
+          {{ item.AddressLine }} <br/>
+          {{ item.Town }} <br/>
+          {{ item.Region }}
         </template>
         <template v-slot:Price="{ row: item }">
-          {{ item.Price }}
-        </template>
-        <template v-slot:Town="{ row: item }">
-          {{ item.Town }}
+          {{ item.Price }} 
         </template>
         <!-- <template v-slot:CreationDate="{ row: item }">
           {{ item.CreationDate.substring(0, 10) }}
@@ -156,8 +163,20 @@ export default defineComponent({
   setup() {
     const tableHeader = ref([
       {
-        columnName: "Categoria",
-        columnLabel: "Category",
+        columnName: "Codice",
+        columnLabel: "Id",
+        sortEnabled: true,
+        columnWidth: 175,
+      },
+      {
+        columnName: "Ins. / Inc.",
+        columnLabel: "CreationDate",
+        sortEnabled: true,
+        columnWidth: 175,
+      },
+      {
+        columnName: "Mq",
+        columnLabel: "CommercialSurfaceate",
         sortEnabled: true,
         columnWidth: 175,
       },
@@ -170,12 +189,6 @@ export default defineComponent({
       {
         columnName: "Prezzo",
         columnLabel: "Price",
-        sortEnabled: true,
-        columnWidth: 175,
-      },
-      {
-        columnName: "Città",
-        columnLabel: "Town",
         sortEnabled: true,
         columnWidth: 175,
       },
@@ -194,6 +207,7 @@ export default defineComponent({
     ]);
     const selectedIds = ref<Array<Number>>([]);
     let selectedId = ref<Number>();
+    const loading = ref<boolean>(true);
     const tableData = ref();
     const initAgents = ref([]);
     
@@ -203,16 +217,20 @@ export default defineComponent({
     };
 
     onMounted(async () => {
+      loading.value = true;
       // initAgents.value.splice(0, tableData.value.length, ...tableData.value);
-      getItems("");
+      await getItems("");
+      loading.value = false;
     });
 
     const deleteFewItems = async () => {
+      loading.value = true;
       selectedIds.value.forEach(async (item) => {
         await deleteRealEstateProperty(item)
       });
       selectedIds.value.length = 0;
       await getItems("");
+      loading.value = false;
     };
 
     const search = ref<string>("");
@@ -242,6 +260,7 @@ export default defineComponent({
     };
 
     async function deleteItem(id: Number){
+      loading.value = true;
       Swal.fire({
         text: "Confermare l'eliminazione?",
         icon: "warning",
@@ -254,9 +273,10 @@ export default defineComponent({
       }).then(async () => {
         await deleteRealEstateProperty(id)
         await getItems("");
+        loading.value = false;
         MenuComponent.reinitialization(); 
       });
-      
+      loading.value = false;
     }
     
     const sort = (sort: Sort) => {
@@ -281,7 +301,8 @@ export default defineComponent({
       sort,
       onItemSelect,
       getAssetPath,
-      getItems
+      getItems,
+      loading
     };
   },
 });

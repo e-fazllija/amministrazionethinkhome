@@ -47,27 +47,6 @@
               data-kt-scroll-wrappers="#kt_modal_add_customer_scroll"
               data-kt-scroll-offset="300px"
             >
-             <!--begin::Input group-->
-             <div class="fv-row mb-7">
-                <!--begin::Label-->
-                <label class="fs-6 fw-semobold mb-2">
-                  <span class="required">Codice</span>
-                  <i
-                    class="fas fa-exclamation-circle ms-1 fs-7"
-                    data-bs-toggle="tooltip"
-                    title="Codice non valido "
-                  ></i>
-                </label>
-                <!--end::Label-->
-
-                <!--begin::Input-->
-                <el-form-item prop="code">
-                  <el-input v-model="formData.Code" 
-                  type= "number" />
-                </el-form-item>
-                <!--end::Input-->
-              </div>
-              <!--end::Input group-->
               <!--begin::Input group-->
               <div class="fv-row mb-7">
                 <!--begin::Label-->
@@ -75,7 +54,7 @@
                 <!--end::Label-->
 
                 <!--begin::Input-->
-                <el-form-item prop="name">
+                <el-form-item prop="Name">
                   <el-input
                     v-model="formData.Name"
                     type="text"
@@ -117,7 +96,7 @@
                 <!--end::Label-->
 
                 <!--begin::Input-->
-                <el-form-item prop="email">
+                <el-form-item prop="Email">
                   <el-input v-model="formData.Email" />
                 </el-form-item>
                 <!--end::Input-->
@@ -137,7 +116,7 @@
                 <!--end::Label-->
 
                 <!--begin::Input-->
-                <el-form-item prop="phone">
+                <el-form-item prop="Phone">
                   <el-input v-model="formData.Phone" 
                   type= "number" />
                 </el-form-item>
@@ -146,13 +125,88 @@
               <!--end::Input group-->
 
               <!--begin::Input group-->
+              <div class="row mb-6">
+                  <!--begin::Label-->
+                  <label class="col-lg-4 col-form-label required fw-semobold fs-6">Compratore</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <div class="col-lg-8 fv-row">
+                    <div class="form-check form-switch form-check-custom form-check-solid">
+                      <input class="form-check-input" type="checkbox" value="" v-model="formData.Buyer" />
+                    </div>
+                  </div>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                  <!--begin::Label-->
+                  <label class="col-lg-4 col-form-label required fw-semobold fs-6">Venditore</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <div class="col-lg-8 fv-row">
+                    <div class="form-check form-switch form-check-custom form-check-solid">
+                      <input class="form-check-input" type="checkbox" value="" v-model="formData.Seller" />
+                    </div>
+                  </div>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                  <!--begin::Label-->
+                  <label class="col-lg-4 col-form-label required fw-semobold fs-6">Costruttore</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <div class="col-lg-8 fv-row">
+                    <div class="form-check form-switch form-check-custom form-check-solid">
+                      <input class="form-check-input" type="checkbox" value="" v-model="formData.Builder" />
+                    </div>
+                  </div>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                  <!--begin::Label-->
+                  <label class="col-lg-4 col-form-label required fw-semobold fs-6">Altro</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <div class="col-lg-8 fv-row">
+                    <div class="form-check form-switch form-check-custom form-check-solid">
+                      <input class="form-check-input" type="checkbox" value="" v-model="formData.Other" />
+                    </div>
+                  </div>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+                
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                  <!--begin::Label-->
+                  <label class="col-lg-4 col-form-label required fw-semobold fs-6">Cliente gold</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <div class="col-lg-8 fv-row">
+                    <div class="form-check form-switch form-check-custom form-check-solid">
+                      <input class="form-check-input" type="checkbox" value="" v-model="formData.GoldCustomer" />
+                    </div>
+                  </div>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+
+              <!--begin::Input group-->
               <div class="fv-row mb-15">
                 <!--begin::Label-->
                 <label class="fs-6 fw-semobold mb-2">Note</label>
                 <!--end::Label-->
 
                 <!--begin::Input-->
-                <el-form-item prop="description">
+                <el-form-item prop="Description">
                   <el-input v-model="formData.Description" type="text" />
                 </el-form-item>
                 <!--end::Input-->
@@ -186,7 +240,7 @@
                   <!--end::Label-->
 
                   <!--begin::Input-->
-                  <el-form-item prop="addressLine">
+                  <el-form-item prop="AdressLine">
                     <el-input v-model="formData.AdressLine" />
                   </el-form-item>
                   <!--end::Input-->
@@ -200,7 +254,7 @@
                   <!--end::Label-->
 
                   <!--begin::Input-->
-                  <el-form-item prop="town">
+                  <el-form-item prop="Town">
                     <el-input v-model="formData.Town" />
                   </el-form-item>
                   <!--end::Input-->
@@ -216,7 +270,7 @@
                     <!--end::Label-->
 
                     <!--begin::Input-->
-                    <el-form-item prop="state">
+                    <el-form-item prop="State">
                       <el-input v-model="formData.State" />
                     </el-form-item>
                     <!--end::Input-->
@@ -288,7 +342,11 @@ export default defineComponent({
     const loading = ref<boolean>(false);
     const store = useAuthStore();
     const formData = ref<Customer>({
-      Code:"",
+      Buyer: false,
+      Seller: false,
+      Builder: false,
+      Other: false,
+      GoldCustomer: false,
       Name: "",
       LastName:"",
       Email: "",
@@ -300,10 +358,10 @@ export default defineComponent({
     });
 
     const rules = ref({
-      Code: [
+      Type: [
         {
           required: true,
-          message: "Codice obligatorio",
+          message: "Tipologia obligatoria",
           trigger: "change",
         },
       ],
