@@ -74,7 +74,7 @@
 
 <script lang="ts">
 import { getAssetPath } from "@/core/helpers/assets";
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
@@ -88,6 +88,14 @@ export default defineComponent({
     const store = useAuthStore();
     const user = store.user;
 
+
+    watch(
+      () => user,
+      (currentValue) => {
+        console.log("reload");
+      }
+    );
+    
     i18n.locale.value = localStorage.getItem("lang")
       ? (localStorage.getItem("lang") as string)
       : "en";

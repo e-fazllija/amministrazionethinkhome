@@ -21,12 +21,12 @@ export default defineComponent({
     const themeStore = useThemeStore();
     const bodyStore = useBodyStore();
 
-    onBeforeMount(() => {
+    onBeforeMount(async () => {
       /**
        * Overrides the layout config using saved data from localStorage
        * remove this to use static config (@/core/config/DefaultLayoutConfig.ts)
        */
-      configStore.overrideLayoutConfig();
+      await configStore.overrideLayoutConfig();
 
       /**
        *  Sets a mode from configuration

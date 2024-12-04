@@ -19,11 +19,11 @@
         :src="getAssetPath('media/logos/TH-4.jpg')"
         class="h-25px app-sidebar-logo-default"
       />
-      <!-- <img
+      <img
         alt="Logo"
         :src="getAssetPath('media/logos/default-small.svg')"
         class="h-20px app-sidebar-logo-minimize"
-      /> -->
+      />
     </router-link>
     <!--end::Logo image-->
     <!--begin::Sidebar toggle-->
