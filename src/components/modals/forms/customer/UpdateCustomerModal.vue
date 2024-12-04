@@ -123,7 +123,7 @@
                 <!--begin::Input group-->
                 <div class="row mb-6">
                   <!--begin::Label-->
-                  <label class="col-lg-4 col-form-label required fw-semobold fs-6">Compratore</label>
+                  <label class="col-lg-4 col-form-label fw-semobold fs-6">Aquirente</label>
                   <!--end::Label-->
                   <!--begin::Input-->
                   <div class="col-lg-8 fv-row">
@@ -138,7 +138,7 @@
                 <!--begin::Input group-->
                 <div class="row mb-6">
                   <!--begin::Label-->
-                  <label class="col-lg-4 col-form-label required fw-semobold fs-6">Venditore</label>
+                  <label class="col-lg-4 col-form-label fw-semobold fs-6">Venditore</label>
                   <!--end::Label-->
                   <!--begin::Input-->
                   <div class="col-lg-8 fv-row">
@@ -153,7 +153,7 @@
                 <!--begin::Input group-->
                 <div class="row mb-6">
                   <!--begin::Label-->
-                  <label class="col-lg-4 col-form-label required fw-semobold fs-6">Costruttore</label>
+                  <label class="col-lg-4 col-form-label fw-semobold fs-6">Costruttore</label>
                   <!--end::Label-->
                   <!--begin::Input-->
                   <div class="col-lg-8 fv-row">
@@ -168,7 +168,7 @@
                 <!--begin::Input group-->
                 <div class="row mb-6">
                   <!--begin::Label-->
-                  <label class="col-lg-4 col-form-label required fw-semobold fs-6">Altro</label>
+                  <label class="col-lg-4 col-form-label fw-semobold fs-6">Altro</label>
                   <!--end::Label-->
                   <!--begin::Input-->
                   <div class="col-lg-8 fv-row">
@@ -183,7 +183,7 @@
                 <!--begin::Input group-->
                 <div class="row mb-6">
                   <!--begin::Label-->
-                  <label class="col-lg-4 col-form-label required fw-semobold fs-6">Cliente gold</label>
+                  <label class="col-lg-4 col-form-label fw-semobold fs-6">Cliente gold</label>
                   <!--end::Label-->
                   <!--begin::Input-->
                   <div class="col-lg-8 fv-row">
@@ -352,7 +352,7 @@
         AdressLine: "",
         Town: "",
         State: "",
-        // country: "US",
+        Code: "0"
       });
       
       watch(() => props.Id, async (first, second) => {

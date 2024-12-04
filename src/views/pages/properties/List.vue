@@ -212,14 +212,13 @@ export default defineComponent({
     const initAgents = ref([]);
     
     async function getItems(filterRequest: string) {
-         tableData.value = await getRealEstateProperties(filterRequest);
-
+       tableData.value = await getRealEstateProperties(filterRequest);
     };
 
     onMounted(async () => {
       loading.value = true;
-      // initAgents.value.splice(0, tableData.value.length, ...tableData.value);
       await getItems("");
+      initAgents.value.splice(0, tableData.value.length, ...tableData.value);
       loading.value = false;
     });
 
@@ -250,10 +249,14 @@ export default defineComponent({
 
     const searchingFunc = (obj: any, value: string): boolean => {
       for (let key in obj) {
-        if (!Number.isInteger(obj[key]) && !(typeof obj[key] === "object")) {
-          if (obj[key].indexOf(value) != -1) {
-            return true;
-          }
+        if (
+            !Number.isInteger(obj[key]) && 
+            !(typeof obj[key] === "object") && 
+            (typeof obj[key] === "string" || Array.isArray(obj[key]))
+        ) {
+            if (obj[key].indexOf(value) !== -1) {
+                return true;
+            }
         }
       }
       return false;
