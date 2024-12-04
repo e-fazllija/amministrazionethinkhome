@@ -203,7 +203,7 @@
             <!--begin::Button-->
             <button :data-kt-indicator="loading ? 'on' : null" class="btn btn-lg btn-primary" type="submit">
               <span v-if="!loading" class="indicator-label">
-                Modifica
+                Salva
                 <KTIcon icon-name="arrow-right" icon-class="fs-2 me-2 me-0" />
               </span>
               <span v-if="loading" class="indicator-progress">

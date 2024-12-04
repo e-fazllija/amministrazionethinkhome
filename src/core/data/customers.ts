@@ -4,7 +4,11 @@ const store = useAuthStore();
 
 export class Customer{
   Id?: number;
-  Code: string;
+  Buyer: boolean;
+  Seller: boolean;
+  Builder: boolean;
+  Other: boolean;
+  GoldCustomer: boolean;
   Name: string;
   LastName: string;
   Email: string;

@@ -42,12 +42,12 @@
               data-kt-scroll-wrappers="#kt_modal_add_property_scroll"
               data-kt-scroll-offset="300px">
 
-              <!--begin::Input group-->
-              <div class="d-flex flex-column mb-7 fv-row">
+                  <!--begin::Input group-->
+                  <div class="d-flex flex-column mb-5 fv-row">
                     <!--begin::Label-->
                     <label class="fs-6 fw-semobold mb-2">
                       <span class="required">Agente</span>
-                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Seleziona una categoria di immobile"></i>
+                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i>
                      </label>
                    <!--end::Label-->
                    <!--begin::Input-->
@@ -59,11 +59,11 @@
                   <!--end::Input group-->
 
                   <!--begin::Input group-->
-                  <div class="d-flex flex-column mb-7 fv-row">
+                  <div class="d-flex flex-column mb-5 fv-row">
                     <!--begin::Label-->
                     <label class="fs-6 fw-semobold mb-2">
                       <span class="required">Cliente</span>
-                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Seleziona una categoria di immobile"></i>
+                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i>
                      </label>
                    <!--end::Label-->
                    <!--begin::Input-->
@@ -75,7 +75,7 @@
                 <!--end::Input group-->
 
                 <!--begin::Input group-->
-                <div class="d-flex flex-column mb-7 fv-row">
+                <div class="d-flex flex-column mb-2 fv-row">
                   <!--begin::Label-->
                   <label class="required fs-6 fw-semobold mb-2">Titolo</label>
                   <!--end::Label-->
@@ -87,10 +87,23 @@
                 </div>
                 <!--end::Input group-->
 
+                <!--begin::Input group-->
+                <div class="d-flex flex-column mb-2 fv-row">
+                  <!--begin::Label-->
+                  <label class="required fs-6 fw-semobold mb-2">Titolo Breve / Homepage e lista</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <el-form-item prop="ShortTitle">
+                    <el-input v-model="formData.ShortTitle" type="text"/>
+                  </el-form-item>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+
                   <!--begin::Input group-->
-                  <div class="fv-row mb-15">
+                  <div class="d-flex flex-column mb-2 fv-row">
                         <!--begin::Label-->
-                        <label class="fs-6 fw-semobold mb-2">Descrizione</label>
+                        <label class="required fs-6 fw-semobold mb-2">Descrizione</label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <el-form-item prop="Description">
@@ -100,6 +113,98 @@
                       </div>
                       <!--end::Input group-->
                       
+                      <!--begin::Input group-->
+                  <div class="d-flex flex-column mb-2 fv-row">
+                        <!--begin::Label-->
+                        <label class="required fs-6 fw-semobold mb-2">Descrizione Breve / Homepage e lista</label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <el-form-item prop="ShortDescription">
+                          <el-input v-model="formData.ShortDescription" type="text" />
+                        </el-form-item>
+                        <!--end::Input-->
+                      </div>
+                      <!--end::Input group-->
+
+                      <!--begin::Col-->
+                      <div class="d-flex flex-column mb-2 fv-row">
+                            <!--begin::Label-->
+                            <label class="required fs-6 fw-semobold mb-2"
+                              >Prezzo</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <el-form-item prop="Price">
+                              <el-input v-model="formData.Price" type="number" />
+                            </el-form-item>
+                            <!--end::Input-->
+                          </div>
+                          <!--end::Col-->
+
+                          <!--begin::Col-->
+                      <div class="d-flex flex-column mb-2 fv-row">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-semobold fs-6">Data fine incarico</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <el-form-item prop="AssignmentEnd">
+                              <el-input v-model="formData.AssignmentEnd" type="date" />
+                            </el-form-item>
+                            <!--end::Input-->
+                          </div>
+                          <!--end::Col-->
+                          
+                               <!--begin::Col-->
+                      <div class="d-flex flex-column mb-2 fv-row">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-semobold fs-6">Asta</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="form-check form-switch form-check-custom form-check-solid">
+                              <input class="form-check-input" type="checkbox" value="" v-model="formData.Auction" />
+                            </div>
+                            <!--end::Input-->
+                          </div>
+                          <!--end::Col-->
+
+      <!--begin::Col-->
+      <div class="d-flex flex-column mb-2 fv-row">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-semobold fs-6">Venduto</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="form-check form-switch form-check-custom form-check-solid">
+                              <input class="form-check-input" type="checkbox" value="" v-model="formData.Sold" />
+                            </div>
+                            <!--end::Input-->
+                          </div>
+                          <!--end::Col-->
+
+                          <!--begin::Col-->
+      <div class="d-flex flex-column mb-2 fv-row">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-semobold fs-6">Imposta in home</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="form-check form-switch form-check-custom form-check-solid">
+                              <input class="form-check-input" type="checkbox" value="" v-model="formData.InHome" />
+                            </div>
+                            <!--end::Input-->
+                          </div>
+                          <!--end::Col-->
+
+                                     <!--begin::Col-->
+      <div class="d-flex flex-column mb-2 fv-row">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-semobold fs-6">Imposta in evidenza</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="form-check form-switch form-check-custom form-check-solid">
+                              <input class="form-check-input" type="checkbox" value="" v-model="formData.Highlighted" />
+                            </div>
+                            <!--end::Input-->
+                          </div>
+                          <!--end::Col-->
+
                 <!--begin::Billing toggle-->
                   <div
                    class="fw-bold fs-3 rotate collapsible mb-7"
@@ -120,7 +225,7 @@
                     <!--begin::Label-->
                     <label class="fs-6 fw-semobold mb-2">
                       <span class="required">Categoria</span>
-                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Seleziona una categoria di immobile"></i>
+                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" ></i>
                      </label>
                    <!--end::Label-->
                    <!--begin::Input-->
@@ -141,7 +246,7 @@
                 <div v-if="showTipologia" class="d-flex flex-column mb-7 fv-row">
                    <label class="fs-6 fw-semobold mb-2">
                    <span class="required">Tipologia</span>
-                   <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Seleziona una tipologia di immobile"></i>
+                   <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i>
                    </label>
                   <select class="form-control" v-model="formData.Typology">
                     <option v-for="tipologia in typesavailable" :key="tipologia" :value="tipologia">
@@ -156,7 +261,7 @@
                 <!--begin::Label-->
                 <label class="fs-6 fw-semobold mb-2">
                   <span class="required">Stato vendita o affitto</span>
-                  <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Seleziona lo Stato dell'immobile"></i>
+                  <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i>
                 </label>
                 <!--end::Label-->
                 <!--begin::Input-->
@@ -256,7 +361,22 @@
                     </span>
                   </div>
                   <!--end::Billing toggle-->
-                    <div id="kt_modal_add_property_billing_info3" class="collapse">
+                    <div id="kt_modal_add_property_billing_info3" class="collapse show">
+
+                      <!--begin::Col-->
+                      <div class="col-md-6 fv-row">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-semobold mb-2"
+                              >Spese condominiali</label                    >
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <el-form-item prop="CondominiumExpenses">
+                              <el-input v-model="formData.CondominiumExpenses" type="number" />
+                            </el-form-item>
+                            <!--end::Input-->
+                          </div>
+                          <!--end::Col-->
+
                             <!--begin::Input group-->
                             <div class="row g-9 mb-7">
                             <!--begin::Col-->
@@ -277,12 +397,12 @@
                                 <!--begin::Col-->
                                 <div class="col-md-6 fv-row">
                                   <!--begin::Label-->
-                                  <label class="required fs-6 fw-semobold mb-2"
+                                  <label class="fs-6 fw-semobold mb-2"
                                   >Piano </label>
                                   <!--end::Label-->
                                   <!--begin::Input-->
                                   <select class="form-control"  v-model="formData.Floor">
-                                  <option value="">Scegli</option>
+                                  <option value>Scegli</option>
                                   <option value="Interrato -2">Interrato -2</option>
                                   <option value="Interrato -1">Interrato -1</option>
                                   <option value="Seminterrato">Seminterrato</option>
@@ -422,7 +542,7 @@
                             <span class="">Arredamento</span>
                             <i class="fas fa-exclamation-circle ms-1 fs-7"
                               data-bs-toggle="tooltip"
-                              title="Seleziona il tipo di arredamento"></i>
+                            ></i>
                           </label>
                           <!--end::Label-->
                           <!--begin::Input-->
@@ -469,7 +589,7 @@
                             <span class="">Riscaldamento</span>
                             <i class="fas fa-exclamation-circle ms-1 fs-7"
                               data-bs-toggle="tooltip"
-                              title="Seleziona il tipo di arredamento"></i>
+                              ></i>
                           </label>
                           <!--end::Label-->
                           <!--begin::Input-->
@@ -489,7 +609,7 @@
                             <span class="">Esposizione</span>
                             <i class="fas fa-exclamation-circle ms-1 fs-7"
                               data-bs-toggle="tooltip"
-                              title="Seleziona il tipo di arredamento"></i>
+                              ></i>
                           </label>
                           <!--end::Label-->
                           <!--begin::Input-->
@@ -511,7 +631,7 @@
                             <span class="">Classe energetica</span>
                             <i class="fas fa-exclamation-circle ms-1 fs-7"
                               data-bs-toggle="tooltip"
-                              title="Seleziona il tipo di Classe energetica"></i>
+                              ></i>
                           </label>
                           <!--end::Label-->
                           <!--begin::Input-->
@@ -543,7 +663,7 @@
                             <span class="">Indica il tipo di proprietà</span>
                             <i class="fas fa-exclamation-circle ms-1 fs-7"
                               data-bs-toggle="tooltip"
-                              title="Seleziona il tipo di proprietà"></i>
+                              ></i>
                           </label>
                           <!--end::Label-->
                           <!--begin::Input-->
@@ -567,7 +687,7 @@
                             <span class="">Stato dell'immobile</span>
                             <i class="fas fa-exclamation-circle ms-1 fs-7"
                               data-bs-toggle="tooltip"
-                              title="Seleziona lo Stato dell'immobile"></i>
+                              ></i>
                           </label>
                           <!--end::Label-->
                           <!--begin::Input-->
@@ -595,65 +715,18 @@
                               <!--end::Input-->
                           </div>
                           <!--end::Col-->
-                    </div>
-                  <!--begin::Billing toggle-->
-                    <div
-                      class="fw-bold fs-3 rotate collapsible mb-7"
-                      data-bs-toggle="collapse"
-                      href="#kt_modal_add_property_billing_info4"
-                      role="button"
-                      aria-expanded="false"
-                      aria-controls="kt_property_view_details">
-                      Prezzi e Descrizione
-                      <span class="ms-2 rotate-180">
-                      <KTIcon icon-name="down" icon-class="fs-3" />
-                    </span>
-                    </div>
-                  <!--end::Billing toggle-->
-                    <div id="kt_modal_add_property_billing_info4" class="collapse">
-
-                        
-                          <!--begin::Col-->
-                          <div class="col-md-6 fv-row">
-                            <!--begin::Label-->
-                            <label class="required fs-6 fw-semobold mb-2"
-                              >Prezzo</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <el-form-item prop="Price">
-                              <el-input v-model="formData.Price" type="number" />
-                            </el-form-item>
-                            <!--end::Input-->
-                          </div>
-                          <!--end::Col-->
-
-                          <!--begin::Col-->
-                          <div class="col-md-6 fv-row">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-semobold mb-2"
-                              >Spese condominiali</label                    >
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <el-form-item prop="CondominiumExpenses">
-                              <el-input v-model="formData.CondominiumExpenses" type="number" />
-                            </el-form-item>
-                            <!--end::Input-->
-                          </div>
-                          <!--end::Col-->
-
-                          <!--begin::Input group-->
+                              <!--begin::Input group-->
                       <div  class="fv-row mb-7">
                         <!--begin::Label-->
                         <label class="fs-6 fw-semobold mb-2">
                           <span class="">Disponibilità</span>
                           <i class="fas fa-exclamation-circle ms-1 fs-7"
                             data-bs-toggle="tooltip"
-                            title="Seleziona la Disponibilità"></i>
+                            ></i>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <select class="form-control" v-model="formData.Availability">
-                          <option value="">Seleziona la Disponibilità</option>
                           <option value="Libero">Libero</option>
                           <option value="Occupato">Occupato</option>
                           </select>
@@ -662,7 +735,7 @@
                       <!--end::Input group-->
 
                     </div>
-                    <!--begin::Input group-->
+
                     <div class="fv-row mb-15">
                         <!--begin::Label-->
                         <label class="fs-6 fw-semobold mb-2">Immagini</label>
@@ -730,10 +803,13 @@ export default defineComponent({
     const loading = ref<boolean>(false);
     const formData = ref<RealEstateProperty>({
       Title: "",
+      ShortTitle: "",
       Category: "Residenziale",
       Typology: "Appartamento",
       InHome: false,
       Highlighted: false,
+      Auction: false,
+      Sold: false,
       Status: "Vendita",
       AddressLine: "",
       Town: "",
@@ -760,8 +836,10 @@ export default defineComponent({
       CondominiumExpenses: 0,
       Availability: "",
       Description: "",
+      ShortDescription: "",
       CustomerId: 0,
-      AgentId: ""
+      AgentId: "",
+      AssignmentEnd: ""
     });
     const inserModel = ref<InsertModel>({
       Customers: [],
@@ -800,6 +878,34 @@ export default defineComponent({
     );
 
     const rules = ref({
+      Title: [
+        {
+          required: true,
+          message: "E' obbligatorio",
+          trigger: "change",
+        },
+      ],
+      ShortTitle: [
+        {
+          required: true,
+          message: "E' obbligatorio",
+          trigger: "change",
+        },
+      ],
+      Descriptio: [
+        {
+          required: true,
+          message: "E' obbligatorio",
+          trigger: "change",
+        },
+      ],
+      ShortDescriptio: [
+        {
+          required: true,
+          message: "E' obbligatorio",
+          trigger: "change",
+        },
+      ],
       AddressLine: [
         {
           required: true,
@@ -829,13 +935,6 @@ export default defineComponent({
         },
       ],
       CommercialSurfaceate: [
-        {
-          required: false,
-          message: "E' obbligatorio",
-          trigger: "change",
-        },
-      ],
-      Floor: [
         {
           required: false,
           message: "E' obbligatorio",

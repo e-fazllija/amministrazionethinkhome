@@ -11,12 +11,83 @@
     </div>
     <!--begin::Card header-->
   </div>
+  <div  v-if="loading" class="d-flex justify-content-center">
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
   <!--begin::Content-->
-  <div class="collapse show">
+  <div v-else class="collapse show">
     <!--begin::Form-->
     <el-form @submit.prevent="submit()" :model="formData" :rules="rules" ref="formRef" enctype="multipart/form-data">
       <!--begin::Card body-->
       <div class="card-body border-top p-9">
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Cliente</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <!--begin::Input group-->
+            <div class="d-flex flex-column mb-7 fv-row">
+              <!--begin::Input-->
+              <select class="form-control" v-model="formData.CustomerId" required>
+                <option v-for="(user, index) in inserModel.Customers" :key="index" :value="user.Id">{{ user.Name }} {{ user.LastName }}</option>
+              </select>
+              <!--end::Input-->
+            </div>
+            <!--end::Input group-->
+          </div>
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Agente</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <!--begin::Input group-->
+            <div class="d-flex flex-column mb-7 fv-row">
+            <!--begin::Input-->
+            <select class="form-control" v-model="formData.AgentId" required>
+              <option v-for="(user, index) in inserModel.Users" :key="index" :value="user.Id">{{ user.Name }} {{ user.LastName }}</option>
+            </select>
+            <!--end::Input-->
+          </div>
+          <!--end::Input group-->
+          </div>
+        </div>
+        <!--end::Input group-->
+
+         <!--begin::Input group-->
+         <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6 required">Titolo</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.Title" type="text" required/>
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+         <!--begin::Input group-->
+         <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6 required">Titolo breve / Homepage e lista</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.ShortTitle" type="text" required />
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
@@ -25,7 +96,7 @@
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
             <select as="select" name="Category" class="form-select form-select-lg fw-semobold"
-              v-model="formData.Category">
+              v-model="formData.Category" required>
               <option value>Seleziona una Categoria...</option>
               <option value="Residenziale">Residenziale</option>
               <option value="Capannone">Capannone</option>
@@ -61,7 +132,7 @@
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
-            <select as="select" name="Status" class="form-select form-select-lg fw-semobold" v-model="formData.Status">
+            <select as="select" name="Status" class="form-select form-select-lg fw-semobold" v-model="formData.Status" required>
               <option value="">Scegli tra vendita e affitto</option>
               <option value="Vendita">Vendita</option>
               <option value="Affitto">Affitto</option>
@@ -78,7 +149,7 @@
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.AddressLine" type="text" />
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.AddressLine" type="text" required/>
           </div>
           <!--end::Col-->
         </div>
@@ -91,7 +162,7 @@
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.Town" type="text" />
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.Town" type="text" required/>
           </div>
           <!--end::Input-->
         </div>
@@ -104,7 +175,7 @@
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.State" type="text" />
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.State" type="text" required />
           </div>
           <!--end::Input-->
         </div>
@@ -117,7 +188,7 @@
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.PostCode" type="number" />
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.PostCode" type="text" required/>
           </div>
           <!--end::Input-->
         </div>
@@ -131,7 +202,7 @@
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
             <input class="form-control form-control-lg fw-semobold" v-model="formData.CommercialSurfaceate"
-              type="number" />
+              type="number" required/>
           </div>
           <!--end::Input-->
         </div>
@@ -140,7 +211,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Piano</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Piano</label>
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
@@ -175,7 +246,7 @@
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
             <input class="form-control form-control-lg fw-semobold" v-model="formData.TotalBuildingfloors"
-              type="number" />
+              type="number" required/>
           </div>
           <!--end::Input-->
         </div>
@@ -184,7 +255,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Ascensori</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Ascensori</label>
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
@@ -197,7 +268,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Altri dettagli</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Altri dettagli</label>
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
@@ -210,7 +281,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Camere da letto</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Camere da letto</label>
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
@@ -223,7 +294,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Locali</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Locali</label>
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
@@ -236,7 +307,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Cucine</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Cucine</label>
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
@@ -249,7 +320,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Bagni</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Bagni</label>
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
@@ -262,7 +333,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Arredamento</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Arredamento</label>
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
@@ -283,7 +354,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Altre Caratteristiche</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Altre Caratteristiche</label>
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
@@ -296,7 +367,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Posti Auto</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Posti Auto</label>
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
@@ -309,7 +380,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Riscaldamento</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Riscaldamento</label>
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
@@ -328,7 +399,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Esposizione</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Esposizione</label>
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
@@ -349,7 +420,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Classe energetica</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Classe energetica</label>
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
@@ -380,7 +451,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Indica il tipo di proprietà</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Indica il tipo di proprietà</label>
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
@@ -403,7 +474,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Stato dell'immobile</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Stato dell'immobile</label>
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
@@ -424,7 +495,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Anno di costruzione</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Anno di costruzione</label>
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
@@ -442,7 +513,7 @@
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.Price" type="number" />
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.Price" type="number" required/>
           </div>
           <!--end::Input-->
         </div>
@@ -451,7 +522,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Spese condominiali</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Spese condominiali</label>
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
@@ -465,7 +536,7 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Disponibilità</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Disponibilità</label>
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
@@ -488,7 +559,20 @@
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.Description" type="text" />
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.Description" type="text" required/>
+          </div>
+          <!--end::Input-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Descrizione Breve / Homepage e lista</label>
+          <!--end::Label-->
+          <!--begin::Input-->
+          <div class="col-lg-8 fv-row">
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.ShortDescription" type="text" required/>
           </div>
           <!--end::Input-->
         </div>
@@ -521,6 +605,51 @@
               <input class="form-check-input" type="checkbox" value="" v-model="formData.Highlighted" />
             </div>
 
+          </div>
+          <!--end::Input-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Asta</label>
+          <!--end::Label-->
+          <!--begin::Input-->
+          <div class="col-lg-8 fv-row">
+            <div class="form-check form-switch form-check-custom form-check-solid">
+              <input class="form-check-input" type="checkbox" value="" v-model="formData.Auction" />
+            </div>
+
+          </div>
+          <!--end::Input-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Venduto</label>
+          <!--end::Label-->
+          <!--begin::Input-->
+          <div class="col-lg-8 fv-row">
+            <div class="form-check form-switch form-check-custom form-check-solid">
+              <input class="form-check-input" type="checkbox" value="" v-model="formData.Sold" />
+            </div>
+
+          </div>
+          <!--end::Input-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Data fine incarico</label>
+          <!--end::Label-->
+          <!--begin::Input-->
+          <div class="col-lg-8 fv-row">
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.AssignmentEnd" type="date" placeholder="yyyy-MM-dd" required/>
           </div>
           <!--end::Input-->
         </div>
@@ -593,7 +722,15 @@
 import { getAssetPath } from "@/core/helpers/assets";
 import { defineComponent, onMounted, ref, watch } from "vue";
 import Swal from "sweetalert2/dist/sweetalert2.js";
-import { updateRealEstateProperty, RealEstateProperty, getRealEstateProperty, setRealEstatePropertyPhotoHighlighted, deletePhoto, deleteRealEstateProperty, uploadFiles } from "@/core/data/properties";
+import { updateRealEstateProperty, 
+  RealEstateProperty, 
+  getRealEstateProperty, 
+  setRealEstatePropertyPhotoHighlighted, 
+  deletePhoto, 
+  deleteRealEstateProperty, 
+  uploadFiles, 
+  InsertModel,
+  getToInsert } from "@/core/data/properties";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 
@@ -609,13 +746,16 @@ export default defineComponent({
     const updateModalRef = ref<null | HTMLElement>(null);
     const typesavailable = ref<string[]>([]);
     const showTipologia = ref(false);
-    const loading = ref<boolean>(false);
+    const loading = ref<boolean>(true);
     const formData = ref<RealEstateProperty>({
       Title: "",
+      ShortTitle: "",
       Category: "",
       Typology: "",
       InHome: false,
       Highlighted: false,
+      Auction: false,
+      Sold: false,
       Status: "",
       AddressLine: "",
       Town: "",
@@ -642,8 +782,15 @@ export default defineComponent({
       CondominiumExpenses: 0,
       Availability: "",
       Description: "",
+      ShortDescription: "",
       CustomerId: 0,
-      AgentId: ""
+      AgentId: "",
+      AssignmentEnd: ""
+    });
+
+    const inserModel = ref<InsertModel>({
+      Customers: [],
+      Users: []
     });
 
     const rules = ref({
@@ -720,7 +867,18 @@ export default defineComponent({
     });
 
     onMounted(async () => {
+      loading.value = true;
       formData.value = await getRealEstateProperty(id)
+      formData.value.AssignmentEnd = formData.value.AssignmentEnd.split('T')[0]
+      console.log(formData.value.AssignmentEnd)
+      inserModel.value = await getToInsert();
+      // if(inserModel.value.Customers.length > 0){
+      //   formData.value.CustomerId = inserModel.value.Customers[0].Id;
+      // }
+      if(inserModel.value.Users.length > 0){
+        formData.value.AgentId = formData.value.AgentId;
+      }
+      loading.value = false;
     })
 
     const onFileChanged = async (event: Event) => {
@@ -826,6 +984,7 @@ export default defineComponent({
     };
 
     const deleteFile = async (photoId: number) => {
+      loading.value = true;
       await deletePhoto(photoId)
         .then(() => {
           loading.value = false;
@@ -860,6 +1019,7 @@ export default defineComponent({
     }
 
     async function deleteItem() {
+      loading.value = true;
       Swal.fire({
         text: "Confermare l'eliminazione?",
         icon: "warning",
@@ -870,6 +1030,7 @@ export default defineComponent({
           confirmButton: "btn btn-danger",
         },
       }).then(async () => {
+        loading.value = false;
         await deleteRealEstateProperty(id)
         router.push({ name: "properties" })
       });
@@ -943,7 +1104,8 @@ export default defineComponent({
       showTipologia,
       setPhotoHighlighted,
       deleteFile,
-      deleteItem
+      deleteItem,
+      inserModel
     };
   },
 });
