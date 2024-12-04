@@ -7,7 +7,7 @@ import ClipboardJS from "clipboard";
  * @returns {string}
  */
 export const themeName = computed(() => {
-  return import.meta.env.VITE_APP_NAME;
+  return ;
 });
 
 /**

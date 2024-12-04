@@ -85,13 +85,7 @@
               <div class="fv-row mb-7">
                 <!--begin::Label-->
                 <label class="fs-6 fw-semobold mb-2">
-                  <span class="required">Email</span>
-
-                  <i
-                    class="fas fa-exclamation-circle ms-1 fs-7"
-                    data-bs-toggle="tooltip"
-                    title="indirizzo email non valido"
-                  ></i>
+                  <span>Email</span>
                 </label>
                 <!--end::Label-->
 
@@ -107,11 +101,6 @@
                 <!--begin::Label-->
                 <label class="fs-6 fw-semobold mb-2">
                   <span class="required">Telefono</span>
-                  <i
-                    class="fas fa-exclamation-circle ms-1 fs-7"
-                    data-bs-toggle="tooltip"
-                    title="numero di telefono non valido "
-                  ></i>
                 </label>
                 <!--end::Label-->
 
@@ -377,13 +366,6 @@ export default defineComponent({
         {
           required: true,
           message: "Cognome obligatorio",
-          trigger: "change",
-        },
-      ],
-      Email: [
-        {
-          required: true,
-          message: "Email obligatorio",
           trigger: "change",
         },
       ],
