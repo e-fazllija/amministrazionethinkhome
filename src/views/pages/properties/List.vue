@@ -124,9 +124,6 @@
         <template v-slot:Price="{ row: item }">
           {{ item.Price }} 
         </template>
-        <!-- <template v-slot:CreationDate="{ row: item }">
-          {{ item.CreationDate.substring(0, 10) }}
-        </template> -->
         <template v-slot:actions="{ row: item }">
                    <router-link :to="{ name: 'property', params: { id: item.Id } }" class="btn btn-light-info me-1"
                        >Dettagli</router-link>

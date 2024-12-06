@@ -70,6 +70,15 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
+        path: "requests",
+        name: "requests",
+        component: () => import("@/views/pages/requests/List.vue"),
+        meta: {
+          pageTitle: "Richieste",
+          breadcrumbs: ["Richieste"],
+        },
+      },
+      {
         path: "/builder",
         name: "builder",
         component: () => import("@/views/LayoutBuilder.vue"),
