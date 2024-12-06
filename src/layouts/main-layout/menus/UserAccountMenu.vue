@@ -57,7 +57,7 @@
 
     <!--begin::Menu item-->
     <!-- <div class="menu-item px-5 my-1">
-      <router-link to="/pages/profile/overview" class="menu-link px-5">
+      <router-link :to="{ name: 'profile_details', params: { id: user.Id }}" class="menu-link px-5">
         Account Settings
       </router-link>
     </div> -->
