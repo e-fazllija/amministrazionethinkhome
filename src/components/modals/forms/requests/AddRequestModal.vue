@@ -272,12 +272,6 @@
                         <option value="4">Nuda Proprietà</option>
                         <option value="5">Occupato</option>
                     </select>
-                  <!--begin::Input-->
-                  <el-form-item prop="PropertyState">
-                    <el-input v-model="formData.PropertyState" 
-                    type= "text" />
-                  </el-form-item>
-                  <!--end::Input-->
                 </div>
                 <!--end::Input group-->
 
@@ -324,13 +318,7 @@
                     <span>Note</span>
                   </label>
                   <!--end::Label-->
-  
-                  <!--begin::Input-->
-                  <el-form-item prop="Notes">
-                    <el-input v-model="formData.Notes" 
-                    type= "text" />
-                  </el-form-item>
-                  <!--end::Input-->
+                  <textarea class="form-control" v-model="formData.Notes"></textarea>
                 </div>
                 <!--end::Input group-->
   
