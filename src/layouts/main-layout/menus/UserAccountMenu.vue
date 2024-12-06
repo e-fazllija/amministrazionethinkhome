@@ -56,11 +56,11 @@
     <!--end::Menu separator-->
 
     <!--begin::Menu item-->
-    <!-- <div class="menu-item px-5 my-1">
+    <div v-if="user.Id != undefined" class="menu-item px-5 my-1">
       <router-link :to="{ name: 'profile_details', params: { id: user.Id }}" class="menu-link px-5">
-        Account Settings
+        Impostazioni
       </router-link>
-    </div> -->
+    </div>
     <!--end::Menu item-->
 
     <!--begin::Menu item-->
@@ -86,42 +86,12 @@ export default defineComponent({
     const router = useRouter();
     const i18n = useI18n();
     const store = useAuthStore();
-    const user = store.user;
-
-
-    watch(
-      () => user,
-      (currentValue) => {
-        console.log("reload");
-      }
-    );
+    const loggedUser = store.user;
     
     i18n.locale.value = localStorage.getItem("lang")
       ? (localStorage.getItem("lang") as string)
       : "en";
 
-    const countries = {
-      en: {
-        flag: getAssetPath("media/flags/united-states.svg"),
-        name: "English",
-      },
-      es: {
-        flag: getAssetPath("media/flags/spain.svg"),
-        name: "Spanish",
-      },
-      de: {
-        flag: getAssetPath("media/flags/germany.svg"),
-        name: "German",
-      },
-      ja: {
-        flag: getAssetPath("media/flags/japan.svg"),
-        name: "Japanese",
-      },
-      fr: {
-        flag: getAssetPath("media/flags/france.svg"),
-        name: "French",
-      },
-    };
 
     const signOut = () => {
       store.logout();
@@ -137,16 +107,14 @@ export default defineComponent({
       return i18n.locale.value;
     });
 
-    const currentLangugeLocale = computed(() => {
-      return countries[i18n.locale.value as keyof typeof countries];
+    const user = computed(() => {
+      return loggedUser;
     });
 
     return {
       signOut,
       setLang,
       currentLanguage,
-      currentLangugeLocale,
-      countries,
       getAssetPath,
       user
     };

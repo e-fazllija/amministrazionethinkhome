@@ -202,7 +202,6 @@ const login = Yup.object().shape({
       const error = store.errors;
 
       if (!error) {
-        console.log(store.user);
         Swal.fire({
           text: "You have successfully logged in!",
           icon: "success",

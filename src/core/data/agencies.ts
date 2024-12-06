@@ -8,7 +8,7 @@ export class Agency {
   LastName: string;
   Email: string;
   PhoneNumber: number;
-  MobilePhoneNumber?: number;
+  MobilePhone?: number;
   Referent?: string;
   Address: string;
   Town: string;

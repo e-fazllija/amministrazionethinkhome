@@ -6,7 +6,7 @@
       data-bs-target="#kt_account_profile_details" aria-expanded="true" aria-controls="kt_account_profile_details">
       <!--begin::Card title-->
       <div class="card-title m-0">
-        <h3 class="fw-bold m-0">Profile Details</h3>
+        <h3 class="fw-bold m-0">Dettagli Profilo</h3>
       </div>
       <!--end::Card title-->
     </div>
@@ -15,7 +15,7 @@
     <!--begin::Content-->
     <div id="kt_account_profile_details" class="collapse show">
       <!--begin::Form-->
-      <VForm id="kt_account_profile_details_form" class="form" novalidate @submit="saveChanges1()"
+      <VForm id="kt_account_profile_details_form" class="form" novalidate @submit="saveChanges()"
         :validation-schema="profileDetailsValidator">
         <!--begin::Card body-->
         <div class="card-body border-top p-9">
@@ -103,11 +103,11 @@
 
                 <!--begin::Col-->
                 <div class="col-lg-6 fv-row">
-                  <Field type="text" name="MobilePhoneNumber" class="form-control form-control-lg form-control-solid"
-                    placeholder="Cellulare" v-model="profileDetails.MobilePhoneNumber" />
+                  <Field type="text" name="MobilePhone" class="form-control form-control-lg form-control-solid"
+                    placeholder="Cellulare" v-model="profileDetails.MobilePhone" />
                   <div class="fv-plugins-message-container">
                     <div class="fv-help-block">
-                      <ErrorMessage name="MobilePhoneNumber" />
+                      <ErrorMessage name="MobilePhone" />
                     </div>
                   </div>
                 </div>
@@ -229,7 +229,7 @@
       <!--begin::Card body-->
       <div class="card-body border-top p-9">
         <!--begin::Email Address-->
-        <div class="d-flex flex-wrap align-items-center mb-8">
+        <!-- <div class="d-flex flex-wrap align-items-center mb-8">
           <div id="kt_signin_email" :class="{ 'd-none': emailFormDisplay }">
             <div class="fs-4 fw-bolder mb-1">Email Address</div>
             <div class="fs-6 fw-semobold text-gray-600">
@@ -238,7 +238,7 @@
           </div>
 
           <div id="kt_signin_email_edit" :class="{ 'd-none': !emailFormDisplay }" class="flex-row-fluid">
-            <!--begin::Form-->
+            
             <VForm id="kt_signin_change_email" class="form" novalidate @submit="updateEmail()"
               :validation-schema="changeEmail">
               <div class="row mb-6">
@@ -282,14 +282,14 @@
                 </button>
               </div>
             </VForm>
-            <!--end::Form-->
+          
           </div>
           <div id="kt_signin_email_button" :class="{ 'd-none': emailFormDisplay }" class="ms-auto">
             <button class="btn btn-light fw-bolder px-6" @click="emailFormDisplay = !emailFormDisplay">
               Change Email
             </button>
           </div>
-        </div>
+        </div> -->
         <!--end::Email Address-->
 
         <!--begin::Password-->
@@ -300,7 +300,7 @@
           </div>
           <div id="kt_signin_password_edit" class="flex-row-fluid" :class="{ 'd-none': !passwordFormDisplay }">
             <div class="fs-6 fw-semobold text-gray-600 mb-4">
-              Password must be at least 8 character and contain symbols
+              La password deve contenere 8 caratteri di cui una lettere maiuscola, un carattere speciale e un numero
             </div>
 
             <!--begin::Form-->
@@ -309,7 +309,7 @@
               <div class="row mb-6">
                 <div class="col-lg-4">
                   <div class="fv-row mb-0">
-                    <label for="currentpassword" class="form-label fs-6 fw-bold mb-3">Current Password</label>
+                    <label for="currentpassword" class="form-label fs-6 fw-bold mb-3">Password Attuale</label>
                     <Field type="password" class="form-control form-control-lg form-control-solid fw-semobold fs-6"
                       name="currentpassword" id="currentpassword" />
                     <div class="fv-plugins-message-container">
@@ -321,7 +321,7 @@
                 </div>
                 <div class="col-lg-4">
                   <div class="fv-row mb-0">
-                    <label for="newpassword" class="form-label fs-6 fw-bold mb-3">New Password</label>
+                    <label for="newpassword" class="form-label fs-6 fw-bold mb-3">Nuova Password</label>
                     <Field type="password" class="form-control form-control-lg form-control-solid fw-semobold fs-6"
                       name="newpassword" id="newpassword" />
                     <div class="fv-plugins-message-container">
@@ -333,9 +333,9 @@
                 </div>
                 <div class="col-lg-4">
                   <div class="fv-row mb-0">
-                    <label for="confirmpassword" class="form-label fs-6 fw-bold mb-3">Confirm New Password</label>
+                    <label for="confirmpassword" class="form-label fs-6 fw-bold mb-3">Conferma Nuova Password</label>
                     <Field type="password" class="form-control form-control-lg form-control-solid fw-semobold fs-6"
-                      name="confirmpassword" id="confirmpassword" />
+                      name="confirmpassword" id="confirmpassword" v-model="newPassword" />
                     <div class="fv-plugins-message-container">
                       <div class="fv-help-block">
                         <ErrorMessage name="confirmpassword" />
@@ -347,7 +347,7 @@
               <div class="d-flex">
                 <button id="kt_password_submit" type="submit" ref="updatePasswordButton"
                   class="btn btn-primary me-2 px-6">
-                  <span class="indicator-label"> Update Password </span>
+                  <span class="indicator-label"> Aggiorna Password </span>
                   <span class="indicator-progress">
                     Attendere...
                     <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -362,8 +362,8 @@
             <!--end::Form-->
           </div>
           <div id="kt_signin_password_button" class="ms-auto" :class="{ 'd-none': passwordFormDisplay }">
-            <button @click="passwordFormDisplay = !passwordFormDisplay" class="btn btn-light fw-bolder">
-              Reset Password
+            <button @click="passwordFormDisplay = !passwordFormDisplay, sendLink()" class="btn btn-light fw-bolder">
+              Resetta Password
             </button>
           </div>
         </div>
@@ -383,7 +383,8 @@ import { defineComponent, ref } from "vue";
 import { ErrorMessage, Field, Form as VForm } from "vee-validate";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import * as Yup from "yup";
-import { getAgent, Agent } from "@/core/data/agents"
+import { Agent, updateAgent } from "@/core/data/agents"
+import { useAuthStore, type User } from "@/stores/auth";
 
 export default defineComponent({
   name: "account-settings",
@@ -395,12 +396,14 @@ export default defineComponent({
   props: {
     profileDetails:
     {
-      type: Agent,
+      type: Object,
       Required: true
     }
   },
-  setup(props) {
+  emits: ["formUpdateSubmitted"],
+  setup(props, { emit }) {
     const profileDetails = props.profileDetails;
+    const store = useAuthStore();
     const submitButton1 = ref<HTMLElement | null>(null);
     const submitButton2 = ref<HTMLElement | null>(null);
     const submitButton3 = ref<HTMLElement | null>(null);
@@ -411,17 +414,17 @@ export default defineComponent({
 
     const emailFormDisplay = ref(false);
     const passwordFormDisplay = ref(false);
-
+    const resetPasswordToken = ref<string>();
+    const newPassword = ref<string>();
     const profileDetailsValidator = Yup.object().shape({
-      fname: Yup.string().required().label("First name"),
-      lname: Yup.string().required().label("Last name"),
-      company: Yup.string().required().label("Company"),
-      phone: Yup.string().required().label("Contact phone"),
-      website: Yup.string().label("Webside"),
-      country: Yup.string().required().label("Country"),
-      language: Yup.string().required().label("Language"),
-      timezone: Yup.string().required().label("Timezone"),
-      currency: Yup.string().required().label("Currency"),
+      Name: Yup.string().required().label("Name"),
+      LastName: Yup.string().required().label("LastName"),
+      PhoneNumber: Yup.string().required().label("PhoneNumber"),
+      MobilePhone: Yup.string().label("MobilePhone"),
+      Referent: Yup.string().label("Referent"),
+      Address: Yup.string().required().label("Address"),
+      Town: Yup.string().required().label("Town"),
+      Region: Yup.string().label("Region"),
     });
 
     const changeEmail = Yup.object().shape({
@@ -435,18 +438,43 @@ export default defineComponent({
       confirmpassword: Yup.string()
         .min(4)
         .required()
-        .oneOf([Yup.ref("newpassword")], "Passwords must match")
+        .oneOf([Yup.ref("newpassword")], "Le password devono essere uguali")
         .label("Password Confirmation"),
     });
 
-    const saveChanges1 = () => {
+    const saveChanges = async () => {
       if (submitButton1.value) {
         // Activate indicator
         submitButton1.value.setAttribute("data-kt-indicator", "on");
 
-        setTimeout(() => {
-          submitButton1.value?.removeAttribute("data-kt-indicator");
-        }, 2000);
+        await updateAgent(profileDetails)
+          .then(() => {
+            Swal.fire({
+              text: "Continua!",
+              icon: "success",
+              buttonsStyling: false,
+              confirmButtonText: "Continua!",
+              heightAuto: false,
+              customClass: {
+                confirmButton: "btn btn-primary",
+              },
+            })
+            submitButton1.value?.removeAttribute("data-kt-indicator");
+            emit('formUpdateSubmitted', profileDetails);
+          })
+          .catch(({ response }) => {
+            console.log(response);
+            Swal.fire({
+              text: "Attenzione, si è verificato un errore.",
+              icon: "error",
+              buttonsStyling: false,
+              confirmButtonText: "Continua!",
+              heightAuto: false,
+              customClass: {
+                confirmButton: "btn btn-primary",
+              },
+            });
+          });
       }
     };
 
@@ -463,28 +491,47 @@ export default defineComponent({
       }
     };
 
+    const sendLink = async () => {
+      updatePasswordButton.value.setAttribute("data-kt-indicator", "on");
+      resetPasswordToken.value = await store.sendResetLink(profileDetails.Email)
+      updatePasswordButton.value?.removeAttribute("data-kt-indicator");
+    }
+
     const updatePassword = () => {
       if (updatePasswordButton.value) {
         // Activate indicator
         updatePasswordButton.value.setAttribute("data-kt-indicator", "on");
 
-        setTimeout(() => {
-          updatePasswordButton.value?.removeAttribute("data-kt-indicator");
-
-          Swal.fire({
-            text: "Password is successfully changed!",
-            icon: "success",
-            confirmButtonText: "Ok",
-            buttonsStyling: false,
-            heightAuto: false,
-            customClass: {
-              confirmButton: "btn btn-light-primary",
-            },
-          }).then(() => {
-            passwordFormDisplay.value = false;
+        store.resetPassword(profileDetails.Email, resetPasswordToken.value, newPassword.value)
+        .then(() => {
+            Swal.fire({
+              text: "Continua!",
+              icon: "success",
+              buttonsStyling: false,
+              confirmButtonText: "Continua!",
+              heightAuto: false,
+              customClass: {
+                confirmButton: "btn btn-primary",
+              },
+            })
+            updatePasswordButton.value?.removeAttribute("data-kt-indicator");
+            emit('formUpdateSubmitted', profileDetails);
+          })
+          .catch(({ response }) => {
+            console.log(response);
+            Swal.fire({
+              text: "Attenzione, si è verificato un errore.",
+              icon: "error",
+              buttonsStyling: false,
+              confirmButtonText: "Continua!",
+              heightAuto: false,
+              customClass: {
+                confirmButton: "btn btn-primary",
+              },
+            });
           });
-        }, 2000);
-      }
+
+        }
     };
 
     return {
@@ -493,7 +540,7 @@ export default defineComponent({
       submitButton3,
       submitButton4,
       submitButton5,
-      saveChanges1,
+      saveChanges,
       profileDetails,
       emailFormDisplay,
       passwordFormDisplay,
@@ -505,6 +552,8 @@ export default defineComponent({
       updateEmail,
       updatePassword,
       getAssetPath,
+      sendLink,
+      newPassword
     };
   },
 });
