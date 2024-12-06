@@ -104,8 +104,8 @@
                 <!--end::Label-->
 
                 <!--begin::Input-->
-                <el-form-item prop="MobilePhoneNumber">
-                  <el-input v-model="formData.MobilePhoneNumber" type="number" />
+                <el-form-item prop="MobilePhone">
+                  <el-input v-model="formData.MobilePhone" type="number" />
                 </el-form-item>
                 <!--end::Input-->
               </div>
@@ -249,7 +249,7 @@ export default defineComponent({
       LastName: "",
       Email: "",
       PhoneNumber: null,
-      MobilePhoneNumber: null,
+      MobilePhone: null,
       Referent: "",
       Address: "",
       Town: "",

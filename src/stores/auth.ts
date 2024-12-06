@@ -14,7 +14,7 @@ export interface User {
   Password: string;
   Token: string;
   PhoneNumber: number;
-  MobilePhoneNumber?: number;
+  MobilePhone?: number;
   Referent?: string;
   Address: string;
   Town: string;
@@ -104,6 +104,40 @@ export const useAuthStore = defineStore("auth", () => {
       purgeAuth();
     }
   }
+  
+  const sendResetLink = async (_email: string) : Promise<string> =>  {
+    return await ApiService.post("auth/SendResetLink?email=" + _email, "")
+      .then(({ data }) => {
+        return data as string;
+      })
+      .catch(({ response }) => {
+        setError(response.data.Message, response.status);
+        return undefined;
+      });
+  }
+
+  const resetPassword = async (email: string, token: string, password: string) : Promise<string> =>  {
+    return await ApiService.post("auth/ResetPassword", { Email: email, Token: token, Password: password })
+      .then(({ data }) => {
+        return data;
+      })
+      .catch(({ response }) => {
+        setError(response.data.Message, response.status);
+        return undefined;
+      });
+  }
+
+  const getUser = async (id: string) : Promise<User> =>  {
+      return await ApiService.get("auth/getUser?id=" + id, "")
+        .then(({ data }) => {
+          const result = data as Partial<User>
+          return result;
+        })
+        .catch(({ response }) => {
+          setError(response.data.Message, response.status);
+          return undefined;
+        });
+  }
 
   async function verifyCredentials(email: string, token: string) {
       await ApiService.post("auth/ConfirmCredentials", { Email: email, Token: token })
@@ -125,6 +159,9 @@ export const useAuthStore = defineStore("auth", () => {
     forgotPassword,
     verifyAuth,
     verifyCredentials,
-    setError
+    setError,
+    getUser,
+    sendResetLink,
+    resetPassword
   };
 });

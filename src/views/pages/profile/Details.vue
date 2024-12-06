@@ -23,19 +23,8 @@
                   <a
                     href="#"
                     class="text-gray-800 text-hover-primary fs-2 fw-bold me-1"
-                    >Max Smith</a
-                  >
-                  <a href="#">
-                    <KTIcon icon-name="verify" icon-class="fs-1 text-primary" />
-                  </a>
-  
-                  <a
-                    href="#"
-                    class="btn btn-sm btn-light-success fw-bold ms-2 fs-8 py-1 px-3"
-                    data-bs-toggle="modal"
-                    data-bs-target="#kt_modal_upgrade_plan"
-                    >Upgrade to Pro</a
-                  >
+                    >{{ formData.Name }} {{ formData.LastName }}</a
+                  >  
                 </div>
                 <!--end::Name-->
   
@@ -46,21 +35,21 @@
                     class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2"
                   >
                     <KTIcon icon-name="profile-circle" icon-class="fs-4 me-1" />
-                    Agente
+                    {{ formData.Role }}
                   </a>
                   <a
                     href="#"
                     class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2"
                   >
                     <KTIcon icon-name="geolocation" icon-class="fs-4 me-1" />
-                    SF, Bay Area
+                    {{ formData.Address }}, {{ formData.Town }}, {{ formData.Region }}
                   </a>
                   <a
                     href="#"
                     class="d-flex align-items-center text-gray-400 text-hover-primary mb-2"
                   >
                     <KTIcon icon-name="sms" icon-class="fs-4 me-1" />
-                    max@kt.com
+                    {{ formData.Email }}
                   </a>
                 </div>
                 <!--end::Info-->
@@ -87,92 +76,6 @@
               <!--end::Actions-->
             </div>
             <!--end::Title-->
-  
-            <!--begin::Stats-->
-            <div class="d-flex flex-wrap flex-stack">
-              <!--begin::Wrapper-->
-              <div class="d-flex flex-column flex-grow-1 pe-8">
-                <!--begin::Stats-->
-                <div class="d-flex flex-wrap">
-                  <!--begin::Stat-->
-                  <div
-                    class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3"
-                  >
-                    <!--begin::Number-->
-                    <div class="d-flex align-items-center">
-                      <KTIcon
-                        icon-name="arrow-up"
-                        icon-class="fs-3 text-success me-2"
-                      />
-                      <div class="fs-2 fw-bold">4500$</div>
-                    </div>
-                    <!--end::Number-->
-  
-                    <!--begin::Label-->
-                    <div class="fw-semobold fs-6 text-gray-400">Earnings</div>
-                    <!--end::Label-->
-                  </div>
-                  <!--end::Stat-->
-  
-                  <!--begin::Stat-->
-                  <div
-                    class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3"
-                  >
-                    <!--begin::Number-->
-                    <div class="d-flex align-items-center">
-                      <KTIcon
-                        icon-name="arrow-down"
-                        icon-class="fs-3 text-danger me-2"
-                      />
-                      <div
-                        class="fs-2 fw-bold"
-                        data-kt-countup="true"
-                        data-kt-countup-value="75"
-                      >
-                        75
-                      </div>
-                    </div>
-                    <!--end::Number-->
-  
-                    <!--begin::Label-->
-                    <div class="fw-semobold fs-6 text-gray-400">Projects</div>
-                    <!--end::Label-->
-                  </div>
-                  <!--end::Stat-->
-  
-                  <!--begin::Stat-->
-                  <div
-                    class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3"
-                  >
-                    <!--begin::Number-->
-                    <div class="d-flex align-items-center">
-                      <KTIcon
-                        icon-name="arrow-up"
-                        icon-class="fs-3 text-success me-2"
-                      />
-                      <div
-                        class="fs-2 fw-bold"
-                        data-kt-countup="true"
-                        data-kt-countup-value="60"
-                        data-kt-countup-prefix="%"
-                      >
-                        60%
-                      </div>
-                    </div>
-                    <!--end::Number-->
-  
-                    <!--begin::Label-->
-                    <div class="fw-semobold fs-6 text-gray-400">Success Rate</div>
-                    <!--end::Label-->
-                  </div>
-                  <!--end::Stat-->
-                </div>
-                <!--end::Stats-->
-              </div>
-              <!--end::Wrapper-->
-  
-            </div>
-            <!--end::Stats-->
           </div>
           <!--end::Info-->
         </div>
@@ -180,7 +83,7 @@
       </div>
     </div>
     <!--end::Navbar-->
-    <Settings v-if="!loading" :profileDetails=formData></Settings>
+    <Settings v-if="!loading" :profileDetails=formData @formUpdateSubmitted="getItem()"></Settings>
     <router-view></router-view>
   </template>
   
@@ -203,21 +106,27 @@
         const route = useRoute();
         const router = useRouter();
         const id = route.params.id;
-        console.log(route.params.id)
-        const formData = ref<Agent>();
+        const store = useAuthStore();
+        
+        const formData = ref<User>();
         const loading = ref<boolean>(true);
 
-        onMounted(async () => {
+        async function getItem(){
             loading.value = true;
-            formData.value = await getAgent(id.toString())
+            formData.value = await store.getUser(id.toString())
             loading.value = false;
+        }
+
+        onMounted(async () => {
+            await getItem();
         })
 
       return {
         getAssetPath,
         id,
         formData,
-        loading
+        loading,
+        getItem
       };
     },
   });
