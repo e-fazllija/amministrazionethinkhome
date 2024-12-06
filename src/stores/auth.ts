@@ -38,9 +38,9 @@ export const useAuthStore = defineStore("auth", () => {
 
   function setError(error: any, status?: number) {
     if(status == 400){
-      errors.value = error;
+      errors.value = "Si è verificato un errore. Assicurati di aver inserito i campi obbligatori!";
     } else if (status == 500) {
-      errors.value = error.Message;
+      errors.value = error;
     } else {
       errors.value = "Si è verificato un errore";
     }
