@@ -11,7 +11,7 @@
         <!--end::Amount-->
 
         <!--begin::Subtitle-->
-        <span class="text-gray-400 pt-1 fw-semibold fs-6">{{
+        <span class="text-dark-400 pt-1 fw-semibold fs-6">{{
           description
         }}</span>
         <!--end::Subtitle-->
@@ -23,7 +23,7 @@
     <!--begin::Card body-->
     <div class="card-body d-flex flex-column justify-content-end pe-0">
       <!--begin::Title-->
-      <span class="fs-6 fw-bolder text-gray-800 d-block mb-2"
+      <span class="fs-6 fw-bolder text-dark-800 d-block mb-2"
         >Today’s Heroes</span
       >
       <!--end::Title-->

@@ -1,16 +1,16 @@
 <template>
   <!--begin::Mixed Widget 5-->
-  <div :class="widgetClasses" class="card">
+  <div :class="widgetClasses" class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end">
     <!--begin::Beader-->
     <div class="card-header border-0 py-5">
       <h3 class="card-title align-items-start flex-column">
-        <span class="card-label fw-bold fs-3 mb-1">Trends</span>
+        <span class="card-label fw-bold fs-3 mb-1">Annunci pubblicati ultimo anno divisi per mese</span>
 
-        <span class="text-muted fw-semobold fs-7">Latest trends</span>
+        <!-- <span class="text-muted fw-semobold fs-7">Latest trends</span> -->
       </h3>
 
-      <div class="card-toolbar">
-        <!--begin::Menu-->
+      <!-- <div class="card-toolbar">
+       
         <button
           type="button"
           class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
@@ -21,8 +21,8 @@
           <KTIcon icon-name="category" icon-class="fs-2" />
         </button>
         <Dropdown3></Dropdown3>
-        <!--end::Menu-->
-      </div>
+       
+      </div> -->
     </div>
     <!--end::Header-->
 
@@ -60,18 +60,18 @@
             <!--begin::Title-->
             <div>
               <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold"
-                >Top Authors</a
+                >Totale Annunci online </a
               >
-              <div class="fs-7 text-muted fw-semobold mt-1">
+              <!-- <div class="fs-7 text-muted fw-semobold mt-1">
                 Ricky Hunt, Sandra Trepp
-              </div>
+              </div> -->
             </div>
             <!--end::Title-->
           </div>
           <!--end::Section-->
 
           <!--begin::Label-->
-          <div class="badge badge-light fw-semobold py-4 px-3">+82$</div>
+          <div class="badge badge-light fw-semobold py-4 px-3">100</div>
           <!--end::Label-->
         </div>
         <!--end::Item-->
@@ -95,16 +95,16 @@
             <!--begin::Title-->
             <div>
               <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold"
-                >Top Sales</a
+                >Totale Annunci online (Vendita)</a
               >
-              <div class="fs-7 text-muted fw-semobold mt-1">PitStop Emails</div>
+              <!-- <div class="fs-7 text-muted fw-semobold mt-1">PitStop Emails</div> -->
             </div>
             <!--end::Title-->
           </div>
           <!--end::Section-->
 
           <!--begin::Label-->
-          <div class="badge badge-light fw-semobold py-4 px-3">+82$</div>
+          <div class="badge badge-light fw-semobold py-4 px-3">80</div>
           <!--end::Label-->
         </div>
         <!--end::Item-->
@@ -128,17 +128,17 @@
             <!--begin::Title-->
             <div class="py-1">
               <a href="#" class="fs-6 text-gray-800 text-hover-primary fw-bold"
-                >Top Engagement</a
+                >Totale Annunci online (Affitto)</a
               >
 
-              <div class="fs-7 text-muted fw-semobold mt-1">KT.com</div>
+              <!-- <div class="fs-7 text-muted fw-semobold mt-1">KT.com</div> -->
             </div>
             <!--end::Title-->
           </div>
           <!--end::Section-->
 
           <!--begin::Label-->
-          <div class="badge badge-light fw-semobold py-4 px-3">+82$</div>
+          <div class="badge badge-light fw-semobold py-4 px-3">20</div>
           <!--end::Label-->
         </div>
         <!--end::Item-->
@@ -177,7 +177,7 @@ export default defineComponent({
     const series = [
       {
         name: "Net Profit",
-        data: [30, 30, 60, 25, 25, 40],
+        data: [30, 30, 60, 25, 25, 40, 50, 45, 51, 14, 100, 150],
       },
     ];
 
@@ -187,10 +187,6 @@ export default defineComponent({
 
     onMounted(() => {
       Object.assign(chart, chartOptions(props.chartColor, props.chartHeight));
-
-      setTimeout(() => {
-        refreshChart();
-      }, 200);
     });
 
     const refreshChart = () => {
