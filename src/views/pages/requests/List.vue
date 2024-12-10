@@ -105,8 +105,8 @@
           :checkbox-enabled="true"
           checkbox-label="Id"
         >
-          <template v-slot:Customer.Name="{ row: request }">
-            {{ request.Customer.Name }} {{ request.Customer.LastName }}
+          <template v-slot:CustomerName="{ row: request }">
+            {{ request.CustomerName }} {{ request.CustomerLastName }}
           </template>
           <template v-slot:Contract="{ row: request }">
             {{ request.Contract }}
@@ -114,11 +114,11 @@
           <template v-slot:CreationDate="{ row: request }">
             {{ request.CreationDate.substring(0, 10).split('-').reverse().join('-') }}
           </template>
-          <template v-slot:Email="{ row: request }">
-              {{ request.Customer.Email }}
+          <template v-slot:CustomerEmail="{ row: request }">
+              {{ request.CustomerEmail }}
           </template>
-          <template v-slot:Customer.Phone="{ row: request }">
-            {{ request.Customer.Phone }}
+          <template v-slot:CustomerPhone="{ row: request }">
+            {{ request.CustomerPhone }}
           </template>
             <template v-slot:Actions="{ row: request }">
                      <button class="btn btn-light-info me-1" data-bs-toggle="modal"
@@ -152,7 +152,7 @@
   import AddRequestModal from "@/components/modals/forms/requests/AddRequestModal.vue";
   import arraySort from "array-sort";
   import { MenuComponent } from "@/assets/ts/components";
-  import { getRequests, Request, deleteRequest } from "@/core/data/requests";
+  import { getRequests, Request, deleteRequest, RequestTabelData } from "@/core/data/requests";
   import UpdateRequestModal from "@/components/modals/forms/requests/UpdateRequestModal.vue";
   import Swal from "sweetalert2";
   
@@ -168,7 +168,7 @@
       const tableHeader = ref([
         {
           columnName: "Cliente",
-          columnLabel: "Customer.Name",
+          columnLabel: "CustomerName",
           sortEnabled: true,
           columnWidth: 175,
         },
@@ -185,14 +185,14 @@
           columnWidth: 230,
         },
         {
-          columnName: "Customer.Email",
-          columnLabel: "Email",
+          columnName: "Email",
+          columnLabel: "CustomerEmail",
           sortEnabled: true,
           columnWidth: 175,
         },
         {
-          columnName: "Customer.Telefono",
-          columnLabel: "Customer.Phone",
+          columnName: "Telefono",
+          columnLabel: "CustomerPhone",
           sortEnabled: true,
           columnWidth: 175,
         },
@@ -206,11 +206,23 @@
 
       const selectedIds = ref<Array<number>>([]);
       let selectedId = ref(0);
-      const tableData = ref<Array<Request>>();
+      const tableData = ref<Array<RequestTabelData>>([]);
       const initCustomers = ref([]);
       async function getItems(filterRequest: string) {
-          tableData.value = await getRequests(filterRequest);
-        
+          const results = await getRequests(filterRequest);
+          for(const key in results){
+            const item = {
+              Id: results[key].Id,
+              CustomerName: results[key].Customer.Name,
+              CustomerLastName: results[key].Customer.LastName,
+              CustomerEmail: results[key].Customer.Email,
+              CustomerPhone: results[key].Customer.Phone,
+              Contract: results[key].Contract,
+              CreationDate: results[key].CreationDate
+            } as RequestTabelData;
+
+            tableData.value.push(item)
+          }
       };
   
       onMounted(async () => {
@@ -230,7 +242,7 @@
       const searchItems = () => {
         tableData.value.splice(0, tableData.value.length, ...initCustomers.value);
         if (search.value !== "") {
-          let results: Array<Request> = [];
+          let results: Array<RequestTabelData> = [];
           for (let j = 0; j < tableData.value.length; j++) {
             if (searchingFunc(tableData.value[j], search.value)) {
               results.push(tableData.value[j]);

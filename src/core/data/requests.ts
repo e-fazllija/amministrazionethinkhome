@@ -26,6 +26,16 @@ export class Request{
   Town?: string;
 }
 
+export class RequestTabelData{
+  Id?: number;
+  CustomerName: string;
+  CustomerLastName: string;
+  CustomerEmail: string;
+  CustomerPhone: number;
+  Contract: string;
+  CreationDate?: Date;
+}
+
 export class InsertModel {
     Customers: Customer[];
     Users: User[];
