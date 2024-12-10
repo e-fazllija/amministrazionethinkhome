@@ -8,15 +8,15 @@
         <div class="d-flex flex-stack flex-wrap">
           <div class="me-2">
             <a href="#" class="text-dark text-hover-primary fw-bold fs-3"
-              >Generate Reports</a
+              >{{ title }}</a
             >
 
             <div class="text-muted fs-7 fw-semobold">
-              Finance and accounting reports
+              {{ description }}
             </div>
           </div>
 
-          <div :class="`text-${chartColor}`" class="fw-bold fs-3">$24,500</div>
+          <div :class="`text-${chartColor}`" class="fw-bold fs-3">{{ details.Total }}</div>
         </div>
       </div>
       <!--end::Stats-->
@@ -51,17 +51,21 @@ export default defineComponent({
     widgetClasses: String,
     chartColor: String,
     chartHeight: String,
+    details: Object,
+    title: String,
+    description: String
   },
   setup(props) {
     const chartRef = ref<typeof VueApexCharts | null>(null);
     const color = ref(props.chartColor);
     let chart: ApexOptions = {};
     const store = useThemeStore();
+    const datas = props.details.TotalCreatedPerMonth as Array<number>
 
     const series = ref([
       {
         name: "Net Profit",
-        data: [15, 25, 15, 40, 20, 50],
+        data: datas,
       },
     ]);
 
@@ -139,7 +143,7 @@ const chartOptions = (
       colors: [baseColor],
     },
     xaxis: {
-      categories: ["Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+      categories: ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"],
       axisBorder: {
         show: false,
       },
@@ -209,7 +213,7 @@ const chartOptions = (
       },
       y: {
         formatter: function (val) {
-          return "$" + val + " thousands";
+          return val.toString();
         },
       },
     },

@@ -3,10 +3,10 @@
   <div :class="widgetClasses" class="card">
     <!--begin::Header-->
     <div :class="`bg-${widgetColor}`" class="card-header border-0 py-5">
-      <h3 class="card-title fw-bold text-white">Sales Progress</h3>
+      <h3 class="card-title fw-bold text-white">{{ title }}</h3>
 
-      <div class="card-toolbar">
-        <!--begin::Menu-->
+      <!-- <div class="card-toolbar">
+       
         <button
           type="button"
           :class="`btn-active-color-${widgetColor}`"
@@ -17,8 +17,8 @@
           <KTIcon icon-name="category" icon-class="fs-2" />
         </button>
         <Dropdown3></Dropdown3>
-        <!--end::Menu-->
-      </div>
+        
+      </div> -->
     </div>
     <!--end::Header-->
 
@@ -31,7 +31,7 @@
         class="mixed-widget-12-chart card-rounded-bottom"
         :options="chart"
         :series="series"
-        height="200"
+        height="450"
         type="bar"
       ></apexchart>
       <!--end::Chart-->
@@ -39,36 +39,18 @@
       <!--begin::Stats-->
       <div class="card-rounded bg-body mt-n10 position-relative card-px py-15">
         <!--begin::Row-->
-        <div class="row g-0 mb-7">
-          <!--begin::Col-->
-          <div class="col mx-5">
-            <div class="fs-6 text-gray-400">Avarage Sale</div>
-            <div class="fs-2 fw-bold text-gray-800">$650</div>
-          </div>
-          <!--end::Col-->
-
-          <!--begin::Col-->
-          <div class="col mx-5">
-            <div class="fs-6 text-gray-400">Comissions</div>
-            <div class="fs-2 fw-bold text-gray-800">$29,500</div>
-          </div>
-          <!--end::Col-->
-        </div>
-        <!--end::Row-->
-
-        <!--begin::Row-->
         <div class="row g-0">
           <!--begin::Col-->
           <div class="col mx-5">
-            <div class="fs-6 text-gray-400">Revenue</div>
-            <div class="fs-2 fw-bold text-gray-800">$55,000</div>
+            <div class="fs-6 text-gray-400">Massimo annuale</div>
+            <div class="fs-2 fw-bold text-gray-800">{{ details.MaxAnnual }}</div>
           </div>
           <!--end::Col-->
 
           <!--begin::Col-->
           <div class="col mx-5">
-            <div class="fs-6 text-gray-400">Expenses</div>
-            <div class="fs-2 fw-bold text-gray-800">$1,130,600</div>
+            <div class="fs-6 text-gray-400">Minimo annuale</div>
+            <div class="fs-2 fw-bold text-gray-800">{{ details.MinAnnual }}</div>
           </div>
           <!--end::Col-->
         </div>
@@ -93,9 +75,11 @@ import Dropdown3 from "@/components/dropdown/Dropdown3.vue";
 export default defineComponent({
   name: "widget-12",
   props: {
+    title: String,
     widgetClasses: String,
     widgetColor: String,
     chartHeight: String,
+    details: Object
   },
   components: {
     Dropdown3,
@@ -104,16 +88,17 @@ export default defineComponent({
     const chartRef = ref<typeof VueApexCharts | null>(null);
     let chart: ApexOptions = {};
     const store = useThemeStore();
-
+    const datas = props.details.TotalCreatedPerMonth as Array<number>
+    console.log(datas)
     const series = ref([
       {
-        name: "Net Profit",
-        data: [35, 65, 75, 55, 45, 60, 55],
+        name: "Valore",
+        data: datas,
       },
-      {
-        name: "Revenue",
-        data: [40, 70, 80, 60, 50, 65, 60],
-      },
+      // {
+      //   name: "Revenue",
+      //   data: [40, 70, 80, 60, 50, 65, 60],
+      // },
     ]);
 
     const themeMode = computed(() => {
@@ -182,7 +167,7 @@ const chartOptions = (chartHeight: string = "auto"): ApexOptions => {
       colors: ["transparent"],
     },
     xaxis: {
-      categories: ["Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+      categories: ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"],
       axisBorder: {
         show: false,
       },
@@ -237,11 +222,11 @@ const chartOptions = (chartHeight: string = "auto"): ApexOptions => {
       },
       y: {
         formatter: function (val) {
-          return "$" + val + " thousands";
+          return val.toString();
         },
       },
       marker: {
-        show: false,
+        show: true,
       },
     },
     colors: ["#ffffff", "#ffffff"],

@@ -104,6 +104,7 @@
           :enable-items-per-page-dropdown="true"
           :checkbox-enabled="true"
           checkbox-label="Id"
+          :loading="loading"
         >
           <template v-slot:CustomerName="{ row: request }">
             {{ request.CustomerName }} {{ request.CustomerLastName }}
@@ -206,9 +207,11 @@
 
       const selectedIds = ref<Array<number>>([]);
       let selectedId = ref(0);
+      let loading = ref<boolean>(true);
       const tableData = ref<Array<RequestTabelData>>([]);
       const initCustomers = ref([]);
       async function getItems(filterRequest: string) {
+        loading.value = true;
           const results = await getRequests(filterRequest);
           for(const key in results){
             const item = {
@@ -223,6 +226,7 @@
 
             tableData.value.push(item)
           }
+          loading.value = false;
       };
   
       onMounted(async () => {
@@ -314,6 +318,7 @@
         deleteItem,
         selectId,
         getItems,
+        loading
       };
     },
   });
