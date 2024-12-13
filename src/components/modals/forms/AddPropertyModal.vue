@@ -839,7 +839,8 @@ export default defineComponent({
       ShortDescription: "",
       CustomerId: 0,
       AgentId: "",
-      AssignmentEnd: ""
+      AssignmentEnd: "",
+      Agent: null
     });
     const inserModel = ref<InsertModel>({
       Customers: [],
