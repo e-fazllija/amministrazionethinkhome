@@ -1,9 +1,10 @@
 import ApiService from "@/core/services/ApiService";
 import { useAuthStore, type User } from "@/stores/auth";
 import type { Customer } from "@/core/data/customers";
+import type { RealEstateProperty } from "@/core/data/properties";
 const store = useAuthStore();
 
-export class Request{
+export class Request {
   Id?: number;
   CustomerId: number;
   Contract: string;
@@ -24,9 +25,10 @@ export class Request{
   UpdateDate?: Date;
   Customer?: Customer
   Town?: string;
+  RealEstateProperties?: RealEstateProperty[]
 }
 
-export class RequestTabelData{
+export class RequestTabelData {
   Id?: number;
   CustomerName: string;
   CustomerLastName: string;
@@ -37,12 +39,12 @@ export class RequestTabelData{
 }
 
 export class InsertModel {
-    Customers: Customer[];
-    Users: User[];
+  Customers: Customer[];
+  Users: User[];
 }
 
-const getRequests = (filterRequest: string) : Promise<Array<Request>> => {
-   return ApiService.get(
+const getRequests = (filterRequest: string): Promise<Array<Request>> => {
+  return ApiService.get(
     `Requests/Get?currentPage=0&filterRequest=${filterRequest}`,
     ""
   )
@@ -56,12 +58,13 @@ const getRequests = (filterRequest: string) : Promise<Array<Request>> => {
     });
 };
 
-const getRequest = (id: number) : Promise<Request> => {
-  return ApiService.get(`Requests/GetById?id=${id}`, "")
+const getCustomerRequests = (customerId: number): Promise<Array<Request>> => {
+  return ApiService.get(
+    `Requests/GetCustomerRequests?customerId=${customerId}`,
+    ""
+  )
     .then(({ data }) => {
-      const result = data as Partial<Request>;
-      result.City = data.Town;
-      result.Customer = data.Customer as Customer;
+      const result = data.Data.$values as Partial<Array<Request>>
       return result;
     })
     .catch(({ response }) => {
@@ -70,7 +73,22 @@ const getRequest = (id: number) : Promise<Request> => {
     });
 };
 
-const createRequest = async (formData:Request) => {
+const getRequest = (id: number): Promise<Request> => {
+  return ApiService.get(`Requests/GetById?id=${id}`, "")
+    .then(({ data }) => {
+      const result = data as Partial<Request>;
+      result.City = data.Town;
+      result.Customer = data.Customer as Customer;
+      result.RealEstateProperties = data.RealEstateProperties.$values;
+      return result;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
+
+const createRequest = async (formData: Request) => {
   return ApiService.post("Requests/Create", formData)
     .then(({ data }) => {
       const result = data as Partial<Request>;
@@ -82,7 +100,7 @@ const createRequest = async (formData:Request) => {
     });
 };
 
-const updateRequest = async (formData:Request) => {
+const updateRequest = async (formData: Request) => {
   return ApiService.post("Requests/Update", formData)
     .then(({ data }) => {
       const result = data as Partial<Request>;
@@ -106,21 +124,21 @@ const deleteRequest = async (id: number) => {
     });
 };
 
-const getToInsert = () : Promise<InsertModel> => {
-return ApiService.get(`RealEstateProperty/GetToInsert`, "")
+const getToInsert = (): Promise<InsertModel> => {
+  return ApiService.get(`RealEstateProperty/GetToInsert`, "")
     .then(({ data }) => {
-    const agents = data.Agents.$values as Array<User>;
-    const customers = data.Customers.$values as Array<Customer>;
-    const result = <InsertModel>({
+      const agents = data.Agents.$values as Array<User>;
+      const customers = data.Customers.$values as Array<Customer>;
+      const result = <InsertModel>({
         Users: agents,
         Customers: customers
-    })
-    return result;
+      })
+      return result;
     })
     .catch(({ response }) => {
-    store.setError(response.data.Message, response.status);
-    return undefined;
+      store.setError(response.data.Message, response.status);
+      return undefined;
     });
 };
 
-export { getRequests, getRequest, createRequest, updateRequest, deleteRequest, getToInsert }
+export { getRequests, getRequest, createRequest, updateRequest, deleteRequest, getToInsert, getCustomerRequests }

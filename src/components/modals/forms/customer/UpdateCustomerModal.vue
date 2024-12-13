@@ -232,7 +232,7 @@
                   <!--begin::Input group-->
                   <div class="d-flex flex-column mb-7 fv-row">
                     <!--begin::Label-->
-                    <label >Indirizzo</label>
+                    <label>Indirizzo</label>
                     <!--end::Label-->
 
                     <!--begin::Input-->
@@ -246,7 +246,7 @@
                   <!--begin::Input group-->
                   <div class="d-flex flex-column mb-7 fv-row">
                     <!--begin::Label-->
-                    <label >Comune</label>
+                    <label>Comune</label>
                     <!--end::Label-->
 
                     <!--begin::Input-->
@@ -262,7 +262,7 @@
                     <!--begin::Col-->
                     <div class="col-md-6 fv-row">
                       <!--begin::Label-->
-                      <label >Provincia</label>
+                      <label>Provincia</label>
                       <!--end::Label-->
 
                       <!--begin::Input-->

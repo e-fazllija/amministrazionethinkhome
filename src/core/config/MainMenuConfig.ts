@@ -5,6 +5,7 @@ export interface MenuItem {
   pages?: Array<MenuItem>;
   keenthemesIcon?: string;
   bootstrapIcon?: string;
+  roleEnabled?: string[];
   sub?: Array<MenuItem>;
 }
 
@@ -16,36 +17,42 @@ const MainMenuConfig: Array<MenuItem> = [
         route: "/dashboard",
         keenthemesIcon: "element-11",
         bootstrapIcon: "bi-app-indicator",
+        roleEnabled: ["Admin", "Agenzia", "Agente"],
       },
       {
         heading: "Agenzie",
         route: "/agencies",
         keenthemesIcon: "element-11",
         bootstrapIcon: "bi-app-indicator",
+        roleEnabled: ["Admin"],
       },
       {
         heading: "Agenti",
         route: "/agents",
         keenthemesIcon: "element-11",
         bootstrapIcon: "bi-app-indicator",
+        roleEnabled: ["Admin", "Agenzia"],
       },
       {
         heading: "Clienti",
         route: "/clients",
         keenthemesIcon: "element-11",
         bootstrapIcon: "bi-app-indicator",
+        roleEnabled: ["Admin", "Agenzia", "Agente"],
       },
       {
         heading: "Richieste",
         route: "/requests",
         keenthemesIcon: "element-11",
         bootstrapIcon: "bi-app-indicator",
+        roleEnabled: ["Admin", "Agenzia", "Agente"],
       },
       {
         heading: "Immobili",
         route: "/properties",
         keenthemesIcon: "element-11",
         bootstrapIcon: "bi-app-indicator",
+        roleEnabled: ["Admin", "Agenzia", "Agente"],
       },
     ],
   }

@@ -122,9 +122,9 @@
             {{ request.CustomerPhone }}
           </template>
             <template v-slot:Actions="{ row: request }">
-                     <button class="btn btn-light-info me-1" data-bs-toggle="modal"
-                          data-bs-target="#kt_modal_update_request"
-                          @click="selectId(request.Id)">Dettagli</button>
+              <router-link :to="{ name: 'request', params: { id: request.Id } }" 
+                    class="btn btn-light-info me-1"
+                       >Dettagli</router-link>
   
                     <!-- <button @click="deleteItem(request.Id)" class="btn btn-light-danger me-1">Elimina</button> -->
                 </template>

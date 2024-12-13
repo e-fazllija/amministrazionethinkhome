@@ -695,7 +695,7 @@
 
       </div>
       <!--begin::Actions-->
-      <div class="card-footer d-flex justify-content-end py-6 px-9">
+      <div v-if="user.Id === formData.AgentId || user.Role === 'Admin' || formData.Agent.AgencyId === user.Id" class="card-footer d-flex justify-content-end py-6 px-9">
         <button type="button" @click="deleteItem()" class="btn btn-danger btn-active-light-primary me-2">
           Elimina
         </button>
@@ -739,9 +739,10 @@ export default defineComponent({
   components: {},
   setup() {
     const store = useAuthStore();
+    const user = store.user;
     const route = useRoute();
     const router = useRouter();
-    const id = parseInt(route.params.id[0]);
+    const id = parseInt(route.params.id.toString());
     const formRef = ref<null | HTMLFormElement>(null);
     const updateModalRef = ref<null | HTMLElement>(null);
     const typesavailable = ref<string[]>([]);
@@ -785,7 +786,8 @@ export default defineComponent({
       ShortDescription: "",
       CustomerId: 0,
       AgentId: "",
-      AssignmentEnd: ""
+      AssignmentEnd: "",
+      Agent: null
     });
 
     const inserModel = ref<InsertModel>({
@@ -870,7 +872,7 @@ export default defineComponent({
       loading.value = true;
       formData.value = await getRealEstateProperty(id)
       formData.value.AssignmentEnd = formData.value.AssignmentEnd.split('T')[0]
-      console.log(formData.value.AssignmentEnd)
+      console.log(formData.value)
       inserModel.value = await getToInsert();
       // if(inserModel.value.Customers.length > 0){
       //   formData.value.CustomerId = inserModel.value.Customers[0].Id;
@@ -1105,7 +1107,8 @@ export default defineComponent({
       setPhotoHighlighted,
       deleteFile,
       deleteItem,
-      inserModel
+      inserModel,
+      user
     };
   },
 });

@@ -58,8 +58,8 @@
     <!--end::Col-->
     <!--begin::Col-->
     <div class="col-xl-2">
-      <Widget1 className="card-xl-stretch mb-xl-10 card theme-dark-bg-body" description="Totale clienti"
-        bgColor="#cbd4f4" :total="data.TotalCustomers" />
+      <Widget1 className="card-xl-stretch mb-xl-10 card theme-dark-bg-body" description="Totale agenti"
+        bgColor="#cbd4f4" :total="data.TotalAgents" />
     </div>
     <!--end::Col-->
   </div>
@@ -87,7 +87,7 @@
     <div class="col-xl-4">
       <Widget1 className="card-xl-stretch mb-xl-10 card theme-dark-bg-body" description="Richieste totali"
         bgColor="#cbd4f4" :total="data.RequestHomeDetails.Total" :difference="data.RequestHomeDetails.TotalClosed"
-        differenceTitle="Chiuse"
+        differenceTitle="Evase"
         :percentage="(data.RequestHomeDetails.TotalClosed / data.RequestHomeDetails.Total) * 100" />
     </div>
     <!--end::Col-->

@@ -66,9 +66,9 @@
           <!--end::Label-->
 
           <!--begin::Link-->
-          <router-link to="/password-reset" class="link-primary fs-6 fw-bold">
+          <!-- <router-link to="/password-reset" class="link-primary fs-6 fw-bold">
             Password Dimenticata?
-          </router-link>
+          </router-link> -->
           <!--end::Link-->
         </div>
         <!--end::Wrapper-->
