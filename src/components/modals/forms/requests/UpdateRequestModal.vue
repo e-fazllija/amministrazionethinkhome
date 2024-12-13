@@ -13,7 +13,7 @@
           <!--begin::Modal header-->
           <div class="modal-header" id="kt_modal_update_request_header">
             <!--begin::Modal title-->
-            <h2 class="fw-bold">Aggiungi Cliente</h2>
+            <h2 class="fw-bold">Aggiungi Richiesta</h2>
             <!--end::Modal title-->
   
             <!--begin::Close-->

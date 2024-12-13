@@ -47,6 +47,7 @@ export class RealEstateProperty {
   Photos?: Array<RealEstatePropertyPhotos>; 
   CustomerId: number | 0;
   AgentId: string;
+  Agent: User;
   Files?: FileList;
 }
 
@@ -71,6 +72,7 @@ const getRealEstateProperties = (filterRequest: string) : Promise<Array<RealEsta
   )
     .then(({ data }) => {
       const result = data.Data.$values as Partial<Array<RealEstateProperty>>
+      console.log(result)
       return result;
     })
     .catch(({ response }) => {
@@ -79,15 +81,17 @@ const getRealEstateProperties = (filterRequest: string) : Promise<Array<RealEsta
     });
 };
 
-const getRealEstateProperty = (id: number) : Promise<RealEstateProperty> => {
+const getRealEstateProperty = (id: number) => {
   return ApiService.get(`RealEstateProperty/GetById?id=${id}`, "")
     .then(({ data }) => {
+      console.log(data)
       const photos = data.Photos.$values as Array<RealEstatePropertyPhotos>;
       const result = data as Partial<RealEstateProperty>;
       result.Photos = photos;
       return result;
     })
     .catch(({ response }) => {
+      console.log(response)
       store.setError(response.data.Message, response.status);
       return undefined;
     });

@@ -125,10 +125,10 @@
           {{ item.Price }} 
         </template>
         <template v-slot:actions="{ row: item }">
-                   <router-link :to="{ name: 'property', params: { id: item.Id } }" class="btn btn-light-info me-1"
+                   <router-link :to="{ name: 'property', params: { id: item.Id } }" 
+                    class="btn btn-light-info me-1"
                        >Dettagli</router-link>
-
-                  <button @click="deleteItem(item.Id)" class="btn btn-light-danger me-1">Elimina</button>
+                  <button v-if="user.Id === item.AgentId || user.Role === 'Admin' || item.Agent.AgencyId === user.Id" @click="deleteItem(item.Id)" class="btn btn-light-danger me-1">Elimina</button>
               </template>
       </Datatable>
     </div>
@@ -149,6 +149,7 @@ import { getRealEstateProperties, deleteRealEstateProperty, RealEstateProperty }
 import arraySort from "array-sort";
 import { MenuComponent } from "@/assets/ts/components";
 import Swal from "sweetalert2/dist/sweetalert2.js";
+import { useAuthStore } from "@/stores/auth";
 
 export default defineComponent({
   name: "properties",
@@ -158,6 +159,7 @@ export default defineComponent({
     AddPropertyModal,
   },
   setup() {
+    const authStore = useAuthStore();
     const tableHeader = ref([
       {
         columnName: "Codice",
@@ -189,12 +191,6 @@ export default defineComponent({
         sortEnabled: true,
         columnWidth: 175,
       },
-      // {
-      //   columnName: "Creato il",
-      //   columnLabel: "CreationDate",
-      //   sortEnabled: true,
-      //   columnWidth: 225,
-      // },
       {
         columnName: "Actions",
         columnLabel: "actions",
@@ -205,9 +201,9 @@ export default defineComponent({
     const selectedIds = ref<Array<Number>>([]);
     let selectedId = ref<Number>();
     const loading = ref<boolean>(true);
-    const tableData = ref();
+    const tableData = ref<Array<RealEstateProperty>>();
     const initAgents = ref([]);
-    
+    const user = authStore.user;
     async function getItems(filterRequest: string) {
        tableData.value = await getRealEstateProperties(filterRequest);
     };
@@ -302,7 +298,8 @@ export default defineComponent({
       onItemSelect,
       getAssetPath,
       getItems,
-      loading
+      loading,
+      user
     };
   },
 });

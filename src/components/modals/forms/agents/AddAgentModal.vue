@@ -389,7 +389,6 @@ export default defineComponent({
           loading.value = true;
           
           formData.value.Role = "Agent"
-          formData.value.AgencyId = store.user.Id;
           await createAgent(formData.value);
           
           const error = store.errors;

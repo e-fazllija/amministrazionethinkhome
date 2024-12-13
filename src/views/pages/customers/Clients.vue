@@ -120,9 +120,9 @@
           {{ customer.Phone }}
         </template>
           <template v-slot:Actions="{ row: customer }">
-                   <button class="btn btn-light-info me-1" data-bs-toggle="modal"
-                        data-bs-target="#kt_modal_update_customer"
-                        @click="selectId(customer.Id)">Dettagli</button>
+            <router-link :to="{ name: 'client', params: { id: customer.Id } }" 
+                    class="btn btn-light-info me-1"
+                       >Dettagli</router-link>
 
                   <!-- <button @click="deleteItem(customer.Id)" class="btn btn-light-danger me-1">Elimina</button> -->
               </template>

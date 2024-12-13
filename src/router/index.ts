@@ -31,6 +31,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           pageTitle: "Agenti",
           breadcrumbs: ["Agenti"],
+          // requiresAdmin: true
         },
       },
       {
@@ -40,6 +41,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           pageTitle: "Agenzie",
           breadcrumbs: ["Agenzie"],
+          requiresAdmin: true
         },
       },
       {
@@ -70,12 +72,30 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
+        path: "client/:id",
+        name: "client",
+        component: () => import("@/views/pages/customers/Update.vue"),
+        meta: {
+          pageTitle: "Cliente",
+          breadcrumbs: ["Cliente"],
+        },
+      },
+      {
         path: "requests",
         name: "requests",
         component: () => import("@/views/pages/requests/List.vue"),
         meta: {
           pageTitle: "Richieste",
           breadcrumbs: ["Richieste"],
+        },
+      },
+      {
+        path: "request/:id",
+        name: "request",
+        component: () => import("@/views/pages/requests/Update.vue"),
+        meta: {
+          pageTitle: "Richiesta",
+          breadcrumbs: ["Richiesta"],
         },
       },
       {
@@ -137,7 +157,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () =>
       import("@/views/crafted/authentication/MultiStepSignUp.vue"),
     meta: {
-      pageTitle: "Multi-step Sign up",
+      pageTitle: "Multi-step Sign up"
     },
   },
   {
@@ -158,7 +178,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "500",
         component: () => import("@/views/crafted/authentication/Error500.vue"),
         meta: {
-          pageTitle: "Error 500",
+          pageTitle: "Error 500"
         },
       },
     ],
@@ -174,7 +194,7 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
   const configStore = useConfigStore();
 
@@ -185,18 +205,29 @@ router.beforeEach((to, from, next) => {
   configStore.resetLayoutConfig();
 
   // verify auth token before each page change
-  authStore.verifyAuth();
+  await authStore.verifyAuth();
 
   // before page access check if page requires authentication
   if (to.meta.middleware == "auth") {
     if (authStore.isAuthenticated) {
-      next();
+      if (to.meta.requiresAdmin) {
+        if (authStore.user.Role == "Admin") {
+          next();
+        } else {
+          authStore.logout()
+          next({ name: "sign-in" });
+        }
+      } else {
+        next();
+      }
     } else {
+      authStore.logout()
       next({ name: "sign-in" });
     }
   } else {
     next();
   }
+  
 
   // Scroll page to top on every route change
   window.scrollTo({
