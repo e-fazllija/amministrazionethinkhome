@@ -47,7 +47,7 @@ export class RealEstateProperty {
   Photos?: Array<RealEstatePropertyPhotos>; 
   CustomerId: number | 0;
   AgentId: string;
-  Agent: User;
+  Agent?: User;
   Files?: FileList;
 }
 

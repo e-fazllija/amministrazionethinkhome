@@ -368,7 +368,7 @@ import Datatable from "@/components/kt-datatable/KTDataTable.vue";
 import { provinceCities } from "@/core/data/provinces";
 import type { Sort } from "@/components/kt-datatable//table-partials/models";
 import arraySort from "array-sort";
-import { RealEstateProperty } from "@/core/data/properties";
+import type { RealEstateProperty } from "@/core/data/properties";
 import { MenuComponent } from "@/assets/ts/components";
 
 export default defineComponent({
