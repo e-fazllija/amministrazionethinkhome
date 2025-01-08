@@ -119,8 +119,25 @@
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
             <div class="form-check form-switch form-check-custom form-check-solid">
-              <select class="form-control" v-model="formData.City" required>
+              <select class="form-control" v-model="selectedCities" required multiple>
                 <option v-for="(city, index) in cities" :key="index" :value="city.Id">{{ city.Name }} </option>
+              </select>
+            </div>
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+         <!--begin::Input group-->
+         <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6 required">Località</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <div class="form-check form-switch form-check-custom form-check-solid">
+              <select class="form-control" v-model="selectedLocations" required multiple>
+                <option v-for="(location, index) in locations" :key="index" :value="location.Id">{{ location.Name }} </option>
               </select>
             </div>
           </div>
@@ -370,6 +387,7 @@ import type { Sort } from "@/components/kt-datatable//table-partials/models";
 import arraySort from "array-sort";
 import type { RealEstateProperty } from "@/core/data/properties";
 import { MenuComponent } from "@/assets/ts/components";
+import { cityLocations } from "@/core/data/locations";
 
 export default defineComponent({
   name: "update-request",
@@ -383,6 +401,7 @@ export default defineComponent({
     const loading = ref<boolean>(true);
     const firtLoad = ref(false);
     const cities = ref([]);
+    const locations = ref([]);
     const selectedIds = ref<Array<Number>>([]);
     const initItems = ref([]);
     const formData = ref<Request>({
@@ -400,7 +419,8 @@ export default defineComponent({
       PropertyState: "",
       Heating: "",
       ParkingSpaces: 0,
-      Notes: ""
+      Notes: "",
+      Location:""
     });
     const inserModel = ref<InsertModel>({
       Customers: [],
@@ -446,10 +466,16 @@ export default defineComponent({
       },
     ]);
 
+    let selectedCities = []
+    let selectedLocations = []
+
+
     onMounted(async () => {
       loading.value = true;
       firtLoad.value = true;
       formData.value = await getRequest(id);
+      selectedCities = formData.value.City.split(",")
+      selectedLocations = formData.value.Location.split(",")
       inserModel.value = await getToInsert();
       initItems.value.splice(0, formData.value.RealEstateProperties.length, ...formData.value.RealEstateProperties);
       if (inserModel.value.Customers.length > 0) {
@@ -475,6 +501,23 @@ export default defineComponent({
           } else {
             cities.value = [];
             formData.value.City = null;
+          }
+        } else {
+          firtLoad.value = false;
+        }
+      }
+    );
+
+    watch(
+      () => formData.value.City,
+      (newCity) => {
+        if (!firtLoad.value) {
+          if (newCity && cityLocations[newCity]) {
+            locations.value = cityLocations[newCity];
+            formData.value.City = locations.value[0].Id;
+          } else {
+            locations.value = [];
+            formData.value.Location = null;
           }
         } else {
           firtLoad.value = false;
@@ -587,11 +630,14 @@ export default defineComponent({
       user,
       inserModel,
       cities,
+      locations,
       sort,
       tableHeader,
       onItemSelect,
       searchItems,
-      search
+      search,
+      selectedCities,
+      selectedLocations
     };
   },
 });

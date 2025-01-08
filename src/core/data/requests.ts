@@ -11,6 +11,7 @@ export class Request {
   PropertyType: string;
   Province: string;
   City: string;
+  Location:string;
   Price: number;
   Archived: boolean;
   Closed: boolean;
