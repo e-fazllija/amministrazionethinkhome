@@ -87,19 +87,6 @@
                 </div>
                 <!--end::Input group-->
 
-                <!--begin::Input group-->
-                <div class="d-flex flex-column mb-2 fv-row">
-                  <!--begin::Label-->
-                  <label class="required fs-6 fw-semobold mb-2">Titolo Breve / Homepage e lista</label>
-                  <!--end::Label-->
-                  <!--begin::Input-->
-                  <el-form-item prop="ShortTitle">
-                    <el-input v-model="formData.ShortTitle" type="text"/>
-                  </el-form-item>
-                  <!--end::Input-->
-                </div>
-                <!--end::Input group-->
-
                   <!--begin::Input group-->
                   <div class="d-flex flex-column mb-2 fv-row">
                         <!--begin::Label-->
@@ -108,19 +95,6 @@
                         <!--begin::Input-->
                         <el-form-item prop="Description">
                           <el-input v-model="formData.Description" type="text" />
-                        </el-form-item>
-                        <!--end::Input-->
-                      </div>
-                      <!--end::Input group-->
-                      
-                      <!--begin::Input group-->
-                  <div class="d-flex flex-column mb-2 fv-row">
-                        <!--begin::Label-->
-                        <label class="required fs-6 fw-semobold mb-2">Descrizione Breve / Homepage e lista</label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <el-form-item prop="ShortDescription">
-                          <el-input v-model="formData.ShortDescription" type="text" />
                         </el-form-item>
                         <!--end::Input-->
                       </div>
@@ -237,6 +211,7 @@
                      <option value="Garage">Garage</option>
                      <option value="Ufficio">Ufficio</option>
                      <option value="Terreno">Terreno</option>
+                     <option value="Rustico / Casale">Rustico / Casale</option>
                     </select>
                    <!--end::Input-->
                   </div>

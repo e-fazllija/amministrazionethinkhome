@@ -119,7 +119,7 @@
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
             <div class="form-check form-switch form-check-custom form-check-solid">
-              <select class="form-control" v-model="formData.City" required>
+              <select class="form-control" multiple v-model="formData.City" required>
                 <option v-for="(city, index) in cities" :key="index" :value="city.Id">{{ city.Name }} </option>
               </select>
             </div>
@@ -366,6 +366,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import Datatable from "@/components/kt-datatable/KTDataTable.vue";
 import { provinceCities } from "@/core/data/provinces";
+import { locations } from "@/core/data/locations";
 import type { Sort } from "@/components/kt-datatable//table-partials/models";
 import arraySort from "array-sort";
 import type { RealEstateProperty } from "@/core/data/properties";
@@ -452,9 +453,9 @@ export default defineComponent({
       formData.value = await getRequest(id);
       inserModel.value = await getToInsert();
       initItems.value.splice(0, formData.value.RealEstateProperties.length, ...formData.value.RealEstateProperties);
-      if (inserModel.value.Customers.length > 0) {
-        formData.value.CustomerId = inserModel.value.Customers[0].Id;
-      }
+      // if (inserModel.value.Customers.length > 0) {
+      //   formData.value.CustomerId = inserModel.value.Customers[0].Id;
+      // }
       if (formData.value.Province && provinceCities[formData.value.Province]) {
         cities.value = provinceCities[formData.value.Province];
       } else {
@@ -479,6 +480,13 @@ export default defineComponent({
         } else {
           firtLoad.value = false;
         }
+      }
+    );
+
+    watch(
+      () => formData.value.City,
+      (_new) => {
+        console.log(_new)
       }
     );
 

@@ -105,6 +105,7 @@
               <option value="Garage">Garage</option>
               <option value="Ufficio">Ufficio</option>
               <option value="Terreno">Terreno</option>
+              <option value="Rustico / Casale">Rustico / Casale</option>
             </select>
           </div>
           <!--end::Col-->
