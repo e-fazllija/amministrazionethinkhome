@@ -146,8 +146,23 @@
                         </label>
                     <!--end::Label-->
                     <!--begin::Input-->
-                    <select class="form-control" v-model="formData.City">
+                    <select class="form-select" multiple aria-label="Multiple select example" v-model="formData.City" required>
                         <option v-for="(city, index) in cities" :key="index" :value="city.Id">{{ city.Name }} </option>
+                    </select>
+                    <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+               <div class="d-flex flex-column mb-5 fv-row">
+                    <!--begin::Label-->
+                    <label class="fs-6 fw-semobold mb-2">
+                        <span class="required">Località</span>
+                        </label>
+                    <!--end::Label-->
+                    <!--begin::Input-->
+                    <select  class="form-select" multiple aria-label="Multiple select example" v-model="formData.Location">
+                        <option v-for="(location, index) in locations" :key="index" :value="location.Id">{{ location.Name }} </option>
                     </select>
                     <!--end::Input-->
                 </div>
@@ -373,6 +388,7 @@
   import { countries } from "@/core/data/countries";
   import Swal from "sweetalert2/dist/sweetalert2.js";
   import {createRequest, Request, InsertModel, getToInsert } from "@/core/data/requests";
+  import {cityLocations } from "@/core/data/locations";
   import {provinceCities } from "@/core/data/provinces";
   import { useAuthStore, type User } from "@/stores/auth";
   
@@ -385,6 +401,7 @@
       const loading = ref<boolean>(false);
       const store = useAuthStore();
       const cities = ref([]);
+      const locations = ref([]);
       const formData = ref<Request>({
         CustomerId: 0,  
         Contract: "Vendita",
@@ -400,7 +417,8 @@
         PropertyState: "",
         Heating: "",
         ParkingSpaces: 0, 
-        Notes: ""
+        Notes: "",
+        Location:""
       });
 
         const inserModel = ref<InsertModel>({
@@ -461,6 +479,21 @@
             }
         }
         );
+
+      watch(
+        () => formData.value.City,
+        (newCity) => {
+          if (Array.isArray(newCity) && newCity.length > 0) {
+            locations.value = newCity
+              .filter(city => cityLocations[city])
+              .flatMap(city => cityLocations[city]);
+            formData.value.Location = null;
+          } else {
+            locations.value = [];
+            formData.value.Location = null;
+          }
+        }
+      );
   
       const submit = () => {
         if (!formRef.value) {
@@ -469,7 +502,11 @@
         formRef.value.validate(async (valid: boolean) => {
           if (valid) {
             loading.value = true;
-  
+            formData.value.City = formData.value.City.toString()
+            if(formData.value.Location != null && formData.value.Location != undefined){
+              formData.value.Location = formData.value.Location.toString()
+            }
+
           await createRequest(formData.value);
   
           const error = store.errors;
@@ -516,7 +553,8 @@
         getAssetPath,
         countries,
         cities,
-        inserModel
+        inserModel,
+        locations
       };
     },
   });
