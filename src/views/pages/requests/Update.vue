@@ -119,7 +119,7 @@
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
             <div class="form-check form-switch form-check-custom form-check-solid">
-              <select class="form-select" multiple v-model="selectedCities">
+              <select class="form-select" multiple v-model="selectedCities" required>
                 <option v-for="(city, index) in cities" :key="index" :value="city.Id">{{ city.Name }} </option>
               </select>
             </div>
@@ -136,7 +136,7 @@
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
             <div class="form-check form-switch form-check-custom form-check-solid">
-              <select class="form-control" v-model="selectedLocations" required multiple>
+              <select class="form-control" v-model="selectedLocations" multiple>
                 <option v-for="(location, index) in locations" :key="index" :value="location.Id">{{ location.Name }} </option>
               </select>
             </div>
@@ -557,7 +557,7 @@ export default defineComponent({
     const submit = async () => {
       loading.value = true;
       formData.value.City = selectedCities.value.toString()
-      formData.value.Location = selectedLocations.value.toString();
+      formData.value.Location = selectedLocations.value?.toString();
 
       await updateRequest(formData.value)
         .then(() => {
