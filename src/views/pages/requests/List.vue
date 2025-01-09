@@ -141,7 +141,6 @@
   
     <ExportCustomerModal></ExportCustomerModal>
     <AddRequestModal @formAddSubmitted="getItems('')"></AddRequestModal>
-    <UpdateRequestModal :Id="selectedId" @formUpdateSubmitted="getItems('')"></UpdateRequestModal>
   </template>
   
   <script lang="ts">
@@ -154,7 +153,6 @@
   import arraySort from "array-sort";
   import { MenuComponent } from "@/assets/ts/components";
   import { getRequests, Request, deleteRequest, RequestTabelData } from "@/core/data/requests";
-  import UpdateRequestModal from "@/components/modals/forms/requests/UpdateRequestModal.vue";
   import Swal from "sweetalert2";
   
   export default defineComponent({
@@ -162,8 +160,7 @@
     components: {
       Datatable,
       ExportCustomerModal,
-      AddRequestModal,
-      UpdateRequestModal,
+      AddRequestModal
     },
     setup() {
       const tableHeader = ref([
