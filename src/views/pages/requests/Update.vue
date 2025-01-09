@@ -119,11 +119,7 @@
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
             <div class="form-check form-switch form-check-custom form-check-solid">
-<<<<<<< HEAD
-              <select class="form-control" multiple v-model="formData.City" required>
-=======
-              <select class="form-control" v-model="selectedCities" required multiple>
->>>>>>> 5fc8b061552048b260114b207cf86f23554c62ff
+              <select class="form-select" multiple v-model="selectedCities">
                 <option v-for="(city, index) in cities" :key="index" :value="city.Id">{{ city.Name }} </option>
               </select>
             </div>
@@ -470,16 +466,16 @@ export default defineComponent({
       },
     ]);
 
-    let selectedCities = []
-    let selectedLocations = []
+    let selectedCities = ref<Array<string>>([]);
+    let selectedLocations = ref<Array<string>>([]);
 
 
     onMounted(async () => {
       loading.value = true;
       firtLoad.value = true;
       formData.value = await getRequest(id);
-      selectedCities = formData.value.City.split(",")
-      selectedLocations = formData.value.Location.split(",")
+      selectedCities.value = formData.value.City.split(",")
+      selectedLocations.value = formData.value.Location?.split(",")
       inserModel.value = await getToInsert();
       initItems.value.splice(0, formData.value.RealEstateProperties.length, ...formData.value.RealEstateProperties);
       // if (inserModel.value.Customers.length > 0) {
@@ -491,7 +487,15 @@ export default defineComponent({
         cities.value = [];
         formData.value.City = null;
       }
+
+      if (selectedCities.value.length > 0) {
+        locations.value = selectedCities.value
+                .filter(city => cityLocations[city]) 
+                .flatMap(city => cityLocations[city]);
+          }
+
       loading.value = false;
+      setTimeout(() => firtLoad.value = false, 3000);
     })
 
 
@@ -513,12 +517,14 @@ export default defineComponent({
     );
 
     watch(
-      () => formData.value.City,
+      () => selectedCities.value,
       (newCity) => {
         if (!firtLoad.value) {
-          if (newCity && cityLocations[newCity]) {
-            locations.value = cityLocations[newCity];
-            formData.value.City = locations.value[0].Id;
+          if (Array.isArray(newCity) && newCity.length > 0) {
+            locations.value = newCity
+              .filter(city => cityLocations[city])
+              .flatMap(city => cityLocations[city]);
+            formData.value.Location = null;
           } else {
             locations.value = [];
             formData.value.Location = null;
@@ -528,7 +534,6 @@ export default defineComponent({
         }
       }
     );
-
 
     async function deleteItem() {
       loading.value = true;
@@ -551,6 +556,9 @@ export default defineComponent({
 
     const submit = async () => {
       loading.value = true;
+      formData.value.City = selectedCities.value.toString()
+      formData.value.Location = selectedLocations.value.toString();
+
       await updateRequest(formData.value)
         .then(() => {
           loading.value = false;
