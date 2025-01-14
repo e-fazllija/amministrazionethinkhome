@@ -10,7 +10,7 @@ export class Request {
   Contract: string;
   PropertyType: string;
   Province: string;
-  City: string;
+  Town: string;
   Location:string;
   Price: number;
   Archived: boolean;
@@ -25,8 +25,8 @@ export class Request {
   CreationDate?: Date;
   UpdateDate?: Date;
   Customer?: Customer
-  Town?: string;
-  RealEstateProperties?: RealEstateProperty[]
+  RealEstateProperties?: RealEstateProperty[];
+  StringDate?: string;
 }
 
 export class RequestTabelData {
@@ -37,6 +37,9 @@ export class RequestTabelData {
   CustomerPhone: number;
   Contract: string;
   CreationDate?: Date;
+  Town:string;
+  Locations: string;
+  Price: number;
 }
 
 export class InsertModel {
@@ -78,7 +81,6 @@ const getRequest = (id: number): Promise<Request> => {
   return ApiService.get(`Requests/GetById?id=${id}`, "")
     .then(({ data }) => {
       const result = data as Partial<Request>;
-      result.City = data.Town;
       result.Customer = data.Customer as Customer;
       result.RealEstateProperties = data.RealEstateProperties.$values;
       return result;
