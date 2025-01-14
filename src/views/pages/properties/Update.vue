@@ -75,19 +75,6 @@
         </div>
         <!--end::Input group-->
 
-         <!--begin::Input group-->
-         <div class="row mb-6">
-          <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6 required">Titolo breve / Homepage e lista</label>
-          <!--end::Label-->
-          <!--begin::Col-->
-          <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.ShortTitle" type="text" required />
-          </div>
-          <!--end::Col-->
-        </div>
-        <!--end::Input group-->
-
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
@@ -560,20 +547,7 @@
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.Description" type="text" required/>
-          </div>
-          <!--end::Input-->
-        </div>
-        <!--end::Input group-->
-
-        <!--begin::Input group-->
-        <div class="row mb-6">
-          <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Descrizione Breve / Homepage e lista</label>
-          <!--end::Label-->
-          <!--begin::Input-->
-          <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.ShortDescription" type="text" required/>
+            <textarea class="form-control form-control-lg fw-semobold" v-model="formData.Description" type="text"></textarea>
           </div>
           <!--end::Input-->
         </div>

@@ -409,7 +409,7 @@ export default defineComponent({
       Contract: "",
       PropertyType: "",
       Province: "",
-      City: "",
+      Town: "",
       Price: 0,
       Archived: false,
       Closed: false,
@@ -474,7 +474,7 @@ export default defineComponent({
       loading.value = true;
       firtLoad.value = true;
       formData.value = await getRequest(id);
-      selectedCities.value = formData.value.City.split(",")
+      selectedCities.value = formData.value.Town.split(",")
       selectedLocations.value = formData.value.Location?.split(",")
       inserModel.value = await getToInsert();
       initItems.value.splice(0, formData.value.RealEstateProperties.length, ...formData.value.RealEstateProperties);
@@ -485,7 +485,7 @@ export default defineComponent({
         cities.value = provinceCities[formData.value.Province];
       } else {
         cities.value = [];
-        formData.value.City = null;
+        formData.value.Town = null;
       }
 
       if (selectedCities.value.length > 0) {
@@ -505,10 +505,10 @@ export default defineComponent({
         if (!firtLoad.value) {
           if (newProvince && provinceCities[newProvince]) {
             cities.value = provinceCities[newProvince];
-            formData.value.City = cities.value[0].Id;
+            formData.value.Town = cities.value[0].Id;
           } else {
             cities.value = [];
-            formData.value.City = null;
+            formData.value.Town = null;
           }
         } else {
           firtLoad.value = false;
@@ -518,10 +518,10 @@ export default defineComponent({
 
     watch(
       () => selectedCities.value,
-      (newCity) => {
+      (newTown) => {
         if (!firtLoad.value) {
-          if (Array.isArray(newCity) && newCity.length > 0) {
-            locations.value = newCity
+          if (Array.isArray(newTown) && newTown.length > 0) {
+            locations.value = newTown
               .filter(city => cityLocations[city])
               .flatMap(city => cityLocations[city]);
             formData.value.Location = null;
@@ -556,7 +556,7 @@ export default defineComponent({
 
     const submit = async () => {
       loading.value = true;
-      formData.value.City = selectedCities.value.toString()
+      formData.value.Town = selectedCities.value.toString()
       formData.value.Location = selectedLocations.value?.toString();
 
       await updateRequest(formData.value)

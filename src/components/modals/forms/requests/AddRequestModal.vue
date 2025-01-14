@@ -146,7 +146,7 @@
                         </label>
                     <!--end::Label-->
                     <!--begin::Input-->
-                    <select class="form-select" multiple aria-label="Multiple select example" v-model="formData.City" required>
+                    <select class="form-select" multiple aria-label="Multiple select example" v-model="formData.Town" required>
                         <option v-for="(city, index) in cities" :key="index" :value="city.Id">{{ city.Name }} </option>
                     </select>
                     <!--end::Input-->
@@ -407,7 +407,7 @@
         Contract: "Vendita",
         PropertyType: "",
         Province: "",
-        City:  "",
+        Town:  "",
         Price: 0, 
         Archived: false,
         Closed: false,
@@ -472,19 +472,19 @@
         (newProvince) => {
             if (newProvince && provinceCities[newProvince]) {
             cities.value = provinceCities[newProvince];
-            formData.value.City = null;
+            formData.value.Town = null;
             } else {
             cities.value = [];
-            formData.value.City = null;
+            formData.value.Town = null;
             }
         }
         );
 
       watch(
-        () => formData.value.City,
-        (newCity) => {
-          if (Array.isArray(newCity) && newCity.length > 0) {
-            locations.value = newCity
+        () => formData.value.Town,
+        (newTown) => {
+          if (Array.isArray(newTown) && newTown.length > 0) {
+            locations.value = newTown
               .filter(city => cityLocations[city])
               .flatMap(city => cityLocations[city]);
             formData.value.Location = null;
@@ -502,7 +502,7 @@
         formRef.value.validate(async (valid: boolean) => {
           if (valid) {
             loading.value = true;
-            formData.value.City = formData.value.City.toString()
+            formData.value.Town = formData.value.Town.toString()
             if(formData.value.Location != null && formData.value.Location != undefined){
               formData.value.Location = formData.value.Location.toString()
             }
