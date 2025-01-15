@@ -40,6 +40,7 @@ export class RequestTabelData {
   Town:string;
   Locations: string;
   Price: number;
+  PropertyType: string;
 }
 
 export class InsertModel {
