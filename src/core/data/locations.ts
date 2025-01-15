@@ -1,85 +1,85 @@
 export const cityLocations = {
-  "Zagarolo": [
-    { Id: 'Centro Paese', Name: 'Centro Paese' },
-    { Id: 'Via Prenestina', Name: 'Via Prenestina' },
-    { Id: 'Valle Martella', Name: 'Valle Martella' }
-  ],
-  "Palestrina": [
-    { Id: 'Valvarino', Name: 'Valvarino' },
-    { Id: 'Carchitti', Name: 'Carchitti' }
-  ],
-  "Labico": [
-    { Id: 'Colle Spina', Name: 'Colle Spina' }
-  ],
-  "Rocca Priora": [
-    { Id: 'Colle di Fuori', Name: 'Colle di Fuori' }
-  ],
-  "Monte Compatri": [
-    { Id: 'Laghetto', Name: 'Laghetto' },
-    { Id: 'Colle Mattia', Name: 'Colle Mattia' }
-  ],
   "Cave": [
     { Id: 'Colle Palme', Name: 'Colle Palme' },
     { Id: 'San Bartolomeo', Name: 'San Bartolomeo' }
   ],
   "Guidonia Montecelio": [
-    { Id: 'Setteville', Name: 'Setteville' },
-    { Id: 'Marco Simone', Name: 'Marco Simone' },
-    { Id: 'Villa Nova', Name: 'Villa Nova' },
-    { Id: 'Villalba', Name: 'Villalba' },
+    { Id: 'Albuccione', Name: 'Albuccione' },
+    { Id: 'Casacalda', Name: 'Casacalda' },
+    { Id: 'Castel Arcione', Name: 'Castel Arcione' },
     { Id: 'Colle Verde', Name: 'Colle Verde' },
     { Id: 'La Botte', Name: 'La Botte' },
-    { Id: 'Albuccione', Name: 'Albuccione' },
+    { Id: 'Marco Simone', Name: 'Marco Simone' },
     { Id: 'Montecelio', Name: 'Montecelio' },
-    { Id: 'Casacalda', Name: 'Casacalda' },
-    { Id: 'Castel Arcione', Name: 'Castel Arcione' }
+    { Id: 'Setteville', Name: 'Setteville' },
+    { Id: 'Villa Nova', Name: 'Villa Nova' },
+    { Id: 'Villalba', Name: 'Villalba' }
+  ],
+  "Labico": [
+    { Id: 'Colle Spina', Name: 'Colle Spina' }
+  ],
+  "Monte Compatri": [
+    { Id: 'Colle Mattia', Name: 'Colle Mattia' },
+    { Id: 'Laghetto', Name: 'Laghetto' }
+  ],
+  "Palestrina": [
+    { Id: 'Carchitti', Name: 'Carchitti' },
+    { Id: 'Valvarino', Name: 'Valvarino' }
   ],
   "Roma": [
     { Id: 'Boccea', Name: 'Boccea' },
-    { Id: 'Casalotti', Name: 'Casalotti' },
+    { Id: 'Borghesiana', Name: 'Borghesiana' },
     { Id: 'Casal Palocco', Name: 'Casal Palocco' },
+    { Id: 'Casalotti', Name: 'Casalotti' },
     { Id: 'Castel Fusano', Name: 'Castel Fusano' },
+    { Id: 'Castelverde', Name: 'Castelverde' },
+    { Id: 'Colle Monfortani', Name: 'Colle Monfortani' },
+    { Id: 'Colle Prenestino', Name: 'Colle Prenestino' },
+    { Id: 'Colle del Sole', Name: 'Colle del Sole' },
+    { Id: 'Corcolle', Name: 'Corcolle' },
+    { Id: 'Corcolle Alto', Name: 'Corcolle Alto' },
+    { Id: 'Finocchio', Name: 'Finocchio' },
+    { Id: 'Fonte Laurentina', Name: 'Fonte Laurentina' },
+    { Id: 'Fosso San Giuliano', Name: 'Fosso San Giuliano' },
+    { Id: 'Giardinetti', Name: 'Giardinetti' },
+    { Id: 'Giardini di Corcolle', Name: 'Giardini di Corcolle' },
+    { Id: 'La Pisana', Name: 'La Pisana' },
+    { Id: 'La Storta', Name: 'La Storta' },
     { Id: 'Lunghezza', Name: 'Lunghezza' },
+    { Id: 'Osteria del Curato', Name: 'Osteria del Curato' },
     { Id: 'Ostia', Name: 'Ostia' },
     { Id: 'Ostia Antica', Name: 'Ostia Antica' },
     { Id: 'Ostia Levante', Name: 'Ostia Levante' },
     { Id: 'Ostia Ponente', Name: 'Ostia Ponente' },
+    { Id: 'Pantano Borghese', Name: 'Pantano Borghese' },
     { Id: 'Ponte Galeria', Name: 'Ponte Galeria' },
+    { Id: 'Ponte di Nona', Name: 'Ponte di Nona' },
+    { Id: 'Prato Fiorito', Name: 'Prato Fiorito' },
     { Id: 'Prima Porta', Name: 'Prima Porta' },
+    { Id: 'Rocca Cencia', Name: 'Rocca Cencia' },
+    { Id: 'Romanina', Name: 'Romanina' },
+    { Id: 'Roma Est', Name: 'Roma Est' },
     { Id: 'San Vittorino', Name: 'San Vittorino' },
+    { Id: 'Saxa Rubra', Name: 'Saxa Rubra' },
     { Id: 'Settecamini', Name: 'Settecamini' },
-    { Id: 'La Storta', Name: 'La Storta' },
+    { Id: 'Tor Bella Monaca', Name: 'Tor Bella Monaca' },
+    { Id: 'Tor Vergata', Name: 'Tor Vergata' },
     { Id: 'Tor de Cenci', Name: 'Tor de Cenci' },
     { Id: 'Torre Angela', Name: 'Torre Angela' },
     { Id: 'Torre Gaia', Name: 'Torre Gaia' },
-    { Id: 'Tor Bella Monaca', Name: 'Tor Bella Monaca' },
-    { Id: 'Tor Vergata', Name: 'Tor Vergata' },
-    { Id: 'Vermicino', Name: 'Vermicino' },
-    { Id: 'Finocchio', Name: 'Finocchio' },
-    { Id: 'Borghesiana', Name: 'Borghesiana' },
-    { Id: 'Castelverde', Name: 'Castelverde' },
-    { Id: 'Colle del Sole', Name: 'Colle del Sole' },
-    { Id: 'Ponte di Nona', Name: 'Ponte di Nona' },
-    { Id: 'Pantano Borghese', Name: 'Pantano Borghese' },
     { Id: 'Tuscolana', Name: 'Tuscolana' },
-    { Id: 'Colle Monfortani', Name: 'Colle Monfortani' },
-    { Id: 'Colle Prenestino', Name: 'Colle Prenestino' },
-    { Id: 'Corcolle', Name: 'Corcolle' },
-    { Id: 'Corcolle Alto', Name: 'Corcolle Alto' },
-    { Id: 'Giardini di Corcolle', Name: 'Giardini di Corcolle' },
-    { Id: 'Fonte Laurentina', Name: 'Fonte Laurentina' },
-    { Id: 'Fosso San Giuliano', Name: 'Fosso San Giuliano' },
-    { Id: 'Giardinetti', Name: 'Giardinetti' },
-    { Id: 'Osteria del Curato', Name: 'Osteria del Curato' },
-    { Id: 'La Pisana', Name: 'La Pisana' },
-    { Id: 'Prato Fiorito', Name: 'Prato Fiorito' },
-    { Id: 'Rocca Cencia', Name: 'Rocca Cencia' },
-    { Id: 'Romanina', Name: 'Romanina' },
-    { Id: 'Saxa Rubra', Name: 'Saxa Rubra' },
     { Id: 'Vallerano', Name: 'Vallerano' },
+    { Id: 'Vermicino', Name: 'Vermicino' },
     { Id: 'Villa Verde', Name: 'Villa Verde' },
     { Id: 'Villaggio Breda', Name: 'Villaggio Breda' },
-    { Id: 'Villaggio Prenestino', Name: 'Villaggio Prenestino' },
-    { Id: 'Roma Est', Name: 'Roma Est' }
+    { Id: 'Villaggio Prenestino', Name: 'Villaggio Prenestino' }
+  ],
+  "Rocca Priora": [
+    { Id: 'Colle di Fuori', Name: 'Colle di Fuori' }
+  ],
+  "Zagarolo": [
+    { Id: 'Centro Paese', Name: 'Centro Paese' },
+    { Id: 'Valle Martella', Name: 'Valle Martella' },
+    { Id: 'Via Prenestina', Name: 'Via Prenestina' }
   ]
 };

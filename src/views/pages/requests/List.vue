@@ -3,21 +3,48 @@
     <div class="card-header border-0 pt-6">
       <!--begin::Card title-->
       <div class="card-title">
-        <!--begin::Search-->
-        <div class="d-flex align-items-center position-relative my-1">
-          <KTIcon icon-name="magnifier" icon-class="fs-1 position-absolute ms-6" />
-          <input type="text" v-model="search" @input="searchItems()"
-            class="form-control form-control-solid w-250px ps-15" placeholder="Ricerca" />
-          <select class="form-control form-control-solid w-100px ms-3" v-model="contract">
-            <option value="">Contratto</option>
-            <option value="Vendita">Vendita</option>
-            <option value="Affitto">Affitto</option>
-          </select>
-          <input type="text" v-model="fromPrice" @input="searchPrice()"
-            class="form-control form-control-solid w-250px ps-15 ms-3" placeholder="Prezzo da " />
+        <div>
+<!--begin::Search-->
+<div class="row">
+          <div class="col-md-4 col-lg-4">
+            <input type="text" v-model="search" @input="searchItems()" class="form-control form-control-solid"
+              placeholder="Cerca Immobile" />
+          </div>
+          <div class="col-md-4 col-lg-4">
+            <select class="form-control form-control-solid" v-model="contract">
+              <option value="">Contratto</option>
+              <option value="Vendita">Vendita</option>
+              <option value="Affitto">Affitto</option>
+            </select>
+          </div>
+          <div class="col-md-4 col-lg-4">
+            <select class="form-control form-control-solid" v-model="typologie">
+              <option value="">Tipologia</option>
+              <option value="Appartamenti">Appartamenti</option>
+              <option value="AttivitaCommerciale">Attività Commerciale</option>
+              <option value="Box">Box</option>
+              <option value="CapannoniLocArtigianali">Capannoni, Loc. Artigianali</option>
+              <option value="CasaliRuderi">Casali e Ruderi</option>
+              <option value="CaseSemindipendenti">Case Semindipendenti</option>
+              <option value="LocaliCommerciali">Locali Commerciali</option>
+              <option value="NuoveCostruzioni">Nuove Costruzioni</option>
+              <option value="Terreni">Terreni</option>
+              <option value="VilleCaseIndipendenti">Ville e Case Indipendenti</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-5 col-lg-4">
+            <input type="text" v-model="fromPrice" @input="searchPrice()"
+            class="form-control form-control-solid" placeholder="Prezzo da " />
+          </div>
+          <div class="col-md-4 col-lg-4">
             <input type="text" v-model="toPrice" @input="searchPrice()"
-            class="form-control form-control-solid w-250px ps-15 ms-3" placeholder="Prezzo a " />
-          <select class="form-control form-control-solid w-350px ms-3 custom-multiple-select" v-model="locations" multiple>
+            class="form-control form-control-solid" placeholder="Prezzo a " />
+          </div>
+          <div class="col-md-4 col-lg-4">
+            <select class="form-control form-control-solid custom-multiple-select" v-model="locations"
+            multiple>
             <option value="">Qualsiasi</option>
             <option value="FROSINONE">LAZIO \ FROSINONE (FR)</option>
             <option value="LATINA">LAZIO \ LATINA (LT)</option>
@@ -75,9 +102,12 @@
             <option value="VELLETRI">LAZIO \ ROMA (RM) \ VELLETRI</option>
             <option value="ZAGAROLO">LAZIO \ ROMA (RM) \ ZAGAROLO</option>
             <option value="VITERBO">LAZIO \ VITERBO (VT) \ VITERBO</option>
-          </select>          
-        </div>
+          </select>
+          </div>
+        </div>        
         <!--end::Search-->
+        </div>
+        
       </div>
       <!--begin::Card title-->
       <!--begin::Card toolbar-->
@@ -224,10 +254,9 @@ export default defineComponent({
     ]);
 
     const selectedIds = ref<Array<number>>([]);
-    let selectedId = ref(0);
     let loading = ref<boolean>(true);
     const tableData = ref<Array<RequestTabelData>>([]);
-    const initCustomers = ref([]);
+    const initItems = ref([]);
     async function getItems(filterRequest: string) {
       loading.value = true;
       const results = await getRequests(filterRequest);
@@ -243,13 +272,13 @@ export default defineComponent({
           StringDate: results[key].CreationDate.toString().substring(0, 10).split('-').reverse().join('-'),
           Locations: results[key].Location,
           Town: results[key].Town,
-          // Province: results[key].Province,
-          Price: results[key].Price
+          Price: results[key].Price,
+          PropertyType: results[key].PropertyType
         } as RequestTabelData;
 
         tableData.value.push(item)
       }
-      initCustomers.value.splice(0, tableData.value.length, ...tableData.value);
+      initItems.value.splice(0, tableData.value.length, ...tableData.value);
       loading.value = false;
     };
 
@@ -267,7 +296,7 @@ export default defineComponent({
 
     const search = ref<string>("");
     const searchItems = () => {
-      tableData.value.splice(0, tableData.value.length, ...initCustomers.value);
+      tableData.value.splice(0, tableData.value.length, ...initItems.value);
       if (search.value !== "") {
         let results: Array<RequestTabelData> = [];
         for (let j = 0; j < tableData.value.length; j++) {
@@ -283,7 +312,7 @@ export default defineComponent({
     const fromPrice = ref<number>();
     const toPrice = ref<number>();
     const searchPrice = () => {
-      tableData.value.splice(0, tableData.value.length, ...initCustomers.value);
+      tableData.value.splice(0, tableData.value.length, ...initItems.value);
       let results: Array<RequestTabelData> = [];
       if (fromPrice.value > 0) {
         for (let j = 0; j < tableData.value.length; j++) {
@@ -335,7 +364,24 @@ export default defineComponent({
     watch(
       () => contract.value,
       (newValue) => {
-        tableData.value.splice(0, tableData.value.length, ...initCustomers.value);
+        tableData.value.splice(0, tableData.value.length, ...initItems.value);
+        if (newValue) {
+          let results: Array<RequestTabelData> = [];
+          for (let j = 0; j < tableData.value.length; j++) {
+            if (searchingFunc(tableData.value[j], newValue.toLowerCase())) {
+              results.push(tableData.value[j]);
+            }
+          }
+          tableData.value.splice(0, tableData.value.length, ...results);
+        }
+      }
+    );
+
+    const typologie = ref<string>("");
+    watch(
+      () => typologie.value,
+      (newValue) => {
+        tableData.value.splice(0, tableData.value.length, ...initItems.value);
         if (newValue) {
           let results: Array<RequestTabelData> = [];
           for (let j = 0; j < tableData.value.length; j++) {
@@ -352,7 +398,7 @@ export default defineComponent({
     watch(
       () => locations.value,
       (newValue) => {
-        tableData.value.splice(0, tableData.value.length, ...initCustomers.value);
+        tableData.value.splice(0, tableData.value.length, ...initItems.value);
         if (newValue) {
           let results: Array<RequestTabelData> = [];
             for(let item in newValue){
@@ -397,10 +443,6 @@ export default defineComponent({
       }
     };
 
-    const selectId = (id: number) => {
-      selectedId.value = id;
-    };
-
     const onItemSelect = (selectedItems: Array<number>) => {
       selectedIds.value = selectedItems;
     };
@@ -412,17 +454,16 @@ export default defineComponent({
       searchItems,
       contract,
       locations,
+      typologie,
       fromPrice,
       toPrice,
       searchPrice,
-      selectedId,
       selectedIds,
       deleteFewItems,
       sort,
       onItemSelect,
       getAssetPath,
       deleteItem,
-      selectId,
       getItems,
       loading
     };

@@ -51,6 +51,20 @@ export class RealEstateProperty {
   Files?: FileList;
 }
 
+export class RequestTabelData {
+  Id: number;
+  CreationDate: Date;
+  CommercialSurfaceate: number;
+  AddressLine: string;
+  Price: number;
+  Category: string;
+  Typology: string;
+  StateOfTheProperty?: string;
+  AssignmentEnd?: string;
+  Status: string;
+  Town: string;
+}
+
 export class InsertModel {
   Customers: Customer[];
   Users: User[];
@@ -72,7 +86,6 @@ const getRealEstateProperties = (filterRequest: string) : Promise<Array<RealEsta
   )
     .then(({ data }) => {
       const result = data.Data.$values as Partial<Array<RealEstateProperty>>
-      console.log(result)
       return result;
     })
     .catch(({ response }) => {
@@ -84,7 +97,6 @@ const getRealEstateProperties = (filterRequest: string) : Promise<Array<RealEsta
 const getRealEstateProperty = (id: number) => {
   return ApiService.get(`RealEstateProperty/GetById?id=${id}`, "")
     .then(({ data }) => {
-      console.log(data)
       const photos = data.Photos.$values as Array<RealEstatePropertyPhotos>;
       const result = data as Partial<RealEstateProperty>;
       result.Photos = photos;

@@ -63,7 +63,7 @@ export const provinceCities = {
     { Id: 'Petrella Salto', Name: 'Petrella Salto' },
     { Id: 'Poggio Nativo', Name: 'Poggio Nativo' },
     { Id: 'Rocca Sinibalda', Name: 'Rocca Sinibalda' },
-    { Id: 'Torre in Sabina', Name: 'Torre in Sabina' },
+    { Id: 'Torre in Sabina', Name: 'Torre in Sabina' }
   ],
   "Roma": [
     { Id: 'Agosta', Name: 'Agosta' },
@@ -301,7 +301,8 @@ export const provinceCities = {
       Name: "Roiate",
       Locations: []
     },
-    { Id: 'Roma', Name: 'Roma', Locations: [
+    { Id: 'Roma', Name: 'Roma', 
+      Locations: [
       { Id: "Acilia", Name: "Acilia" },
       { Id: "Acilia-Castel Fusano-Ostia Antica", Name: "Acilia-Castel Fusano-Ostia Antica" },
       { Id: "Borgo Santa Fumia", Name: "Borgo Santa Fumia" },
@@ -365,22 +366,23 @@ export const provinceCities = {
       { Id: "Villa Spada", Name: "Villa Spada" },
       { Id: "Villaggio Breda", Name: "Villaggio Breda" },
       { Id: "Villaggio Prenestino", Name: "Villaggio Prenestino" },
-      { Id: "Vitinia", Name: "Vitinia" }] },
-    { Id: 'Sacrofano', Name: 'Sacrofano' },
-    { Id: 'San Cesareo', Name: 'San Cesareo' },
-    { Id: 'San Polo dei Cavalieri', Name: 'San Polo dei Cavalieri' },
-    { Id: 'San Vito Romano', Name: 'San Vito Romano' },
-    { Id: 'Sant\'Angelo Romano', Name: 'Sant\'Angelo Romano' },
-    { Id: 'Sant\'Oreste', Name: 'Sant\'Oreste' },
-    { Id: 'Santa Marinella', Name: 'Santa Marinella' },
-    { Id: 'Segni', Name: 'Segni' },
-    { Id: 'Subiaco', Name: 'Subiaco' },
-    { Id: 'Tivoli', Name: 'Tivoli' },
-    { Id: 'Tolfa', Name: 'Tolfa' },
-    { Id: 'Valmontone', Name: 'Valmontone' },
-    { Id: 'Velletri', Name: 'Velletri' },
-    { Id: 'Zagarolo', Name: 'Zagarolo' }
-  ],
+      { Id: "Vitinia", Name: "Vitinia" },
+      { Id: 'Sacrofano', Name: 'Sacrofano' },
+      { Id: 'San Cesareo', Name: 'San Cesareo' },
+      { Id: 'San Polo dei Cavalieri', Name: 'San Polo dei Cavalieri' },
+      { Id: 'San Vito Romano', Name: 'San Vito Romano' },
+      { Id: 'Sant\'Angelo Romano', Name: 'Sant\'Angelo Romano' },
+      { Id: 'Sant\'Oreste', Name: 'Sant\'Oreste' },
+      { Id: 'Santa Marinella', Name: 'Santa Marinella' },
+      { Id: 'Segni', Name: 'Segni' },
+      { Id: 'Subiaco', Name: 'Subiaco' },
+      { Id: 'Tivoli', Name: 'Tivoli' },
+      { Id: 'Tolfa', Name: 'Tolfa' },
+      { Id: 'Valmontone', Name: 'Valmontone' },
+      { Id: 'Velletri', Name: 'Velletri' },
+      { Id: 'Zagarolo', Name: 'Zagarolo' }
+    ]
+    }],
   "Sassari": [
     { Id: 'Sassari', Name: 'Sassari' },
     { Id: 'Olbia', Name: 'Olbia' },
@@ -397,5 +399,5 @@ export const provinceCities = {
     { Id: 'Viterbo', Name: 'Viterbo' },
     { Id: 'Bolsena', Name: 'Bolsena' },
     { Id: 'Civita Castellana', Name: 'Civita Castellana' }
-  ],
+  ]
 };
