@@ -14,7 +14,11 @@ export class RealEstatePropertyHomeDetails {
     TotalSale: number;
     TotalRent: number;
     TotalLastMonth: number;
-    TotalCreatedPerMonth: number[];
+    TotalCreatedPerMonth: Object;
+    DistinctByTownSale: Object;
+    DistinctByTownRent: Object;
+    DistinctByTypeSale: Object;
+    DistinctByTypeRent: Object;
     MaxAnnual: number;
     MinAnnual: number;
 }
@@ -27,7 +31,11 @@ export class RequestHomeDetails {
     TotalLastMonth: number;
     TotalSale: number;
     TotalRent: number;
-    TotalCreatedPerMonth: number[];
+    TotalCreatedPerMonth: Object;
+    DistinctByTownSale: Object;
+    DistinctByTownRent: Object;
+    DistinctByTypeSale: Object;
+    DistinctByTypeRent: Object;
     MaxAnnual: number;
     MinAnnual: number;
 }

@@ -32,7 +32,7 @@
     <!--begin::Aside-->
     <div
       class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center order-1 order-lg-2"
-      :style="`background-color: #232323; `"
+      :style="`background-color: #016974; `"
     >
     <!-- background-image: url('${getAssetPath(
         'media/auth/bg10-dark.jpeg'
@@ -54,7 +54,7 @@
         <!--begin::Image-->
         <img
           class="d-none d-lg-block mx-auto w-275px w-md-50 w-xl-500px mb-10 mb-lg-20"
-          :src="getAssetPath('media/logos/TH-6.jpg')"
+          :src="getAssetPath('media/logos/TH-7.jpg')"
           alt=""
         />
         <!--end::Image-->

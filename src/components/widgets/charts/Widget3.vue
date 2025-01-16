@@ -4,15 +4,15 @@
     <!--begin::Header-->
     <div class="card-header border-0 pt-5">
       <h3 class="card-title align-items-start flex-column">
-        <span class="card-label fw-bold fs-3 mb-1">Recent Transactions</span>
+        <span class="card-label fw-bold fs-3 mb-1">{{ title }}</span>
 
         <span class="text-muted fw-semobold fs-7"
-          >More than 1000 new records</span
+          >{{ subTitle }}</span
         >
       </h3>
 
       <!--begin::Toolbar-->
-      <div class="card-toolbar" data-kt-buttons="true">
+      <!-- <div class="card-toolbar" data-kt-buttons="true">
         <a
           class="btn btn-sm btn-color-muted btn-active btn-active-primary active px-4 me-1"
           id="kt_charts_widget_3_year_btn"
@@ -30,7 +30,7 @@
           id="kt_charts_widget_3_week_btn"
           >Week</a
         >
-      </div>
+      </div> -->
       <!--end::Toolbar-->
     </div>
     <!--end::Header-->
@@ -59,20 +59,25 @@ import { getCSSVariableValue } from "@/assets/ts/_utils";
 import type VueApexCharts from "vue3-apexcharts";
 
 export default defineComponent({
-  name: "widget-1",
+  name: "widget-3",
   props: {
     widgetClasses: String,
+    datas: Object,
+    title: String,
+    subTitle: String,
   },
   components: {},
-  setup() {
+  setup(props) {
     const chartRef = ref<typeof VueApexCharts | null>(null);
     let chart: ApexOptions = {};
     const store = useThemeStore();
+    const keys = Object.keys(props.datas).slice(1);
+    const values = Object.values(props.datas).slice(1);
 
     const series = [
       {
-        name: "Net Profit",
-        data: [30, 40, 40, 90, 90, 70, 70],
+        name: "Inserimenti",
+        data: values,
       },
     ];
 
@@ -98,15 +103,7 @@ export default defineComponent({
       refreshChart();
     });
 
-    return {
-      chart,
-      series,
-      chartRef,
-    };
-  },
-});
-
-const chartOptions = (): ApexOptions => {
+    const chartOptions = (): ApexOptions => {
   const labelColor = getCSSVariableValue("--bs-gray-500");
   const borderColor = getCSSVariableValue("--bs-gray-200");
   const baseColor = getCSSVariableValue("--bs-info");
@@ -139,7 +136,7 @@ const chartOptions = (): ApexOptions => {
       colors: [baseColor],
     },
     xaxis: {
-      categories: ["Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
+      categories: keys,
       axisBorder: {
         show: false,
       },
@@ -199,7 +196,7 @@ const chartOptions = (): ApexOptions => {
       },
       y: {
         formatter: function (val) {
-          return "$" + val + " thousands";
+          return val.toString();
         },
       },
     },
@@ -219,4 +216,14 @@ const chartOptions = (): ApexOptions => {
     },
   };
 };
+
+    return {
+      chart,
+      series,
+      chartRef,
+    };
+  },
+});
+
+
 </script>

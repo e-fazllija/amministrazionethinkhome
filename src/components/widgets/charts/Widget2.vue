@@ -73,11 +73,11 @@ export default defineComponent({
 
     const series = [
       {
-        name: "Net Profit",
+        name: "Vendita",
         data: [44, 55, 57, 56, 61, 58],
       },
       {
-        name: "Revenue",
+        name: "Affitto",
         data: [76, 85, 101, 98, 87, 105],
       },
     ];
