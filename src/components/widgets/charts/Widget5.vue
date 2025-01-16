@@ -59,7 +59,7 @@ import { getCSSVariableValue } from "@/assets/ts/_utils";
 import type VueApexCharts from "vue3-apexcharts";
 
 export default defineComponent({
-  name: "widget-1",
+  name: "widget-5",
   props: {
     widgetClasses: String,
   },
