@@ -157,7 +157,7 @@
           <div class="fw-bold me-5">
             <span class="me-2">{{ selectedIds.length }}</span>Seleziona
           </div>
-          <button type="button" class="btn btn-danger" @click="deleteFewItems()">
+          <button v-if="user.Role === 'Admin' || user.Role == 'Agency'" type="button" class="btn btn-danger" @click="deleteFewItems()">
             Cancella
           </button>
         </div>
@@ -167,7 +167,7 @@
           <div class="fw-bold me-5">
             <span class="me-2" data-kt-customer-table-select="selected_count"></span>Seleziona
           </div>
-          <button type="button" class="btn btn-danger" data-kt-customer-table-select="delete_selected">
+          <button v-if="user.Role === 'Admin' || user.Role == 'Agency'" type="button" class="btn btn-danger" data-kt-customer-table-select="delete_selected">
             Cancella Selezionate
           </button>
         </div>
@@ -199,7 +199,7 @@
         <template v-slot:actions="{ row: item }">
           <router-link :to="{ name: 'property', params: { id: item.Id } }"
             class="btn btn-light-info me-1">Dettagli</router-link>
-          <button v-if="user.Id === item.AgentId || user.Role === 'Admin' || item.Agent.AgencyId === user.Id"
+          <button v-if="user.Id === item.AgentId || user.Role === 'Admin' || user.Role == 'Agency'"
             @click="deleteItem(item.Id)" class="btn btn-light-danger me-1">Elimina</button>
         </template>
       </Datatable>
@@ -297,7 +297,6 @@ export default defineComponent({
       }
       initItems.value.splice(0, tableData.value.length, ...tableData.value);
       loading.value = false;
-      console.log(initItems.value)
     };
 
     onMounted(async () => {
