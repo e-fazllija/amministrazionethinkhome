@@ -138,7 +138,7 @@
           <div class="fw-bold me-5">
             <span class="me-2">{{ selectedIds.length }}</span>Seleziona
           </div>
-          <button type="button" class="btn btn-danger" @click="deleteFewItems()">
+          <button v-if="user.Role === 'Admin' || user.Role == 'Agency'" type="button" class="btn btn-danger" @click="deleteFewItems()">
             Cancella Selezionati
           </button>
         </div>
@@ -148,7 +148,7 @@
           <div class="fw-bold me-5">
             <span class="me-2" data-kt-request-table-select="selected_count"></span>Seleziona
           </div>
-          <button type="button" class="btn btn-danger" data-kt-request-table-select="delete_selected">
+          <button v-if="user.Role === 'Admin' || user.Role == 'Agency'" type="button" class="btn btn-danger" data-kt-request-table-select="delete_selected">
             Cancella Selezionati
           </button>
         </div>
@@ -205,6 +205,7 @@ import arraySort from "array-sort";
 import { MenuComponent } from "@/assets/ts/components";
 import { getRequests, Request, deleteRequest, RequestTabelData } from "@/core/data/requests";
 import Swal from "sweetalert2";
+import { useAuthStore } from "@/stores/auth";
 
 export default defineComponent({
   name: "requests",
@@ -214,6 +215,7 @@ export default defineComponent({
     AddRequestModal
   },
   setup() {
+    const authStore = useAuthStore();
     const tableHeader = ref([
       {
         columnName: "Cliente",
@@ -255,6 +257,7 @@ export default defineComponent({
 
     const selectedIds = ref<Array<number>>([]);
     let loading = ref<boolean>(true);
+      const user = authStore.user;
     const tableData = ref<Array<RequestTabelData>>([]);
     const initItems = ref([]);
     async function getItems(filterRequest: string) {
@@ -465,7 +468,8 @@ export default defineComponent({
       getAssetPath,
       deleteItem,
       getItems,
-      loading
+      loading,
+      user
     };
   },
 });
