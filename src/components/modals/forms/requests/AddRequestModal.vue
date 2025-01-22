@@ -224,6 +224,22 @@
                 <div class="fv-row mb-7">
                   <!--begin::Label-->
                   <label class="fs-6 fw-semobold mb-2">
+                    <span>Consulenza mutuo richiesta</span>
+                  </label>
+                  <!--end::Label-->
+  
+                    <!--begin::Input-->
+                    <div class="form-check form-switch form-check-custom form-check-solid">
+                        <input class="form-check-input" type="checkbox" value="" v-model="formData.MortgageAdviceRequired" />
+                    </div>
+                    <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="fv-row mb-7">
+                  <!--begin::Label-->
+                  <label class="fs-6 fw-semobold mb-2">
                     <span>Numero Locali</span>
                   </label>
                   <!--end::Label-->
@@ -418,7 +434,8 @@
         Heating: "",
         ParkingSpaces: 0, 
         Notes: "",
-        Location:""
+        Location:"",
+        MortgageAdviceRequired: false
       });
 
         const inserModel = ref<InsertModel>({

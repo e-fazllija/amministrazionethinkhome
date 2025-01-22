@@ -27,6 +27,7 @@ export class Request {
   Customer?: Customer
   RealEstateProperties?: RealEstateProperty[];
   StringDate?: string;
+  MortgageAdviceRequired: boolean;
 }
 
 export class RequestTabelData {

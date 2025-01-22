@@ -21,6 +21,8 @@ export class Customer{
   UpdateDate?: Date;
   Token?: string;
   Code: string;
+  AcquisitionDone: boolean;
+  OngoingAssignment: boolean;
   }
 
 const getCustomers = (filterRequest: string) : Promise<Array<Customer>> => {

@@ -642,7 +642,11 @@
                           </label>
                           <!--end::Label-->
                           <!--begin::Input-->
-                          <select class="form-control" v-model="formData.TypeOfProperty">
+                          <el-form-item prop="TypeOfProperty">
+                                    <el-input v-model="formData.TypeOfProperty" type="text" />
+                                  </el-form-item>
+
+                          <!-- <select class="form-control" v-model="formData.TypeOfProperty">
                             <option value="">Seleziona il tipo di proprietà</option>
                             <option value="Intera Proprietà">Intera Proprietà</option>
                             <option value="Nuda Proprietà">Nuda Proprietà</option>
@@ -650,7 +654,7 @@
                             <option value="Usufrutto">Usufrutto</option>
                             <option value="Multiproprietà">Multiproprietà</option>
                             <option value="Diritto di Superficie">Diritto di Superficie</option>
-                            </select>
+                            </select> -->
                           <!--end::Input-->
                         </div>
                         <!--end::Input group-->

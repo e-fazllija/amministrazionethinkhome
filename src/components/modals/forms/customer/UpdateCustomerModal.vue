@@ -196,15 +196,44 @@
                 <!--end::Input group-->
 
                 <!--begin::Input group-->
+                <div class="row mb-6">
+                  <!--begin::Label-->
+                  <label class="col-lg-4 col-form-label fw-semobold fs-6">Acquisizione svolta</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <div class="col-lg-8 fv-row">
+                    <div class="form-check form-switch form-check-custom form-check-solid">
+                      <input class="form-check-input" type="checkbox" value="" v-model="formData.AcquisitionDone" />
+                    </div>
+                  </div>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+                
+                
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                  <!--begin::Label-->
+                  <label class="col-lg-4 col-form-label fw-semobold fs-6">Incarico in corso</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <div class="col-lg-8 fv-row">
+                    <div class="form-check form-switch form-check-custom form-check-solid">
+                      <input class="form-check-input" type="checkbox" value="" v-model="formData.OngoingAssignment" />
+                    </div>
+                  </div>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
                 <div class="fv-row mb-15">
                   <!--begin::Label-->
                   <label class="fs-6 fw-semobold mb-2">Note</label>
                   <!--end::Label-->
 
                   <!--begin::Input-->
-                  <el-form-item prop="description">
-                    <el-input v-model="formData.Description" type="text" />
-                  </el-form-item>
+                  <textarea class="form-control" v-model="formData.Description"></textarea>
                   <!--end::Input-->
                 </div>
                 <!--end::Input group-->
@@ -352,7 +381,9 @@
         AdressLine: "",
         Town: "",
         State: "",
-        Code: "0"
+        Code: "0",
+        AcquisitionDone: false,
+        OngoingAssignment: false
       });
       
       watch(() => props.Id, async (first, second) => {
