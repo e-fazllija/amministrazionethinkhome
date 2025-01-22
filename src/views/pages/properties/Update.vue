@@ -11,11 +11,11 @@
     </div>
     <!--begin::Card header-->
   </div>
-  <div  v-if="loading" class="d-flex justify-content-center">
-  <div class="spinner-border" role="status">
-    <span class="sr-only">Loading...</span>
+  <div v-if="loading" class="d-flex justify-content-center">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
   </div>
-</div>
   <!--begin::Content-->
   <div v-else class="collapse show">
     <!--begin::Form-->
@@ -33,7 +33,8 @@
             <div class="d-flex flex-column mb-7 fv-row">
               <!--begin::Input-->
               <select class="form-control" v-model="formData.CustomerId" required>
-                <option v-for="(user, index) in inserModel.Customers" :key="index" :value="user.Id">{{ user.Name }} {{ user.LastName }}</option>
+                <option v-for="(user, index) in inserModel.Customers" :key="index" :value="user.Id">{{ user.Name }} {{
+                  user.LastName }}</option>
               </select>
               <!--end::Input-->
             </div>
@@ -51,25 +52,26 @@
           <div class="col-lg-8 fv-row">
             <!--begin::Input group-->
             <div class="d-flex flex-column mb-7 fv-row">
-            <!--begin::Input-->
-            <select class="form-control" v-model="formData.AgentId" required>
-              <option v-for="(user, index) in inserModel.Users" :key="index" :value="user.Id">{{ user.Name }} {{ user.LastName }}</option>
-            </select>
-            <!--end::Input-->
-          </div>
-          <!--end::Input group-->
+              <!--begin::Input-->
+              <select class="form-control" v-model="formData.AgentId" required>
+                <option v-for="(user, index) in inserModel.Users" :key="index" :value="user.Id">{{ user.Name }} {{
+                  user.LastName }}</option>
+              </select>
+              <!--end::Input-->
+            </div>
+            <!--end::Input group-->
           </div>
         </div>
         <!--end::Input group-->
 
-         <!--begin::Input group-->
-         <div class="row mb-6">
+        <!--begin::Input group-->
+        <div class="row mb-6">
           <!--begin::Label-->
           <label class="col-lg-4 col-form-label required fw-semobold fs-6 required">Titolo</label>
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.Title" type="text" required/>
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.Title" type="text" required />
           </div>
           <!--end::Col-->
         </div>
@@ -120,7 +122,8 @@
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
-            <select as="select" name="Status" class="form-select form-select-lg fw-semobold" v-model="formData.Status" required>
+            <select as="select" name="Status" class="form-select form-select-lg fw-semobold" v-model="formData.Status"
+              required>
               <option value="">Scegli tra vendita e affitto</option>
               <option value="Vendita">Vendita</option>
               <option value="Affitto">Affitto</option>
@@ -137,7 +140,8 @@
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.AddressLine" type="text" required/>
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.AddressLine" type="text"
+              required />
           </div>
           <!--end::Col-->
         </div>
@@ -150,7 +154,7 @@
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.Town" type="text" required/>
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.Town" type="text" required />
           </div>
           <!--end::Input-->
         </div>
@@ -176,7 +180,7 @@
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.PostCode" type="text" required/>
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.PostCode" type="text" required />
           </div>
           <!--end::Input-->
         </div>
@@ -190,7 +194,7 @@
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
             <input class="form-control form-control-lg fw-semobold" v-model="formData.CommercialSurfaceate"
-              type="number" required/>
+              type="number" required />
           </div>
           <!--end::Input-->
         </div>
@@ -233,8 +237,8 @@
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.TotalBuildingfloors"
-              type="number" required/>
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.TotalBuildingfloors" type="number"
+              required />
           </div>
           <!--end::Input-->
         </div>
@@ -443,7 +447,8 @@
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
-            <select as="select" name="TypeOfProperty" class="form-select form-select-lg fw-semobold"
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.TypeOfProperty" type="text" />
+            <!-- <select as="select" name="TypeOfProperty" class="form-select form-select-lg fw-semobold"
               v-model="formData.TypeOfProperty">
               <option value="">Seleziona il tipo di proprietà</option>
               <option value="Intera Proprietà">Intera Proprietà</option>
@@ -452,7 +457,7 @@
               <option value="Usufrutto">Usufrutto</option>
               <option value="Multiproprietà">Multiproprietà</option>
               <option value="Diritto di Superficie">Diritto di Superficie</option>
-            </select>
+            </select> -->
             <!--end::Input-->
           </div>
           <!--end::Col-->
@@ -501,7 +506,7 @@
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.Price" type="number" required/>
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.Price" type="number" required />
           </div>
           <!--end::Input-->
         </div>
@@ -547,7 +552,8 @@
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
-            <textarea class="form-control form-control-lg fw-semobold" v-model="formData.Description" type="text"></textarea>
+            <textarea class="form-control form-control-lg fw-semobold" v-model="formData.Description"
+              type="text"></textarea>
           </div>
           <!--end::Input-->
         </div>
@@ -624,14 +630,15 @@
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.AssignmentEnd" type="date" placeholder="yyyy-MM-dd" required/>
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.AssignmentEnd" type="date"
+              placeholder="yyyy-MM-dd" required />
           </div>
           <!--end::Input-->
         </div>
         <!--end::Input group-->
 
-         <!--begin::Input group-->
-         <div class="row mb-6">
+        <!--begin::Input group-->
+        <div class="row mb-6">
           <!--begin::Label-->
           <label class="col-lg-4 col-form-label required fw-semobold fs-6">Carica immagini</label>
           <!--end::Label-->
@@ -645,10 +652,30 @@
 
         <div class="py-5">
           <div class="rounded border p-10">
-            <div class="row">
-              <div v-for="(photo, index) in formData.Photos" :key="index" class="col-lg-4">
+            <div class="row justify-content-center">
+              <div class="col-lg-4">
+                <draggable :list="formData.Photos" :disabled="false" item-key="name" class="list-group"
+                  ghost-class="ghost" @start="true" @end="false" :move="checkMove" :animation="300">
+                  <template #item="{ element }">
+                    <div class="card overlay">
+                      <div class="card-body p-0">
+                        <div class="overlay-wrapper">
+                          <img :src="element.Url" alt="" class="w-100 card-rounded">
+                        </div>
+                        <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
+                          <button v-if="!element.Highlighted" type="button" class="btn btn-primary btn-shadow"
+                            @click="setPhotoHighlighted(element.Id)">Imposta immagine principale</button>
+                          <button class="btn btn-light-danger btn-shadow ms-2" type="button"
+                            @click="deleteFile(element.Id)">Elimina</button>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </draggable>
+              </div>
+              <!-- <div v-for="(photo, index) in formData.Photos" :key="index" class="col-lg-4"> -->
                 <!--begin::Card-->
-                <div class="card  overlay">
+                <!-- <div class="card  overlay">
                   <div class="card-body p-0">
                     <div class="overlay-wrapper">
                       <img :src="photo.Url" alt="" class="w-100 card-rounded">
@@ -660,9 +687,9 @@
                         @click="deleteFile(photo.Id)">Elimina</button>
                     </div>
                   </div>
-                </div>
+                </div> -->
                 <!--end::Card-->
-              </div>
+              <!-- </div> -->
 
             </div>
           </div>
@@ -670,7 +697,8 @@
 
       </div>
       <!--begin::Actions-->
-      <div v-if="user.Id === formData.AgentId || user.Role === 'Admin' || formData.Agent.AgencyId === user.Id" class="card-footer d-flex justify-content-end py-6 px-9">
+      <div v-if="user.Id === formData.AgentId || user.Role === 'Admin' || formData.Agent.AgencyId === user.Id"
+        class="card-footer d-flex justify-content-end py-6 px-9">
         <button type="button" @click="deleteItem()" class="btn btn-danger btn-active-light-primary me-2">
           Elimina
         </button>
@@ -705,13 +733,15 @@ import { updateRealEstateProperty,
   deleteRealEstateProperty, 
   uploadFiles, 
   InsertModel,
-  getToInsert } from "@/core/data/properties";
+  getToInsert,
+  updatePhotosOrder } from "@/core/data/properties";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
+import draggable from 'vuedraggable';
 
 export default defineComponent({
   name: "update",
-  components: {},
+  components: {draggable},
   setup() {
     const store = useAuthStore();
     const user = store.user;
@@ -854,6 +884,7 @@ export default defineComponent({
       if(inserModel.value.Users.length > 0){
         formData.value.AgentId = formData.value.AgentId;
       }
+      console.log("mounted: " + JSON.stringify(formData.value.Photos))
       loading.value = false;
     })
 
@@ -1020,6 +1051,7 @@ export default defineComponent({
       formRef.value.validate(async (valid: boolean) => {
         if (valid) {
           loading.value = true;
+          await updatePhotosOrder(formData.value.Photos)
           await updateRealEstateProperty(formData.value)
             .then(() => {
               loading.value = false;
@@ -1051,6 +1083,7 @@ export default defineComponent({
                 },
               });
             });
+          loading.value = false;
         } else {
           Swal.fire({
             text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
@@ -1067,6 +1100,11 @@ export default defineComponent({
       });
     };
 
+    async function checkMove(log){
+      // await updatePhotosOrder(formData.value.Photos)
+      console.log(formData.value.Photos)
+    }
+
     return {
       formData,
       rules,
@@ -1082,7 +1120,8 @@ export default defineComponent({
       deleteFile,
       deleteItem,
       inserModel,
-      user
+      user,
+      checkMove
     };
   },
 });

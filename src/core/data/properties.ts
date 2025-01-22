@@ -196,6 +196,19 @@ const updateRealEstateProperty = async (formData: any) => {
     });
 };
 
+const updatePhotosOrder = async (formData: any) => {
+  const values = formData as Array<RealEstatePropertyPhotos>;
+  return await ApiService.post("RealEstateProperty/UpdatePhotosOrder", values)
+    .then(({ data }) => {
+      const result = data;
+      return result;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
+
 const deleteRealEstateProperty = async (id: Number) => {
   return await ApiService.delete(`RealEstateProperty/Delete?id=${id}`)
     .then(({ data }) => {
@@ -228,4 +241,5 @@ export {
   getToInsert, 
   setRealEstatePropertyPhotoHighlighted, 
   deletePhoto,
-  uploadFiles }
+  uploadFiles,
+  updatePhotosOrder }

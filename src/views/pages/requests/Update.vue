@@ -192,6 +192,21 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Consulenza mutuo richiesta</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <div class="form-check form-switch form-check-custom form-check-solid">
+              <input class="form-check-input" type="checkbox" v-model="formData.MortgageAdviceRequired" />
+            </div>
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
           <label class="col-lg-4 col-form-label fw-semobold fs-6">Numero Locali</label>
           <!--end::Label-->
           <!--begin::Col-->
@@ -420,7 +435,8 @@ export default defineComponent({
       Heating: "",
       ParkingSpaces: 0,
       Notes: "",
-      Location:""
+      Location:"",
+      MortgageAdviceRequired: false
     });
     const inserModel = ref<InsertModel>({
       Customers: [],
