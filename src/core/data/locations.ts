@@ -27,12 +27,14 @@ export const cityLocations = {
     { Id: 'Valvarino', Name: 'Valvarino' }
   ],
   "Roma": [
+    { Id: 'Acilia', Name: 'Acilia' },
     { Id: 'Boccea', Name: 'Boccea' },
     { Id: 'Borghesiana', Name: 'Borghesiana' },
     { Id: 'Casal Palocco', Name: 'Casal Palocco' },
     { Id: 'Casalotti', Name: 'Casalotti' },
     { Id: 'Castel Fusano', Name: 'Castel Fusano' },
     { Id: 'Castelverde', Name: 'Castelverde' },
+    { Id: 'Centocelle', Name: 'Centocelle' },
     { Id: 'Cinecittà', Name: 'Cinecittà' },
     { Id: 'Colle Monfortani', Name: 'Colle Monfortani' },
     { Id: 'Colle Prenestino', Name: 'Colle Prenestino' },
