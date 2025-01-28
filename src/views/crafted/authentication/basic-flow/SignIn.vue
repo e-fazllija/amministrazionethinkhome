@@ -164,7 +164,6 @@ export default defineComponent({
       const error = store.errors;
 
       if (!error) {
-        console.log(store.user);
         Swal.fire({
           text: "Accesso effettuato!",
           icon: "success",

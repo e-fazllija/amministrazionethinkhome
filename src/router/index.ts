@@ -107,6 +107,15 @@ const routes: Array<RouteRecordRaw> = [
           breadcrumbs: ["Richieste"],
         },
       },
+      {
+        path: "calendar",
+        name: "calendar",
+        component: () => import("@/views/pages/calendar/Calendar.vue"),
+        meta: {
+          pageTitle: "Calendario",
+          breadcrumbs: ["Calendario"],
+        },
+      },
     ],
   },
   {
