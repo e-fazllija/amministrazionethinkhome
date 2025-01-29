@@ -115,6 +115,7 @@ const events: Array<EventInput> = [
 export class Event {
   Id?: number;
   ApplicationUserId: string;
+  ApplicationUser?: User;
   NomeEvento: string;
   Type: string;
   CustomerId: number;
@@ -145,7 +146,7 @@ const getEvents = (filterRequest: string) : Promise<Array<Event>> => {
    ""
  )
    .then(({ data }) => {
-     const result = data.Data.$values as Partial<Array<Event>>
+     const result = data.Data as Partial<Array<Event>>
      return result;
    })
    .catch(({ response }) => {
@@ -194,8 +195,8 @@ const getSearchItems = (agencyId: string) : Promise<SearchModel> => {
    ""
  )
    .then(({ data }) => {
-      const agencies = data.Agencies.$values as Array<User>;
-      const agents = data.Agents.$values as Array<User>;
+      const agencies = data.Agencies as Array<User>;
+      const agents = data.Agents as Array<User>;
       const result = <SearchModel>({
         Agencies: agencies,
         Agents: agents
@@ -232,6 +233,17 @@ const updateEvent = async (formData:Event) => {
     });
 };
 
+const deleteEvent = async (id:number) => {
+  return ApiService.delete(`Calendar/Delete?id=${id}`)
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
+
 export default events;
 
-export { todayDate, YM, YESTERDAY, TODAY, TOMORROW, getEvents, getEvent, getToInsert, createEvent, updateEvent, getSearchItems };
+export { todayDate, YM, YESTERDAY, TODAY, TOMORROW, getEvents, getEvent, getToInsert, createEvent, updateEvent, getSearchItems, deleteEvent };

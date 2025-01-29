@@ -36,8 +36,8 @@
   </div>
   <!--end::Card-->
 
-  <NewEventModal :SelectedDateStart="selectedDateStart" :SelectedDateEnd="selectedDateEnd" @formAddSubmitted="getItems('')"></NewEventModal>
-  <UpdateEventModal :Id="selectedId" @formUpdateSubmitted="getItems('')"></UpdateEventModal>
+  <NewEventModal :SelectedDateStart="selectedDateStart" :SelectedDateEnd="selectedDateEnd" @formAddSubmitted="getItems(agentId)"></NewEventModal>
+  <UpdateEventModal :Id="selectedId" @formUpdateSubmitted="getItems(agentId)"></UpdateEventModal>
 </template>
 
 <script lang="ts">
@@ -77,8 +77,8 @@ export default defineComponent({
     const user = store.user;
     
     const newEvent = (start: string, end: string) => {
-      selectedDateStart.value = start || todayDate.format("YYYY-MM-DD");
-      selectedDateEnd.value = end || todayDate.format("YYYY-MM-DD");
+      selectedDateStart.value = start != null ? start : todayDate.format("YYYY-MM-DD").toString();
+      selectedDateEnd.value = end != null ? end : selectedDateStart.value;
       const modal = new Modal(
         document.getElementById("kt_modal_add_event") as Element
       );
@@ -94,20 +94,24 @@ export default defineComponent({
     };
 
     const tableData = ref<Array<EventInput>>([]);
-
+    
     async function getItems(filterRequest: string) {
       loading.value = true;
       tableData.value.splice(0);
       const results = await getEvents(filterRequest);
-
+      const addName = store.user.Role != "Agent" && agentId.value == "" ? true : false;
       for (const key in results) {
+        const colors = ["#FF5733", "#D2691E", "#3357FF", "#FF33A1", "#A133FF", "#33FFF5", "#008B8B"];
+        const randomColor = colors[Number(key) % colors.length];
+
         const item = {
           id: results[key].Id.toString(),
-          title: results[key].NomeEvento,
+          title: addName ? `${results[key].ApplicationUser.Name} ${results[key].ApplicationUser.LastName}: ${results[key].NomeEvento}` : results[key].NomeEvento,
           start: results[key].DataInizioEvento,
           end: results[key].DataFineEvento,
           description: results[key].DescrizioneEvento,
-          className: "fc-event-success"
+          className: "fc-event-meeting",
+          color: randomColor
         } as EventInput;
 
         tableData.value.push(item)
@@ -139,7 +143,7 @@ export default defineComponent({
     })
 
     onMounted(async () => {
-      await getItems("");
+      await getItems(store.user.Role == "Admin" ? "" : store.user.Id);
 
     });
 
@@ -181,24 +185,22 @@ export default defineComponent({
       dayMaxEvents: true, // allow "more" link when too many events
       events: tableData.value,
       dateClick: (arg) => {
-        console.log(arg)
         newEvent(arg.dateStr, null);
       },
       eventClick: (arg) => {
         updateEvent(parseInt(arg.event.id));
       },
       select: (arg) => {
-    // Passa le date di inizio e fine al metodo newEvent
-    newEvent(arg.start, arg.end);
-  },
+        newEvent(arg.start, arg.end);
+      },
       locale: 'it', // Imposta la lingua su italiano
-  locales: [itLocale], // Aggiungi la localizzazione italiana
-  buttonText: {
-    today: 'Oggi',
-    month: 'Mese',
-    week: 'Settimana',
-    day: 'Giorno',
-  },
+      locales: [itLocale], // Aggiungi la localizzazione italiana
+      buttonText: {
+        today: 'Oggi',
+        month: 'Mese',
+        week: 'Settimana',
+        day: 'Giorno',
+      },
     };
 
     return {

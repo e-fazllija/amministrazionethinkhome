@@ -1,30 +1,18 @@
 <template>
-  <div
-    class="modal fade show"
-    id="kt_modal_add_event"
-    aria-modal="true"
-    role="dialog"
-    ref="newTargetModalRef"
-  >
+  <div class="modal fade show" id="kt_modal_add_event" role="dialog" ref="newTargetModalRef">
     <div class="modal-dialog modal-dialog-centered mw-650px">
       <div class="modal-content">
-        <el-form
-          class="form fv-plugins-bootstrap5 fv-plugins-framework"
-          id="kt_modal_add_event_form"
-          @submit.prevent="submit()"
-          :model="targetData"
-          :rules="rules"
-          ref="formRef"
-        >
+        <el-form class="form fv-plugins-bootstrap5 fv-plugins-framework" id="kt_modal_add_event_form"
+          @submit.prevent="submit()" :model="targetData" :rules="rules" ref="formRef">
           <div class="modal-header">
             <h2 class="fw-bold">Aggiungi evento</h2>
-            <div
+            <!-- <div
               class="btn btn-icon btn-sm btn-active-icon-primary"
               id="kt_modal_add_event_close"
               data-bs-dismiss="modal"
             >
               <KTIcon icon-name="cross" icon-class="fs-1" />
-            </div>
+            </div> -->
           </div>
           <!--end::Modal header-->
           <!--begin::Modal body-->
@@ -36,11 +24,7 @@
               <!--end::Label-->
               <!--begin::Input-->
               <el-form-item prop="NomeEvento">
-                <el-input
-                  v-model="targetData.NomeEvento"
-                  type="text"
-                  name="NomeEvento"
-                />
+                <el-input v-model="targetData.NomeEvento" type="text" name="NomeEvento" />
               </el-form-item>
               <!--end::Input-->
               <div class="fv-plugins-message-container invalid-feedback"></div>
@@ -52,12 +36,7 @@
               <label class="fs-6 fw-semobold mb-2">Descrizione evento</label>
               <!--end::Label-->
               <!--begin::Input-->
-              <el-input
-                v-model="targetData.DescrizioneEvento"
-                type="text"
-                placeholder=""
-                name="DescrizioneEvento"
-              />
+              <el-input v-model="targetData.DescrizioneEvento" type="text" placeholder="" name="DescrizioneEvento" />
               <!--end::Input-->
             </div>
             <!--end::Input group-->
@@ -67,12 +46,7 @@
               <label class="fs-6 fw-semobold mb-2">Luogo evento</label>
               <!--end::Label-->
               <!--begin::Input-->
-              <el-input
-                v-model="targetData.LuogoEvento"
-                type="text"
-                placeholder=""
-                name="LuogoEvento"
-              />
+              <el-input v-model="targetData.LuogoEvento" type="text" placeholder="" name="LuogoEvento" />
               <!--end::Input-->
             </div>
             <!--end::Input group-->
@@ -82,58 +56,34 @@
               <label class="fs-6 fw-semobold mb-2">Immobile</label>
               <!--end::Label-->
               <!--begin::Input-->
-              <el-select
-              v-model="targetData.RealEstatePropertyId"
-              placeholder="Seleziona l'immobile"
-              size="large"
-            >
-              <el-option
-                v-for="item in inserModel.RealEstateProperties"
-                :key="item.Id"
-                :label="item.Town + ', ' + item.AddressLine"
-                :value="item.Id"
-              />
-            </el-select>
-          </div>
-              <!--end::Input-->
-              <!--begin::Input group-->
+              <el-select v-model="targetData.RealEstatePropertyId" placeholder="Seleziona l'immobile" size="large">
+                <el-option v-for="item in inserModel.RealEstateProperties" :key="item.Id"
+                  :label="item.Town + ', ' + item.AddressLine" :value="item.Id" />
+              </el-select>
+            </div>
+            <!--end::Input-->
+            <!--begin::Input group-->
             <div class="fv-row mb-9">
               <!--begin::Label-->
               <label class="fs-6 fw-semobold mb-2">Richiesta</label>
               <!--end::Label-->
               <!--begin::Input-->
-              <el-select
-              v-model="targetData.RequestId"
-              placeholder="Seleziona la richiesta"
-              size="large"
-            >
-              <el-option
-                v-for="item in inserModel.Requests"
-                :key="item.Id"
-                :label="item.Customer.Name + ' ' + item.Customer.LastName"
-                :value="item.Id"
-              />
-            </el-select>
-          </div>
-              <!--end::Input-->
-              <!--begin::Input group-->
+              <el-select v-model="targetData.RequestId" placeholder="Seleziona la richiesta" size="large">
+                <el-option v-for="item in inserModel.Requests" :key="item.Id"
+                  :label="item.Customer.Name + ' ' + item.Customer.LastName" :value="item.Id" />
+              </el-select>
+            </div>
+            <!--end::Input-->
+            <!--begin::Input group-->
             <div class="fv-row mb-9">
               <!--begin::Label-->
               <label class="fs-6 fw-semobold mb-2">Cliente</label>
               <!--end::Label-->
               <!--begin::Input-->
-              <el-select
-              v-model="targetData.CustomerId"
-              placeholder="Seleziona il cliente"
-              size="large"
-            >
-              <el-option
-                v-for="item in inserModel.Customers"
-                :key="item.Id"
-                :label="item.Name + ' ' + item.LastName"
-                :value="item.Id"
-              />
-            </el-select>
+              <el-select v-model="targetData.CustomerId" placeholder="Seleziona il cliente" size="large">
+                <el-option v-for="item in inserModel.Customers" :key="item.Id" :label="item.Name + ' ' + item.LastName"
+                  :value="item.Id" />
+              </el-select>
               <!--end::Input-->
             </div>
             <!--end::Input group-->
@@ -150,26 +100,15 @@
             <!--begin::Input group-->
             <div class="row row-cols-lg-2 g-10">
               <div class="col">
-                <div
-                  class="fv-row mb-9 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid"
-                >
+                <div class="fv-row mb-9 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid">
                   <!--begin::Label-->
-                  <label class="fs-6 fw-semobold mb-2 required"
-                    >Inizio</label
-                  >
+                  <label class="fs-6 fw-semobold mb-2 required">Inizio</label>
                   <!--end::Label-->
                   <!--begin::Input-->
-                  <el-date-picker
-                    v-model="targetData.DataInizioEvento"
-                    type="datetime"
-                    :teleported="false"
-                    name="DataInizioEvento"
-                    prop="DataInizioEvento"
-                  />
+                  <el-date-picker v-model="targetData.DataInizioEvento" type="datetime" :teleported="false"
+                    name="DataInizioEvento" prop="DataInizioEvento" />
                   <!--end::Input-->
-                  <div
-                    class="fv-plugins-message-container invalid-feedback"
-                  ></div>
+                  <div class="fv-plugins-message-container invalid-feedback"></div>
                 </div>
               </div>
             </div>
@@ -177,26 +116,15 @@
             <!--begin::Input group-->
             <div class="row row-cols-lg-2 g-10">
               <div class="col">
-                <div
-                  class="fv-row mb-9 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid"
-                >
+                <div class="fv-row mb-9 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid">
                   <!--begin::Label-->
-                  <label class="fs-6 fw-semobold mb-2 required"
-                    >Fine</label
-                  >
+                  <label class="fs-6 fw-semobold mb-2 required">Fine</label>
                   <!--end::Label-->
                   <!--begin::Input-->
-                  <el-date-picker
-                    v-model="targetData.DataFineEvento"
-                    type="datetime"
-                    :teleported="false"
-                    name="DataFineEvento"
-                    prop="DataFineEvento"
-                  />
+                  <el-date-picker v-model="targetData.DataFineEvento" type="datetime" :teleported="false"
+                    name="DataFineEvento" prop="DataFineEvento" />
                   <!--end::Input-->
-                  <div
-                    class="fv-plugins-message-container invalid-feedback"
-                  ></div>
+                  <div class="fv-plugins-message-container invalid-feedback"></div>
                 </div>
               </div>
             </div>
@@ -206,30 +134,19 @@
           <!--begin::Modal footer-->
           <div class="modal-footer flex-center">
             <!--begin::Button-->
-            <button
-              data-bs-dismiss="modal"
-              type="reset"
-              id="kt_modal_add_event_cancel"
-              class="btn btn-light me-3"
-            >
+            <button data-bs-dismiss="modal" type="reset" id="kt_modal_add_event_cancel" class="btn btn-light me-3">
               Cancel
             </button>
             <!--end::Button-->
             <!--begin::Button-->
-            <button
-              :data-kt-indicator="loading ? 'on' : null"
-              class="btn btn-lg btn-primary"
-              type="submit"
-            >
+            <button :data-kt-indicator="loading ? 'on' : null" class="btn btn-lg btn-primary" type="submit">
               <span v-if="!loading" class="indicator-label">
                 Submit
                 <KTIcon icon-name="arrow-right" icon-class="fs-3 ms-2 me-0" />
               </span>
               <span v-if="loading" class="indicator-progress">
                 Attendere...
-                <span
-                  class="spinner-border spinner-border-sm align-middle ms-2"
-                ></span>
+                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
               </span>
             </button>
             <!--end::Button-->
@@ -254,18 +171,18 @@ import { useAuthStore } from "@/stores/auth";
 export default defineComponent({
   name: "new-event-modal",
   components: {},
-  props:{
-    SelectedDateStart: {type:String, Required: true},
-    SelectedDateEnd: {type:String, Required: true},
+  props: {
+    SelectedDateStart: { type: String, Required: true },
+    SelectedDateEnd: { type: String, Required: true },
   },
   setup(props, { emit }) {
     const formRef = ref<null | HTMLFormElement>(null);
     const newTargetModalRef = ref<null | HTMLElement>(null);
     const loading = ref<boolean>(false);
     const store = useAuthStore();
-    
+
     const targetData = ref<Event>({
-      ApplicationUserId:store.user.Id,
+      ApplicationUserId: store.user.Id,
       NomeEvento: "",
       DescrizioneEvento: "",
       LuogoEvento: "",
@@ -273,20 +190,20 @@ export default defineComponent({
       RequestId: null,
       RealEstatePropertyId: null,
       DataInizioEvento: new Date(todayDate.format("YYYY-MM-DD")),
-      DataFineEvento:  new Date(todayDate.format("YYYY-MM-DD")),
+      DataFineEvento: new Date(todayDate.format("YYYY-MM-DD")),
       Type: "Appuntamento"
     });
 
     watch(() => props.SelectedDateStart, async (first, second) => {
-        if (first){
-          targetData.value.DataInizioEvento = new Date(first);
-        }
+      if (first) {
+        targetData.value.DataInizioEvento = new Date(first);
+      }
     })
-    
+
     watch(() => props.SelectedDateEnd, async (first, second) => {
-        if (first){
-          targetData.value.DataFineEvento = new Date(first);
-        }
+      if (first) {
+        targetData.value.DataFineEvento = new Date(first);
+      }
     })
 
     const rules = ref({
@@ -318,7 +235,7 @@ export default defineComponent({
       Requests: [],
       RealEstateProperties: [],
     });
-    
+
     onMounted(async () => {
       inserModel.value = await getToInsert();
     })
@@ -328,42 +245,42 @@ export default defineComponent({
         return;
       }
 
-      formRef.value.validate( async (valid: boolean) => {
+      formRef.value.validate(async (valid: boolean) => {
         if (valid) {
           loading.value = true;
           await createEvent(targetData.value);
 
-            const error = store.errors;
+          const error = store.errors;
 
-            if (!error) {
-              Swal.fire({
-                text: "Operazione completata!",
-                icon: "success",
-                buttonsStyling: false,
-                confirmButtonText: "Continua!",
-                heightAuto: false,
-                customClass: {
-                  confirmButton: "btn fw-semobold btn-light-primary",
-                },
-              }).then(function () {
-                loading.value = false;
-                hideModal(newTargetModalRef.value);
-                emit('formAddSubmitted', targetData.value);
-              });
-            } else {
+          if (!error) {
+            Swal.fire({
+              text: "Operazione completata!",
+              icon: "success",
+              buttonsStyling: false,
+              confirmButtonText: "Continua!",
+              heightAuto: false,
+              customClass: {
+                confirmButton: "btn fw-semobold btn-light-primary",
+              },
+            }).then(function () {
               loading.value = false;
-              Swal.fire({
-                text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
-                icon: "error",
-                buttonsStyling: false,
-                confirmButtonText: "Ok, capito!",
-                heightAuto: false,
-                customClass: {
+              hideModal(newTargetModalRef.value);
+              emit('formAddSubmitted', targetData.value);
+            });
+          } else {
+            loading.value = false;
+            Swal.fire({
+              text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
+              icon: "error",
+              buttonsStyling: false,
+              confirmButtonText: "Ok, capito!",
+              heightAuto: false,
+              customClass: {
                 confirmButton: "btn btn-primary",
-                },
-              });
-              return false;
-            }
+              },
+            });
+            return false;
+          }
 
         } else {
           loading.value = false;
@@ -374,7 +291,7 @@ export default defineComponent({
             confirmButtonText: "Ok, capito!",
             heightAuto: false,
             customClass: {
-            confirmButton: "btn btn-primary",
+              confirmButton: "btn btn-primary",
             },
           });
           return false;
