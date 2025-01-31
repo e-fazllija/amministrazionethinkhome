@@ -85,7 +85,7 @@ const getRealEstateProperties = (filterRequest: string) : Promise<Array<RealEsta
     ""
   )
     .then(({ data }) => {
-      const result = data.Data.$values as Partial<Array<RealEstateProperty>>
+      const result = data.Data as Partial<Array<RealEstateProperty>>
       return result;
     })
     .catch(({ response }) => {
@@ -97,7 +97,7 @@ const getRealEstateProperties = (filterRequest: string) : Promise<Array<RealEsta
 const getRealEstateProperty = (id: number) => {
   return ApiService.get(`RealEstateProperty/GetById?id=${id}`, "")
     .then(({ data }) => {
-      const photos = data.Photos.$values as Array<RealEstatePropertyPhotos>;
+      const photos = data.Photos as Array<RealEstatePropertyPhotos>;
       const result = data as Partial<RealEstateProperty>;
       result.Photos = photos;
       return result;
@@ -112,8 +112,8 @@ const getRealEstateProperty = (id: number) => {
 const getToInsert = () : Promise<InsertModel> => {
   return ApiService.get(`RealEstateProperty/GetToInsert`, "")
     .then(({ data }) => {
-      const agents = data.Agents.$values as Array<User>;
-      const customers = data.Customers.$values as Array<Customer>;
+      const agents = data.Agents as Array<User>;
+      const customers = data.Customers as Array<Customer>;
       const result = <InsertModel>({
         Users: agents,
         Customers: customers

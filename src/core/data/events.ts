@@ -1,5 +1,11 @@
+import ApiService from "@/core/services/ApiService";
+import { useAuthStore, type User } from "@/stores/auth";
+const store = useAuthStore();
 import moment from "moment";
 import type { EventInput } from "@fullcalendar/core";
+import { RealEstateProperty } from "./properties";
+import { Request } from "./requests";
+import { Customer } from "./customers";
 
 const todayDate = moment().startOf("day");
 const YM = todayDate.format("YYYY-MM");
@@ -106,6 +112,138 @@ const events: Array<EventInput> = [
   },
 ];
 
+export class Event {
+  Id?: number;
+  ApplicationUserId: string;
+  ApplicationUser?: User;
+  NomeEvento: string;
+  Type: string;
+  CustomerId: number;
+  RealEstatePropertyId: number;
+  RequestId: number;
+  DescrizioneEvento: string;
+  LuogoEvento: string;
+  DataInizioEvento?: Date;
+  DataFineEvento?: Date;
+  CreationDate?: Date;
+  UpdateDate?: Date;
+}
+
+export class InsertModel {
+  Customers: Customer[];
+  Requests: Request[];
+  RealEstateProperties: RealEstateProperty[];
+}
+
+export class SearchModel {
+  Agencies: User[];
+  Agents: User[];
+}
+
+const getEvents = (filterRequest: string) : Promise<Array<Event>> => {
+  return ApiService.get(
+   `Calendar/Get?filterRequest=${filterRequest}`,
+   ""
+ )
+   .then(({ data }) => {
+     const result = data.Data as Partial<Array<Event>>
+     return result;
+   })
+   .catch(({ response }) => {
+     store.setError(response.data.Message, response.status);
+     return undefined;
+   });
+};
+
+const getEvent = (id: number) : Promise<Event> => {
+  return ApiService.get(
+   `Calendar/GetById?id=${id}`,
+   ""
+ )
+   .then(({ data }) => {
+     const result = data as Partial<Event>;
+     return result;
+   })
+   .catch(({ response }) => {
+     store.setError(response.data.Message, response.status);
+     return undefined;
+   });
+};
+
+const getToInsert = () : Promise<InsertModel> => {
+  return ApiService.get(`Calendar/GetToInsert?agencyId=${store.user.AgencyId || "admin"}`, "")
+    .then(({ data }) => {
+      const requests = data.Requests as Array<Request>;
+      const customers = data.Customers as Array<Customer>;
+      const properties = data.RealEstateProperties as Array<RealEstateProperty>;
+      const result = <InsertModel>({
+        Requests: requests,
+        Customers: customers,
+        RealEstateProperties: properties,
+      })
+      return result;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
+
+const getSearchItems = (agencyId: string) : Promise<SearchModel> => {
+  return ApiService.get(
+   `Calendar/GetSearchItems?agencyId=${agencyId}`,
+   ""
+ )
+   .then(({ data }) => {
+      const agencies = data.Agencies as Array<User>;
+      const agents = data.Agents as Array<User>;
+      const result = <SearchModel>({
+        Agencies: agencies,
+        Agents: agents
+      })
+      return result;
+   })
+   .catch(({ response }) => {
+     store.setError(response.data.Message, response.status);
+     return undefined;
+   });
+};
+
+const createEvent = async (formData:Event) => {
+  return ApiService.post("Calendar/Create", formData)
+    .then(({ data }) => {
+      const result = data as Partial<Event>;
+      return result;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
+
+const updateEvent = async (formData:Event) => {
+  return ApiService.post("Calendar/Update", formData)
+    .then(({ data }) => {
+      const result = data as Partial<Event>;
+      return result;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
+
+const deleteEvent = async (id:number) => {
+  return ApiService.delete(`Calendar/Delete?id=${id}`)
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
+
 export default events;
 
-export { todayDate, YM, YESTERDAY, TODAY, TOMORROW };
+export { todayDate, YM, YESTERDAY, TODAY, TOMORROW, getEvents, getEvent, getToInsert, createEvent, updateEvent, getSearchItems, deleteEvent };

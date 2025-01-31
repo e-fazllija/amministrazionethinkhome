@@ -54,6 +54,13 @@ const MainMenuConfig: Array<MenuItem> = [
         bootstrapIcon: "bi-app-indicator",
         roleEnabled: ["Admin", "Agenzia", "Agente"],
       },
+      {
+        heading: "Calendario",
+        route: "/calendar",
+        keenthemesIcon: "element-11",
+        bootstrapIcon: "bi-app-indicator",
+        roleEnabled: ["Admin", "Agenzia", "Agente"],
+      },
     ],
   }
 ];

@@ -31,7 +31,7 @@ const getCustomers = (filterRequest: string) : Promise<Array<Customer>> => {
     ""
   )
     .then(({ data }) => {
-      const result = data.Data.$values as Partial<Array<Customer>>
+      const result = data.Data as Partial<Array<Customer>>
       return result;
     })
     .catch(({ response }) => {
