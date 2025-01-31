@@ -26,7 +26,7 @@ const getAgencies = (filterRequest: string) : Promise<Array<Agency>> => {
     ""
   )
     .then(({ data }) => {
-      const result = data.Data.$values as Partial<Array<Agency>>
+      const result = data.Data as Partial<Array<Agency>>
       return result;
     })
     .catch(({ response }) => {

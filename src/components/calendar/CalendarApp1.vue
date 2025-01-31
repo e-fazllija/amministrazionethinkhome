@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { getAssetPath } from "@/core/helpers/assets";
-import { defineComponent, ref, onMounted, watch } from "vue";
+import { defineComponent, ref, onMounted, watch, nextTick  } from "vue";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -76,9 +76,10 @@ export default defineComponent({
     const store = useAuthStore();
     const user = store.user;
     
-    const newEvent = (start: string, end: string) => {
+    const newEvent = async (start: string, end: string) => {
       selectedDateStart.value = start != null ? start : todayDate.format("YYYY-MM-DD").toString();
       selectedDateEnd.value = end != null ? end : selectedDateStart.value;
+  
       const modal = new Modal(
         document.getElementById("kt_modal_add_event") as Element
       );

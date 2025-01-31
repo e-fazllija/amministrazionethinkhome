@@ -173,9 +173,9 @@ const getEvent = (id: number) : Promise<Event> => {
 const getToInsert = () : Promise<InsertModel> => {
   return ApiService.get(`Calendar/GetToInsert?agencyId=${store.user.AgencyId || "admin"}`, "")
     .then(({ data }) => {
-      const requests = data.Requests.$values as Array<Request>;
-      const customers = data.Customers.$values as Array<Customer>;
-      const properties = data.RealEstateProperties.$values as Array<RealEstateProperty>;
+      const requests = data.Requests as Array<Request>;
+      const customers = data.Customers as Array<Customer>;
+      const properties = data.RealEstateProperties as Array<RealEstateProperty>;
       const result = <InsertModel>({
         Requests: requests,
         Customers: customers,

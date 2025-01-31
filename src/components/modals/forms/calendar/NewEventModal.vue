@@ -1,5 +1,5 @@
 <template>
-  <div class="modal fade show" id="kt_modal_add_event" role="dialog" ref="newTargetModalRef">
+  <div class="modal fade show" id="kt_modal_add_event" role="dialog" ref="newTargetModalRef" tabindex="-1" aria-hidden="false" aria-modal="true">
     <div class="modal-dialog modal-dialog-centered mw-650px">
       <div class="modal-content">
         <el-form class="form fv-plugins-bootstrap5 fv-plugins-framework" id="kt_modal_add_event_form"
@@ -135,7 +135,7 @@
           <div class="modal-footer flex-center">
             <!--begin::Button-->
             <button data-bs-dismiss="modal" type="reset" id="kt_modal_add_event_cancel" class="btn btn-light me-3">
-              Cancel
+              Chiudi
             </button>
             <!--end::Button-->
             <!--begin::Button-->
@@ -298,6 +298,7 @@ export default defineComponent({
         }
       });
     };
+    
 
     return {
       formRef,

@@ -55,7 +55,7 @@ const getRequests = (filterRequest: string): Promise<Array<Request>> => {
     ""
   )
     .then(({ data }) => {
-      const result = data.Data.$values as Partial<Array<Request>>
+      const result = data.Data as Partial<Array<Request>>
       return result;
     })
     .catch(({ response }) => {
@@ -70,7 +70,7 @@ const getCustomerRequests = (customerId: number): Promise<Array<Request>> => {
     ""
   )
     .then(({ data }) => {
-      const result = data.Data.$values as Partial<Array<Request>>
+      const result = data.Data as Partial<Array<Request>>
       return result;
     })
     .catch(({ response }) => {
@@ -84,7 +84,7 @@ const getRequest = (id: number): Promise<Request> => {
     .then(({ data }) => {
       const result = data as Partial<Request>;
       result.Customer = data.Customer as Customer;
-      result.RealEstateProperties = data.RealEstateProperties.$values;
+      result.RealEstateProperties = data.RealEstateProperties;
       return result;
     })
     .catch(({ response }) => {
@@ -132,8 +132,8 @@ const deleteRequest = async (id: number) => {
 const getToInsert = (): Promise<InsertModel> => {
   return ApiService.get(`RealEstateProperty/GetToInsert`, "")
     .then(({ data }) => {
-      const agents = data.Agents.$values as Array<User>;
-      const customers = data.Customers.$values as Array<Customer>;
+      const agents = data.Agents as Array<User>;
+      const customers = data.Customers as Array<Customer>;
       const result = <InsertModel>({
         Users: agents,
         Customers: customers
