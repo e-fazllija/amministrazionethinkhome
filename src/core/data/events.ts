@@ -3,9 +3,9 @@ import { useAuthStore, type User } from "@/stores/auth";
 const store = useAuthStore();
 import moment from "moment";
 import type { EventInput } from "@fullcalendar/core";
-import { RealEstateProperty } from "./properties";
-import { Request } from "./requests";
-import { Customer } from "./customers";
+import type { RealEstateProperty } from "./properties";
+import type { Request } from "./requests";
+import type { Customer } from "./customers";
 
 const todayDate = moment().startOf("day");
 const YM = todayDate.format("YYYY-MM");
@@ -140,37 +140,37 @@ export class SearchModel {
   Agents: User[];
 }
 
-const getEvents = (filterRequest: string) : Promise<Array<Event>> => {
+const getEvents = (filterRequest: string): Promise<Array<Event>> => {
   return ApiService.get(
-   `Calendar/Get?filterRequest=${filterRequest}`,
-   ""
- )
-   .then(({ data }) => {
-     const result = data.Data as Partial<Array<Event>>
-     return result;
-   })
-   .catch(({ response }) => {
-     store.setError(response.data.Message, response.status);
-     return undefined;
-   });
+    `Calendar/Get?filterRequest=${filterRequest}`,
+    ""
+  )
+    .then(({ data }) => {
+      const result = data.Data as Partial<Array<Event>>
+      return result;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
 };
 
-const getEvent = (id: number) : Promise<Event> => {
+const getEvent = (id: number): Promise<Event> => {
   return ApiService.get(
-   `Calendar/GetById?id=${id}`,
-   ""
- )
-   .then(({ data }) => {
-     const result = data as Partial<Event>;
-     return result;
-   })
-   .catch(({ response }) => {
-     store.setError(response.data.Message, response.status);
-     return undefined;
-   });
+    `Calendar/GetById?id=${id}`,
+    ""
+  )
+    .then(({ data }) => {
+      const result = data as Partial<Event>;
+      return result;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
 };
 
-const getToInsert = () : Promise<InsertModel> => {
+const getToInsert = (): Promise<InsertModel> => {
   return ApiService.get(`Calendar/GetToInsert?agencyId=${store.user.AgencyId || "admin"}`, "")
     .then(({ data }) => {
       const requests = data.Requests as Array<Request>;
@@ -189,12 +189,12 @@ const getToInsert = () : Promise<InsertModel> => {
     });
 };
 
-const getSearchItems = (agencyId: string) : Promise<SearchModel> => {
+const getSearchItems = (agencyId: string): Promise<SearchModel> => {
   return ApiService.get(
-   `Calendar/GetSearchItems?agencyId=${agencyId}`,
-   ""
- )
-   .then(({ data }) => {
+    `Calendar/GetSearchItems?agencyId=${agencyId}`,
+    ""
+  )
+    .then(({ data }) => {
       const agencies = data.Agencies as Array<User>;
       const agents = data.Agents as Array<User>;
       const result = <SearchModel>({
@@ -202,14 +202,14 @@ const getSearchItems = (agencyId: string) : Promise<SearchModel> => {
         Agents: agents
       })
       return result;
-   })
-   .catch(({ response }) => {
-     store.setError(response.data.Message, response.status);
-     return undefined;
-   });
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
 };
 
-const createEvent = async (formData:Event) => {
+const createEvent = async (formData: Event) => {
   return ApiService.post("Calendar/Create", formData)
     .then(({ data }) => {
       const result = data as Partial<Event>;
@@ -221,7 +221,7 @@ const createEvent = async (formData:Event) => {
     });
 };
 
-const updateEvent = async (formData:Event) => {
+const updateEvent = async (formData: Event) => {
   return ApiService.post("Calendar/Update", formData)
     .then(({ data }) => {
       const result = data as Partial<Event>;
@@ -233,7 +233,7 @@ const updateEvent = async (formData:Event) => {
     });
 };
 
-const deleteEvent = async (id:number) => {
+const deleteEvent = async (id: number) => {
   return ApiService.delete(`Calendar/Delete?id=${id}`)
     .then(({ data }) => {
       return data;
