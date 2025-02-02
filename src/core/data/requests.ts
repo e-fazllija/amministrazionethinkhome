@@ -28,6 +28,7 @@ export class Request {
   RealEstateProperties?: RealEstateProperty[];
   StringDate?: string;
   MortgageAdviceRequired: boolean;
+  RequestNotes?: Notes[];
 }
 
 export class RequestTabelData {
@@ -47,6 +48,12 @@ export class RequestTabelData {
 export class InsertModel {
   Customers: Customer[];
   Users: User[];
+}
+
+export class Notes {
+  Id?: number;
+  ApplicationUserId: string;
+  Text: string;
 }
 
 const getRequests = (filterRequest: string): Promise<Array<Request>> => {
@@ -85,6 +92,7 @@ const getRequest = (id: number): Promise<Request> => {
       const result = data as Partial<Request>;
       result.Customer = data.Customer as Customer;
       result.RealEstateProperties = data.RealEstateProperties;
+      result.RequestNotes = data.RequestNotes;
       return result;
     })
     .catch(({ response }) => {

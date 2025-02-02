@@ -4,12 +4,12 @@
       <!--begin::Card title-->
       <div class="card-title">
         <div>
-<!--begin::Search-->
-<div class="row">
-          <div class="col-md-4 col-lg-4">
-            <input type="text" v-model="search" @input="searchItems()" class="form-control form-control-solid"
-              placeholder="Cerca Immobile" />
-          </div>
+          <!--begin::Search-->
+          <div class="row">
+            <div class="col-md-4 col-lg-4">
+              <input type="text" v-model="search" @input="searchItems()" class="form-control form-control-solid"
+                placeholder="Cerca Richiesta" />
+            </div>
           <div class="col-md-4 col-lg-4">
             <select class="form-control form-control-solid" v-model="contract">
               <option value="">Contratto</option>
