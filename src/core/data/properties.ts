@@ -49,6 +49,7 @@ export class RealEstateProperty {
   AgentId: string;
   Agent?: User;
   Files?: FileList;
+  RealEstatePropertyNotes?: Notes[];
 }
 
 export class RequestTabelData {
@@ -79,6 +80,12 @@ export class RealEstatePropertyPhotos {
   UpdateDate?: Date;
 }
 
+export class Notes {
+  Id?: number;
+  ApplicationUserId: string;
+  Text: string;
+}
+
 const getRealEstateProperties = (filterRequest: string) : Promise<Array<RealEstateProperty>> => {
    return ApiService.get(
     `RealEstateProperty/Get?currentPage=0&filterRequest=${filterRequest}`,
@@ -100,6 +107,7 @@ const getRealEstateProperty = (id: number) => {
       const photos = data.Photos as Array<RealEstatePropertyPhotos>;
       const result = data as Partial<RealEstateProperty>;
       result.Photos = photos;
+      result.RealEstatePropertyNotes = data.RealEstatePropertyNotes;
       return result;
     })
     .catch(({ response }) => {

@@ -650,6 +650,20 @@
         </div>
         <!--end::Input group-->
 
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Riepilogo Note</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div v-for="(note, index) in formData.RealEstatePropertyNotes" :key="index" class="col-lg-8 fv-row">
+            <div class="border border-secondary" v-html="note.Text"></div>
+            <hr>
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
         <div class="py-5">
           <div class="rounded border p-10">
             <div class="row justify-content-center">
@@ -699,9 +713,9 @@
       <!--begin::Actions-->
       <div v-if="user.Id === formData.AgentId || user.Role === 'Admin' || formData.Agent.AgencyId === user.Id"
         class="card-footer d-flex justify-content-end py-6 px-9">
-        <button type="button" @click="deleteItem()" class="btn btn-danger btn-active-light-primary me-2">
+        <!-- <button type="button" @click="deleteItem()" class="btn btn-danger btn-active-light-primary me-2">
           Elimina
-        </button>
+        </button> -->
         <!--begin::Button-->
         <button :data-kt-indicator="loading ? 'on' : null" class="btn btn-lg btn-primary" type="submit">
           <span v-if="!loading" class="indicator-label">
@@ -884,7 +898,6 @@ export default defineComponent({
       if(inserModel.value.Users.length > 0){
         formData.value.AgentId = formData.value.AgentId;
       }
-      console.log("mounted: " + JSON.stringify(formData.value.Photos))
       loading.value = false;
     })
 

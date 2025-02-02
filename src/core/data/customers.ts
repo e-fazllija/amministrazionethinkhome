@@ -23,7 +23,22 @@ export class Customer{
   Code: string;
   AcquisitionDone: boolean;
   OngoingAssignment: boolean;
-  }
+  CustomerNotes?: Notes[];
+}
+
+export class CustomerTabelData {
+  Id?: number;
+  Name: string;
+  Type: string;
+  Email: string;
+  Phone: string;
+}
+
+export class Notes {
+  Id?: number;
+  ApplicationUserId: string;
+  Text: string;
+}
 
 const getCustomers = (filterRequest: string) : Promise<Array<Customer>> => {
    return ApiService.get(
@@ -44,6 +59,7 @@ const getCustomer = (id: number) : Promise<Customer> => {
   return ApiService.get(`Customers/GetById?id=${id}`, "")
     .then(({ data }) => {
       const result = data as Partial<Customer>;
+      result.CustomerNotes = data.CustomerNotes;
       return result;
     })
     .catch(({ response }) => {

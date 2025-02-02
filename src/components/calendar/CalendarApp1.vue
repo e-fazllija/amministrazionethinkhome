@@ -56,6 +56,7 @@ import { useAuthStore } from "@/stores/auth";
 import type { EventInput } from "@fullcalendar/core";
 import Loading from "@/components/kt-datatable/table-partials/Loading.vue";
 import itLocale from '@fullcalendar/core/locales/it';
+import { showModal } from "@/core/helpers/dom";
 
 export default defineComponent({
   name: "calendar-app-1",
@@ -66,25 +67,39 @@ export default defineComponent({
     Loading
   },
   setup() {
+    const isModalOpen = ref(false);
     const loading = ref<boolean>(true);
     let selectedId = ref(0);
     let selectedDateStart = ref<string>("");
     let selectedDateEnd = ref<string>("");
     let agentId = ref("");
     let agencyId = ref("");
-
+    const newTargetModalRef = ref<null | HTMLElement>(null);
     const store = useAuthStore();
     const user = store.user;
     
     const newEvent = async (start: string, end: string) => {
-      selectedDateStart.value = start != null ? start : todayDate.format("YYYY-MM-DD").toString();
-      selectedDateEnd.value = end != null ? end : selectedDateStart.value;
-  
+      selectedDateStart.value = start?.toString() ?? todayDate.format("YYYY-MM-DD").toString();
+      selectedDateEnd.value = end?.toString() ?? selectedDateStart.value;
+
       const modal = new Modal(
         document.getElementById("kt_modal_add_event") as Element
       );
       modal.show();
+
+      const modalElement = document.getElementById("kt_modal_add_event");
+      if (modalElement) {
+        modalElement.addEventListener("hidden.bs.modal", () => {
+          // Rimuove il backdrop
+          document.querySelectorAll(".modal-backdrop").forEach((el) => el.remove());
+
+          // Rimuove forzatamente la classe modal-open dal body
+          document.body.classList.remove("modal-open");
+          document.body.style.overflow = "";
+        });
+      }
     };
+
 
     const updateEvent = (id: number) => {
       selectedId.value = id;
@@ -218,7 +233,9 @@ export default defineComponent({
       searchItems,
       selectedDateStart,
       selectedDateEnd,
-      todayDate
+      todayDate,
+      newTargetModalRef,
+      isModalOpen
     };
   },
 });

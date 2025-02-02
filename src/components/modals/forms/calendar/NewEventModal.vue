@@ -1,18 +1,18 @@
 <template>
-  <div class="modal fade show" id="kt_modal_add_event" role="dialog" ref="newTargetModalRef" tabindex="-1" aria-hidden="false" aria-modal="true">
+<div class="modal fade show" id="kt_modal_add_event" role="dialog" ref="newTargetModalRef" tabindex="-1" aria-hidden="false" aria-modal="true">
     <div class="modal-dialog modal-dialog-centered mw-650px">
       <div class="modal-content">
         <el-form class="form fv-plugins-bootstrap5 fv-plugins-framework" id="kt_modal_add_event_form"
           @submit.prevent="submit()" :model="targetData" :rules="rules" ref="formRef">
           <div class="modal-header">
             <h2 class="fw-bold">Aggiungi evento</h2>
-            <!-- <div
+            <div
               class="btn btn-icon btn-sm btn-active-icon-primary"
               id="kt_modal_add_event_close"
               data-bs-dismiss="modal"
             >
               <KTIcon icon-name="cross" icon-class="fs-1" />
-            </div> -->
+            </div>
           </div>
           <!--end::Modal header-->
           <!--begin::Modal body-->
@@ -163,7 +163,7 @@
 <script lang="ts">
 import { getAssetPath } from "@/core/helpers/assets";
 import { defineComponent, ref, onMounted, watch } from "vue";
-import { hideModal } from "@/core/helpers/dom";
+import { hideModal, removeModalBackdrop } from "@/core/helpers/dom";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import events, { todayDate, getToInsert, createEvent, InsertModel, Event } from "@/core/data/events";
 import { useAuthStore } from "@/stores/auth";
@@ -265,6 +265,7 @@ export default defineComponent({
             }).then(function () {
               loading.value = false;
               hideModal(newTargetModalRef.value);
+              hideModal(newTargetModalRef.value);
               emit('formAddSubmitted', targetData.value);
             });
           } else {
@@ -308,7 +309,8 @@ export default defineComponent({
       rules,
       submit,
       getAssetPath,
-      inserModel
+      inserModel,
+      removeModalBackdrop
     };
   },
 });

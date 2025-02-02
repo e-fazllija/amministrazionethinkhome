@@ -157,9 +157,9 @@
           <div class="fw-bold me-5">
             <span class="me-2">{{ selectedIds.length }}</span>Seleziona
           </div>
-          <button v-if="user.Role === 'Admin' || user.Role == 'Agency'" type="button" class="btn btn-danger" @click="deleteFewItems()">
+          <!-- <button v-if="user.Role === 'Admin' || user.Role == 'Agency'" type="button" class="btn btn-danger" @click="deleteFewItems()">
             Cancella
-          </button>
+          </button> -->
         </div>
         <!--end::Group actions-->
         <!--begin::Group actions-->
@@ -199,8 +199,8 @@
         <template v-slot:actions="{ row: item }">
           <router-link :to="{ name: 'property', params: { id: item.Id } }"
             class="btn btn-light-info me-1">Dettagli</router-link>
-          <button v-if="user.Id === item.AgentId || user.Role === 'Admin' || user.Role == 'Agency'"
-            @click="deleteItem(item.Id)" class="btn btn-light-danger me-1">Elimina</button>
+          <!-- <button v-if="user.Id === item.AgentId || user.Role === 'Admin' || user.Role == 'Agency'"
+            @click="deleteItem(item.Id)" class="btn btn-light-danger me-1">Elimina</button> -->
         </template>
       </Datatable>
     </div>

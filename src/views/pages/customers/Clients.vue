@@ -3,7 +3,7 @@
     <div class="card-header border-0 pt-6">
       <!--begin::Card title-->
       <div class="card-title">
-        <!--begin::Search-->
+          <!--begin::Search-->
         <div class="d-flex align-items-center position-relative my-1">
           <KTIcon
             icon-name="magnifier"
@@ -17,6 +17,15 @@
             placeholder="Ricerca Clienti"
           />
         </div>
+        <div class="d-flex align-items-center position-relative ms-3">
+        <select class="form-control form-control-solid" v-model="contract">
+                <option value="">Tipologia</option>
+                <option value="Compratore">Compratore</option>
+                <option value="Venditore">Venditore</option>
+                <option value="Costruttore">Costruttore</option>
+                <option value="Cliente gold">Cliente gold</option>
+              </select>
+            </div>
         <!--end::Search-->
       </div>
       <!--begin::Card title-->
@@ -29,7 +38,7 @@
           data-kt-customer-table-toolbar="base"
         >
           <!--begin::Export-->
-          <button
+          <!-- <button
             type="button"
             class="btn btn-light-primary me-3"
             data-bs-toggle="modal"
@@ -37,7 +46,7 @@
           >
             <KTIcon icon-name="exit-up" icon-class="fs-2" />
             Export
-          </button>
+          </button> -->
           <!--end::Export-->
           <!--begin::Add customer-->
           <button
@@ -108,8 +117,8 @@
         <template v-slot:Name="{ row: customer }">
           {{ customer.Name }}
         </template>
-        <template v-slot:LastName="{ row: customer }">
-          {{ customer.LastName }}
+        <template v-slot:Type="{ row: customer }">
+          {{ customer.Type }}
         </template>
         <template v-slot:Email="{ row: customer }">
           <a href="#" class="text-gray-600 text-hover-primary mb-1">
@@ -144,14 +153,14 @@
 
 <script lang="ts">
 import { getAssetPath } from "@/core/helpers/assets";
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted, ref, watch } from "vue";
 import Datatable from "@/components/kt-datatable/KTDataTable.vue";
 import type { Sort } from "@/components/kt-datatable//table-partials/models";
 import ExportCustomerModal from "@/components/modals/forms/ExportCustomerModal.vue";
 import AddCustomerModal from "@/components/modals/forms/customer/AddCustomerModal.vue";
 import arraySort from "array-sort";
 import { MenuComponent } from "@/assets/ts/components";
-import { getCustomers, Customer, deleteCustomer } from "@/core/data/customers";
+import { getCustomers, Customer, deleteCustomer, CustomerTabelData } from "@/core/data/customers";
 import UpdateCustomerModal from "@/components/modals/forms/customer/UpdateCustomerModal.vue";
 import Swal from "sweetalert2";
 
@@ -166,16 +175,17 @@ export default defineComponent({
     UpdateCustomerModal,
   },
   setup() {
+    let loading = ref<boolean>(true);
     const tableHeader = ref([
       {
-        columnName: "Nome",
+        columnName: "Cliente",
         columnLabel: "Name",
         sortEnabled: true,
         columnWidth: 175,
       },
       {
-        columnName: "Cognome",
-        columnLabel: "LastName",
+        columnName: "Tipologia",
+        columnLabel: "Type",
         sortEnabled: true,
         columnWidth: 175,
       },
@@ -200,16 +210,29 @@ export default defineComponent({
     ]);
     const selectedIds = ref<Array<number>>([]);
     let selectedId = ref(0);
-    const tableData = ref<Array<Customer>>();
+    const tableData = ref<Array<CustomerTabelData>>([]);
     const initCustomers = ref([]);
     async function getItems(filterRequest: string) {
-        tableData.value = await getCustomers(filterRequest);
-      
+      loading.value = true;
+        const results = await getCustomers(filterRequest);
+        for (const key in results) {
+          const item = {
+            Id: results[key].Id,
+            Name: results[key].Name + " " + results[key].LastName,
+            Type: results[key].Buyer ? "Compratore" : results[key].Seller ? "Venditore" : results[key].Builder ? "Costruttore" : results[key].GoldCustomer ? "Cliente gold" : "",
+            Email: results[key].Email,
+            Phone: results[key].Phone.toString()
+          } as CustomerTabelData;
+
+          tableData.value.push(item)
+        }
+        initCustomers.value.splice(0, tableData.value.length, ...tableData.value);
+        loading.value = false;
     };
 
     onMounted(async () => {
       await getItems("");
-      initCustomers.value.splice(0, tableData.value.length, ...tableData.value);
+      
     });
 
     const deleteFewItems = async () => {
@@ -224,7 +247,7 @@ export default defineComponent({
     const searchItems = () => {
       tableData.value.splice(0, tableData.value.length, ...initCustomers.value);
       if (search.value !== "") {
-        let results: Array<Customer> = [];
+        let results: Array<CustomerTabelData> = [];
         for (let j = 0; j < tableData.value.length; j++) {
           if (searchingFunc(tableData.value[j], search.value)) {
             results.push(tableData.value[j]);
@@ -238,17 +261,34 @@ export default defineComponent({
     const searchingFunc = (obj: any, value: string): boolean => {
       for (let key in obj) {
         if (
-            !Number.isInteger(obj[key]) && 
-            !(typeof obj[key] === "object") && 
-            (typeof obj[key] === "string" || Array.isArray(obj[key]))
+          !Number.isInteger(obj[key]) &&
+          !(typeof obj[key] === "object") &&
+          (typeof obj[key] === "string" || typeof obj[key] === "number" || Array.isArray(obj[key]))
         ) {
-            if (obj[key].indexOf(value) !== -1) {
-                return true;
-            }
+          if (obj[key].toString().toLowerCase().indexOf(value) !== -1) {
+            return true;
+          }
         }
       }
       return false;
     };
+
+    const contract = ref<string>("");
+    watch(
+      () => contract.value,
+      (newValue) => {
+        tableData.value.splice(0, tableData.value.length, ...initCustomers.value);
+        if (newValue) {
+          let results: Array<CustomerTabelData> = [];
+          for (let j = 0; j < tableData.value.length; j++) {
+            if (searchingFunc(tableData.value[j], newValue.toLowerCase())) {
+              results.push(tableData.value[j]);
+            }
+          }
+          tableData.value.splice(0, tableData.value.length, ...results);
+        }
+      }
+    );
 
     async function deleteItem(id: number){
       Swal.fire({
@@ -297,6 +337,7 @@ export default defineComponent({
       deleteItem,
       selectId,
       getItems,
+      contract
     };
   },
 });

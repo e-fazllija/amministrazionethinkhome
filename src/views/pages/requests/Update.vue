@@ -305,11 +305,25 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label fw-semobold fs-6">Note</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Nota principale</label>
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
             <textarea class="form-control form-control-lg fw-semobold" v-model="formData.Notes"></textarea>
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Riepilogo Note</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div v-for="(note, index) in formData.RequestNotes" :key="index" class="col-lg-8 fv-row">
+            <div class="border border-secondary" v-html="note.Text"></div>
+            <hr>
           </div>
           <!--end::Col-->
         </div>
