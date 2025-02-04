@@ -136,7 +136,7 @@
             </button>
             <!--end::Button-->
             <!--begin::Button-->
-            <button v-if="user.Id == targetData.ApplicationUserId" @click="deleteItem(targetData.Id)" data-bs-dismiss="modal" type="button" class="btn btn-danger me-3">
+            <button v-if="user.Id == targetData.ApplicationUserId || user.Role == 'Admin' || user.Role == 'Agency'" @click="deleteItem(targetData.Id)" data-bs-dismiss="modal" type="button" class="btn btn-danger me-3">
               Elimina
             </button>
             <!--end::Button-->
@@ -236,6 +236,7 @@ export default defineComponent({
       Customers: [],
       Requests: [],
       RealEstateProperties: [],
+      // Agents: []
     });
 
     onMounted(async () => {

@@ -36,13 +36,13 @@
   </div>
   <!--end::Card-->
 
-  <NewEventModal :SelectedDateStart="selectedDateStart" :SelectedDateEnd="selectedDateEnd" @formAddSubmitted="getItems(agentId)"></NewEventModal>
+  <NewEventModal :UserId="userId" :SelectedDateStart="selectedDateStart" :SelectedDateEnd="selectedDateEnd" @formAddSubmitted="getItems(agentId)"></NewEventModal>
   <UpdateEventModal :Id="selectedId" @formUpdateSubmitted="getItems(agentId)"></UpdateEventModal>
 </template>
 
 <script lang="ts">
 import { getAssetPath } from "@/core/helpers/assets";
-import { defineComponent, ref, onMounted, watch, nextTick  } from "vue";
+import { defineComponent, ref, onMounted, watch, computed  } from "vue";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -56,7 +56,6 @@ import { useAuthStore } from "@/stores/auth";
 import type { EventInput } from "@fullcalendar/core";
 import Loading from "@/components/kt-datatable/table-partials/Loading.vue";
 import itLocale from '@fullcalendar/core/locales/it';
-import { showModal } from "@/core/helpers/dom";
 
 export default defineComponent({
   name: "calendar-app-1",
@@ -67,7 +66,6 @@ export default defineComponent({
     Loading
   },
   setup() {
-    const isModalOpen = ref(false);
     const loading = ref<boolean>(true);
     let selectedId = ref(0);
     let selectedDateStart = ref<string>("");
@@ -78,6 +76,10 @@ export default defineComponent({
     const store = useAuthStore();
     const user = store.user;
     
+    const userId = computed(() => {
+      return agentId.value != null && agentId.value != "" ? agentId.value : user.Id
+    })
+
     const newEvent = async (start: string, end: string) => {
       selectedDateStart.value = start?.toString() ?? todayDate.format("YYYY-MM-DD").toString();
       selectedDateEnd.value = end?.toString() ?? selectedDateStart.value;
@@ -235,7 +237,7 @@ export default defineComponent({
       selectedDateEnd,
       todayDate,
       newTargetModalRef,
-      isModalOpen
+      userId
     };
   },
 });
