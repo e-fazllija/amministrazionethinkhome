@@ -174,6 +174,7 @@ export default defineComponent({
   props: {
     SelectedDateStart: { type: String, Required: true },
     SelectedDateEnd: { type: String, Required: true },
+    UserId: { type: String, Required: true },
   },
   setup(props, { emit }) {
     const formRef = ref<null | HTMLFormElement>(null);
@@ -182,7 +183,7 @@ export default defineComponent({
     const store = useAuthStore();
 
     const targetData = ref<Event>({
-      ApplicationUserId: store.user.Id,
+      ApplicationUserId: "",
       NomeEvento: "",
       DescrizioneEvento: "",
       LuogoEvento: "",
@@ -248,6 +249,7 @@ export default defineComponent({
       formRef.value.validate(async (valid: boolean) => {
         if (valid) {
           loading.value = true;
+          targetData.value.ApplicationUserId = props.UserId
           await createEvent(targetData.value);
 
           const error = store.errors;
