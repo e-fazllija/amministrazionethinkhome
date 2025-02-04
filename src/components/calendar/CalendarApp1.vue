@@ -36,8 +36,8 @@
   </div>
   <!--end::Card-->
 
-  <NewEventModal :UserId="userId" :SelectedDateStart="selectedDateStart" :SelectedDateEnd="selectedDateEnd" @formAddSubmitted="getItems(agentId)"></NewEventModal>
-  <UpdateEventModal :Id="selectedId" @formUpdateSubmitted="getItems(agentId)"></UpdateEventModal>
+  <NewEventModal :UserId="userId" :SelectedDateStart="selectedDateStart" :SelectedDateEnd="selectedDateEnd" @formAddSubmitted="getItems(user.Role == 'Admin' ? agentId : userId)"></NewEventModal>
+  <UpdateEventModal :Id="selectedId" @formUpdateSubmitted="getItems(user.Role == 'Admin' ? agentId : userId)"></UpdateEventModal>
 </template>
 
 <script lang="ts">
@@ -77,7 +77,14 @@ export default defineComponent({
     const user = store.user;
     
     const userId = computed(() => {
-      return agentId.value != null && agentId.value != "" ? agentId.value : user.Id
+      if(user.Role == "Admin" || user.Role == "Agency"){
+        console.log("admin: " + agentId.value != null && agentId.value != "" ? agentId.value : user.Id)
+        return agentId.value != null && agentId.value != "" ? agentId.value : user.Id
+      }
+      else {
+        console.log("not admin: " + user.Id)
+        return user.Id
+      }
     })
 
     const newEvent = async (start: string, end: string) => {
