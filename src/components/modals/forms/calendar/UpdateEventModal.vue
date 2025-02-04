@@ -141,7 +141,7 @@
             </button>
             <!--end::Button-->
             <!--begin::Button-->
-            <button v-if="user.Id == targetData.ApplicationUserId" :data-kt-indicator="loading ? 'on' : null" class="btn btn-lg btn-primary" type="submit">
+            <button v-if="user.Id == targetData.ApplicationUserId || user.Role == 'Admin' || user.Role == 'Agency'" :data-kt-indicator="loading ? 'on' : null" class="btn btn-lg btn-primary" type="submit">
               <span v-if="!loading" class="indicator-label">
                 Salva
                 <KTIcon icon-name="arrow-right" icon-class="fs-3 ms-2 me-0" />

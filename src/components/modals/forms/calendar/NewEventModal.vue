@@ -267,8 +267,7 @@ export default defineComponent({
             }).then(function () {
               loading.value = false;
               hideModal(newTargetModalRef.value);
-              hideModal(newTargetModalRef.value);
-              emit('formAddSubmitted', targetData.value);
+              emit('formAddSubmitted', targetData.value.ApplicationUserId);
             });
           } else {
             loading.value = false;
