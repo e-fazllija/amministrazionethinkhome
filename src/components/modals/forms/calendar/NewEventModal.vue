@@ -255,6 +255,16 @@ export default defineComponent({
           const error = store.errors;
 
           if (!error) {
+            targetData.value.ApplicationUserId= "";
+            targetData.value.NomeEvento= "";
+            targetData.value.DescrizioneEvento= "";
+            targetData.value.LuogoEvento= "";
+            targetData.value.CustomerId= null;
+            targetData.value.RequestId= null;
+            targetData.value.RealEstatePropertyId= null;
+            targetData.value.DataInizioEvento= new Date(todayDate.format("YYYY-MM-DD"));
+            targetData.value.DataFineEvento= new Date(todayDate.format("YYYY-MM-DD"));
+            targetData.value.Type = "Appuntamento";
             Swal.fire({
               text: "Operazione completata!",
               icon: "success",
