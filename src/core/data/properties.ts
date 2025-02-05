@@ -50,6 +50,7 @@ export class RealEstateProperty {
   Agent?: User;
   Files?: FileList;
   RealEstatePropertyNotes?: Notes[];
+  VideoUrl?: string;
 }
 
 export class RequestTabelData {

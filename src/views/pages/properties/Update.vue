@@ -640,6 +640,19 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Url Video</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.VideoUrl" type="text" />
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
           <label class="col-lg-4 col-form-label required fw-semobold fs-6">Carica immagini</label>
           <!--end::Label-->
           <!--begin::Input-->
@@ -688,8 +701,8 @@
                 </draggable>
               </div>
               <!-- <div v-for="(photo, index) in formData.Photos" :key="index" class="col-lg-4"> -->
-                <!--begin::Card-->
-                <!-- <div class="card  overlay">
+              <!--begin::Card-->
+              <!-- <div class="card  overlay">
                   <div class="card-body p-0">
                     <div class="overlay-wrapper">
                       <img :src="photo.Url" alt="" class="w-100 card-rounded">
@@ -702,7 +715,7 @@
                     </div>
                   </div>
                 </div> -->
-                <!--end::Card-->
+              <!--end::Card-->
               <!-- </div> -->
 
             </div>
@@ -739,23 +752,25 @@
 import { getAssetPath } from "@/core/helpers/assets";
 import { defineComponent, onMounted, ref, watch } from "vue";
 import Swal from "sweetalert2/dist/sweetalert2.js";
-import { updateRealEstateProperty, 
-  RealEstateProperty, 
-  getRealEstateProperty, 
-  setRealEstatePropertyPhotoHighlighted, 
-  deletePhoto, 
-  deleteRealEstateProperty, 
-  uploadFiles, 
+import {
+  updateRealEstateProperty,
+  RealEstateProperty,
+  getRealEstateProperty,
+  setRealEstatePropertyPhotoHighlighted,
+  deletePhoto,
+  deleteRealEstateProperty,
+  uploadFiles,
   InsertModel,
   getToInsert,
-  updatePhotosOrder } from "@/core/data/properties";
+  updatePhotosOrder
+} from "@/core/data/properties";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import draggable from 'vuedraggable';
 
 export default defineComponent({
   name: "update",
-  components: {draggable},
+  components: { draggable },
   setup() {
     const store = useAuthStore();
     const user = store.user;
@@ -806,7 +821,8 @@ export default defineComponent({
       CustomerId: 0,
       AgentId: "",
       AssignmentEnd: "",
-      Agent: null
+      Agent: null,
+      VideoUrl: ""
     });
 
     const inserModel = ref<InsertModel>({
@@ -895,7 +911,7 @@ export default defineComponent({
       // if(inserModel.value.Customers.length > 0){
       //   formData.value.CustomerId = inserModel.value.Customers[0].Id;
       // }
-      if(inserModel.value.Users.length > 0){
+      if (inserModel.value.Users.length > 0) {
         formData.value.AgentId = formData.value.AgentId;
       }
       loading.value = false;
@@ -903,55 +919,55 @@ export default defineComponent({
 
     const onFileChanged = async (event: Event) => {
       const target = event.target as HTMLInputElement;
-        if (target.files && target.files.length > 0) {
-          formData.value.Files = target.files;
-          await uploadFiles(formData.value.Files, id)
+      if (target.files && target.files.length > 0) {
+        formData.value.Files = target.files;
+        await uploadFiles(formData.value.Files, id)
           .then(async () => {
-          loading.value = false;
-          const error = store.errors;
+            loading.value = false;
+            const error = store.errors;
 
-          if (!error) {
+            if (!error) {
+              Swal.fire({
+                text: "Operazione completata!",
+                icon: "success",
+                buttonsStyling: false,
+                confirmButtonText: "Continua!",
+                heightAuto: false,
+                customClass: {
+                  confirmButton: "btn fw-semobold btn-light-primary",
+                },
+              }).then(async function () {
+                formData.value = await getRealEstateProperty(id);
+              });
+            } else {
+              Swal.fire({
+                text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, capito!",
+                heightAuto: false,
+                customClass: {
+                  confirmButton: "btn btn-primary",
+                },
+              });
+              return false;
+            }
+          })
+          .catch(({ response }) => {
+            console.log(response);
+            loading.value = false;
             Swal.fire({
-              text: "Operazione completata!",
-              icon: "success",
-              buttonsStyling: false,
-              confirmButtonText: "Continua!",
-              heightAuto: false,
-              customClass: {
-                confirmButton: "btn fw-semobold btn-light-primary",
-              },
-            }).then(async function () {
-              formData.value = await getRealEstateProperty(id);
-            });
-          } else {
-            Swal.fire({
-              text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
+              text: "Attenzione, si è verificato un errore.",
               icon: "error",
               buttonsStyling: false,
-              confirmButtonText: "Ok, capito!",
+              confirmButtonText: "Continua!",
               heightAuto: false,
               customClass: {
                 confirmButton: "btn btn-primary",
               },
             });
-            return false;
-          }
-        })
-        .catch(({ response }) => {
-          console.log(response);
-          loading.value = false;
-          Swal.fire({
-            text: "Attenzione, si è verificato un errore.",
-            icon: "error",
-            buttonsStyling: false,
-            confirmButtonText: "Continua!",
-            heightAuto: false,
-            customClass: {
-              confirmButton: "btn btn-primary",
-            },
           });
-        });
-        }
+      }
     };
 
     const setPhotoHighlighted = async (photoId) => {
@@ -1113,7 +1129,7 @@ export default defineComponent({
       });
     };
 
-    async function checkMove(log){
+    async function checkMove(log) {
       // await updatePhotosOrder(formData.value.Photos)
       console.log(formData.value.Photos)
     }
