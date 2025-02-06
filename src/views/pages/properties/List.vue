@@ -196,6 +196,9 @@
         <template v-slot:Price="{ row: item }">
           {{ item.Price }}
         </template>
+        <template v-slot:Photos="{ row: item }">
+          <img v-if="item.Photos" :src="item.Photos" style="height: 100px; width: 200px; object-fit: cover;" />
+        </template>
         <template v-slot:actions="{ row: item }">
           <router-link :to="{ name: 'property', params: { id: item.Id } }"
             class="btn btn-light-info me-1">Dettagli</router-link>
@@ -237,31 +240,37 @@ export default defineComponent({
         columnName: "Codice",
         columnLabel: "Id",
         sortEnabled: true,
-        columnWidth: 175,
+        columnWidth: 100,
       },
       {
         columnName: "Ins. / Inc.",
         columnLabel: "CreationDate",
         sortEnabled: true,
-        columnWidth: 175,
+        columnWidth: 120,
       },
       {
         columnName: "Mq",
         columnLabel: "CommercialSurfaceate",
         sortEnabled: true,
-        columnWidth: 175,
+        columnWidth: 80,
       },
       {
         columnName: "Indirizzo",
         columnLabel: "AddressLine",
         sortEnabled: true,
-        columnWidth: 230,
+        columnWidth: 200,
       },
       {
         columnName: "Prezzo",
         columnLabel: "Price",
         sortEnabled: true,
-        columnWidth: 175,
+        columnWidth: 150,
+      },
+      {
+        columnName: "Immagine",
+        columnLabel: "Photos",
+        sortEnabled: false,
+        columnWidth: 150,
       },
       {
         columnName: "Actions",
@@ -279,6 +288,7 @@ export default defineComponent({
       loading.value = true;
       const results = await getRealEstateProperties(filterRequest);
       for (const key in results) {
+       
         const item = {
           Id: results[key].Id,
           CreationDate: results[key].CreationDate,
@@ -290,8 +300,10 @@ export default defineComponent({
           StateOfTheProperty: results[key].StateOfTheProperty,
           AssignmentEnd: results[key].AssignmentEnd,
           Status: results[key].Status,
-          Town: results[key].Town
+          Town: results[key].Town,
+          Photos: results[key].Photos?.length > 0 ? results[key].Photos[0].Url : null, // Passa l'URL della prima foto
         } as RequestTabelData;
+
 
         tableData.value.push(item)
       }
