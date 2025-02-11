@@ -83,9 +83,7 @@
                 <label class="required fs-6 fw-semobold mb-2">Descrizione</label>
                 <!--end::Label-->
                 <!--begin::Input-->
-                <el-form-item prop="Description">
-                  <el-input v-model="formData.Description" type="text" />
-                </el-form-item>
+                <textarea class="form-control" v-model="formData.Description"></textarea>
                 <!--end::Input-->
               </div>
               <!--end::Input group-->

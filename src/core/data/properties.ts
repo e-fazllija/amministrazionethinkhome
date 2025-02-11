@@ -65,6 +65,7 @@ export class RequestTabelData {
   AssignmentEnd?: string;
   Status: string;
   Town: string;
+  Auction:Boolean;
 }
 
 export class InsertModel {

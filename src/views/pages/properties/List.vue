@@ -16,6 +16,7 @@
                 <option value="">Contratto</option>
                 <option value="Vendita">Vendita</option>
                 <option value="Affitto">Affitto</option>
+                <option value="Aste">Aste</option>
               </select>
             </div>
             <div class="col-md-3 col-lg-3">
@@ -201,7 +202,7 @@
         </template>
         <template v-slot:actions="{ row: item }">
           <router-link :to="{ name: 'property', params: { id: item.Id } }"
-            class="btn btn-light-info me-1">Dettagli</router-link>
+            class="btn btn-light-info me-1" target="_blank" rel="noopener noreferrer">Dettagli</router-link>
           <!-- <button v-if="user.Id === item.AgentId || user.Role === 'Admin' || user.Role == 'Agency'"
             @click="deleteItem(item.Id)" class="btn btn-light-danger me-1">Elimina</button> -->
         </template>
@@ -301,7 +302,8 @@ export default defineComponent({
           AssignmentEnd: results[key].AssignmentEnd,
           Status: results[key].Status,
           Town: results[key].Town,
-          Photos: results[key].Photos?.length > 0 ? results[key].Photos[0].Url : null, // Passa l'URL della prima foto
+          Photos: results[key].Photos?.length > 0 ? results[key].Photos[0].Url : null,
+          Auction: results[key].Auction,
         } as RequestTabelData;
 
 
@@ -391,21 +393,35 @@ export default defineComponent({
       MenuComponent.reinitialization();
     };
     const contract = ref<string>("");
-    watch(
-      () => contract.value,
-      (newValue) => {
-        tableData.value.splice(0, tableData.value.length, ...initItems.value);
-        if (newValue) {
-          let results: Array<RequestTabelData> = [];
+      watch(
+       () => contract.value, 
+            (newValue) => {
+          tableData.value.splice(0, tableData.value.length, ...initItems.value);
+          if (newValue) {  
+             let results: Array<RequestTabelData> = [];
           for (let j = 0; j < tableData.value.length; j++) {
-            if (searchingFunc(tableData.value[j], newValue.toLowerCase())) {
-              results.push(tableData.value[j]);
-            }
+          const item = tableData.value[j];
+          const status = item.Status ? item.Status.toLowerCase().trim() : "";
+          const isAuction = item.Auction === true; // Se Auction è true, è un'asta
+          if (newValue === "Aste") {
+          if (isAuction) {
+            results.push(item);
           }
-          tableData.value.splice(0, tableData.value.length, ...results);
+          } else if (newValue === "Vendita") {
+          if (status === "vendita" && !isAuction) { 
+            results.push(item);
+          }
+          } else if (newValue === "Affitto") {
+          if (status === "affitto") { 
+            results.push(item);
+         }
+         }
+         }
+         tableData.value.splice(0, tableData.value.length, ...results);
         }
       }
     );
+
     const typologie = ref<string>("");
     watch(
       () => typologie.value,
