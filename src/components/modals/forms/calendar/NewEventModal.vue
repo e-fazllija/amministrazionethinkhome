@@ -16,7 +16,7 @@
           </div>
           <!--end::Modal header-->
           <!--begin::Modal body-->
-          <div class="modal-body py-10 px-lg-17">
+          <div v-if="!loading" class="modal-body py-10 px-lg-17">
             <!--begin::Input group-->
             <div class="fv-row mb-9 fv-plugins-icon-container">
               <!--begin::Label-->
@@ -80,10 +80,22 @@
               <label class="fs-6 fw-semobold mb-2">Cliente</label>
               <!--end::Label-->
               <!--begin::Input-->
-              <el-select v-model="targetData.CustomerId" placeholder="Seleziona il cliente" size="large">
+
+              <Multiselect
+                v-model="targetData.CustomerId"
+                :options="inserModel.Customers"
+                label="label"
+                valueProp="Id"
+                :searchable="true"
+                :close-on-select="true"
+                :clear-on-select="false"
+                placeholder="Seleziona il cliente"
+              />
+    
+              <!-- <el-select v-model="targetData.CustomerId" placeholder="Seleziona il cliente" size="large">
                 <el-option v-for="item in inserModel.Customers" :key="item.Id" :label="item.Name + ' ' + item.LastName"
                   :value="item.Id" />
-              </el-select>
+              </el-select> -->
               <!--end::Input-->
             </div>
             <!--end::Input group-->
@@ -167,10 +179,11 @@ import { hideModal, removeModalBackdrop } from "@/core/helpers/dom";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import events, { todayDate, getToInsert, createEvent, InsertModel, Event } from "@/core/data/events";
 import { useAuthStore } from "@/stores/auth";
-
+// import Multiselect from 'vue-multiselect'
+import Multiselect from '@vueform/multiselect'
 export default defineComponent({
   name: "new-event-modal",
-  components: {},
+  components: { Multiselect },
   props: {
     SelectedDateStart: { type: String, Required: true },
     SelectedDateEnd: { type: String, Required: true },
@@ -230,6 +243,11 @@ export default defineComponent({
         },
       ],
     });
+    const options = [
+        { id: 1, label: 'Opzione 1' },
+        { id: 2, label: 'Opzione 2' },
+        { id: 3, label: 'Opzione 3' },
+      ];
 
     const inserModel = ref<InsertModel>({
       Customers: [],
@@ -238,7 +256,9 @@ export default defineComponent({
     });
 
     onMounted(async () => {
+      loading.value = true
       inserModel.value = await getToInsert();
+      loading.value = false
     })
 
     const submit = async () => {
@@ -324,8 +344,21 @@ export default defineComponent({
       removeModalBackdrop
     };
   },
+  data() {
+      return {
+        value: null,
+        options: [
+        { Id: 1, Name: 'Opzione 1' },
+        { Id: 2, Name: 'Opzione 2' },
+        { Id: 3, Name: 'Opzione 3' }
+      ],
+      }
+    },
+  methods: {
+  }
 });
 </script>
+<style src="@vueform/multiselect/themes/default.css"></style>
 
 <style lang="scss">
 .el-select {
@@ -336,4 +369,5 @@ export default defineComponent({
 .el-date-editor.el-input__inner {
   width: 100%;
 }
+
 </style>

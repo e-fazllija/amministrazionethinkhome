@@ -176,6 +176,8 @@ const getToInsert = (): Promise<InsertModel> => {
       const requests = data.Requests as Array<Request>;
       const customers = data.Customers as Array<Customer>;
       const properties = data.RealEstateProperties as Array<RealEstateProperty>;
+      customers.forEach(x => x.label = x.Name + ' ' + x.LastName);
+
       const result = <InsertModel>({
         Requests: requests,
         Customers: customers,
