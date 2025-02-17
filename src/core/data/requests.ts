@@ -29,6 +29,7 @@ export class Request {
   StringDate?: string;
   MortgageAdviceRequired: boolean;
   RequestNotes?: Notes[];
+  label?: string;
 }
 
 export class RequestTabelData {
