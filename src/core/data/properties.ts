@@ -51,6 +51,7 @@ export class RealEstateProperty {
   Files?: FileList;
   RealEstatePropertyNotes?: Notes[];
   VideoUrl?: string;
+  label?: string;
 }
 
 export class RequestTabelData {

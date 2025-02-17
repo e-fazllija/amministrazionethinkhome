@@ -56,10 +56,22 @@
               <label class="fs-6 fw-semobold mb-2">Immobile</label>
               <!--end::Label-->
               <!--begin::Input-->
-              <el-select v-model="targetData.RealEstatePropertyId" placeholder="Seleziona l'immobile" size="large">
+
+              <Multiselect
+                v-model="targetData.RealEstatePropertyId"
+                :options="inserModel.RealEstateProperties"
+                label="label"
+                valueProp="Id"
+                :searchable="true"
+                :close-on-select="true"
+                :clear-on-select="false"
+                placeholder="Seleziona l'immobile"
+              />
+
+              <!-- <el-select v-model="targetData.RealEstatePropertyId" placeholder="Seleziona l'immobile" size="large">
                 <el-option v-for="item in inserModel.RealEstateProperties" :key="item.Id"
                   :label="item.Town + ', ' + item.AddressLine" :value="item.Id" />
-              </el-select>
+              </el-select> -->
             </div>
             <!--end::Input-->
             <!--begin::Input group-->
@@ -68,10 +80,22 @@
               <label class="fs-6 fw-semobold mb-2">Richiesta</label>
               <!--end::Label-->
               <!--begin::Input-->
-              <el-select v-model="targetData.RequestId" placeholder="Seleziona la richiesta" size="large">
+
+              <Multiselect
+                v-model="targetData.RequestId"
+                :options="inserModel.Requests"
+                label="label"
+                valueProp="Id"
+                :searchable="true"
+                :close-on-select="true"
+                :clear-on-select="false"
+                placeholder="Seleziona la richiesta"
+              />
+
+              <!-- <el-select v-model="targetData.RequestId" placeholder="Seleziona la richiesta" size="large">
                 <el-option v-for="item in inserModel.Requests" :key="item.Id"
                   :label="item.Customer.Name + ' ' + item.Customer.LastName" :value="item.Id" />
-              </el-select>
+              </el-select> -->
             </div>
             <!--end::Input-->
             <!--begin::Input group-->
@@ -179,8 +203,8 @@ import { hideModal, removeModalBackdrop } from "@/core/helpers/dom";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import events, { todayDate, getToInsert, createEvent, InsertModel, Event } from "@/core/data/events";
 import { useAuthStore } from "@/stores/auth";
-// import Multiselect from 'vue-multiselect'
 import Multiselect from '@vueform/multiselect'
+
 export default defineComponent({
   name: "new-event-modal",
   components: { Multiselect },
