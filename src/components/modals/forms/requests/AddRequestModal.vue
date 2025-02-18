@@ -54,8 +54,8 @@
                 <!--begin::Input group-->
                 <div class="fv-row mb-9">
                 <!--begin::Label-->
-                <label class="fs-6 fw-semobold mb-2">Cliente</label>
-                    <!--end::Label-->
+                <span class="required">Cliente</span>
+                <!--end::Label-->
                     <!--begin::Input-->
                     <Multiselect
                 v-model="formData.CustomerId"
