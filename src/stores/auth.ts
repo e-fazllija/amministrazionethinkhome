@@ -22,6 +22,7 @@ export interface User {
   CreationDate?: Date;
   UpdateDate?: Date;
   AgencyId?: string;
+  label?: string;
 }
 
 export const useAuthStore = defineStore("auth", () => {
