@@ -30,14 +30,16 @@
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
             <!--begin::Input group-->
-            <div class="d-flex flex-column mb-7 fv-row">
-              <!--begin::Input-->
-              <select class="form-control" v-model="formData.CustomerId" required>
-                <option v-for="(user, index) in inserModel.Customers" :key="index" :value="user.Id">{{ user.Name }} {{
-                  user.LastName }}</option>
-              </select>
-              <!--end::Input-->
-            </div>
+              <Multiselect
+                v-model="formData.CustomerId"
+                :options="inserModel.Customers"
+                label="label"
+                valueProp="Id"
+                :searchable="true"
+                :close-on-select="true"
+                :clear-on-select="false"
+                placeholder="Seleziona il cliente"
+              />
             <!--end::Input group-->
           </div>
         </div>
@@ -767,10 +769,11 @@ import {
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import draggable from 'vuedraggable';
+import Multiselect from '@vueform/multiselect'
 
 export default defineComponent({
   name: "update",
-  components: { draggable },
+  components: { draggable, Multiselect },
   setup() {
     const store = useAuthStore();
     const user = store.user;
@@ -818,7 +821,7 @@ export default defineComponent({
       Availability: "",
       Description: "",
       ShortDescription: "",
-      CustomerId: 0,
+      CustomerId: null,
       AgentId: "",
       AssignmentEnd: "",
       Agent: null,
