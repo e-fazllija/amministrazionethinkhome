@@ -411,33 +411,30 @@ export default defineComponent({
 
     const locations = ref<Array<string>>([]);
 
-      watch(
-  () => locations.value,
-  (newValue) => {
-    if (!newValue || newValue.length === 0) {
+  watch(
+      () => locations.value,
+      (newValue) => {
+      if (!newValue || newValue.length === 0) {
       // Se locations è vuoto, ripristina tutte le voci
       tableData.value = [...initItems.value];
       return;
-    }
-
+      }
     let results = [];
-
-    for (let item of newValue) {
+      for (let item of newValue) {
       for (let j = 0; j < initItems.value.length; j++) {
         if (searchingFunc(initItems.value[j], item.toLocaleLowerCase())) {
           results.push(initItems.value[j]);
         }
       }
     }
-
     // Rimuovi duplicati
     const uniqueResults = Array.from(new Set(results.map(item => JSON.stringify(item))))
       .map(item => JSON.parse(item));
 
     tableData.value = uniqueResults;
-  },
-  { deep: true }
-);
+    },
+    { deep: true }
+  );
 
 
     async function deleteItem(id: Number) {

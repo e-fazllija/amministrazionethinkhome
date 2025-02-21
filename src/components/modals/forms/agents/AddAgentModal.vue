@@ -97,6 +97,10 @@
                 <!--end::Input-->
               </div>
               <!--end::Input group-->
+              <div class="d-flex align-items-center mb-7">
+                <label class="required fs-6 fw-semobold me-3">Seleziona il colore:</label>
+                 <el-color-picker v-model="formData.Color" show-alpha />
+               </div>
               <!--begin::Input group-->
               <div class="fv-row mb-7">
                 <!--begin::Label-->
@@ -321,7 +325,8 @@ export default defineComponent({
       Town: "",
       Region: "",
       Password: "",
-      AgencyId: ""
+      AgencyId: "",
+      Color: "#000000"
     });
 
     const rules = ref({
@@ -439,3 +444,4 @@ export default defineComponent({
   },
 });
 </script>
+
