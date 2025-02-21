@@ -216,6 +216,7 @@ export default defineComponent({
     SelectedDateStart: { type: String, Required: true },
     SelectedDateEnd: { type: String, Required: true },
     UserId: { type: String, Required: true },
+    Color: { type: String, Required: true }
   },
   setup(props, { emit }) {
     const formRef = ref<null | HTMLFormElement>(null);
@@ -234,7 +235,7 @@ export default defineComponent({
       DataInizioEvento: new Date(todayDate.format("YYYY-MM-DD")),
       DataFineEvento: new Date(todayDate.format("YYYY-MM-DD")),
       Type: "Appuntamento",
-      Color:"#5e97fd",
+      Color: "#ffffff",
     });
 
     watch(() => props.SelectedDateStart, async (first, second) => {
@@ -246,6 +247,13 @@ export default defineComponent({
     watch(() => props.SelectedDateEnd, async (first, second) => {
       if (first) {
         targetData.value.DataFineEvento = new Date(first);
+      }
+    })
+
+    watch(() => props.Color, async (first, second) => {
+      if (first) {
+        console.log(first)
+        targetData.value.Color = first;
       }
     })
 

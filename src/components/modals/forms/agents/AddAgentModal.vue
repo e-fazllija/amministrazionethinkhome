@@ -326,7 +326,7 @@ export default defineComponent({
       Region: "",
       Password: "",
       AgencyId: "",
-      Color: "#000000"
+      Color: "#ffffff"
     });
 
     const rules = ref({

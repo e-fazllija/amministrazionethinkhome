@@ -56,7 +56,7 @@
               <!--end::Input group-->
               <div class="d-flex align-items-center mb-7">
                 <label class="required fs-6 fw-semobold me-3">Seleziona il colore:</label>
-                 <el-color-picker v-model="formData.Color" show-alpha />
+                 <el-color-picker v-model="formData.Color" />
                </div>
               <!--begin::Input group-->
               <div class="fv-row mb-7">
@@ -254,7 +254,7 @@ export default defineComponent({
       Region: "",
       Password: "",
       AgencyId: "",
-      Color: "#000000"
+      Color: "#ffffff"
     });
 
     watch(() => props.Id, async (first, second) => {

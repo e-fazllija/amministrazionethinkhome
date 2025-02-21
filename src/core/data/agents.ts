@@ -19,7 +19,7 @@ export class Agent {
   Role? = "Agent";
   Password?: string;
   AgencyId: string;
-  Color?: string;
+  Color: string;
 }
 
 export class InsertModel {
