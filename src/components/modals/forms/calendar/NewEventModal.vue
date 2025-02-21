@@ -30,6 +30,10 @@
               <div class="fv-plugins-message-container invalid-feedback"></div>
             </div>
             <!--end::Input group-->
+            <div class="fv-row mb-7">
+                <label class="fs-6 fw-semobold mb-2">Seleziona il colore dell'evento</label>
+                <el-color-picker v-model="targetData.Color" show-alpha style="width: 100%;" />
+            </div>
             <!--begin::Input group-->
             <div class="fv-row mb-9">
               <!--begin::Label-->
@@ -212,6 +216,7 @@ export default defineComponent({
     SelectedDateStart: { type: String, Required: true },
     SelectedDateEnd: { type: String, Required: true },
     UserId: { type: String, Required: true },
+    Color: { type: String, Required: true }
   },
   setup(props, { emit }) {
     const formRef = ref<null | HTMLFormElement>(null);
@@ -229,7 +234,8 @@ export default defineComponent({
       RealEstatePropertyId: null,
       DataInizioEvento: new Date(todayDate.format("YYYY-MM-DD")),
       DataFineEvento: new Date(todayDate.format("YYYY-MM-DD")),
-      Type: "Appuntamento"
+      Type: "Appuntamento",
+      Color: "#ffffff",
     });
 
     watch(() => props.SelectedDateStart, async (first, second) => {
@@ -241,6 +247,13 @@ export default defineComponent({
     watch(() => props.SelectedDateEnd, async (first, second) => {
       if (first) {
         targetData.value.DataFineEvento = new Date(first);
+      }
+    })
+
+    watch(() => props.Color, async (first, second) => {
+      if (first) {
+        console.log(first)
+        targetData.value.Color = first;
       }
     })
 

@@ -127,6 +127,7 @@ export class Event {
   DataFineEvento?: Date;
   CreationDate?: Date;
   UpdateDate?: Date;
+  Color?: string;
 }
 
 export class InsertModel {

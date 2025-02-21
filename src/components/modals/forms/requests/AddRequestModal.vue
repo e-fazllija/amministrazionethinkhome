@@ -52,16 +52,21 @@
                 data-kt-scroll-offset="300px"
               >
                 <!--begin::Input group-->
-                <div class="d-flex flex-column mb-5 fv-row">
-                    <!--begin::Label-->
-                    <label class="fs-6 fw-semobold mb-2">
-                        <span class="required">Cliente</span>
-                        </label>
-                    <!--end::Label-->
+                <div class="fv-row mb-9">
+                <!--begin::Label-->
+                <span class="required">Cliente</span>
+                <!--end::Label-->
                     <!--begin::Input-->
-                    <select class="form-control" v-model="formData.CustomerId">
-                        <option v-for="(user, index) in inserModel.Customers" :key="index" :value="user.Id">{{ user.Name }} {{ user.LastName }}</option>
-                    </select>
+                    <Multiselect
+                v-model="formData.CustomerId"
+                :options="inserModel.Customers"
+                label="label"
+                valueProp="Id"
+                :searchable="true"
+                :close-on-select="true"
+                :clear-on-select="false"
+                placeholder="Seleziona il cliente"
+              />
                     <!--end::Input-->
                 </div>
                 <!--end::Input group-->
@@ -407,10 +412,12 @@
   import {cityLocations } from "@/core/data/locations";
   import {provinceCities } from "@/core/data/provinces";
   import { useAuthStore, type User } from "@/stores/auth";
+  import Multiselect from '@vueform/multiselect'
+
   
   export default defineComponent({
     name: "add-request-modal",
-    components: {},
+    components: {Multiselect},
     setup(_, { emit }) {
       const formRef = ref<null | HTMLFormElement>(null);
       const addRequestModalRef = ref<null | HTMLElement>(null);
@@ -419,7 +426,7 @@
       const cities = ref([]);
       const locations = ref([]);
       const formData = ref<Request>({
-        CustomerId: 0,  
+        CustomerId: null,  
         Contract: "Vendita",
         PropertyType: "",
         Province: "",
@@ -442,7 +449,16 @@
             Customers: [],
             Users: []
         });
-  
+
+        onMounted(async () => {
+        loading.value = true;
+        inserModel.value = await getToInsert();
+        if(inserModel.value.Customers.length > 0){
+        formData.value.CustomerId = inserModel.value.Customers[0].Id;
+        } 
+        loading.value = false;
+      })
+        
       const rules = ref({
         Type: [
           {
@@ -474,14 +490,7 @@
         ],
       });
 
-      onMounted(async () => {
-        loading.value = true;
-        inserModel.value = await getToInsert();
-        if(inserModel.value.Customers.length > 0){
-            formData.value.CustomerId = inserModel.value.Customers[0].Id;
-        }
-        loading.value = false;
-      })
+      
 
 
       watch(
@@ -576,4 +585,17 @@
     },
   });
   </script>
+  <style src="@vueform/multiselect/themes/default.css"></style>
+  <style lang="scss">
+.el-select {
+  width: 100%;
+}
+
+.el-date-editor.el-input,
+.el-date-editor.el-input__inner {
+  width: 100%;
+}
+
+</style>
+
   

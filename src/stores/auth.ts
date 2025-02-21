@@ -22,6 +22,8 @@ export interface User {
   CreationDate?: Date;
   UpdateDate?: Date;
   AgencyId?: string;
+  label?: string;
+  Color?: "#ffffff"
 }
 
 export const useAuthStore = defineStore("auth", () => {

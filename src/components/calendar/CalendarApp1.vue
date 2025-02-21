@@ -36,13 +36,16 @@
   </div>
   <!--end::Card-->
 
-  <NewEventModal :UserId="userId" :SelectedDateStart="selectedDateStart" :SelectedDateEnd="selectedDateEnd" @formAddSubmitted="getItems(user.Role == 'Admin' ? agentId : userId)"></NewEventModal>
-  <UpdateEventModal :Id="selectedId" @formUpdateSubmitted="getItems(user.Role == 'Admin' ? agentId : userId)"></UpdateEventModal>
+  <NewEventModal :UserId="userId" :Color="color" :SelectedDateStart="selectedDateStart"
+    :SelectedDateEnd="selectedDateEnd" @formAddSubmitted="getItems(user.Role == 'Admin' ? agentId : userId)">
+  </NewEventModal>
+  <UpdateEventModal :Id="selectedId" @formUpdateSubmitted="getItems(user.Role == 'Admin' ? agentId : userId)">
+  </UpdateEventModal>
 </template>
 
 <script lang="ts">
 import { getAssetPath } from "@/core/helpers/assets";
-import { defineComponent, ref, onMounted, watch, computed  } from "vue";
+import { defineComponent, ref, onMounted, watch, computed } from "vue";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -75,15 +78,25 @@ export default defineComponent({
     const newTargetModalRef = ref<null | HTMLElement>(null);
     const store = useAuthStore();
     const user = store.user;
-    
+
     const userId = computed(() => {
-      if(user.Role == "Admin" || user.Role == "Agency"){
-        console.log("admin: " + agentId.value != null && agentId.value != "" ? agentId.value : user.Id)
+      if (user.Role == "Admin" || user.Role == "Agency") {
         return agentId.value != null && agentId.value != "" ? agentId.value : user.Id
       }
       else {
-        console.log("not admin: " + user.Id)
         return user.Id
+      }
+    })
+
+    const color = computed(() => {
+      if (agentId.value != null && agentId.value != "") {
+        if (user.Role == "Admin" || user.Role == "Agency") {
+          const userSelected = defaultSearchItems.value.Agents.filter(x => x.Id == agentId.value)[0];
+          return userSelected.Color;
+        }
+        else {
+          return user.Color;
+        }
       }
     })
 
@@ -119,15 +132,13 @@ export default defineComponent({
     };
 
     const tableData = ref<Array<EventInput>>([]);
-    
+
     async function getItems(filterRequest: string) {
       loading.value = true;
       tableData.value.splice(0);
       const results = await getEvents(filterRequest);
       const addName = store.user.Role != "Agent" && agentId.value == "" ? true : false;
       for (const key in results) {
-        const colors = ["#FF5733", "#D2691E", "#3357FF", "#FF33A1", "#A133FF", "#33FFF5", "#008B8B"];
-        const randomColor = colors[Number(key) % colors.length];
 
         const item = {
           id: results[key].Id.toString(),
@@ -136,7 +147,7 @@ export default defineComponent({
           end: results[key].DataFineEvento,
           description: results[key].DescrizioneEvento,
           className: "fc-event-meeting",
-          color: randomColor
+          color: results[key].Color != null && results[key].Color != "" ? results[key].Color : results[key].ApplicationUser.Color
         } as EventInput;
 
         tableData.value.push(item)
@@ -244,7 +255,8 @@ export default defineComponent({
       selectedDateEnd,
       todayDate,
       newTargetModalRef,
-      userId
+      userId,
+      color
     };
   },
 });

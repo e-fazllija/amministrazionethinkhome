@@ -64,66 +64,15 @@
               <input type="text" v-model="toPrice" @input="searchPrice()" class="form-control form-control-solid"
                 placeholder="Prezzo a " />
             </div>
-            <div class="col-md-6 col-lg-6">
-              <select class="form-control form-control-solid custom-multiple-select" v-model="locations" multiple>
-                <option value="">Qualsiasi</option>
-                <option value="FROSINONE">LAZIO \ FROSINONE (FR)</option>
-                <option value="LATINA">LAZIO \ LATINA (LT)</option>
-                <option value="ROMA">LAZIO \ ROMA (RM)</option>
-                <option value="VITERBO">LAZIO \ VITERBO (VT)</option>
-                <option value="TAGLIACOZZO">ABRUZZO \ L'AQUILA (AQ) \ TAGLIACOZZO</option>
-                <option value="ANAGNI">LAZIO \ FROSINONE (FR) \ ANAGNI</option>
-                <option value="FIUGGI">LAZIO \ FROSINONE (FR) \ FIUGGI</option>
-                <option value="FROSINONE">LAZIO \ FROSINONE (FR) \ FROSINONE</option>
-                <option value="PALIANO">LAZIO \ FROSINONE (FR) \ PALIANO</option>
-                <option value="SERRONE">LAZIO \ FROSINONE (FR) \ SERRONE</option>
-                <option value="APRILIA">LAZIO \ LATINA (LT) \ APRILIA</option>
-                <option value="ROCCA MASSIMA">LAZIO \ LATINA (LT) \ ROCCA MASSIMA</option>
-                <option value="SABAUDIA">LAZIO \ LATINA (LT) \ SABAUDIA</option>
-                <option value="ALBANO LAZIALE">LAZIO \ ROMA (RM) \ ALBANO LAZIALE</option>
-                <option value="ANZIO">LAZIO \ ROMA (RM) \ ANZIO</option>
-                <option value="ARDEA">LAZIO \ ROMA (RM) \ ARDEA</option>
-                <option value="ARTENA">LAZIO \ ROMA (RM) \ ARTENA</option>
-                <option value="BELLEGRA">LAZIO \ ROMA (RM) \ BELLEGRA</option>
-                <option value="CAMPAGNANO DI ROMA">LAZIO \ ROMA (RM) \ CAMPAGNANO DI ROMA</option>
-                <option value="CASAPE">LAZIO \ ROMA (RM) \ CASAPE</option>
-                <option value="CASTEL SAN PIETRO ROMANO">LAZIO \ ROMA (RM) \ CASTEL SAN PIETRO ROMANO</option>
-                <option value="CAVE">LAZIO \ ROMA (RM) \ CAVE</option>
-                <option value="COLLEFERRO">LAZIO \ ROMA (RM) \ COLLEFERRO</option>
-                <option value="COLONNA">LAZIO \ ROMA (RM) \ COLONNA</option>
-                <option value="FIANO ROMANO">LAZIO \ ROMA (RM) \ FIANO ROMANO</option>
-                <option value="FRASCATI">LAZIO \ ROMA (RM) \ FRASCATI</option>
-                <option value="GALLICANO NEL LAZIO">LAZIO \ ROMA (RM) \ GALLICANO NEL LAZIO</option>
-                <option value="GAVIGNANO">LAZIO \ ROMA (RM) \ GAVIGNANO</option>
-                <option value="GENAZZANO">LAZIO \ ROMA (RM) \ GENAZZANO</option>
-                <option value="GROTTAFERRATA">LAZIO \ ROMA (RM) \ GROTTAFERRATA</option>
-                <option value="GUIDONIA MONTECELIO">LAZIO \ ROMA (RM) \ GUIDONIA MONTECELIO</option>
-                <option value="LABICO">LAZIO \ ROMA (RM) \ LABICO</option>
-                <option value="LANUVIO">LAZIO \ ROMA (RM) \ LANUVIO</option>
-                <option value="LARIANO">LAZIO \ ROMA (RM) \ LARIANO</option>
-                <option value="MARINO">LAZIO \ ROMA (RM) \ MARINO</option>
-                <option value="MONTE PORZIO CATONE">LAZIO \ ROMA (RM) \ MONTE PORZIO CATONE</option>
-                <option value="MONTECOMPATRI">LAZIO \ ROMA (RM) \ MONTECOMPATRI</option>
-                <option value="MONTELANICO">LAZIO \ ROMA (RM) \ MONTELANICO</option>
-                <option value="NETTUNO">LAZIO \ ROMA (RM) \ NETTUNO</option>
-                <option value="OLEVANO ROMANO">LAZIO \ ROMA (RM) \ OLEVANO ROMANO</option>
-                <option value="PALESTRINA">LAZIO \ ROMA (RM) \ PALESTRINA</option>
-                <option value="PALOMBARA SABINA">LAZIO \ ROMA (RM) \ PALOMBARA SABINA</option>
-                <option value="POLI">LAZIO \ ROMA (RM) \ POLI</option>
-                <option value="POMEZIA">LAZIO \ ROMA (RM) \ POMEZIA</option>
-                <option value="ROCCA DI CAVE">LAZIO \ ROMA (RM) \ ROCCA DI CAVE</option>
-                <option value="ROCCA PRIORA">LAZIO \ ROMA (RM) \ ROCCA PRIORA</option>
-                <option value="ROMA">LAZIO \ ROMA (RM) \ ROMA</option>
-                <option value="SAN CESAREO">LAZIO \ ROMA (RM) \ SAN CESAREO</option>
-                <option value="SAN VITO ROMANO">LAZIO \ ROMA (RM) \ SAN VITO ROMANO</option>
-                <option value="SEGNI">LAZIO \ ROMA (RM) \ SEGNI</option>
-                <option value="SUBIACO">LAZIO \ ROMA (RM) \ SUBIACO</option>
-                <option value="TIVOLI">LAZIO \ ROMA (RM) \ TIVOLI</option>
-                <option value="VALMONTONE">LAZIO \ ROMA (RM) \ VALMONTONE</option>
-                <option value="VELLETRI">LAZIO \ ROMA (RM) \ VELLETRI</option>
-                <option value="ZAGAROLO">LAZIO \ ROMA (RM) \ ZAGAROLO</option>
-                <option value="VITERBO">LAZIO \ VITERBO (VT) \ VITERBO</option>
-              </select>
+             <div class="col-md-6 col-lg-6">
+              <Multiselect
+              v-model="locations"
+              :options="options"
+               mode="tags"
+              :multiple="true"
+               placeholder="Seleziona località"
+               class="cform-control form-control-solid"
+             />
             </div>
           </div>
           <!--end::Search-->
@@ -226,6 +175,9 @@ import arraySort from "array-sort";
 import { MenuComponent } from "@/assets/ts/components";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import { useAuthStore } from "@/stores/auth";
+import Multiselect from '@vueform/multiselect'
+import { options } from "@fullcalendar/core/preact";
+
 
 export default defineComponent({
   name: "properties",
@@ -233,6 +185,7 @@ export default defineComponent({
     Datatable,
     ExportCustomerModal,
     AddPropertyModal,
+    Multiselect,
   },
   setup() {
     const authStore = useAuthStore();
@@ -457,29 +410,32 @@ export default defineComponent({
     );
 
     const locations = ref<Array<string>>([]);
-    watch(
+
+  watch(
       () => locations.value,
       (newValue) => {
-        tableData.value.splice(0, tableData.value.length, ...initItems.value);
-        if (newValue) {
-          let results: Array<RequestTabelData> = [];
-          for (let item in newValue) {
-            for (let j = 0; j < tableData.value.length; j++) {
-              if (searchingFunc(tableData.value[j], newValue[item].toLocaleLowerCase())) {
-                results.push(tableData.value[j]);
-              }
-            }
-          }
-
-          // Rimuovi i duplicati da results
-          const uniqueResults = Array.from(
-            new Set(results.map(item => JSON.stringify(item)))
-          ).map(item => JSON.parse(item));
-
-          tableData.value.splice(0, tableData.value.length, ...uniqueResults);
+      if (!newValue || newValue.length === 0) {
+      // Se locations è vuoto, ripristina tutte le voci
+      tableData.value = [...initItems.value];
+      return;
+      }
+    let results = [];
+      for (let item of newValue) {
+      for (let j = 0; j < initItems.value.length; j++) {
+        if (searchingFunc(initItems.value[j], item.toLocaleLowerCase())) {
+          results.push(initItems.value[j]);
         }
       }
-    );
+    }
+    // Rimuovi duplicati
+    const uniqueResults = Array.from(new Set(results.map(item => JSON.stringify(item))))
+      .map(item => JSON.parse(item));
+
+    tableData.value = uniqueResults;
+    },
+    { deep: true }
+  );
+
 
     async function deleteItem(id: Number) {
       loading.value = true;
@@ -535,8 +491,74 @@ export default defineComponent({
       user
     };
   },
+  data() {
+  return {
+    options: [
+{ value: "", label: "Qualsiasi" },
+  { value: "FROSINONE", label: "LAZIO \\ FROSINONE (FR)" },
+  { value: "LATINA", label: "LAZIO \\ LATINA (LT)" },
+  { value: "ROMA", label: "LAZIO \\ ROMA (RM)" },
+  { value: "VITERBO", label: "LAZIO \\ VITERBO (VT)" },
+  { value: "TAGLIACOZZO", label: "ABRUZZO \\ L'AQUILA (AQ) \\ TAGLIACOZZO" },
+  { value: "ANAGNI", label: "LAZIO \\ FROSINONE (FR) \\ ANAGNI" },
+  { value: "FIUGGI", label: "LAZIO \\ FROSINONE (FR) \\ FIUGGI" },
+  { value: "FROSINONE", label: "LAZIO \\ FROSINONE (FR) \\ FROSINONE" },
+  { value: "PALIANO", label: "LAZIO \\ FROSINONE (FR) \\ PALIANO" },
+  { value: "SERRONE", label: "LAZIO \\ FROSINONE (FR) \\ SERRONE" },
+  { value: "APRILIA", label: "LAZIO \\ LATINA (LT) \\ APRILIA" },
+  { value: "ROCCA MASSIMA", label: "LAZIO \\ LATINA (LT) \\ ROCCA MASSIMA" },
+  { value: "SABAUDIA", label: "LAZIO \\ LATINA (LT) \\ SABAUDIA" },
+  { value: "ALBANO LAZIALE", label: "LAZIO \\ ROMA (RM) \\ ALBANO LAZIALE" },
+  { value: "ANZIO", label: "LAZIO \\ ROMA (RM) \\ ANZIO" },
+  { value: "ARDEA", label: "LAZIO \\ ROMA (RM) \\ ARDEA" },
+  { value: "ARTENA", label: "LAZIO \\ ROMA (RM) \\ ARTENA" },
+  { value: "BELLEGRA", label: "LAZIO \\ ROMA (RM) \\ BELLEGRA" },
+  { value: "CAMPAGNANO DI ROMA", label: "LAZIO \\ ROMA (RM) \\ CAMPAGNANO DI ROMA" },
+  { value: "CASAPE", label: "LAZIO \\ ROMA (RM) \\ CASAPE" },
+  { value: "CASTEL SAN PIETRO ROMANO", label: "LAZIO \\ ROMA (RM) \\ CASTEL SAN PIETRO ROMANO" },
+  { value: "CAVE", label: "LAZIO \\ ROMA (RM) \\ CAVE" },
+  { value: "COLLEFERRO", label: "LAZIO \\ ROMA (RM) \\ COLLEFERRO" },
+  { value: "COLONNA", label: "LAZIO \\ ROMA (RM) \\ COLONNA" },
+  { value: "FIANO ROMANO", label: "LAZIO \\ ROMA (RM) \\ FIANO ROMANO" },
+  { value: "FRASCATI", label: "LAZIO \\ ROMA (RM) \\ FRASCATI" },
+  { value: "GALLICANO NEL LAZIO", label: "LAZIO \\ ROMA (RM) \\ GALLICANO NEL LAZIO" },
+  { value: "GAVIGNANO", label: "LAZIO \\ ROMA (RM) \\ GAVIGNANO" },
+  { value: "GENAZZANO", label: "LAZIO \\ ROMA (RM) \\ GENAZZANO" },
+  { value: "GROTTAFERRATA", label: "LAZIO \\ ROMA (RM) \\ GROTTAFERRATA" },
+  { value: "GUIDONIA MONTECELIO", label: "LAZIO \\ ROMA (RM) \\ GUIDONIA MONTECELIO" },
+  { value: "LABICO", label: "LAZIO \\ ROMA (RM) \\ LABICO" },
+  { value: "LANUVIO", label: "LAZIO \\ ROMA (RM) \\ LANUVIO" },
+  { value: "LARIANO", label: "LAZIO \\ ROMA (RM) \\ LARIANO" },
+  { value: "MARINO", label: "LAZIO \\ ROMA (RM) \\ MARINO" },
+  { value: "MONTE PORZIO CATONE", label: "LAZIO \\ ROMA (RM) \\ MONTE PORZIO CATONE" },
+  { value: "MONTECOMPATRI", label: "LAZIO \\ ROMA (RM) \\ MONTECOMPATRI" },
+  { value: "MONTELANICO", label: "LAZIO \\ ROMA (RM) \\ MONTELANICO" },
+  { value: "NETTUNO", label: "LAZIO \\ ROMA (RM) \\ NETTUNO" },
+  { value: "OLEVANO ROMANO", label: "LAZIO \\ ROMA (RM) \\ OLEVANO ROMANO" },
+  { value: "PALESTRINA", label: "LAZIO \\ ROMA (RM) \\ PALESTRINA" },
+  { value: "PALOMBARA SABINA", label: "LAZIO \\ ROMA (RM) \\ PALOMBARA SABINA" },
+  { value: "POLI", label: "LAZIO \\ ROMA (RM) \\ POLI" },
+  { value: "POMEZIA", label: "LAZIO \\ ROMA (RM) \\ POMEZIA" },
+  { value: "ROCCA DI CAVE", label: "LAZIO \\ ROMA (RM) \\ ROCCA DI CAVE" },
+  { value: "ROCCA PRIORA", label: "LAZIO \\ ROMA (RM) \\ ROCCA PRIORA" },
+  { value: "ROMA", label: "LAZIO \\ ROMA (RM) \\ ROMA" },
+  { value: "SAN CESAREO", label: "LAZIO \\ ROMA (RM) \\ SAN CESAREO" },
+  { value: "SAN VITO ROMANO", label: "LAZIO \\ ROMA (RM) \\ SAN VITO ROMANO" },
+  { value: "SEGNI", label: "LAZIO \\ ROMA (RM) \\ SEGNI" },
+  { value: "SUBIACO", label: "LAZIO \\ ROMA (RM) \\ SUBIACO" },
+  { value: "TIVOLI", label: "LAZIO \\ ROMA (RM) \\ TIVOLI" },
+  { value: "VALMONTONE", label: "LAZIO \\ ROMA (RM) \\ VALMONTONE" },
+  { value: "VELLETRI", label: "LAZIO \\ ROMA (RM) \\ VELLETRI" },
+  { value: "ZAGAROLO", label: "LAZIO \\ ROMA (RM) \\ ZAGAROLO" },
+  { value: "VITERBO", label: "LAZIO \\ VITERBO (VT) \\ VITERBO" }
+]
+  };
+}
+
 });
 </script>
+<style src="@vueform/multiselect/themes/default.css"></style>
+
 
 <style scoped>
 .custom-multiple-select {

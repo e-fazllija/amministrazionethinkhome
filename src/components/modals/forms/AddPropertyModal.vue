@@ -48,18 +48,21 @@
               <!--end::Input group-->
 
               <!--begin::Input group-->
-              <div class="d-flex flex-column mb-5 fv-row">
+              <div class="fv-row mb-9">
                 <!--begin::Label-->
-                <label class="fs-6 fw-semobold mb-2">
                   <span class="required">Cliente</span>
-                  <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i>
-                </label>
                 <!--end::Label-->
                 <!--begin::Input-->
-                <select class="form-control" v-model="formData.CustomerId">
-                  <option v-for="(user, index) in inserModel.Customers" :key="index" :value="user.Id">{{ user.Name }} {{
-                    user.LastName }}</option>
-                </select>
+                <Multiselect
+                v-model="formData.CustomerId"
+                :options="inserModel.Customers"
+                label="label"
+                valueProp="Id"
+                :searchable="true"
+                :close-on-select="true"
+                :clear-on-select="false"
+                placeholder="Seleziona il cliente"
+              />
                 <!--end::Input-->
               </div>
               <!--end::Input group-->
@@ -727,10 +730,11 @@ import { countries } from "@/core/data/countries";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import { createRealEstateProperty, RealEstateProperty, getToInsert, InsertModel } from "@/core/data/properties";
 import { useAuthStore } from "@/stores/auth";
+import Multiselect from '@vueform/multiselect'
 
 export default defineComponent({
   name: "add-property-modal",
-  components: {},
+  components: {Multiselect},
   setup(_, { emit }) {
     const formRef = ref<null | HTMLFormElement>(null);
     const addPropertyModalRef = ref<null | HTMLElement>(null);
@@ -772,7 +776,7 @@ export default defineComponent({
       Availability: "",
       Description: "",
       ShortDescription: "",
-      CustomerId: 0,
+      CustomerId: null,
       AgentId: "",
       AssignmentEnd: "",
       Agent: null,
