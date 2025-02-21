@@ -235,7 +235,7 @@ export default defineComponent({
       DataInizioEvento: new Date(todayDate.format("YYYY-MM-DD")),
       DataFineEvento: new Date(todayDate.format("YYYY-MM-DD")),
       Type: "Appuntamento",
-      Color: "#ffffff",
+      Color: store.user.Color
     });
 
     watch(() => props.SelectedDateStart, async (first, second) => {
@@ -252,7 +252,6 @@ export default defineComponent({
 
     watch(() => props.Color, async (first, second) => {
       if (first) {
-        console.log(first)
         targetData.value.Color = first;
       }
     })
