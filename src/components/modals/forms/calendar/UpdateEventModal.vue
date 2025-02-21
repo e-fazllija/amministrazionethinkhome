@@ -27,6 +27,10 @@
               <div class="fv-plugins-message-container invalid-feedback"></div>
             </div>
             <!--end::Input group-->
+            <div class="fv-row mb-7">
+                <label class="fs-6 fw-semobold mb-2">Seleziona il colore dell'evento</label>
+                <el-color-picker v-model="targetData.Color" show-alpha style="width: 100%;" />
+            </div>
             <!--begin::Input group-->
             <div class="fv-row mb-9">
               <!--begin::Label-->
@@ -228,7 +232,8 @@ export default defineComponent({
       RealEstatePropertyId: null,
       DataInizioEvento: null,
       DataFineEvento: null,
-      Type: "Appuntamento"
+      Type: "Appuntamento",
+      Color:"##5e97fd"
     });
 
     const rules = ref({
