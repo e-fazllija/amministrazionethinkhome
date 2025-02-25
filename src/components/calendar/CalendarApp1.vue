@@ -59,6 +59,7 @@ import { useAuthStore } from "@/stores/auth";
 import type { EventInput } from "@fullcalendar/core";
 import Loading from "@/components/kt-datatable/table-partials/Loading.vue";
 import itLocale from '@fullcalendar/core/locales/it';
+import { end, start } from "@popperjs/core";
 
 export default defineComponent({
   name: "calendar-app-1",
@@ -101,8 +102,14 @@ export default defineComponent({
     })
 
     const newEvent = async (start: string, end: string) => {
-      selectedDateStart.value = start?.toString() ?? todayDate.format("YYYY-MM-DD").toString();
-      selectedDateEnd.value = end?.toString() ?? selectedDateStart.value;
+      if (!start || !end) {
+        const today = todayDate.format("YYYY-MM-DD"); // Data di oggi
+          selectedDateStart.value = `${today}T07:00:00`; // Imposta l'orario di inizio alle 7:00
+          selectedDateEnd.value = `${today}T08:00:00`; // Imposta l'orario di fine alle 8:00
+      } else {
+          selectedDateStart.value = start.toString();
+          selectedDateEnd.value = end.toString();
+      }
 
       const modal = new Modal(
         document.getElementById("kt_modal_add_event") as Element
@@ -221,7 +228,17 @@ export default defineComponent({
       dayMaxEvents: true, // allow "more" link when too many events
       events: tableData.value,
       dateClick: (arg) => {
-        newEvent(arg.dateStr, null);
+       if (arg.allDay) {
+        const start = new Date(arg.dateStr + "T07:00:00"); // Ora di inizio: 7:00
+        const end = new Date(arg.dateStr + "T08:00:00"); // Ora di fine: 8:00
+        newEvent(start.toISOString(), end.toISOString()); // Passa le date formattate
+       } else {
+        const start = new Date(arg.dateStr);
+        const end = new Date(start.getTime());
+        end.setMinutes(start.getMinutes() + 30); // Aggiungi 30 minuti per la fine
+
+        newEvent(start.toISOString(), end.toISOString()); // Passa i nuovi orari all'evento
+       }
       },
       eventClick: (arg) => {
         updateEvent(parseInt(arg.event.id));
