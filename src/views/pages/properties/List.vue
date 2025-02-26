@@ -493,7 +493,7 @@ export default defineComponent({
   data() {
   return {
     options: [
-             { value: "", label: "Qualsiasi" },
+    { value: "", label: "Qualsiasi" },
              { value: "FROSINONE", label: "LAZIO \\ FROSINONE (FR)" },
              { value: "LATINA", label: "LAZIO \\ LATINA (LT)" },
              { value: "ROMA", label: "LAZIO \\ ROMA (RM)" },
@@ -508,6 +508,7 @@ export default defineComponent({
              { value: "ROCCA MASSIMA", label: "LAZIO \\ LATINA (LT) \\ ROCCA MASSIMA" },
              { value: "SABAUDIA", label: "LAZIO \\ LATINA (LT) \\ SABAUDIA" },
              { value: "ALBANO LAZIALE", label: "LAZIO \\ ROMA (RM) \\ ALBANO LAZIALE" },
+             { value: "ALESSANDRINO", label: "LAZIO \\ ROMA (RM) \\ ALESSANDRINO" },
              { value: "ANZIO", label: "LAZIO \\ ROMA (RM) \\ ANZIO" },
              { value: "ARDEA", label: "LAZIO \\ ROMA (RM) \\ ARDEA" },
              { value: "ARTENA", label: "LAZIO \\ ROMA (RM) \\ ARTENA" },
@@ -541,7 +542,9 @@ export default defineComponent({
              { value: "ROCCA DI CAVE", label: "LAZIO \\ ROMA (RM) \\ ROCCA DI CAVE" },
              { value: "ROCCA PRIORA", label: "LAZIO \\ ROMA (RM) \\ ROCCA PRIORA" },
              { value: "ROMA", label: "LAZIO \\ ROMA (RM) \\ ROMA" },
+             { value: "TOR TRE TESTE", label: "LAZIO \\ ROMA (RM) \\ TOR TRE TESTE" },
              { value: "TORRE MAURA", label: "LAZIO \\ ROMA (RM) \\ TORRE MAURA" },
+             { value: "TORRE SPACCATA", label: "LAZIO \\ ROMA (RM) \\ TORRE SPACCATA" },
              { value: "INFERNETTO", label: "LAZIO \\ ROMA (RM) \\ INFERNETTO" },
              { value: "SAN CESAREO", label: "LAZIO \\ ROMA (RM) \\ SAN CESAREO" },
              { value: "SAN VITO ROMANO", label: "LAZIO \\ ROMA (RM) \\ SAN VITO ROMANO" },
