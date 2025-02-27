@@ -210,6 +210,7 @@ export default defineComponent({
     const calendarOptions = {
       plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
       initialView: "timeGridDay",
+      slotMinTime: "07:00:00",
       headerToolbar: {
         left: "prev,next today",
         center: "title",
