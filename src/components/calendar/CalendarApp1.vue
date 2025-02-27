@@ -141,7 +141,7 @@ export default defineComponent({
     const tableData = ref<Array<EventInput>>([]);
 
     async function getItems(filterRequest: string) {
-      loading.value = true;
+    
       tableData.value.splice(0);
       const results = await getEvents(filterRequest);
       const addName = store.user.Role != "Agent" && agentId.value == "" ? true : false;
@@ -172,7 +172,7 @@ export default defineComponent({
         }
       }
 
-      loading.value = false;
+     
     };
 
     const searchItems = ref<SearchModel>({
@@ -186,8 +186,9 @@ export default defineComponent({
     })
 
     onMounted(async () => {
+      loading.value = true;
       await getItems(store.user.Role == "Admin" ? "" : store.user.Id);
-
+      loading.value = false;
     });
 
     watch(() => agencyId.value, async (first, second) => {
@@ -208,6 +209,7 @@ export default defineComponent({
 
     const calendarOptions = {
       plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
+      initialView: "timeGridDay",
       headerToolbar: {
         left: "prev,next today",
         center: "title",
