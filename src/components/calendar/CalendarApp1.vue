@@ -209,6 +209,7 @@ export default defineComponent({
 
     const calendarOptions = {
       plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
+      initialView: "timeGridDay",
       headerToolbar: {
         left: "prev,next today",
         center: "title",
