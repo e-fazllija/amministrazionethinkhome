@@ -7,7 +7,7 @@
           <!--begin::Search-->
           <div class="row">
             <div class="col-md-3 col-lg-3">
-              <input type="text" v-model="search" @input="searchItems()" class="form-control form-control-solid"
+              <input type="text" v-model="search" class="form-control form-control-solid"
                 placeholder="Cerca Immobile" />
             </div>
             <div class="col-md-3 col-lg-3">
@@ -56,11 +56,11 @@
           </div>
           <div class="row mt-3">
             <div class="col-md-3 col-lg-3">
-              <input type="text" v-model="fromPrice" @input="searchPrice()" class="form-control form-control-solid"
+              <input type="text" v-model="fromPrice" class="form-control form-control-solid"
                 placeholder="Prezzo da " />
             </div>
             <div class="col-md-3 col-lg-3">
-              <input type="text" v-model="toPrice" @input="searchPrice()" class="form-control form-control-solid"
+              <input type="text" v-model="toPrice" class="form-control form-control-solid"
                 placeholder="Prezzo a " />
             </div>
              <div class="col-md-6 col-lg-6">
@@ -94,6 +94,11 @@
           </button> -->
           <!--end::Export-->
           <!--begin::Add customer-->
+          <div class="d-flex justify-content-end align-items-center">
+               <button type="button" @click="searchItems" class="btn btn-primary me-3">
+                      <KTIcon icon-name="search" icon-class="fs-2" /> Cerca
+               </button>
+          </div>
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_property">
             <KTIcon icon-name="plus" icon-class="fs-2" />
             Aggiungi Immobile
@@ -280,160 +285,69 @@ export default defineComponent({
     };
 
     const search = ref<string>("");
-    const searchItems = () => {
-      tableData.value.splice(0, tableData.value.length, ...initItems.value);
-      if (search.value !== "") {
-        let results: Array<RequestTabelData> = [];
-        for (let j = 0; j < tableData.value.length; j++) {
-          if (searchingFunc(tableData.value[j], search.value)) {
-            results.push(tableData.value[j]);
-          }
-        }
-        tableData.value.splice(0, tableData.value.length, ...results);
-      }
-      MenuComponent.reinitialization();
-    };
+    const fromPrice = ref<number | undefined>(undefined);
+    const toPrice = ref<number | undefined>(undefined);
+    const contract = ref<string>("");
+    const typologie = ref<string>("");
+    const category = ref<string>("");
+    const locations = ref<Array<string>>([]);   
 
     const searchingFunc = (obj: any, value: string): boolean => {
-      for (let key in obj) {
-        if (
-          !Number.isInteger(obj[key]) &&
-          !(typeof obj[key] === "object") &&
-          (typeof obj[key] === "string" || typeof obj[key] === "number" || Array.isArray(obj[key]))
-        ) {
+          for (let key in obj) {
+           // Verifica se la proprietà è una stringa o un numero
+          if (
+             !Number.isInteger(obj[key]) &&
+             !(typeof obj[key] === "object") &&
+              (typeof obj[key] === "string" || typeof obj[key] === "number" || Array.isArray(obj[key]))
+             ) {
+          // Confronta la proprietà dell'oggetto con la stringa di ricerca
           if (obj[key].toString().toLowerCase().indexOf(value) !== -1) {
-            return true;
+           return true;
           }
-        }
+       }
       }
       return false;
     };
 
-    const fromPrice = ref<number>();
-    const toPrice = ref<number>();
-    const searchPrice = () => {
+    const searchItems = () => {
+      // Resetta la tabella ai dati iniziali
       tableData.value.splice(0, tableData.value.length, ...initItems.value);
-      let results: Array<RequestTabelData> = [];
-      if (fromPrice.value > 0) {
-        for (let j = 0; j < tableData.value.length; j++) {
-          if (tableData.value[j].Price >= fromPrice.value) {
-            results.push(tableData.value[j]);
-          }
-        }
 
-        // Rimuovi i duplicati da results
-        const uniqueResults = Array.from(
-          new Set(results.map(item => JSON.stringify(item)))
-        ).map(item => JSON.parse(item));
-        tableData.value.splice(0, tableData.value.length, ...uniqueResults);
+      let filteredResults = [...initItems.value];
+      // Filtraggio per testo (search)
+      if (search.value !== "") { 
+         filteredResults = filteredResults.filter(item => searchingFunc(item, search.value));
+      }
+      // Filtraggio per prezzo
+      if (fromPrice.value > 0) { 
+         filteredResults = filteredResults.filter(item => item.Price >= fromPrice.value);
       }
       if (toPrice.value > 0) {
-        for (let j = 0; j < tableData.value.length; j++) {
-          if (tableData.value[j].Price <= toPrice.value) {
-            results.push(tableData.value[j]);
-          }
-        }
-
-        // Rimuovi i duplicati da results
-        const uniqueResults = Array.from(
-          new Set(results.map(item => JSON.stringify(item)))
-        ).map(item => JSON.parse(item));
-        tableData.value.splice(0, tableData.value.length, ...uniqueResults);
+         filteredResults = filteredResults.filter(item => item.Price <= toPrice.value);
       }
-
-
-      MenuComponent.reinitialization();
-    };
-    const contract = ref<string>("");
-      watch(
-       () => contract.value, 
-            (newValue) => {
-          tableData.value.splice(0, tableData.value.length, ...initItems.value);
-          if (newValue) {  
-             let results: Array<RequestTabelData> = [];
-          for (let j = 0; j < tableData.value.length; j++) {
-          const item = tableData.value[j];
-          const status = item.Status ? item.Status.toLowerCase().trim() : "";
-          const isAuction = item.Auction === true; // Se Auction è true, è un'asta
-          if (newValue === "Aste") {
-          if (isAuction) {
-            results.push(item);
-          }
-          } else if (newValue === "Vendita") {
-          if (status === "vendita" && !isAuction) { 
-            results.push(item);
-          }
-          } else if (newValue === "Affitto") {
-          if (status === "affitto") { 
-            results.push(item);
-         }
-         }
-         }
-         tableData.value.splice(0, tableData.value.length, ...results);
-        }
+      // Filtraggio per contratto
+      if (contract.value) {
+         filteredResults = filteredResults.filter(item => searchingFunc(item, contract.value.toLowerCase()));
       }
-    );
-
-    const typologie = ref<string>("");
-    watch(
-      () => typologie.value,
-      (newValue) => {
-        tableData.value.splice(0, tableData.value.length, ...initItems.value);
-        if (newValue) {
-          let results: Array<RequestTabelData> = [];
-          for (let j = 0; j < tableData.value.length; j++) {
-            if (searchingFunc(tableData.value[j], newValue.toLowerCase())) {
-              results.push(tableData.value[j]);
-            }
-          }
-          tableData.value.splice(0, tableData.value.length, ...results);
-        }
+      // Filtraggio per tipologia
+      if (typologie.value) {
+         filteredResults = filteredResults.filter(item => searchingFunc(item, typologie.value.toLowerCase()));
       }
-    );
-
-    const category = ref<string>("");
-    watch(
-      () => category.value,
-      (newValue) => {
-        tableData.value.splice(0, tableData.value.length, ...initItems.value);
-        if (newValue) {
-          let results: Array<RequestTabelData> = [];
-          for (let j = 0; j < tableData.value.length; j++) {
-            if (searchingFunc(tableData.value[j], newValue.toLowerCase())) {
-              results.push(tableData.value[j]);
-            }
-          }
-          tableData.value.splice(0, tableData.value.length, ...results);
-        }
+      // Filtraggio per località
+      if (locations.value.length > 0) {
+         filteredResults = filteredResults.filter(item => {
+         // Verifica che l'elemento corrisponda a una delle località selezionate
+       return locations.value.some(location => searchingFunc(item, location.toLowerCase()));
+       });
       }
-    );
-
-    const locations = ref<Array<string>>([]);
-
-  watch(
-      () => locations.value,
-      (newValue) => {
-      if (!newValue || newValue.length === 0) {
-      // Se locations è vuoto, ripristina tutte le voci
-      tableData.value = [...initItems.value];
-      return;
-      }
-    let results = [];
-      for (let item of newValue) {
-      for (let j = 0; j < initItems.value.length; j++) {
-        if (searchingFunc(initItems.value[j], item.toLocaleLowerCase())) {
-          results.push(initItems.value[j]);
-        }
-      }
-    }
-    // Rimuovi duplicati
-    const uniqueResults = Array.from(new Set(results.map(item => JSON.stringify(item))))
-      .map(item => JSON.parse(item));
-
-    tableData.value = uniqueResults;
-    },
-    { deep: true }
-  );
+      // Rimuove i duplicati se ce ne sono (ad esempio per la ricerca per località)
+      const uniqueResults = Array.from(new Set(filteredResults.map(item => JSON.stringify(item))))
+            .map(item => JSON.parse(item));
+            // Assegna i risultati unici alla tabella
+            tableData.value = uniqueResults;
+            // Richiama la re-inizializzazione del menu
+            MenuComponent.reinitialization();
+      };
 
 
     async function deleteItem(id: Number) {
@@ -476,10 +390,9 @@ export default defineComponent({
       contract,
       locations,
       typologie,
-      category,
       fromPrice,
+      category,
       toPrice,
-      searchPrice,
       selectedIds,
       deleteFewItems,
       sort,
