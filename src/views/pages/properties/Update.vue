@@ -728,9 +728,9 @@
       <!--begin::Actions-->
       <div v-if="user.Id === formData.AgentId || user.Role === 'Admin' || formData.Agent.AgencyId === user.Id"
         class="card-footer d-flex justify-content-end py-6 px-9">
-        <!-- <button type="button" @click="deleteItem()" class="btn btn-danger btn-active-light-primary me-2">
+        <button v-if="user.Role === 'Admin'" type="button" @click="deleteItem()" class="btn btn-danger btn-active-light-primary me-2">
           Elimina
-        </button> -->
+        </button>
         <!--begin::Button-->
         <button :data-kt-indicator="loading ? 'on' : null" class="btn btn-lg btn-primary" type="submit">
           <span v-if="!loading" class="indicator-label">
