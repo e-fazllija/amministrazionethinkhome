@@ -1,134 +1,80 @@
 <template>
   <div class="card">
-    <div class="card-header border-0 pt-6">
-      <!--begin::Card title-->
-      <div class="card-title">
-        <div>
-          <!--begin::Search-->
-          <div class="row">
-            <div class="col-md-3 col-lg-3">
-              <input type="text" v-model="search" class="form-control form-control-solid"
-                placeholder="Cerca Immobile" />
-            </div>
-            <div class="col-md-3 col-lg-3">
-              <select class="form-control form-control-solid" v-model="contract">
-                <option value="">Contratto</option>
-                <option value="Vendita">Vendita</option>
-                <option value="Affitto">Affitto</option>
-                <option value="Aste">Aste</option>
-              </select>
-            </div>
-            <div class="col-md-3 col-lg-3">
-              <select class="form-control form-control-solid" v-model="category">
-                <option value="">Categoria</option>
-                <option value="Residenziale">Residenziale</option>
-                <option value="Capannone">Capannone</option>
-                <option value="Negozi-Locale Commerciale">Negozi/Locale Commerciale</option>
-                <option value="Magazzino">Magazzino</option>
-                <option value="Garage">Garage</option>
-                <option value="Ufficio">Ufficio</option>
-                <option value="Terreno">Terreno</option>
-                <option value="Rustico / Casale">Rustico / Casale</option>
-              </select>
-            </div>
-            <div class="col-md-3 col-lg-3">
-              <select class="form-control form-control-solid" v-model="typologie">
-                <option value="">Tipologia</option>
-                <option value="Appartamento">Appartamento</option>
-                <option value="Attico">Attico</option>
-                <option value="Mansarda">Mansarda</option>
-                <option value="Loft">Loft</option>
-                <option value="Soffitta">Soffitta</option>
-                <option value="Casale">Casale</option>
-                <option value="Rustico">Rustico</option>
-                <option value="Villa Unifamiliare">Villa Unifamiliare</option>
-                <option value="Villa Bifamiliare">Villa Bifamiliare</option>
-                <option value="Villa Plurifamiliare">Villa Plurifamiliare</option>
-                <option value="Villa a Schiera">Villa a Schiera</option>
-                <option value="Box singolo">Box singolo</option>
-                <option value="Box doppio">Box doppio</option>
-                <option value="Posto auto">Posto auto</option>
-                <option value="Edificabile">Edificabile</option>
-                <option value="Agricolo">Agricolo</option>
-                <option value="Non Edificabile">Non Edificabile</option>
-              </select>
-            </div>
-          </div>
-          <div class="row mt-3">
-            <div class="col-md-3 col-lg-3">
-              <input type="text" v-model="fromPrice" class="form-control form-control-solid"
-                placeholder="Prezzo da " />
-            </div>
-            <div class="col-md-3 col-lg-3">
-              <input type="text" v-model="toPrice" class="form-control form-control-solid"
-                placeholder="Prezzo a " />
-            </div>
-             <div class="col-md-6 col-lg-6">
-              <Multiselect
-              v-model="locations"
-              :options="options"
-               mode="multiple"
-              :multiple="true"
-               placeholder="Seleziona località"
-               class="cform-control form-control-solid"
-             />
-            </div>
-          </div>
-          <!--end::Search-->
-        </div>
+    <!--begin::Search-->
+    <div class="row m-2">
+      <div class="col-md-2 col-lg-2 mb-2">
+        <input type="text" v-model="search" class="form-control form-control-solid" placeholder="Cerca Immobile" />
       </div>
-      <!--begin::Card title-->
-      <!--begin::Card toolbar-->
-      <div class="card-toolbar">
-        <!--begin::Toolbar-->
-        <div v-if="selectedIds.length === 0" class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-          <!--begin::Export-->
-          <!-- <button
-            type="button"
-            class="btn btn-light-primary me-3"
-            data-bs-toggle="modal"
-            data-bs-target="#kt_customers_export_modal"
-          >
-            <KTIcon icon-name="exit-up" icon-class="fs-2" />
-            Export
-          </button> -->
-          <!--end::Export-->
-          <!--begin::Add customer-->
-          <div class="d-flex justify-content-end align-items-center">
-               <button type="button" @click="searchItems" class="btn btn-primary me-3">
-                      <KTIcon icon-name="search" icon-class="fs-2" /> Cerca
-               </button>
-          </div>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_property">
-            <KTIcon icon-name="plus" icon-class="fs-2" />
-            Aggiungi Immobile
-          </button>
-          <!--end::Add customer-->
-        </div>
-        <!--end::Toolbar-->
-        <!--begin::Group actions-->
-        <div v-else class="d-flex justify-content-end align-items-center" data-kt-customer-table-toolbar="selected">
-          <div class="fw-bold me-5">
-            <span class="me-2">{{ selectedIds.length }}</span>Seleziona
-          </div>
-          <!-- <button v-if="user.Role === 'Admin' || user.Role == 'Agency'" type="button" class="btn btn-danger" @click="deleteFewItems()">
-            Cancella
-          </button> -->
-        </div>
-        <!--end::Group actions-->
-        <!--begin::Group actions-->
-        <div class="d-flex justify-content-end align-items-center d-none" data-kt-customer-table-toolbar="selected">
-          <div class="fw-bold me-5">
-            <span class="me-2" data-kt-customer-table-select="selected_count"></span>Seleziona
-          </div>
-          <button v-if="user.Role === 'Admin' || user.Role == 'Agency'" type="button" class="btn btn-danger" data-kt-customer-table-select="delete_selected">
-            Cancella Selezionate
-          </button>
-        </div>
-        <!--end::Group actions-->
+      <div class="col-md-2 col-lg-2 mb-2">
+        <select class="form-control form-control-solid" v-model="contract">
+          <option value="">Contratto</option>
+          <option value="Vendita">Vendita</option>
+          <option value="Affitto">Affitto</option>
+          <option value="Aste">Aste</option>
+        </select>
       </div>
-      <!--end::Card toolbar-->
+      <div class="col-md-2 col-lg-2 mb-2">
+        <select class="form-control form-control-solid" v-model="category">
+          <option value="">Categoria</option>
+          <option value="Residenziale">Residenziale</option>
+          <option value="Capannone">Capannone</option>
+          <option value="Negozi-Locale Commerciale">Negozi/Locale Commerciale</option>
+          <option value="Magazzino">Magazzino</option>
+          <option value="Garage">Garage</option>
+          <option value="Ufficio">Ufficio</option>
+          <option value="Terreno">Terreno</option>
+          <option value="Rustico / Casale">Rustico / Casale</option>
+        </select>
+      </div>
+      <div class="col-md-3 col-lg-3 mb-2">
+        <select class="form-control form-control-solid" v-model="typologie">
+          <option value="">Tipologia</option>
+          <option value="Appartamento">Appartamento</option>
+          <option value="Attico">Attico</option>
+          <option value="Mansarda">Mansarda</option>
+          <option value="Loft">Loft</option>
+          <option value="Soffitta">Soffitta</option>
+          <option value="Casale">Casale</option>
+          <option value="Rustico">Rustico</option>
+          <option value="Villa Unifamiliare">Villa Unifamiliare</option>
+          <option value="Villa Bifamiliare">Villa Bifamiliare</option>
+          <option value="Villa Plurifamiliare">Villa Plurifamiliare</option>
+          <option value="Villa a Schiera">Villa a Schiera</option>
+          <option value="Box singolo">Box singolo</option>
+          <option value="Box doppio">Box doppio</option>
+          <option value="Posto auto">Posto auto</option>
+          <option value="Edificabile">Edificabile</option>
+          <option value="Agricolo">Agricolo</option>
+          <option value="Non Edificabile">Non Edificabile</option>
+        </select>
+      </div>
     </div>
+    <div class="row m-2">
+
+      
+      <div class="col-md-3 col-lg-3 mb-2">
+        <input type="text" v-model="fromPrice" class="form-control form-control-solid" placeholder="Prezzo da " />
+      </div>
+      <div class="col-md-3 col-lg-3 mb-2">
+        <input type="text" v-model="toPrice" class="form-control form-control-solid" placeholder="Prezzo a " />
+      </div>
+      <div class="col-md-3 col-lg-3 mb-2">
+        <Multiselect v-model="locations" :options="options" mode="multiple" :multiple="true"
+          placeholder="Seleziona località" class="cform-control form-control-solid" />
+      </div>
+
+      <div class="col-md-3 col-lg-3 mb-2 d-flex justify-content-end">
+        <button type="button" @click="searchItems" class="btn btn-light-primary me-3">
+          <KTIcon icon-name="search" icon-class="fs-2" /> Cerca
+        </button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_property">
+          <KTIcon icon-name="plus" icon-class="fs-2" />
+          Aggiungi Immobile
+        </button>
+      </div>
+
+    </div>
+    <!--end::Search-->
     <div class="card-body pt-0">
       <Datatable @on-sort="sort" @on-items-select="onItemSelect" :data="tableData" :header="tableHeader"
         :enable-items-per-page-dropdown="true" :checkbox-enabled="true" checkbox-label="Id" :loading="loading">
@@ -154,8 +100,8 @@
           <img v-if="item.Photos" :src="item.Photos" style="height: 100px; width: 200px; object-fit: cover;" />
         </template>
         <template v-slot:actions="{ row: item }">
-          <router-link :to="{ name: 'property', params: { id: item.Id } }"
-            class="btn btn-light-info me-1" target="_blank" rel="noopener noreferrer">Dettagli</router-link>
+          <router-link :to="{ name: 'property', params: { id: item.Id } }" class="btn btn-light-info me-1"
+            target="_blank" rel="noopener noreferrer">Dettagli</router-link>
           <!-- <button v-if="user.Id === item.AgentId || user.Role === 'Admin' || user.Role == 'Agency'"
             @click="deleteItem(item.Id)" class="btn btn-light-danger me-1">Elimina</button> -->
         </template>
@@ -246,7 +192,7 @@ export default defineComponent({
       loading.value = true;
       const results = await getRealEstateProperties(filterRequest);
       for (const key in results) {
-       
+
         const item = {
           Id: results[key].Id,
           CreationDate: results[key].CreationDate,
@@ -290,21 +236,21 @@ export default defineComponent({
     const contract = ref<string>("");
     const typologie = ref<string>("");
     const category = ref<string>("");
-    const locations = ref<Array<string>>([]);   
+    const locations = ref<Array<string>>([]);
 
     const searchingFunc = (obj: any, value: string): boolean => {
-          for (let key in obj) {
-           // Verifica se la proprietà è una stringa o un numero
-          if (
-             !Number.isInteger(obj[key]) &&
-             !(typeof obj[key] === "object") &&
-              (typeof obj[key] === "string" || typeof obj[key] === "number" || Array.isArray(obj[key]))
-             ) {
+      for (let key in obj) {
+        // Verifica se la proprietà è una stringa o un numero
+        if (
+          !Number.isInteger(obj[key]) &&
+          !(typeof obj[key] === "object") &&
+          (typeof obj[key] === "string" || typeof obj[key] === "number" || Array.isArray(obj[key]))
+        ) {
           // Confronta la proprietà dell'oggetto con la stringa di ricerca
           if (obj[key].toString().toLowerCase().indexOf(value) !== -1) {
-           return true;
+            return true;
           }
-       }
+        }
       }
       return false;
     };
@@ -315,39 +261,39 @@ export default defineComponent({
 
       let filteredResults = [...initItems.value];
       // Filtraggio per testo (search)
-      if (search.value !== "") { 
-         filteredResults = filteredResults.filter(item => searchingFunc(item, search.value));
+      if (search.value !== "") {
+        filteredResults = filteredResults.filter(item => searchingFunc(item, search.value));
       }
       // Filtraggio per prezzo
-      if (fromPrice.value > 0) { 
-         filteredResults = filteredResults.filter(item => item.Price >= fromPrice.value);
+      if (fromPrice.value > 0) {
+        filteredResults = filteredResults.filter(item => item.Price >= fromPrice.value);
       }
       if (toPrice.value > 0) {
-         filteredResults = filteredResults.filter(item => item.Price <= toPrice.value);
+        filteredResults = filteredResults.filter(item => item.Price <= toPrice.value);
       }
       // Filtraggio per contratto
       if (contract.value) {
-         filteredResults = filteredResults.filter(item => searchingFunc(item, contract.value.toLowerCase()));
+        filteredResults = filteredResults.filter(item => searchingFunc(item, contract.value.toLowerCase()));
       }
       // Filtraggio per tipologia
       if (typologie.value) {
-         filteredResults = filteredResults.filter(item => searchingFunc(item, typologie.value.toLowerCase()));
+        filteredResults = filteredResults.filter(item => searchingFunc(item, typologie.value.toLowerCase()));
       }
       // Filtraggio per località
       if (locations.value.length > 0) {
-         filteredResults = filteredResults.filter(item => {
-         // Verifica che l'elemento corrisponda a una delle località selezionate
-       return locations.value.some(location => searchingFunc(item, location.toLowerCase()));
-       });
+        filteredResults = filteredResults.filter(item => {
+          // Verifica che l'elemento corrisponda a una delle località selezionate
+          return locations.value.some(location => searchingFunc(item, location.toLowerCase()));
+        });
       }
       // Rimuove i duplicati se ce ne sono (ad esempio per la ricerca per località)
       const uniqueResults = Array.from(new Set(filteredResults.map(item => JSON.stringify(item))))
-            .map(item => JSON.parse(item));
-            // Assegna i risultati unici alla tabella
-            tableData.value = uniqueResults;
-            // Richiama la re-inizializzazione del menu
-            MenuComponent.reinitialization();
-      };
+        .map(item => JSON.parse(item));
+      // Assegna i risultati unici alla tabella
+      tableData.value = uniqueResults;
+      // Richiama la re-inizializzazione del menu
+      MenuComponent.reinitialization();
+    };
 
 
     async function deleteItem(id: Number) {
@@ -404,73 +350,73 @@ export default defineComponent({
     };
   },
   data() {
-  return {
-    options: [
-    { value: "", label: "Qualsiasi" },
-             { value: "FROSINONE", label: "LAZIO \\ FROSINONE (FR)" },
-             { value: "LATINA", label: "LAZIO \\ LATINA (LT)" },
-             { value: "ROMA", label: "LAZIO \\ ROMA (RM)" },
-             { value: "VITERBO", label: "LAZIO \\ VITERBO (VT)" },
-             { value: "TAGLIACOZZO", label: "ABRUZZO \\ L'AQUILA (AQ) \\ TAGLIACOZZO" },
-             { value: "ANAGNI", label: "LAZIO \\ FROSINONE (FR) \\ ANAGNI" },
-             { value: "FIUGGI", label: "LAZIO \\ FROSINONE (FR) \\ FIUGGI" },
-             { value: "FROSINONE", label: "LAZIO \\ FROSINONE (FR) \\ FROSINONE" },
-             { value: "PALIANO", label: "LAZIO \\ FROSINONE (FR) \\ PALIANO" },
-             { value: "SERRONE", label: "LAZIO \\ FROSINONE (FR) \\ SERRONE" },
-             { value: "APRILIA", label: "LAZIO \\ LATINA (LT) \\ APRILIA" },
-             { value: "ROCCA MASSIMA", label: "LAZIO \\ LATINA (LT) \\ ROCCA MASSIMA" },
-             { value: "SABAUDIA", label: "LAZIO \\ LATINA (LT) \\ SABAUDIA" },
-             { value: "ALBANO LAZIALE", label: "LAZIO \\ ROMA (RM) \\ ALBANO LAZIALE" },
-             { value: "ALESSANDRINO", label: "LAZIO \\ ROMA (RM) \\ ALESSANDRINO" },
-             { value: "ANZIO", label: "LAZIO \\ ROMA (RM) \\ ANZIO" },
-             { value: "ARDEA", label: "LAZIO \\ ROMA (RM) \\ ARDEA" },
-             { value: "ARTENA", label: "LAZIO \\ ROMA (RM) \\ ARTENA" },
-             { value: "BELLEGRA", label: "LAZIO \\ ROMA (RM) \\ BELLEGRA" },
-             { value: "CAMPAGNANO DI ROMA", label: "LAZIO \\ ROMA (RM) \\ CAMPAGNANO DI ROMA" },
-             { value: "CASAPE", label: "LAZIO \\ ROMA (RM) \\ CASAPE" },
-             { value: "CASTEL SAN PIETRO ROMANO", label: "LAZIO \\ ROMA (RM) \\ CASTEL SAN PIETRO ROMANO" },
-             { value: "CAVE", label: "LAZIO \\ ROMA (RM) \\ CAVE" },
-             { value: "COLLEFERRO", label: "LAZIO \\ ROMA (RM) \\ COLLEFERRO" },
-             { value: "COLONNA", label: "LAZIO \\ ROMA (RM) \\ COLONNA" },
-             { value: "FIANO ROMANO", label: "LAZIO \\ ROMA (RM) \\ FIANO ROMANO" },
-             { value: "FRASCATI", label: "LAZIO \\ ROMA (RM) \\ FRASCATI" },
-             { value: "GALLICANO NEL LAZIO", label: "LAZIO \\ ROMA (RM) \\ GALLICANO NEL LAZIO" },
-             { value: "GAVIGNANO", label: "LAZIO \\ ROMA (RM) \\ GAVIGNANO" },
-             { value: "GENAZZANO", label: "LAZIO \\ ROMA (RM) \\ GENAZZANO" },
-             { value: "GROTTAFERRATA", label: "LAZIO \\ ROMA (RM) \\ GROTTAFERRATA" },
-             { value: "GUIDONIA MONTECELIO", label: "LAZIO \\ ROMA (RM) \\ GUIDONIA MONTECELIO" },
-             { value: "LABICO", label: "LAZIO \\ ROMA (RM) \\ LABICO" },
-             { value: "LANUVIO", label: "LAZIO \\ ROMA (RM) \\ LANUVIO" },
-             { value: "LARIANO", label: "LAZIO \\ ROMA (RM) \\ LARIANO" },
-             { value: "MARINO", label: "LAZIO \\ ROMA (RM) \\ MARINO" },
-             { value: "MONTE PORZIO CATONE", label: "LAZIO \\ ROMA (RM) \\ MONTE PORZIO CATONE" },
-             { value: "MONTECOMPATRI", label: "LAZIO \\ ROMA (RM) \\ MONTECOMPATRI" },
-             { value: "MONTELANICO", label: "LAZIO \\ ROMA (RM) \\ MONTELANICO" },
-             { value: "NETTUNO", label: "LAZIO \\ ROMA (RM) \\ NETTUNO" },
-             { value: "OLEVANO ROMANO", label: "LAZIO \\ ROMA (RM) \\ OLEVANO ROMANO" },
-             { value: "PALESTRINA", label: "LAZIO \\ ROMA (RM) \\ PALESTRINA" },
-             { value: "PALOMBARA SABINA", label: "LAZIO \\ ROMA (RM) \\ PALOMBARA SABINA" },
-             { value: "POLI", label: "LAZIO \\ ROMA (RM) \\ POLI" },
-             { value: "POMEZIA", label: "LAZIO \\ ROMA (RM) \\ POMEZIA" },
-             { value: "ROCCA DI CAVE", label: "LAZIO \\ ROMA (RM) \\ ROCCA DI CAVE" },
-             { value: "ROCCA PRIORA", label: "LAZIO \\ ROMA (RM) \\ ROCCA PRIORA" },
-             { value: "ROMA", label: "LAZIO \\ ROMA (RM) \\ ROMA" },
-             { value: "TOR TRE TESTE", label: "LAZIO \\ ROMA (RM) \\ TOR TRE TESTE" },
-             { value: "TORRE MAURA", label: "LAZIO \\ ROMA (RM) \\ TORRE MAURA" },
-             { value: "TORRE SPACCATA", label: "LAZIO \\ ROMA (RM) \\ TORRE SPACCATA" },
-             { value: "INFERNETTO", label: "LAZIO \\ ROMA (RM) \\ INFERNETTO" },
-             { value: "SAN CESAREO", label: "LAZIO \\ ROMA (RM) \\ SAN CESAREO" },
-             { value: "SAN VITO ROMANO", label: "LAZIO \\ ROMA (RM) \\ SAN VITO ROMANO" },
-             { value: "SEGNI", label: "LAZIO \\ ROMA (RM) \\ SEGNI" },
-             { value: "SUBIACO", label: "LAZIO \\ ROMA (RM) \\ SUBIACO" },
-             { value: "TIVOLI", label: "LAZIO \\ ROMA (RM) \\ TIVOLI" },
-             { value: "VALMONTONE", label: "LAZIO \\ ROMA (RM) \\ VALMONTONE" },
-             { value: "VELLETRI", label: "LAZIO \\ ROMA (RM) \\ VELLETRI" },
-             { value: "ZAGAROLO", label: "LAZIO \\ ROMA (RM) \\ ZAGAROLO" },
-             { value: "VITERBO", label: "LAZIO \\ VITERBO (VT) \\ VITERBO" }
-]
-  };
-}
+    return {
+      options: [
+        { value: "", label: "Qualsiasi" },
+        { value: "FROSINONE", label: "LAZIO \\ FROSINONE (FR)" },
+        { value: "LATINA", label: "LAZIO \\ LATINA (LT)" },
+        { value: "ROMA", label: "LAZIO \\ ROMA (RM)" },
+        { value: "VITERBO", label: "LAZIO \\ VITERBO (VT)" },
+        { value: "TAGLIACOZZO", label: "ABRUZZO \\ L'AQUILA (AQ) \\ TAGLIACOZZO" },
+        { value: "ANAGNI", label: "LAZIO \\ FROSINONE (FR) \\ ANAGNI" },
+        { value: "FIUGGI", label: "LAZIO \\ FROSINONE (FR) \\ FIUGGI" },
+        { value: "FROSINONE", label: "LAZIO \\ FROSINONE (FR) \\ FROSINONE" },
+        { value: "PALIANO", label: "LAZIO \\ FROSINONE (FR) \\ PALIANO" },
+        { value: "SERRONE", label: "LAZIO \\ FROSINONE (FR) \\ SERRONE" },
+        { value: "APRILIA", label: "LAZIO \\ LATINA (LT) \\ APRILIA" },
+        { value: "ROCCA MASSIMA", label: "LAZIO \\ LATINA (LT) \\ ROCCA MASSIMA" },
+        { value: "SABAUDIA", label: "LAZIO \\ LATINA (LT) \\ SABAUDIA" },
+        { value: "ALBANO LAZIALE", label: "LAZIO \\ ROMA (RM) \\ ALBANO LAZIALE" },
+        { value: "ALESSANDRINO", label: "LAZIO \\ ROMA (RM) \\ ALESSANDRINO" },
+        { value: "ANZIO", label: "LAZIO \\ ROMA (RM) \\ ANZIO" },
+        { value: "ARDEA", label: "LAZIO \\ ROMA (RM) \\ ARDEA" },
+        { value: "ARTENA", label: "LAZIO \\ ROMA (RM) \\ ARTENA" },
+        { value: "BELLEGRA", label: "LAZIO \\ ROMA (RM) \\ BELLEGRA" },
+        { value: "CAMPAGNANO DI ROMA", label: "LAZIO \\ ROMA (RM) \\ CAMPAGNANO DI ROMA" },
+        { value: "CASAPE", label: "LAZIO \\ ROMA (RM) \\ CASAPE" },
+        { value: "CASTEL SAN PIETRO ROMANO", label: "LAZIO \\ ROMA (RM) \\ CASTEL SAN PIETRO ROMANO" },
+        { value: "CAVE", label: "LAZIO \\ ROMA (RM) \\ CAVE" },
+        { value: "COLLEFERRO", label: "LAZIO \\ ROMA (RM) \\ COLLEFERRO" },
+        { value: "COLONNA", label: "LAZIO \\ ROMA (RM) \\ COLONNA" },
+        { value: "FIANO ROMANO", label: "LAZIO \\ ROMA (RM) \\ FIANO ROMANO" },
+        { value: "FRASCATI", label: "LAZIO \\ ROMA (RM) \\ FRASCATI" },
+        { value: "GALLICANO NEL LAZIO", label: "LAZIO \\ ROMA (RM) \\ GALLICANO NEL LAZIO" },
+        { value: "GAVIGNANO", label: "LAZIO \\ ROMA (RM) \\ GAVIGNANO" },
+        { value: "GENAZZANO", label: "LAZIO \\ ROMA (RM) \\ GENAZZANO" },
+        { value: "GROTTAFERRATA", label: "LAZIO \\ ROMA (RM) \\ GROTTAFERRATA" },
+        { value: "GUIDONIA MONTECELIO", label: "LAZIO \\ ROMA (RM) \\ GUIDONIA MONTECELIO" },
+        { value: "LABICO", label: "LAZIO \\ ROMA (RM) \\ LABICO" },
+        { value: "LANUVIO", label: "LAZIO \\ ROMA (RM) \\ LANUVIO" },
+        { value: "LARIANO", label: "LAZIO \\ ROMA (RM) \\ LARIANO" },
+        { value: "MARINO", label: "LAZIO \\ ROMA (RM) \\ MARINO" },
+        { value: "MONTE PORZIO CATONE", label: "LAZIO \\ ROMA (RM) \\ MONTE PORZIO CATONE" },
+        { value: "MONTECOMPATRI", label: "LAZIO \\ ROMA (RM) \\ MONTECOMPATRI" },
+        { value: "MONTELANICO", label: "LAZIO \\ ROMA (RM) \\ MONTELANICO" },
+        { value: "NETTUNO", label: "LAZIO \\ ROMA (RM) \\ NETTUNO" },
+        { value: "OLEVANO ROMANO", label: "LAZIO \\ ROMA (RM) \\ OLEVANO ROMANO" },
+        { value: "PALESTRINA", label: "LAZIO \\ ROMA (RM) \\ PALESTRINA" },
+        { value: "PALOMBARA SABINA", label: "LAZIO \\ ROMA (RM) \\ PALOMBARA SABINA" },
+        { value: "POLI", label: "LAZIO \\ ROMA (RM) \\ POLI" },
+        { value: "POMEZIA", label: "LAZIO \\ ROMA (RM) \\ POMEZIA" },
+        { value: "ROCCA DI CAVE", label: "LAZIO \\ ROMA (RM) \\ ROCCA DI CAVE" },
+        { value: "ROCCA PRIORA", label: "LAZIO \\ ROMA (RM) \\ ROCCA PRIORA" },
+        { value: "ROMA", label: "LAZIO \\ ROMA (RM) \\ ROMA" },
+        { value: "TOR TRE TESTE", label: "LAZIO \\ ROMA (RM) \\ TOR TRE TESTE" },
+        { value: "TORRE MAURA", label: "LAZIO \\ ROMA (RM) \\ TORRE MAURA" },
+        { value: "TORRE SPACCATA", label: "LAZIO \\ ROMA (RM) \\ TORRE SPACCATA" },
+        { value: "INFERNETTO", label: "LAZIO \\ ROMA (RM) \\ INFERNETTO" },
+        { value: "SAN CESAREO", label: "LAZIO \\ ROMA (RM) \\ SAN CESAREO" },
+        { value: "SAN VITO ROMANO", label: "LAZIO \\ ROMA (RM) \\ SAN VITO ROMANO" },
+        { value: "SEGNI", label: "LAZIO \\ ROMA (RM) \\ SEGNI" },
+        { value: "SUBIACO", label: "LAZIO \\ ROMA (RM) \\ SUBIACO" },
+        { value: "TIVOLI", label: "LAZIO \\ ROMA (RM) \\ TIVOLI" },
+        { value: "VALMONTONE", label: "LAZIO \\ ROMA (RM) \\ VALMONTONE" },
+        { value: "VELLETRI", label: "LAZIO \\ ROMA (RM) \\ VELLETRI" },
+        { value: "ZAGAROLO", label: "LAZIO \\ ROMA (RM) \\ ZAGAROLO" },
+        { value: "VITERBO", label: "LAZIO \\ VITERBO (VT) \\ VITERBO" }
+      ]
+    };
+  }
 
 });
 </script>
