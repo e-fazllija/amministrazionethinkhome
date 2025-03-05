@@ -81,6 +81,15 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
+        path: "documentations",
+        name: "documentations",
+        component: () => import("@/views/pages/documentations/Documentations.vue"),
+        meta: {
+          pageTitle: "Modulistica",
+          breadcrumbs: ["Modulistica"],
+        },
+      },
+      {
         path: "requests",
         name: "requests",
         component: () => import("@/views/pages/requests/List.vue"),

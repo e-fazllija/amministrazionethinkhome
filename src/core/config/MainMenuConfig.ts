@@ -41,6 +41,13 @@ const MainMenuConfig: Array<MenuItem> = [
         roleEnabled: ["Admin", "Agenzia", "Agente"],
       },
       {
+        heading: "Modulistica",
+        route: "/documentations",
+        keenthemesIcon: "element-11",
+        bootstrapIcon: "bi-app-indicator",
+        roleEnabled: ["Admin", "Agenzia", "Agente"],
+      },
+      {
         heading: "Richieste",
         route: "/requests",
         keenthemesIcon: "element-11",
