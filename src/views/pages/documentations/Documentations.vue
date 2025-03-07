@@ -14,18 +14,9 @@
             v-model="search"
             @input="searchItems()"
             class="form-control form-control-solid w-250px ps-15"
-            placeholder="Ricerca Clienti"
+            placeholder="Ricerca"
           />
         </div>
-        <div class="d-flex align-items-center position-relative ms-3">
-        <select class="form-control form-control-solid" v-model="contract">
-                <option value="">Tipologia</option>
-                <option value="Compratore">Compratore</option>
-                <option value="Venditore">Venditore</option>
-                <option value="Costruttore">Costruttore</option>
-                <option value="Cliente gold">Cliente gold</option>
-              </select>
-            </div>
         <!--end::Search-->
       </div>
       <!--begin::Card title-->
@@ -49,15 +40,7 @@
           </button> -->
           <!--end::Export-->
           <!--begin::Add customer-->
-          <button
-            type="button"
-            class="btn btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#kt_modal_add_customer"
-          >
-            <KTIcon icon-name="plus" icon-class="fs-2" />
-            Aggiungi Documenti
-          </button>
+          <input class="form-control" type="file" multiple @change="handleFileUpload">
           <!--end::Add customer-->
         </div>
         <!--end::Toolbar-->
@@ -104,7 +87,12 @@
       </div>
       <!--end::Card toolbar-->
     </div>
-    <div class="card-body pt-0">
+    <div v-if="loading" class="d-flex justify-content-center">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    </div>
+    <div v-else class="card-body pt-0">
       <Datatable
         @on-sort="sort"
         @on-items-select="onItemSelect"
@@ -114,26 +102,12 @@
         :checkbox-enabled="true"
         checkbox-label="Id"
       >
-        <template v-slot:Name="{ row: customer }">
-          {{ customer.Name }}
+        <template v-slot:FileName="{ row: documentations }">
+          {{ documentations.FileName }}
         </template>
-        <template v-slot:Type="{ row: customer }">
-          {{ customer.Type }}
-        </template>
-        <template v-slot:Email="{ row: customer }">
-          <a href="#" class="text-gray-600 text-hover-primary mb-1">
-            {{ customer.Email }}
-          </a>
-        </template>
-        <template v-slot:Phone="{ row: customer }">
-          {{ customer.Phone }}
-        </template>
-          <template v-slot:Actions="{ row: customer }">
-            <router-link :to="{ name: 'client', params: { id: customer.Id } }" 
-                    class="btn btn-light-info me-1"
-                       >Dettagli</router-link>
-
-                  <!-- <button @click="deleteItem(customer.Id)" class="btn btn-light-danger me-1">Elimina</button> -->
+        <template v-slot:Actions="{ row: documentations }">
+            <a  class="btn btn-light-info me-1" download :href="documentations.FileUrl" >Scarica</a>
+                  <button @click="deleteItem(documentations.Id)" class="btn btn-light-danger me-1">Elimina</button>
               </template>
           <!--begin::Menu-->
           <div
@@ -145,59 +119,37 @@
       </Datatable>
     </div>
   </div>
-
-  <ExportCustomerModal></ExportCustomerModal>
-  <AddCustomerModal @formAddSubmitted="getItems('')"></AddCustomerModal>
-  <UpdateCustomerModal :Id="selectedId" @formUpdateSubmitted="getItems('')"></UpdateCustomerModal>
 </template>
 
 <script lang="ts">
-import { getAssetPath } from "@/core/helpers/assets";
-import { defineComponent, onMounted, ref, watch } from "vue";
+import { Documentation, getDocumentations, updateDocumentation, uploadFiles, deleteDocumentation} from "@/core/data/documentations";
+import Swal from "sweetalert2";
+import { defineComponent, ref, onMounted } from "vue";
+import { MenuComponent } from "@/assets/ts/components";
+import arraySort from "array-sort";
 import Datatable from "@/components/kt-datatable/KTDataTable.vue";
 import type { Sort } from "@/components/kt-datatable//table-partials/models";
-import ExportCustomerModal from "@/components/modals/forms/ExportCustomerModal.vue";
-import AddCustomerModal from "@/components/modals/forms/customer/AddCustomerModal.vue";
-import arraySort from "array-sort";
-import { MenuComponent } from "@/assets/ts/components";
-import { getDocumentations, Documentation, deleteDocumentation, DocumentationTabelData } from "@/core/data/documentations";
-import UpdateCustomerModal from "@/components/modals/forms/customer/UpdateCustomerModal.vue";
-import Swal from "sweetalert2";
 
- 
 
 export default defineComponent({
-  name: "documentations",
-  components: {
-    Datatable,
-    ExportCustomerModal,
-    AddCustomerModal,
-    UpdateCustomerModal,
-  },
+  name: "DocumentTable",
+  components: {Datatable},
+ 
   setup() {
+    const isModalOpen = ref(false); // Stato del modale
+    const selectedIds = ref<Array<number>>([]);
+    const fileInput = ref<HTMLInputElement | null>(null); // Riferimento al campo di input file
     let loading = ref<boolean>(true);
+    const tableData = ref<Array<Documentation>>([]);
+    const initItems = ref([]);
+    const formData = ref<Documentation>({
+     FileName: "",
+     FolderName: "",
+    });
     const tableHeader = ref([
       {
-        columnName: "Cliente",
-        columnLabel: "Name",
-        sortEnabled: true,
-        columnWidth: 175,
-      },
-      {
-        columnName: "Tipologia",
-        columnLabel: "Type",
-        sortEnabled: true,
-        columnWidth: 175,
-      },
-      {
-        columnName: "Email",
-        columnLabel: "Email",
-        sortEnabled: true,
-        columnWidth: 230,
-      },
-      {
-        columnName: "Telefono",
-        columnLabel: "Phone",
+        columnName: "File",
+        columnLabel: "FileName",
         sortEnabled: true,
         columnWidth: 175,
       },
@@ -208,46 +160,77 @@ export default defineComponent({
         columnWidth: 135,
       },
     ]);
-    const selectedIds = ref<Array<number>>([]);
-    let selectedId = ref(0);
-    const tableData = ref<Array<CustomerTabelData>>([]);
-    const initCustomers = ref([]);
-    async function getItems(filterRequest: string) {
-      loading.value = true;
-        const results = await getCustomers(filterRequest);
-        for (const key in results) {
-          const item = {
-            Id: results[key].Id,
-            Name: results[key].Name + " " + results[key].LastName,
-            Type: results[key].Buyer ? "Compratore" : results[key].Seller ? "Venditore" : results[key].Builder ? "Costruttore" : results[key].GoldCustomer ? "Cliente gold" : "",
-            Email: results[key].Email,
-            Phone: results[key].Phone.toString()
-          } as CustomerTabelData;
 
-          tableData.value.push(item)
-        }
-        initCustomers.value.splice(0, tableData.value.length, ...tableData.value);
+    // Apre il modale
+    const openModal = () => {
+      isModalOpen.value = true;
+    };
+
+    // Chiude il modale
+    const closeModal = () => {
+      isModalOpen.value = false;
+    };
+
+    // Gestisce il cambiamento del file
+    const handleFileUpload = async (event: Event) => {
+      loading.value = true;
+      const input = event.target as HTMLInputElement;
+      if (input?.files) {
+        formData.value.File = input.files[0];
+        await addFile();
         loading.value = false;
+        // Qui puoi gestire i file selezionati (ad esempio, per inviarli a un server)
+      }
+    };
+
+    const getItems = async () => {
+      tableData.value = await getDocumentations("");
+      initItems.value.splice(0, tableData.value.length, ...tableData.value);
+
     };
 
     onMounted(async () => {
-      await getItems("");
+      loading.value = true;
+      await getItems();
+      loading.value = false;
       
     });
 
-    const deleteFewItems = async () => {
+
+  const addFile = async () => {
+
+    try {
+      const result = await uploadFiles(formData.value);
+      Swal.fire({
+        text: "File caricati con successo!",
+        icon: "success",
+        confirmButtonText: "Continua!",
+      });
+      formData.value.File= null;
+      await getItems();
+    } catch (error) {
+      console.error("Errore durante il caricamento:", error);
+      Swal.fire({
+        text: "Attenzione, si è verificato un errore.",
+        icon: "error",
+        confirmButtonText: "Riprova",
+      });
+    }
+  };
+
+  const deleteFewItems = async () => {
       selectedIds.value.forEach(async (item) => {
-        await deleteCustomer(item)
+        await deleteDocumentation(item)
       });
       selectedIds.value.length = 0;
-      await getItems("");
+      await getItems();
     };
 
     const search = ref<string>("");
     const searchItems = () => {
-      tableData.value.splice(0, tableData.value.length, ...initCustomers.value);
+      tableData.value.splice(0, tableData.value.length, ...initItems.value);
       if (search.value !== "") {
-        let results: Array<CustomerTabelData> = [];
+        let results: Array<Documentation> = [];
         for (let j = 0; j < tableData.value.length; j++) {
           if (searchingFunc(tableData.value[j], search.value)) {
             results.push(tableData.value[j]);
@@ -272,24 +255,15 @@ export default defineComponent({
       }
       return false;
     };
-
-    const contract = ref<string>("");
-    watch(
-      () => contract.value,
-      (newValue) => {
-        tableData.value.splice(0, tableData.value.length, ...initCustomers.value);
-        if (newValue) {
-          let results: Array<CustomerTabelData> = [];
-          for (let j = 0; j < tableData.value.length; j++) {
-            if (searchingFunc(tableData.value[j], newValue.toLowerCase())) {
-              results.push(tableData.value[j]);
-            }
-          }
-          tableData.value.splice(0, tableData.value.length, ...results);
-        }
+    const sort = (sort: Sort) => {
+      const reverse: boolean = sort.order === "asc";
+      if (sort.label) {
+        arraySort(tableData.value, sort.label, { reverse });
       }
-    );
-
+    };
+    const onItemSelect = (selectedItems: Array<number>) => {
+      selectedIds.value = selectedItems;
+    };
     async function deleteItem(id: number){
       Swal.fire({
         text: "Confermare l'eliminazione?",
@@ -301,43 +275,30 @@ export default defineComponent({
           confirmButton: "btn btn-danger",
         },
       }).then(async () => {
-        await deleteCustomer(id)
-        await getItems("");
+        await deleteDocumentation(id)
+        await getItems();
         MenuComponent.reinitialization(); 
       });
     }
 
-    const sort = (sort: Sort) => {
-      const reverse: boolean = sort.order === "asc";
-      if (sort.label) {
-        arraySort(tableData.value, sort.label, { reverse });
-      }
-    };
-
-    const selectId = (id: number) => {
-      selectedId.value = id;
-    };
-
-    const onItemSelect = (selectedItems: Array<number>) => {
-      selectedIds.value = selectedItems;
-    };
 
     return {
+      isModalOpen,
+      openModal,
+      closeModal,
+      handleFileUpload,
+      fileInput,
+      addFile,
+      loading,
       tableData,
-      tableHeader,
-      deleteCustomer,
       search,
       searchItems,
-      selectedId,
       selectedIds,
       deleteFewItems,
       sort,
       onItemSelect,
-      getAssetPath,
-      deleteItem,
-      selectId,
-      getItems,
-      contract
+      tableHeader,
+      deleteItem
     };
   },
 });
