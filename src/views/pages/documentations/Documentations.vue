@@ -59,7 +59,7 @@
       <Datatable @on-sort="sort" @on-items-select="onItemSelect" :data="tableData" :header="tableHeader"
         :loading="loading" :enable-items-per-page-dropdown="true" :checkbox-enabled="true" checkbox-label="Id">
         <template v-slot:FileName="{ row: documentations }">
-          {{ documentations.FileName }}
+          {{ documentations.FileName.split("/")[1] }}
         </template>
         <template v-slot:Actions="{ row: documentations }">
           <a class="btn btn-light-info me-1" download :href="documentations.FileUrl">Scarica</a>
