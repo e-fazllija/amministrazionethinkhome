@@ -3,19 +3,11 @@
     <div class="card-header border-0 pt-6">
       <!--begin::Card title-->
       <div class="card-title">
-          <!--begin::Search-->
+        <!--begin::Search-->
         <div class="d-flex align-items-center position-relative my-1">
-          <KTIcon
-            icon-name="magnifier"
-            icon-class="fs-1 position-absolute ms-6"
-          />
-          <input
-            type="text"
-            v-model="search"
-            @input="searchItems()"
-            class="form-control form-control-solid w-250px ps-15"
-            placeholder="Ricerca"
-          />
+          <KTIcon icon-name="magnifier" icon-class="fs-1 position-absolute ms-6" />
+          <input type="text" v-model="search" @input="searchItems()"
+            class="form-control form-control-solid w-250px ps-15" placeholder="Ricerca" />
         </div>
         <!--end::Search-->
       </div>
@@ -23,11 +15,7 @@
       <!--begin::Card toolbar-->
       <div class="card-toolbar">
         <!--begin::Toolbar-->
-        <div
-          v-if="selectedIds.length === 0"
-          class="d-flex justify-content-end"
-          data-kt-customer-table-toolbar="base"
-        >
+        <div v-if="selectedIds.length === 0" class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
           <!--begin::Export-->
           <!-- <button
             type="button"
@@ -45,41 +33,21 @@
         </div>
         <!--end::Toolbar-->
         <!--begin::Group actions-->
-        <div
-          v-else
-          class="d-flex justify-content-end align-items-center"
-          data-kt-customer-table-toolbar="selected"
-        >
+        <div v-else class="d-flex justify-content-end align-items-center" data-kt-customer-table-toolbar="selected">
           <div class="fw-bold me-5">
-            <span class="me-2">{{ selectedIds.length }}</span
-            >Seleziona
+            <span class="me-2">{{ selectedIds.length }}</span>Seleziona
           </div>
-          <button
-            type="button"
-            class="btn btn-danger"
-            @click="deleteFewItems()"
-          >
+          <button type="button" class="btn btn-danger" @click="deleteFewItems()">
             Cancella Selezionati
           </button>
         </div>
         <!--end::Group actions-->
         <!--begin::Group actions-->
-        <div
-          class="d-flex justify-content-end align-items-center d-none"
-          data-kt-customer-table-toolbar="selected"
-        >
+        <div class="d-flex justify-content-end align-items-center d-none" data-kt-customer-table-toolbar="selected">
           <div class="fw-bold me-5">
-            <span
-              class="me-2"
-              data-kt-customer-table-select="selected_count"
-            ></span
-            >Seleziona
+            <span class="me-2" data-kt-customer-table-select="selected_count"></span>Seleziona
           </div>
-          <button
-            type="button"
-            class="btn btn-danger"
-            data-kt-customer-table-select="delete_selected"
-          >
+          <button type="button" class="btn btn-danger" data-kt-customer-table-select="delete_selected">
             Cancella Selezionati
           </button>
         </div>
@@ -87,65 +55,55 @@
       </div>
       <!--end::Card toolbar-->
     </div>
-    <div v-if="loading" class="d-flex justify-content-center">
-    <div class="spinner-border" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-    </div>
-    <div v-else class="card-body pt-0">
-      <Datatable
-        @on-sort="sort"
-        @on-items-select="onItemSelect"
-        :data="tableData"
-        :header="tableHeader"
-        :enable-items-per-page-dropdown="true"
-        :checkbox-enabled="true"
-        checkbox-label="Id"
-      >
+    <div class="card-body pt-0">
+      <Datatable @on-sort="sort" @on-items-select="onItemSelect" :data="tableData" :header="tableHeader"
+        :loading="loading" :enable-items-per-page-dropdown="true" :checkbox-enabled="true" checkbox-label="Id">
         <template v-slot:FileName="{ row: documentations }">
           {{ documentations.FileName }}
         </template>
         <template v-slot:Actions="{ row: documentations }">
-            <a  class="btn btn-light-info me-1" download :href="documentations.FileUrl" >Scarica</a>
-                  <button @click="deleteItem(documentations.Id)" class="btn btn-light-danger me-1">Elimina</button>
-              </template>
-          <!--begin::Menu-->
-          <div
-            class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semobold fs-7 w-125px py-4"
-            data-kt-menu="true"
-          >
-            <!--end::Menu item-->
-          </div>
+          <a class="btn btn-light-info me-1" download :href="documentations.FileUrl">Scarica</a>
+          <button @click="deleteItem(documentations.Id)" class="btn btn-light-danger me-1">Elimina</button>
+        </template>
+        <!--begin::Menu-->
+        <div
+          class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semobold fs-7 w-125px py-4"
+          data-kt-menu="true">
+          <!--end::Menu item-->
+        </div>
       </Datatable>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Documentation, getDocumentations, updateDocumentation, uploadFiles, deleteDocumentation} from "@/core/data/documentations";
+import { Documentation, getDocumentations, uploadFile, deleteDocumentation } from "@/core/data/documentations";
 import Swal from "sweetalert2";
 import { defineComponent, ref, onMounted } from "vue";
 import { MenuComponent } from "@/assets/ts/components";
 import arraySort from "array-sort";
 import Datatable from "@/components/kt-datatable/KTDataTable.vue";
 import type { Sort } from "@/components/kt-datatable//table-partials/models";
-
+import { useAuthStore, type User } from "@/stores/auth";
 
 export default defineComponent({
   name: "DocumentTable",
-  components: {Datatable},
- 
+  components: { Datatable },
+
   setup() {
-    const isModalOpen = ref(false); // Stato del modale
+    const store = useAuthStore();
     const selectedIds = ref<Array<number>>([]);
-    const fileInput = ref<HTMLInputElement | null>(null); // Riferimento al campo di input file
+    const fileInput = ref<HTMLInputElement | null>(null);
     let loading = ref<boolean>(true);
     const tableData = ref<Array<Documentation>>([]);
     const initItems = ref([]);
+
     const formData = ref<Documentation>({
-     FileName: "",
-     FolderName: "",
+      File: null,
+      FileName: "",
+      FolderName: "Moduli",
     });
+
     const tableHeader = ref([
       {
         columnName: "File",
@@ -161,69 +119,75 @@ export default defineComponent({
       },
     ]);
 
-    // Apre il modale
-    const openModal = () => {
-      isModalOpen.value = true;
-    };
-
-    // Chiude il modale
-    const closeModal = () => {
-      isModalOpen.value = false;
-    };
-
-    // Gestisce il cambiamento del file
     const handleFileUpload = async (event: Event) => {
       loading.value = true;
       const input = event.target as HTMLInputElement;
       if (input?.files) {
         formData.value.File = input.files[0];
+        event = null;
         await addFile();
         loading.value = false;
-        // Qui puoi gestire i file selezionati (ad esempio, per inviarli a un server)
       }
     };
 
     const getItems = async () => {
-      tableData.value = await getDocumentations("");
+      tableData.value = await getDocumentations();
       initItems.value.splice(0, tableData.value.length, ...tableData.value);
-
     };
 
     onMounted(async () => {
       loading.value = true;
       await getItems();
       loading.value = false;
-      
+
     });
 
-
-  const addFile = async () => {
-
-    try {
-      const result = await uploadFiles(formData.value);
+    const addFile = async () => {
+      await uploadFile(formData.value);
       Swal.fire({
         text: "File caricati con successo!",
         icon: "success",
         confirmButtonText: "Continua!",
       });
-      formData.value.File= null;
-      await getItems();
-    } catch (error) {
-      console.error("Errore durante il caricamento:", error);
-      Swal.fire({
-        text: "Attenzione, si è verificato un errore.",
-        icon: "error",
-        confirmButtonText: "Riprova",
-      });
-    }
-  };
+      const error = store.errors;
 
-  const deleteFewItems = async () => {
+      if (!error) {
+        Swal.fire({
+          text: "Il modulo è stato inviato con successo!",
+          icon: "success",
+          buttonsStyling: false,
+          confirmButtonText: "Continua!",
+          heightAuto: false,
+          customClass: {
+            confirmButton: "btn fw-semobold btn-light-primary",
+          },
+        }).then(async function () {
+          await getItems();
+          loading.value = false;
+        });
+      } else {
+        loading.value = false;
+        Swal.fire({
+          text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
+          icon: "error",
+          buttonsStyling: false,
+          confirmButtonText: "Ok",
+          heightAuto: false,
+          customClass: {
+            confirmButton: "btn btn-primary",
+          },
+        });
+      }
+    };
+
+    const deleteFewItems = async () => {
+      loading.value = true;
       selectedIds.value.forEach(async (item) => {
         await deleteDocumentation(item)
       });
       selectedIds.value.length = 0;
       await getItems();
+      loading.value = false;
     };
 
     const search = ref<string>("");
@@ -264,7 +228,8 @@ export default defineComponent({
     const onItemSelect = (selectedItems: Array<number>) => {
       selectedIds.value = selectedItems;
     };
-    async function deleteItem(id: number){
+    async function deleteItem(id: number) {
+      loading.value = true;
       Swal.fire({
         text: "Confermare l'eliminazione?",
         icon: "warning",
@@ -277,15 +242,13 @@ export default defineComponent({
       }).then(async () => {
         await deleteDocumentation(id)
         await getItems();
-        MenuComponent.reinitialization(); 
+        loading.value = false;
+        MenuComponent.reinitialization();
       });
     }
 
 
     return {
-      isModalOpen,
-      openModal,
-      closeModal,
       handleFileUpload,
       fileInput,
       addFile,
