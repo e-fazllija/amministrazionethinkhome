@@ -4,32 +4,17 @@ const store = useAuthStore();
 
 export class Documentation{
   Id?: number;
-  FileName: string;
-  CreationDate?: Date;
-  UpdateDate?: Date;
-  label?: string;
+  File: File;
+  FileName?: string;
+  FolderName: string;
 }
 
-export class DocumentationTabelData {
-  Id?: number;
-  FileName: string;
-  CreationDate: Date;
-  UpdateDate: Date;
-}
-
-export class Notes {
-  Id?: number;
-  ApplicationUserId: string;
-  Text: string;
-}
-
-const getDocumentations = (filterRequest: string) : Promise<Array<Documentation>> => {
-   return ApiService.get(
-    `Documentations/Get?currentPage=0&filterRequest=${filterRequest}`,
-    ""
+const getDocumentations = () : Promise<Array<Documentation>> => {
+  return ApiService.get(
+    `BlobStorage/GetDocuments`, ""
   )
     .then(({ data }) => {
-      const result = data.Data as Partial<Array<Documentation>>
+      const result = data as Partial<Array<Documentation>>;
       return result;
     })
     .catch(({ response }) => {
@@ -38,33 +23,11 @@ const getDocumentations = (filterRequest: string) : Promise<Array<Documentation>
     });
 };
 
-// const getDocumentation = (id: number) : Promise<Documentation> => {
-//   return ApiService.get(`Documentations/GetById?id=${id}`, "")
-//     .then(({ data }) => {
-//       const result = data as Partial<Documentation>;
-//       result.DocumentationNotes = data.DocumentationNotes;
-//       return result;
-//     })
-//     .catch(({ response }) => {
-//       store.setError(response.data.Message, response.status);
-//       return undefined;
-//     });
-// };
-
-const createDocumentation = async (formData:Documentation) => {
-  return ApiService.post("Documentations/Create", formData)
-    .then(({ data }) => {
-      const result = data as Partial<Documentation>;
-      return result;
-    })
-    .catch(({ response }) => {
-      store.setError(response.data.Message, response.status);
-      return undefined;
-    });
-};
-
-const updateDocumentation = async (formData:Documentation) => {
-  return ApiService.post("Customers/Update", formData)
+const uploadFile = async (file: Documentation) => {
+  const formData = new FormData();
+  formData.append("File", file.File);
+  formData.append("FolderName", file.FolderName);
+  return ApiService.post("BlobStorage/InsertDocument", formData)
     .then(({ data }) => {
       const result = data as Partial<Documentation>;
       return result;
@@ -76,7 +39,7 @@ const updateDocumentation = async (formData:Documentation) => {
 };
 
 const deleteDocumentation = async (id: number) => {
-  return await ApiService.delete(`Documentations/Delete?id=${id}`)
+  return await ApiService.delete(`BlobStorage/DeleteModule?id=${id}&folderName=Moduli`)
     .then(({ data }) => {
       const result = data as Partial<Documentation>;
       return result;
@@ -87,4 +50,4 @@ const deleteDocumentation = async (id: number) => {
     });
 };
 
-export { getDocumentations, createDocumentation, updateDocumentation, deleteDocumentation }
+export { getDocumentations, deleteDocumentation, uploadFile };

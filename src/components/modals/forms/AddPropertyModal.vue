@@ -131,6 +131,19 @@
               <!--end::Col-->
 
               <!--begin::Col-->
+               <div class="d-flex flex-column mb-2 fv-row">
+                <!--begin::Label-->
+                <label class="col-lg-4 col-form-label fw-semobold fs-6">In Trattativa</label>
+                <!--end::Label-->
+                <!--begin::Input-->
+                <div class="form-check form-switch form-check-custom form-check-solid">
+                  <input class="form-check-input" type="checkbox" value="" v-model="formData.Negotiation" />
+                </div>
+                <!--end::Input-->
+              </div>
+              <!--end::Col-->
+
+              <!--begin::Col-->
               <div class="d-flex flex-column mb-2 fv-row">
                 <!--begin::Label-->
                 <label class="col-lg-4 col-form-label fw-semobold fs-6">Venduto</label>
@@ -748,6 +761,7 @@ export default defineComponent({
       InHome: false,
       Highlighted: false,
       Auction: false,
+      Negotiation: false,
       Sold: false,
       Status: "Vendita",
       AddressLine: "",
