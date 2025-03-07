@@ -12,6 +12,7 @@ export class RealEstateProperty {
   InHome: boolean;
   Highlighted: boolean;
   Auction: boolean;
+  Negotiation: boolean;
   Sold: boolean;
   Status: string;
   AddressLine: string;

@@ -609,6 +609,22 @@
         </div>
         <!--end::Input group-->
 
+                <!--begin::Input group-->
+                <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">In Trattativa</label>
+          <!--end::Label-->
+          <!--begin::Input-->
+          <div class="col-lg-8 fv-row">
+            <div class="form-check form-switch form-check-custom form-check-solid">
+              <input class="form-check-input" type="checkbox" value="" v-model="formData.Negotiation" />
+            </div>
+
+          </div>
+          <!--end::Input-->
+        </div>
+        <!--end::Input group-->
+
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
@@ -793,6 +809,7 @@ export default defineComponent({
       InHome: false,
       Highlighted: false,
       Auction: false,
+      Negotiation:false,
       Sold: false,
       Status: "",
       AddressLine: "",
