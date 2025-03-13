@@ -59,10 +59,23 @@
         <input type="text" v-model="toPrice" class="form-control form-control-solid" placeholder="Prezzo a " />
       </div>
       <div class="col-md-3 col-lg-3 mb-2">
-        <Multiselect v-model="locations" :options="options" mode="multiple" :multiple="true"
-          placeholder="Seleziona località" class="cform-control form-control-solid" />
+       <Multiselect 
+         v-model="locations" 
+         :options="options" 
+         mode="multiple" 
+         placeholder="Seleziona località" 
+         class="cform-control form-control-solid" 
+        :searchable="true"
+        />
+      <div v-if="locations.length" class="selected-box">
+          <strong></strong> 
+            <span v-for="(location, index) in locations" :key="index" class="selected-location">
+             {{ location }}
+            <span @click="removeLocation(index)" class="remove-btn">×</span>
+             {{ index < locations.length - 1 ? ', ' : '' }}
+           </span>
       </div>
-
+     </div>
       <div class="col-md-3 col-lg-3 mb-2 d-flex justify-content-end">
         <button type="button" @click="searchItems" class="btn btn-light-primary me-3">
           <KTIcon icon-name="search" icon-class="fs-2" /> Cerca
@@ -416,8 +429,12 @@ export default defineComponent({
         { value: "VITERBO", label: "LAZIO \\ VITERBO (VT) \\ VITERBO" }
       ]
     };
+  },
+  methods: {
+    removeLocation(index) {
+      this.locations.splice(index, 1);  // Rimuove l'elemento selezionato
+    }
   }
-
 });
 </script>
 <style src="@vueform/multiselect/themes/default.css"></style>
@@ -435,5 +452,28 @@ export default defineComponent({
   /* Scroll verticale se necessario */
   resize: none;
   /* Evita il ridimensionamento manuale */
+}
+.selected-box {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  background-color: #f9f9f9;
+}
+
+.selected-location {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.remove-btn {
+  color: red;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.remove-btn:hover {
+  color: darkred;
 }
 </style>
