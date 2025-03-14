@@ -290,6 +290,10 @@ export default defineComponent({
       formRef.value.validate(async (valid: boolean) => {
         if (valid) {
           loading.value = true;
+          
+          targetData.value.DataInizioEvento = new Date(targetData.value.DataInizioEvento)
+          targetData.value.DataFineEvento = new Date(targetData.value.DataFineEvento)
+
           await updateEvent(targetData.value);
 
           const error = store.errors;
