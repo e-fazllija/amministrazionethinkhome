@@ -123,8 +123,8 @@ export class Event {
   RequestId: number;
   DescrizioneEvento: string;
   LuogoEvento: string;
-  DataInizioEvento?: Date;
-  DataFineEvento?: Date;
+  DataInizioEvento?: string;
+  DataFineEvento?: string;
   CreationDate?: Date;
   UpdateDate?: Date;
   Color?: string;
