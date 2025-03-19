@@ -142,8 +142,9 @@
                   <label class="fs-6 fw-semobold mb-2 required">Inizio</label>
                   <!--end::Label-->
                   <!--begin::Input-->
-                  <el-date-picker v-model="targetData.DataInizioEvento" type="datetime" :teleported="false"
-                    name="DataInizioEvento" prop="DataInizioEvento" />
+                  <input class="form-control" v-model="targetData.DataInizioEvento" type="datetime-local" />
+                  <!-- <el-date-picker v-model="targetData.DataInizioEvento" type="datetime" :teleported="false"
+                    name="DataInizioEvento" prop="DataInizioEvento" /> -->
                   <!--end::Input-->
                   <div class="fv-plugins-message-container invalid-feedback"></div>
                 </div>
@@ -158,8 +159,9 @@
                   <label class="fs-6 fw-semobold mb-2 required">Fine</label>
                   <!--end::Label-->
                   <!--begin::Input-->
-                  <el-date-picker v-model="targetData.DataFineEvento" type="datetime" :teleported="false"
-                    name="DataFineEvento" prop="DataFineEvento" />
+                  <input class="form-control" v-model="targetData.DataFineEvento" type="datetime-local" />
+                  <!-- <el-date-picker v-model="targetData.DataFineEvento" type="datetime" :teleported="false"
+                    name="DataFineEvento" prop="DataFineEvento" /> -->
                   <!--end::Input-->
                   <div class="fv-plugins-message-container invalid-feedback"></div>
                 </div>
@@ -291,10 +293,8 @@ export default defineComponent({
         if (valid) {
           loading.value = true;
           
-          targetData.value.DataInizioEvento = new Date(targetData.value.DataInizioEvento).toISOString();
-          targetData.value.DataFineEvento = new Date(targetData.value.DataFineEvento).toISOString();
-          console.log(targetData.value.DataInizioEvento)
-          console.log(targetData.value.DataFineEvento)
+          targetData.value.DataInizioEvento = targetData.value.DataInizioEvento;
+          targetData.value.DataFineEvento = targetData.value.DataFineEvento;
 
           await updateEvent(targetData.value);
 
