@@ -232,21 +232,21 @@ export default defineComponent({
       CustomerId: null,
       RequestId: null,
       RealEstatePropertyId: null,
-      DataInizioEvento: new Date(todayDate.format("YYYY-MM-DD")),
-      DataFineEvento: new Date(todayDate.format("YYYY-MM-DD")),
+      DataInizioEvento: todayDate.format("YYYY-MM-DD"),
+      DataFineEvento: todayDate.format("YYYY-MM-DD"),
       Type: "Appuntamento",
       Color: store.user.Color
     });
 
     watch(() => props.SelectedDateStart, async (first, second) => {
       if (first) {
-        targetData.value.DataInizioEvento = new Date(first);
+        targetData.value.DataInizioEvento = new Date(first).toISOString();;
       }
     })
 
     watch(() => props.SelectedDateEnd, async (first, second) => {
       if (first) {
-        targetData.value.DataFineEvento = new Date(first);
+        targetData.value.DataFineEvento = new Date(first).toISOString();;
       }
     })
 
@@ -306,6 +306,10 @@ export default defineComponent({
         if (valid) {
           loading.value = true;
           targetData.value.ApplicationUserId = props.UserId
+
+          console.log(targetData.value.DataInizioEvento)
+          console.log(targetData.value.DataFineEvento)
+          
           await createEvent(targetData.value);
 
           const error = store.errors;
@@ -318,8 +322,8 @@ export default defineComponent({
             targetData.value.CustomerId= null;
             targetData.value.RequestId= null;
             targetData.value.RealEstatePropertyId= null;
-            targetData.value.DataInizioEvento= new Date(todayDate.format("YYYY-MM-DD"));
-            targetData.value.DataFineEvento= new Date(todayDate.format("YYYY-MM-DD"));
+            targetData.value.DataInizioEvento= todayDate.format("YYYY-MM-DD");
+            targetData.value.DataFineEvento= todayDate.format("YYYY-MM-DD");
             targetData.value.Type = "Appuntamento";
             Swal.fire({
               text: "Operazione completata!",

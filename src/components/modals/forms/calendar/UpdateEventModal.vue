@@ -291,8 +291,10 @@ export default defineComponent({
         if (valid) {
           loading.value = true;
           
-          targetData.value.DataInizioEvento = new Date(targetData.value.DataInizioEvento)
-          targetData.value.DataFineEvento = new Date(targetData.value.DataFineEvento)
+          targetData.value.DataInizioEvento = new Date(targetData.value.DataInizioEvento).toISOString();
+          targetData.value.DataFineEvento = new Date(targetData.value.DataFineEvento).toISOString();
+          console.log(targetData.value.DataInizioEvento)
+          console.log(targetData.value.DataFineEvento)
 
           await updateEvent(targetData.value);
 
