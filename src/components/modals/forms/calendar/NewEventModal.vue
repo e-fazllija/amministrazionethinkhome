@@ -145,8 +145,9 @@
                   <label class="fs-6 fw-semobold mb-2 required">Inizio</label>
                   <!--end::Label-->
                   <!--begin::Input-->
-                  <el-date-picker v-model="targetData.DataInizioEvento" type="datetime" :teleported="false"
-                    name="DataInizioEvento" prop="DataInizioEvento" />
+                  <input class="form-control" v-model="targetData.DataInizioEvento" type="datetime-local" />
+                  <!-- <el-date-picker v-model="targetData.DataInizioEvento" type="datetime" :teleported="false"
+                    name="DataInizioEvento" prop="DataInizioEvento" /> -->
                   <!--end::Input-->
                   <div class="fv-plugins-message-container invalid-feedback"></div>
                 </div>
@@ -161,8 +162,9 @@
                   <label class="fs-6 fw-semobold mb-2 required">Fine</label>
                   <!--end::Label-->
                   <!--begin::Input-->
-                  <el-date-picker v-model="targetData.DataFineEvento" type="datetime" :teleported="false"
-                    name="DataFineEvento" prop="DataFineEvento" />
+                  <input class="form-control" v-model="targetData.DataFineEvento" type="datetime-local" />
+                  <!-- <el-date-picker v-model="targetData.DataFineEvento" type="datetime" :teleported="false"
+                    name="DataFineEvento" prop="DataFineEvento" /> -->
                   <!--end::Input-->
                   <div class="fv-plugins-message-container invalid-feedback"></div>
                 </div>
@@ -208,6 +210,7 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import events, { todayDate, getToInsert, createEvent, InsertModel, Event } from "@/core/data/events";
 import { useAuthStore } from "@/stores/auth";
 import Multiselect from '@vueform/multiselect'
+import moment from "moment";
 
 export default defineComponent({
   name: "new-event-modal",
@@ -238,15 +241,25 @@ export default defineComponent({
       Color: store.user.Color
     });
 
+    function formattedDate(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      const seconds = String(date.getSeconds()).padStart(2, "0");
+      return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+    }
+
     watch(() => props.SelectedDateStart, async (first, second) => {
       if (first) {
-        targetData.value.DataInizioEvento = new Date(first).toISOString();;
+        targetData.value.DataInizioEvento = formattedDate(new Date(first));
       }
     })
 
     watch(() => props.SelectedDateEnd, async (first, second) => {
       if (first) {
-        targetData.value.DataFineEvento = new Date(first).toISOString();;
+        targetData.value.DataFineEvento = formattedDate(new Date(first));
       }
     })
 
