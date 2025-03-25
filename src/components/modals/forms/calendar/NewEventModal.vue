@@ -30,10 +30,16 @@
               <div class="fv-plugins-message-container invalid-feedback"></div>
             </div>
             <!--end::Input group-->
-            <div class="fv-row mb-7">
-                <label class="fs-6 fw-semobold mb-2">Seleziona il colore dell'evento</label>
-                <el-color-picker v-model="targetData.Color" show-alpha style="width: 100%;" />
-            </div>
+            <div class="d-flex align-items-center mb-7">
+                 <label class="required fs-6 fw-sembold me-3">Seleziona il colore:</label>
+                  <select v-model="targetData.Color" class="fs-6 fw-sembold mb-2" style="width: 100px;"
+                         :style="{ backgroundColor: targetData.Color, color: '#fff' }">
+                    <option v-for="(color, index) in colorOptions" :key="index" 
+                         :value="color.hex" :style="{ backgroundColor: color.hex, color: '#fff' }">
+                         {{ color.name }}
+                    </option>
+                  </select>
+              </div>
             <!--begin::Input group-->
             <div class="fv-row mb-9">
               <!--begin::Label-->
@@ -226,7 +232,28 @@ export default defineComponent({
     const newTargetModalRef = ref<null | HTMLElement>(null);
     const loading = ref<boolean>(false);
     const store = useAuthStore();
-
+    const colorOptions = [
+  { name: '', hex: '#408441' },       
+  { name: '', hex: '#3412F2' },           
+  { name: '', hex: '#FBC8FF' },          
+  { name: '', hex: '#23D8F4' },        
+  { name: '', hex: '#E70F86' },         
+  { name: '', hex: '#8973AE' },           
+  { name: '', hex: '#559F6D' },     
+  { name: '', hex: '#D6D00C' },          
+  { name: '', hex: '#676769' },          
+  { name: '', hex: '#8B1AD7' },          
+  { name: '', hex: '#F5730F' },      
+  { name: '', hex: '#FF5733' },          
+  { name: '', hex: '#C70039' },     
+  { name: '', hex: '#900C3F' },        
+  { name: '', hex: '#581845' },         
+  { name: '', hex: '#D5A6BD' },    
+  { name: '', hex: '#FF8C00' },   
+  { name: '', hex: '#FF0000' },     
+  { name: '', hex: '#800080' },     
+  { name: '', hex: '#00FF00' }       
+];
     const targetData = ref<Event>({
       ApplicationUserId: "",
       NomeEvento: "",
@@ -331,6 +358,7 @@ export default defineComponent({
             targetData.value.ApplicationUserId= "";
             targetData.value.NomeEvento= "";
             targetData.value.DescrizioneEvento= "";
+            targetData.value.Color="";
             targetData.value.LuogoEvento= "";
             targetData.value.CustomerId= null;
             targetData.value.RequestId= null;
@@ -394,7 +422,8 @@ export default defineComponent({
       submit,
       getAssetPath,
       inserModel,
-      removeModalBackdrop
+      removeModalBackdrop,
+      colorOptions
     };
   },
   data() {

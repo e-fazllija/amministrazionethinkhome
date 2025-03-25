@@ -55,9 +55,15 @@
               </div>
               <!--end::Input group-->
               <div class="d-flex align-items-center mb-7">
-                <label class="required fs-6 fw-semobold me-3">Seleziona il colore:</label>
-                 <el-color-picker v-model="formData.Color" />
-               </div>
+                 <label class="required fs-6 fw-sembold me-3">Seleziona il colore:</label>
+                  <select v-model="formData.Color" class="fs-6 fw-sembold mb-2" style="width: 100px;"
+                         :style="{ backgroundColor: formData.Color, color: '#fff' }">
+                    <option v-for="(color, index) in colorOptions" :key="index" 
+                         :value="color.hex" :style="{ backgroundColor: color.hex, color: '#fff' }">
+                         {{ color.name }}
+                    </option>
+                  </select>
+              </div>
               <!--begin::Input group-->
               <div class="fv-row mb-7">
                 <!--begin::Label-->
@@ -241,6 +247,28 @@ export default defineComponent({
     const formRef = ref<null | HTMLFormElement>(null);
     const updateAgentModalRef = ref<null | HTMLElement>(null);
     const loading = ref<boolean>(false);
+    const colorOptions = [
+  { name: '', hex: '#408441' },       
+  { name: '', hex: '#3412F2' },           
+  { name: '', hex: '#FBC8FF' },          
+  { name: '', hex: '#23D8F4' },        
+  { name: '', hex: '#E70F86' },         
+  { name: '', hex: '#8973AE' },           
+  { name: '', hex: '#559F6D' },     
+  { name: '', hex: '#D6D00C' },          
+  { name: '', hex: '#676769' },          
+  { name: '', hex: '#8B1AD7' },          
+  { name: '', hex: '#F5730F' },      
+  { name: '', hex: '#FF5733' },          
+  { name: '', hex: '#C70039' },     
+  { name: '', hex: '#900C3F' },        
+  { name: '', hex: '#581845' },         
+  { name: '', hex: '#D5A6BD' },    
+  { name: '', hex: '#FF8C00' },   
+  { name: '', hex: '#FF0000' },     
+  { name: '', hex: '#800080' },     
+  { name: '', hex: '#00FF00' }       
+];
     const formData = ref<Agent>({
       Id: 0,
       Name: "",
@@ -374,7 +402,8 @@ export default defineComponent({
       formRef,
       loading,
       updateAgentModalRef,
-      getAssetPath
+      getAssetPath,
+      colorOptions
     };
   },
 });
