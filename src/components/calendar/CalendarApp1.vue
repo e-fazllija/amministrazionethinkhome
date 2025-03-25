@@ -18,13 +18,8 @@
         </select>
       </div>
       <div class="card-toolbar col-lg-3 col-md-9 col-sm-12">
-        <input
-      type="text"
-      class="form-control"
-      v-model="search"
-      @input="searchItemsFunc()"
-      placeholder="Cerca evento, descrizione..."
-    />
+        <input type="text" class="form-control" v-model="search" @input="searchItemsFunc()"
+          placeholder="Cerca evento, descrizione..." />
       </div>
       <div class="card-toolbar">
         <button class="btn btn-flex btn-primary" @click="newEvent(null, null)">
@@ -68,7 +63,6 @@ import { useAuthStore } from "@/stores/auth";
 import type { EventInput } from "@fullcalendar/core";
 import Loading from "@/components/kt-datatable/table-partials/Loading.vue";
 import itLocale from '@fullcalendar/core/locales/it';
-import { end, start } from "@popperjs/core";
 import Multiselect from '@vueform/multiselect';
 import { MenuComponent } from "@/assets/ts/components";
 
@@ -117,12 +111,13 @@ export default defineComponent({
 
     const newEvent = async (start: string, end: string) => {
       if (!start || !end) {
+
         const today = todayDate.format("YYYY-MM-DD"); // Data di oggi
-          selectedDateStart.value = `${today}T07:00:00`; // Imposta l'orario di inizio alle 7:00
-          selectedDateEnd.value = `${today}T08:00:00`; // Imposta l'orario di fine alle 8:00
+        selectedDateStart.value = `${today}T07:00:00`; // Imposta l'orario di inizio alle 7:00
+        selectedDateEnd.value = `${today}T08:00:00`; // Imposta l'orario di fine alle 8:00
       } else {
-          selectedDateStart.value = start.toString();
-          selectedDateEnd.value = end.toString();
+        selectedDateStart.value = start.toString();
+        selectedDateEnd.value = end.toString();
       }
 
       const modal = new Modal(
@@ -161,33 +156,33 @@ export default defineComponent({
       const addName = store.user.Role != "Agent" && agentId.value == "" ? true : false;
       for (const key in results) {
 
-    const item = {
+        const item = {
           id: results[key].Id.toString(),
           title: addName ? `${results[key].ApplicationUser.Name} ${results[key].ApplicationUser.LastName}: ${results[key].NomeEvento}` : results[key].NomeEvento,
           start: results[key].DataInizioEvento,
           end: results[key].DataFineEvento,
           description: results[key].DescrizioneEvento,
-      className: "fc-event-meeting",
+          className: "fc-event-meeting",
           color: results[key].Color != null && results[key].Color != "" ? results[key].Color : results[key].ApplicationUser.Color
-    } as EventInput;
+        } as EventInput;
 
         tableData.value.push(item)
-  }
-     initItems.value.splice(0, tableData.value.length, ...tableData.value);
+      }
+      initItems.value.splice(0, tableData.value.length, ...tableData.value);
 
       if (store.user.Role == "Agency" || store.user.Role == "Admin") {
         defaultSearchItems.value = await getSearchItems(store.user.Id);
         searchItems.value.Agencies = defaultSearchItems.value.Agencies;
         if (store.user.Role == "Agency") {
-      agencyId.value = store.user.Id;
+          agencyId.value = store.user.Id;
           searchItems.value.Agents = defaultSearchItems.value.Agents.filter(x => x.AgencyId == agencyId.value);
-    } else {
-      agencyId.value = defaultSearchItems.value.Agencies[0].Id;
-      searchItems.value.Agents = defaultSearchItems.value.Agents;
-  }
-}
+        } else {
+          agencyId.value = defaultSearchItems.value.Agencies[0].Id;
+          searchItems.value.Agents = defaultSearchItems.value.Agents;
+        }
+      }
 
-     
+
     };
 
     const searchItems = ref<SearchModel>({
@@ -221,7 +216,7 @@ export default defineComponent({
         await getItems("");
       }
     })
-   
+
 
     const search = ref<string>("");
     const searchItemsFunc = () => {
@@ -277,17 +272,17 @@ export default defineComponent({
       dayMaxEvents: true, // allow "more" link when too many events
       events: tableData.value,
       dateClick: (arg) => {
-       if (arg.allDay) {
-        const start = new Date(arg.dateStr + "T07:00:00"); // Ora di inizio: 7:00
-        const end = new Date(arg.dateStr + "T08:00:00"); // Ora di fine: 8:00
-        newEvent(start.toISOString(), end.toISOString()); // Passa le date formattate
-       } else {
-        const start = new Date(arg.dateStr);
-        const end = new Date(start.getTime());
-        end.setMinutes(start.getMinutes() + 30); // Aggiungi 30 minuti per la fine
+        if (arg.allDay) {
+          const start = new Date(arg.dateStr + "T07:00:00"); // Ora di inizio: 7:00
+          const end = new Date(arg.dateStr + "T08:00:00"); // Ora di fine: 8:00
+          newEvent(start.toISOString(), end.toISOString()); // Passa le date formattate
+        } else {
+          const start = new Date(arg.dateStr);
+          const end = new Date(start.getTime());
+          end.setMinutes(start.getMinutes() + 30); // Aggiungi 30 minuti per la fine
 
-        newEvent(start.toISOString(), end.toISOString()); // Passa i nuovi orari all'evento
-       }
+          newEvent(start.toISOString(), end.toISOString()); // Passa i nuovi orari all'evento
+        }
       },
       eventClick: (arg) => {
         updateEvent(parseInt(arg.event.id));
