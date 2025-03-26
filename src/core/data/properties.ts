@@ -1,6 +1,7 @@
 import ApiService from "@/core/services/ApiService";
 import { useAuthStore, type User } from "@/stores/auth";
 import type { Customer } from "./customers";
+import imageCompression from 'browser-image-compression';
 const store = useAuthStore();
 
 export class RealEstateProperty {
@@ -154,43 +155,80 @@ const setRealEstatePropertyPhotoHighlighted = (id : number) => {
   });
 }
 
+const compressTo500KB = async (file: File): Promise<File> => {
+  // Salta la compressione se non è un'immagine o è già sotto 550KB
+  if (!file.type.startsWith('image/') || file.size <= 550 * 1024) {
+    return file;
+  }
+  const options = {
+    maxSizeMB: 0.5, // 500KB (in MB)
+    maxWidthOrHeight: 1600, // Risoluzione ridotta
+    useWebWorker: true,
+    fileType: file.type.includes('jpeg') ? 'image/jpeg' : 'image/webp', // Preferisci JPEG o WebP
+    initialQuality: 0.7, // Qualità iniziale più bassa
+  };
+
+  try {
+    const compressedBlob = await imageCompression(file, options);
+    // Mantieni il nome originale ma aggiorna l'estensione se necessario
+    const newName = options.fileType === 'image/webp' 
+      ? file.name.replace(/\.[^/.]+$/, ".webp") 
+      : file.name.replace(/\.[^/.]+$/, ".jpg");
+
+    return new File([compressedBlob], newName, {
+      type: options.fileType,
+      lastModified: Date.now()
+    });
+  } catch (error) {
+    console.error('Errore compressione:', error);
+    return file;
+  }
+};
+
 const uploadFiles = async (files: FileList, id: number) => {
   const formData = new FormData();
-  formData.append("PropertyId", id.toString())
-  Array.from(files).forEach((file) => {
+  formData.append("PropertyId", id.toString());
+  
+  const filesArray = Array.from(files);
+  const compressedFiles = await Promise.all(
+    filesArray.map(file => compressTo500KB(file))
+  );
+
+  compressedFiles.forEach(file => {
     formData.append("Files", file);
+    console.log(`File: ${file.name} | Dimensione: ${(file.size/1024).toFixed(2)}KB`);
   });
+
   return await ApiService.post("RealEstateProperty/UploadFiles", formData)
-  .then(({ data }) => {
-    return data;
-  })
-  .catch(({ response }) => {
-    store.setError(response.data.Message, response.status);
-    return undefined;
-  });
-}
+    .then(({ data }) => data)
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
 
 const createRealEstateProperty = async (form: any) => {
   const values = form as RealEstateProperty;
   values.AgentId = store.user.Id;
   const formData = new FormData();
-  // Itera su tutte le proprietà dell'oggetto values
+
   for (const key in values) {
     if (key === "Files" && values.Files) {
-      // Se la proprietà è Files, aggiungi i file uno per uno
-      Array.from(values.Files).forEach((file) => {
-        formData.append("Files", file); // Nome del campo nel backend è "Photos"
+      const filesArray = Array.from(values.Files);
+      const compressedFiles = await Promise.all(
+        filesArray.map(file => compressTo500KB(file))
+      );
+      
+      compressedFiles.forEach(file => {
+        formData.append("Files", file);
       });
     } else if (values[key as keyof RealEstateProperty] !== undefined) {
-      // Per tutti gli altri campi, aggiungi il valore come stringa
       formData.append(key, values[key as keyof RealEstateProperty]?.toString() || "");
     }
   }
+
   return await ApiService.post("RealEstateProperty/Create", formData)
-    .then(({ data }) => {
-      const result = data as Partial<RealEstateProperty>;
-      return result;
-    })
+    .then(({ data }) => data as Partial<RealEstateProperty>)
     .catch(({ response }) => {
       store.setError(response.data.Message, response.status);
       return undefined;
