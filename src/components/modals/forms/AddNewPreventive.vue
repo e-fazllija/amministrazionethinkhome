@@ -42,7 +42,8 @@
           <button 
             type="button" 
             class="btn btn-light me-3" 
-            data-bs-dismiss="modal">
+            data-bs-dismiss="modal" 
+            @click="resetModal">
             Chiudi
           </button>
           <button 
@@ -58,9 +59,6 @@
 </template>
 
 <script lang="ts">
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import { defineComponent } from 'vue';
 
 
 export default {
@@ -68,80 +66,101 @@ export default {
     return {
       notaioNotes: '',
       ristrutturazioniNotes: '',
-      praticheTecnicheNotes: ''
+      praticheTecnicheNotes: '',
+      // Altri campi se necessario
+    }
+  },
+  mounted() {
+    // Aggiungi listener per resettare quando la modale viene riaperta
+    const modal = document.getElementById('kt_modal_scheda');
+    if (modal) {
+      modal.addEventListener('show.bs.modal', this.resetModal);
     }
   },
   methods: {
+    resetModal() {
+      // Resetta tutti i campi del form
+      this.notaioNotes = '';
+      this.ristrutturazioniNotes = '';
+      this.praticheTecnicheNotes = '';
+      
+      // Resetta eventuali checkbox
+      const modal = document.getElementById('kt_modal_scheda');
+      if (modal) {
+        const checkboxes = modal.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach((checkbox: HTMLInputElement) => {
+          checkbox.checked = false;
+        });
+      }
+    },
+    
     saveNotes() {
+      // Metodo per salvare le note
       console.log({
         notaio: this.notaioNotes,
         ristrutturazioni: this.ristrutturazioniNotes,
         praticheTecniche: this.praticheTecnicheNotes
       });
+      
+      // Qui puoi aggiungere la logica per salvare i dati
     },
     
     printWithBrowser() {
-  const pdfContent = document.getElementById("pdf-content");
-  if (!pdfContent) return;
+      // Metodo per stampare il contenuto
+      const pdfContent = document.getElementById("pdf-content");
+      if (!pdfContent) return;
 
-  // Clona l'elemento e convertilo esplicitamente a HTMLElement
-  const printContent = pdfContent.cloneNode(true) as HTMLElement;
-  
-  // Applica stili per la stampa
-  printContent.style.width = "210mm";
-  printContent.style.padding = "20mm";
-  printContent.style.margin = "0 auto";
-  printContent.style.display = "block";
+      const printContent = pdfContent.cloneNode(true) as HTMLElement;
+      
+      // Stili per la stampa
+      printContent.style.width = "210mm";
+      printContent.style.padding = "20mm";
+      printContent.style.margin = "0 auto";
+      printContent.style.display = "block";
 
-  // Sostituisci tutte le textarea con div
-  const textareas = printContent.querySelectorAll("textarea");
-  textareas.forEach(textarea => {
-    const div = document.createElement("div");
-    div.style.whiteSpace = "pre-wrap";
-    div.style.padding = "10px";
-    div.style.border = "1px solid #eee";
-    div.textContent = textarea.value;
-    textarea.parentNode?.replaceChild(div, textarea);
-  });
+      // Sostituisci textarea con div
+      const textareas = printContent.querySelectorAll("textarea");
+      textareas.forEach(textarea => {
+        const div = document.createElement("div");
+        div.style.whiteSpace = "pre-wrap";
+        div.style.padding = "10px";
+        div.style.border = "1px solid #eee";
+        div.textContent = (textarea as HTMLTextAreaElement).value;
+        textarea.parentNode?.replaceChild(div, textarea);
+      });
 
-  // Crea la finestra di stampa
-  const printWindow = window.open("", "_blank");
-  if (!printWindow) {
-    alert("Permetti i popup per visualizzare l'anteprima di stampa");
-    return;
-  }
+      const printWindow = window.open("", "_blank");
+      if (!printWindow) {
+        alert("Permetti i popup per visualizzare l'anteprima di stampa");
+        return;
+      }
 
-  // Prepara il documento di stampa con DOCTYPE corretto
-  printWindow.document.write(`
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <title>Preventivo</title>
-        <meta charset="UTF-8">
-        <style>
-          body { font-family: Arial; margin: 0; padding: 20mm; }
-          @page { size: A4; margin: 10mm; }
-          @media print {
-            body { padding: 0; }
-          }
-        </style>
-      </head>
-      <body>
-        ${printContent.innerHTML}
-      </body>
-    </html>
-  `);
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Preventivo</title>
+            <meta charset="UTF-8">
+            <style>
+              body { font-family: Arial; margin: 0; padding: 20mm; }
+              @page { size: A4; margin: 10mm; }
+              @media print {
+                body { padding: 0; }
+              }
+            </style>
+          </head>
+          <body>
+            ${printContent.innerHTML}
+          </body>
+        </html>
+      `);
 
-  // Chiudi il documento e avvia la stampa
-  printWindow.document.close();
-  
-  // Timer per assicurarsi che il contenuto sia completamente caricato
-  setTimeout(() => {
-    printWindow.print();
-    // printWindow.close(); // Opzionale: chiudi dopo la stampa
-  }, 500);
-}
-   
+      printWindow.document.close();
+      
+      setTimeout(() => {
+        printWindow.print();
+      }, 500);
+    }
   }
 }
 </script>

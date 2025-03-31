@@ -466,7 +466,7 @@
             @click="printWithBrowser">
             <i class="fas fa-print me-2"></i> Stampa
           </button>
-        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal" @click="resetModal">
           Chiudi
         </button>
         <button type="button" class="btn btn-primary">
@@ -480,20 +480,46 @@
 
 <script lang="ts">
 export default {
+  data() {
+    return {
+      modalElement: null as HTMLElement | null
+    };
+  },
+  mounted() {
+    this.modalElement = document.getElementById('kt_modal_scheda');
+  },
   methods: {
+    resetModal() {
+      if (this.modalElement) {
+        const checkboxes = this.modalElement.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach((checkbox: HTMLInputElement) => {
+          checkbox.checked = false;
+        });
+      }
+    },
     printWithBrowser() {
   // 1. Ottieni il contenuto della modale
   const modalContent = document.getElementById("kt_modal_scheda");
   if (!modalContent) return;
 
-  // 2. Clona solo il contenuto necessario
+  // 2. Crea un clone profondo
   const printContent = modalContent.cloneNode(true) as HTMLElement;
   
-  // 3. Rimuovi elementi non necessari
+  // 3. Sincronizza lo stato di tutti i checkbox
+  printContent.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+  const replacement = document.createElement('span');
+  replacement.innerHTML = (checkbox as HTMLInputElement).checked 
+    ? '☑' 
+    : '□';
+  replacement.style.marginRight = '5px';
+  checkbox.replaceWith(replacement);
+});
+
+  // 4. Rimuovi elementi non necessari
   const footer = printContent.querySelector('.modal-footer');
   if (footer) footer.remove();
 
-  // 4. Prepara l'HTML per la stampa
+  // 5. Prepara l'HTML per la stampa con stili specifici
   const printHtml = `
     <!DOCTYPE html>
     <html>
@@ -506,10 +532,12 @@ export default {
             margin: 10mm;
           }
           body {
-            font-family: Arial;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 15mm;
             color: #000;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
           }
           .document-item {
             margin-bottom: 8mm;
@@ -529,6 +557,23 @@ export default {
             max-width: 100px;
             height: auto;
           }
+          /* Stile checkbox per stampa */
+          input[type="checkbox"] {
+            -webkit-appearance: checkbox !important;
+            -moz-appearance: checkbox !important;
+            appearance: checkbox !important;
+            width: 14px !important;
+            height: 14px !important;
+            border: 1px solid #000 !important;
+            margin: 0 5px 0 0 !important;
+            vertical-align: middle;
+          }
+          input[type="checkbox"]:checked {
+            background-color: #000 !important;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+          }
         </style>
       </head>
       <body>
@@ -537,24 +582,28 @@ export default {
     </html>
   `;
 
-  // 5. Apri la finestra di stampa
+  // 6. Apri la finestra di stampa
   const printWindow = window.open("", "_blank");
   if (!printWindow) {
     alert("Per favore abilita i popup per la stampa");
     return;
   }
 
-  // 6. Scrivi il contenuto e chiudi il documento
+  // 7. Scrivi il contenuto
   printWindow.document.open();
   printWindow.document.write(printHtml);
   printWindow.document.close();
 
-  // 7. Avvia la stampa dopo un breve ritardo
+  // 8. Forza il rendering prima della stampa
   setTimeout(() => {
+    printWindow.focus();
     printWindow.print();
-  }, 300);
+    printWindow.close();
+  }, 500);
 }
-  }
+
+  },
+
 }
 </script>
 
@@ -574,6 +623,27 @@ export default {
   }
   .modal-footer {
     display: none !important;
+  }
+  
+  /* Stile per i checkbox nella stampa */
+  input[type="checkbox"] {
+    appearance: checkbox !important;
+    -webkit-appearance: checkbox !important;
+    -moz-appearance: checkbox !important;
+    width: 13px !important;
+    height: 13px !important;
+    border: 1px solid #000 !important;
+  }
+  input[type="checkbox"]:checked {
+    background-color: #000 !important;
+  }
+  input[type="checkbox"]:checked::before {
+    content: "✓";
+    color: white;
+    font-size: 10px;
+    position: relative;
+    left: 2px;
+    top: -2px;
   }
 }
 </style>
