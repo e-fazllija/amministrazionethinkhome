@@ -422,6 +422,7 @@ export default defineComponent({
         { value: "PALOMBARA SABINA", label: "LAZIO \\ ROMA (RM) \\ PALOMBARA SABINA" },
         { value: "POLI", label: "LAZIO \\ ROMA (RM) \\ POLI" },
         { value: "POMEZIA", label: "LAZIO \\ ROMA (RM) \\ POMEZIA" },
+        { value: "PORTUENSE", label: "LAZIO \\ ROMA (RM) \\ PORTUENSE" },
         { value: "ROCCA DI CAVE", label: "LAZIO \\ ROMA (RM) \\ ROCCA DI CAVE" },
         { value: "ROCCA PRIORA", label: "LAZIO \\ ROMA (RM) \\ ROCCA PRIORA" },
         { value: "ROMA", label: "LAZIO \\ ROMA (RM) \\ ROMA" },

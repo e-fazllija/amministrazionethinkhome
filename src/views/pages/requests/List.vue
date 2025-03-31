@@ -10,6 +10,7 @@
           <option value="">Contratto</option>
           <option value="Vendita">Vendita</option>
           <option value="Affitto">Affitto</option>
+          <!-- <option value="Aste">Aste</option> -->
         </select>
       </div>
       <div class="col-md-3 col-lg-3 mb-2">
@@ -84,6 +85,9 @@
         <template v-slot:CustomerPhone="{ row: request }">
           {{ request.CustomerPhone }}
         </template>
+        <template v-slot:Price="{ row: request }">
+          {{ request.Price }}
+        </template>
         <template v-slot:Actions="{ row: request }">
           <router-link :to="{ name: 'request', params: { id: request.Id } }"
             class="btn btn-light-info me-1">Dettagli</router-link>
@@ -140,25 +144,31 @@ export default defineComponent({
         columnName: "Contratto",
         columnLabel: "Contract",
         sortEnabled: true,
-        columnWidth: 175,
+        columnWidth: 130
       },
       {
         columnName: "Data Richiesta",
         columnLabel: "StringDate",
         sortEnabled: true,
-        columnWidth: 230,
+        columnWidth: 180,
       },
       {
         columnName: "Email",
         columnLabel: "CustomerEmail",
         sortEnabled: true,
-        columnWidth: 175,
+        columnWidth: 150,
       },
       {
         columnName: "Telefono",
         columnLabel: "CustomerPhone",
         sortEnabled: true,
         columnWidth: 175,
+      },
+      {
+        columnName: "Prezzo",
+        columnLabel: "Price",
+        sortEnabled: true,
+        columnWidth: 150,
       },
       {
         columnName: "Azioni",
@@ -250,9 +260,20 @@ export default defineComponent({
       if (toPrice.value > 0) {
         filteredResults = filteredResults.filter(item => item.Price <= toPrice.value);
       }
-      // Filtraggio per contratto
+      // Filtraggio per contratto con criteri specifici
       if (contract.value) {
-        filteredResults = filteredResults.filter(item => searchingFunc(item, contract.value.toLowerCase()));
+       filteredResults = filteredResults.filter(item => {
+        switch (contract.value) {
+          case 'Affitto':
+        return item.Contract === 'Affitto';
+          case 'Vendita':
+        return item.Contract === 'Vendita';
+          case 'Aste':
+        return item.Contract === 'Aste';
+          default:
+        return true; // Se il filtro non è valido, mostra tutto
+        }
+       });
       }
       // Filtraggio per tipologia
       if (typologie.value) {
@@ -372,6 +393,7 @@ export default defineComponent({
         { value: "PALOMBARA SABINA", label: "LAZIO \\ ROMA (RM) \\ PALOMBARA SABINA" },
         { value: "POLI", label: "LAZIO \\ ROMA (RM) \\ POLI" },
         { value: "POMEZIA", label: "LAZIO \\ ROMA (RM) \\ POMEZIA" },
+        { value: "PORTUENSE", label: "LAZIO \\ ROMA (RM) \\ PORTUENSE" },
         { value: "ROCCA DI CAVE", label: "LAZIO \\ ROMA (RM) \\ ROCCA DI CAVE" },
         { value: "ROCCA PRIORA", label: "LAZIO \\ ROMA (RM) \\ ROCCA PRIORA" },
         { value: "ROMA", label: "LAZIO \\ ROMA (RM) \\ ROMA" },
