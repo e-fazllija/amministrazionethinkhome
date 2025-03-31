@@ -741,13 +741,32 @@
         </div>
 
       </div>
-      <!--begin::Actions-->
       <div v-if="user.Id === formData.AgentId || user.Role === 'Admin' || formData.Agent.AgencyId === user.Id"
-        class="card-footer d-flex justify-content-end py-6 px-9">
+           class="card-footer d-flex justify-content-between py-6 px-9">
+      <!-- <div>
+        <AddNewForm/>
+        <button 
+          type="button" 
+          class="btn btn-info btn-active-light-primary me-2"
+          data-bs-toggle="modal" 
+          data-bs-target="#kt_modal_scheda">
+          <KTIcon icon-name="file" icon-class="fs-2 me-1" />
+          Scheda
+        </button>
+        <AddNewPreventive/>
+        <button 
+          type="button" 
+          class="btn btn-info btn-active-light-primary"
+          data-bs-toggle="modal" 
+          data-bs-target="#kt_modal_preventivo">
+          <KTIcon icon-name="calculator" icon-class="fs-2 me-1" />
+          Preventivo
+        </button>
+      </div> -->
+     <div>
         <button v-if="user.Role === 'Admin'" type="button" @click="deleteItem()" class="btn btn-danger btn-active-light-primary me-2">
           Elimina
         </button>
-        <!--begin::Button-->
         <button :data-kt-indicator="loading ? 'on' : null" class="btn btn-lg btn-primary" type="submit">
           <span v-if="!loading" class="indicator-label">
             Salva modifiche
@@ -757,8 +776,8 @@
             <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
           </span>
         </button>
-        <!--end::Button-->
-      </div>
+     </div>
+</div>
       <!--end::Actions-->
     </el-form>
     <!--end::Form-->
@@ -767,6 +786,8 @@
 </template>
 
 <script lang="ts">
+import AddNewForm from "@/components/modals/forms/AddNewForm.vue";
+import AddNewPreventive from "@/components/modals/forms/AddNewPreventive.vue";
 import { getAssetPath } from "@/core/helpers/assets";
 import { defineComponent, onMounted, ref, watch } from "vue";
 import Swal from "sweetalert2/dist/sweetalert2.js";
@@ -789,7 +810,7 @@ import Multiselect from '@vueform/multiselect'
 
 export default defineComponent({
   name: "update",
-  components: { draggable, Multiselect },
+  components: { draggable, Multiselect, AddNewForm, AddNewPreventive },
   setup() {
     const store = useAuthStore();
     const user = store.user;

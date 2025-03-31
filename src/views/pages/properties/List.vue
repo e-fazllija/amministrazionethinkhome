@@ -284,9 +284,20 @@ export default defineComponent({
       if (toPrice.value > 0) {
         filteredResults = filteredResults.filter(item => item.Price <= toPrice.value);
       }
-      // Filtraggio per contratto
+      // Filtraggio per contratto con criteri specifici
       if (contract.value) {
-        filteredResults = filteredResults.filter(item => searchingFunc(item, contract.value.toLowerCase()));
+       filteredResults = filteredResults.filter(item => {
+        switch (contract.value) {
+          case 'Affitto':
+        return item.Status === 'Affitto' && item.Auction === false;
+          case 'Vendita':
+        return item.Status === 'Vendita' && item.Auction === false;
+          case 'Aste':
+        return item.Status === 'Vendita' && item.Auction === true;
+          default:
+        return true; // Se il filtro non è valido, mostra tutto
+        }
+       });
       }
       // Filtraggio per tipologia
       if (typologie.value) {
