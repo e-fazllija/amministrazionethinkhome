@@ -10,7 +10,7 @@
           <option value="">Contratto</option>
           <option value="Vendita">Vendita</option>
           <option value="Affitto">Affitto</option>
-          <option value="Aste">Aste</option>
+          <!-- <option value="Aste">Aste</option> -->
         </select>
       </div>
       <div class="col-md-3 col-lg-3 mb-2">
@@ -265,11 +265,11 @@ export default defineComponent({
        filteredResults = filteredResults.filter(item => {
         switch (contract.value) {
           case 'Affitto':
-        return item.Status === 'Affitto' && item.Auction === false;
+        return item.Contract === 'Affitto';
           case 'Vendita':
-        return item.Status === 'Vendita' && item.Auction === false;
+        return item.Contract === 'Vendita';
           case 'Aste':
-        return item.Status === 'Vendita' && item.Auction === true;
+        return item.Contract === 'Aste';
           default:
         return true; // Se il filtro non è valido, mostra tutto
         }
