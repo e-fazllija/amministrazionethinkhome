@@ -375,7 +375,8 @@ export default defineComponent({
       State: "",
       Code: "0",
       AcquisitionDone: false,
-      OngoingAssignment: false
+      OngoingAssignment: false,
+      AgencyId: store.user.AgencyId
     });
 
     const rules = ref({

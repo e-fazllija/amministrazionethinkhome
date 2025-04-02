@@ -39,6 +39,8 @@ export class RealEstateProperty {
   StateOfTheProperty?: string;
   YearOfConstruction: number | 0;
   Price: number | 0;
+  PriceReduced: number | 0;
+  MQGarden: number | 0;
   CondominiumExpenses: number | 0;
   Availability?: string;
   Description?: string;

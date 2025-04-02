@@ -130,6 +130,52 @@
               <!--end::Input-->
             </div>
             <!--end::Input group-->
+
+             <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Confermata</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <div class="form-check form-switch form-check-custom form-check-solid">
+              <input class="form-check-input" type="checkbox" v-model="targetData.Confirmed" />
+            </div>
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Disdetto</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <div class="form-check form-switch form-check-custom form-check-solid">
+              <input class="form-check-input" type="checkbox" v-model="targetData.Cancelled" />
+            </div>
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Rimandato</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <div class="form-check form-switch form-check-custom form-check-solid">
+              <input class="form-check-input" type="checkbox" v-model="targetData.Postponed" />
+            </div>
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
             <!--begin::Input group-->
             <div class="fv-row mb-9">
               <!--begin::Checkbox-->
@@ -263,7 +309,10 @@ export default defineComponent({
       DataInizioEvento: null,
       DataFineEvento: null,
       Type: "Appuntamento",
-      Color:"##5e97fd"
+      Color:"##5e97fd",
+      Confirmed: false,
+      Cancelled: false,
+      Postponed: false,
     });
 
     const rules = ref({

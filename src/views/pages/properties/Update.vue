@@ -246,6 +246,19 @@
         </div>
         <!--end::Input group-->
 
+         <!--begin::Input group-->
+         <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Giardino</label>
+          <!--end::Label-->
+          <!--begin::Input-->
+          <div class="col-lg-8 fv-row">
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.MQGarden" type="number" />
+          </div>
+          <!--end::Input-->
+        </div>
+        <!--end::Input group-->
+
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
@@ -509,6 +522,19 @@
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
             <input class="form-control form-control-lg fw-semobold" v-model="formData.Price" type="number" required />
+          </div>
+          <!--end::Input-->
+        </div>
+        <!--end::Input group-->
+
+         <!--begin::Input group-->
+         <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Prezzo Ribassato</label>
+          <!--end::Label-->
+          <!--begin::Input-->
+          <div class="col-lg-8 fv-row">
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.PriceReduced" type="number" required />
           </div>
           <!--end::Input-->
         </div>
@@ -855,6 +881,8 @@ export default defineComponent({
       StateOfTheProperty: "",
       YearOfConstruction: 0,
       Price: 0,
+      PriceReduced: 0,
+      MQGarden:0,
       CondominiumExpenses: 0,
       Availability: "",
       Description: "",
@@ -1136,7 +1164,7 @@ export default defineComponent({
                   confirmButton: "btn btn-primary",
                 },
               }).then(() => {
-                router.push({ name: 'properties' })
+                // router.push({ name: 'properties' })
               });
             })
             .catch(({ response }) => {

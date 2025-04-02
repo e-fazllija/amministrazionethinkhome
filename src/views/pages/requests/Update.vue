@@ -223,6 +223,32 @@
         </div>
         <!--end::Input group-->
 
+         <!--begin::Input group-->
+         <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Giardino Da</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.GardenFrom" type="number" />
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Giardino A</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.GardenTo" type="number" />
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
@@ -447,9 +473,14 @@ export default defineComponent({
       Province: "",
       Town: "",
       Price: 0,
+      PriceTo:0,
+      PriceFrom:0,
       Archived: false,
       Closed: false,
       RoomsNumber: "",
+      Garden: 0,
+      GardenTo:0,
+      GardenFrom:0,
       MQFrom: 0,
       MQTo: 0,
       PropertyState: "",
@@ -610,7 +641,7 @@ export default defineComponent({
               confirmButton: "btn btn-primary",
             },
           }).then(() => {
-            router.push({ name: 'requests' })
+            // router.push({ name: 'requests' })
           });
         })
         .catch(({ response }) => {

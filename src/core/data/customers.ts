@@ -24,6 +24,7 @@ export class Customer{
   AcquisitionDone: boolean;
   OngoingAssignment: boolean;
   CustomerNotes?: Notes[];
+  AgencyId?: string;
   label?: string;
 }
 

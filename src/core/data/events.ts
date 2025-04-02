@@ -128,6 +128,9 @@ export class Event {
   CreationDate?: Date;
   UpdateDate?: Date;
   Color?: string;
+  Confirmed: boolean;
+  Cancelled: boolean;
+  Postponed: boolean;
 }
 
 export class InsertModel {
