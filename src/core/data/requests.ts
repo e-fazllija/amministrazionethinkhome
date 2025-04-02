@@ -13,6 +13,11 @@ export class Request {
   Town: string;
   Location:string;
   Price: number;
+  PriceTo: number;
+  PriceFrom: number;
+  Garden: number;
+  GardenTo?: number;
+  GardenFrom?: number;
   Archived: boolean;
   Closed: boolean;
   RoomsNumber?: string;

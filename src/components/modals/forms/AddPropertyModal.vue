@@ -331,6 +331,19 @@
               <!--end::Billing toggle-->
               <div id="kt_modal_add_property_billing_info3" class="collapse show">
 
+                  <!--begin::Col-->
+                  <div class="col-md-6 fv-row">
+                  <!--begin::Label-->
+                  <label class="fs-6 fw-semobold mb-2">Giardino</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <el-form-item prop="Garden">
+                    <el-input v-model="formData.Garden" type="number" />
+                  </el-form-item>
+                  <!--end::Input-->
+                </div>
+                <!--end::Col-->
+
                 <!--begin::Col-->
                 <div class="col-md-6 fv-row">
                   <!--begin::Label-->
@@ -786,6 +799,8 @@ export default defineComponent({
       StateOfTheProperty: "",
       YearOfConstruction: 0,
       Price: 0,
+      Pricereduced: 0,
+      Garden:0,
       CondominiumExpenses: 0,
       Availability: "",
       Description: "",

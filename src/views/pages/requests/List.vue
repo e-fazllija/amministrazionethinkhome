@@ -90,8 +90,8 @@
         </template>
         <template v-slot:Actions="{ row: request }">
           <router-link :to="{ name: 'request', params: { id: request.Id } }"
-            class="btn btn-light-info me-1">Dettagli</router-link>
-
+            class="btn btn-light-info me-1"
+            target="_blank" rel="noopener noreferrer">Dettagli</router-link>
           <!-- <button @click="deleteItem(request.Id)" class="btn btn-light-danger me-1">Elimina</button> -->
         </template>
         <!--begin::Menu-->
@@ -138,19 +138,19 @@ export default defineComponent({
         columnName: "Cliente",
         columnLabel: "CustomerName",
         sortEnabled: true,
-        columnWidth: 175,
+        columnWidth: 170,
       },
       {
         columnName: "Contratto",
         columnLabel: "Contract",
         sortEnabled: true,
-        columnWidth: 130
+        columnWidth: 110
       },
       {
         columnName: "Data Richiesta",
         columnLabel: "StringDate",
         sortEnabled: true,
-        columnWidth: 180,
+        columnWidth: 150,
       },
       {
         columnName: "Email",
@@ -162,13 +162,13 @@ export default defineComponent({
         columnName: "Telefono",
         columnLabel: "CustomerPhone",
         sortEnabled: true,
-        columnWidth: 175,
+        columnWidth: 160,
       },
       {
         columnName: "Prezzo",
         columnLabel: "Price",
         sortEnabled: true,
-        columnWidth: 150,
+        columnWidth: 100,
       },
       {
         columnName: "Azioni",

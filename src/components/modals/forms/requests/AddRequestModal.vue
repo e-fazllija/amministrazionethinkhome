@@ -177,16 +177,30 @@
                 <div class="fv-row mb-7">
                   <!--begin::Label-->
                   <label class="fs-6 fw-semobold mb-2">
-                    <span class="required"> 
-                        Canone Mensile €
-                        Prezzo - Massimo:
-                    </span>
+                    <span>Canone - Prezzo: Da</span>
                   </label>
                   <!--end::Label-->
   
                   <!--begin::Input-->
-                  <el-form-item prop="Price">
-                    <el-input v-model="formData.Price" 
+                  <el-form-item prop="PriceFrom">
+                    <el-input v-model="formData.PriceFrom" 
+                    type= "number" />
+                  </el-form-item>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="fv-row mb-7">
+                  <!--begin::Label-->
+                  <label class="fs-6 fw-semobold mb-2">
+                    <span>Canone - Prezzo: A</span>
+                  </label>
+                  <!--end::Label-->
+  
+                  <!--begin::Input-->
+                  <el-form-item prop="PriceTo">
+                    <el-input v-model="formData.PriceTo" 
                     type= "number" />
                   </el-form-item>
                   <!--end::Input-->
@@ -252,6 +266,40 @@
                   <!--begin::Input-->
                   <el-form-item prop="RoomsNumber">
                     <el-input v-model="formData.RoomsNumber" 
+                    type= "number" />
+                  </el-form-item>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+
+                  <!--begin::Input group-->
+                  <div class="fv-row mb-7">
+                  <!--begin::Label-->
+                  <label class="fs-6 fw-semobold mb-2">
+                    <span>Giardino Da</span>
+                  </label>
+                  <!--end::Label-->
+  
+                  <!--begin::Input-->
+                  <el-form-item prop="GardenFrom">
+                    <el-input v-model="formData.GardenFrom" 
+                    type= "number" />
+                  </el-form-item>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="fv-row mb-7">
+                  <!--begin::Label-->
+                  <label class="fs-6 fw-semobold mb-2">
+                    <span>Giardino A</span>
+                  </label>
+                  <!--end::Label-->
+  
+                  <!--begin::Input-->
+                  <el-form-item prop="GardenTo">
+                    <el-input v-model="formData.GardenTo" 
                     type= "number" />
                   </el-form-item>
                   <!--end::Input-->
@@ -432,9 +480,14 @@
         Province: "",
         Town:  "",
         Price: 0, 
+        PriceFrom: 0,
+        PriceTo: 0,
         Archived: false,
         Closed: false,
         RoomsNumber: "",
+        Garden: 0,
+        GardenTo:0,
+        GardenFrom:0,
         MQFrom: 0, 
         MQTo: 0, 
         PropertyState: "",
