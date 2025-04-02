@@ -265,7 +265,10 @@ export default defineComponent({
       DataInizioEvento: todayDate.format("YYYY-MM-DD"),
       DataFineEvento: todayDate.format("YYYY-MM-DD"),
       Type: "Appuntamento",
-      Color: store.user.Color
+      Color: store.user.Color,
+      Confirmed: false,
+      Cancelled: false,
+      Postponed: false,
     });
 
     function formattedDate(date) {
