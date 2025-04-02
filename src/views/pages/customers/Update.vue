@@ -461,7 +461,7 @@ export default defineComponent({
               confirmButton: "btn btn-primary",
             },
           }).then(() => {
-            router.push({ name: 'clients' })
+            // router.push({ name: 'clients' })
           });
         })
         .catch(({ response }) => {

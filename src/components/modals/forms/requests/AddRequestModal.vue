@@ -495,7 +495,8 @@
         ParkingSpaces: 0, 
         Notes: "",
         Location:"",
-        MortgageAdviceRequired: false
+        MortgageAdviceRequired: false,
+        AgencyId: store.user.AgencyId
       });
 
         const inserModel = ref<InsertModel>({

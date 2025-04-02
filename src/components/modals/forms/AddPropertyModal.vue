@@ -338,7 +338,7 @@
                   <!--end::Label-->
                   <!--begin::Input-->
                   <el-form-item prop="Garden">
-                    <el-input v-model="formData.Garden" type="number" />
+                    <el-input v-model="formData.MQGarden" type="number" />
                   </el-form-item>
                   <!--end::Input-->
                 </div>
@@ -799,8 +799,8 @@ export default defineComponent({
       StateOfTheProperty: "",
       YearOfConstruction: 0,
       Price: 0,
-      Pricereduced: 0,
-      Garden:0,
+      PriceReduced: 0,
+      MQGarden:0,
       CondominiumExpenses: 0,
       Availability: "",
       Description: "",

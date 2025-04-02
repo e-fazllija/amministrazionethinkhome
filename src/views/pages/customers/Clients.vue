@@ -129,7 +129,7 @@
           {{ customer.Phone }}
         </template>
           <template v-slot:Actions="{ row: customer }">
-            <router-link :to="{ name: 'client', params: { id: customer.Id } }" 
+            <router-link :to="{ name: 'client', params: { id: customer.Id } }" target="_blank"
                     class="btn btn-light-info me-1"
                        >Dettagli</router-link>
 

@@ -253,7 +253,7 @@
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.Garden" type="number" />
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.MQGarden" type="number" />
           </div>
           <!--end::Input-->
         </div>
@@ -534,7 +534,7 @@
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.Pricereduced" type="number" required />
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.PriceReduced" type="number" required />
           </div>
           <!--end::Input-->
         </div>
@@ -881,8 +881,8 @@ export default defineComponent({
       StateOfTheProperty: "",
       YearOfConstruction: 0,
       Price: 0,
-      Pricereduced: 0,
-      Garden:0,
+      PriceReduced: 0,
+      MQGarden:0,
       CondominiumExpenses: 0,
       Availability: "",
       Description: "",
@@ -1164,7 +1164,7 @@ export default defineComponent({
                   confirmButton: "btn btn-primary",
                 },
               }).then(() => {
-                router.push({ name: 'properties' })
+                // router.push({ name: 'properties' })
               });
             })
             .catch(({ response }) => {

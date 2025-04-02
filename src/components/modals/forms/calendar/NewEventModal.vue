@@ -233,27 +233,27 @@ export default defineComponent({
     const loading = ref<boolean>(false);
     const store = useAuthStore();
     const colorOptions = [
-  { name: '', hex: '#408441' },       
-  { name: '', hex: '#3412F2' },           
-  { name: '', hex: '#FBC8FF' },          
-  { name: '', hex: '#23D8F4' },        
-  { name: '', hex: '#E70F86' },         
-  { name: '', hex: '#8973AE' },           
-  { name: '', hex: '#559F6D' },     
-  { name: '', hex: '#D6D00C' },          
-  { name: '', hex: '#676769' },          
-  { name: '', hex: '#8B1AD7' },          
-  { name: '', hex: '#F5730F' },      
-  { name: '', hex: '#FF5733' },          
-  { name: '', hex: '#C70039' },     
-  { name: '', hex: '#900C3F' },        
-  { name: '', hex: '#581845' },         
-  { name: '', hex: '#D5A6BD' },    
-  { name: '', hex: '#FF8C00' },   
-  { name: '', hex: '#FF0000' },     
-  { name: '', hex: '#800080' },     
-  { name: '', hex: '#00FF00' }       
-];
+      { name: '', hex: '#408441' },       
+      { name: '', hex: '#3412F2' },           
+      { name: '', hex: '#FBC8FF' },          
+      { name: '', hex: '#23D8F4' },        
+      { name: '', hex: '#E70F86' },         
+      { name: '', hex: '#8973AE' },           
+      { name: '', hex: '#559F6D' },     
+      { name: '', hex: '#D6D00C' },          
+      { name: '', hex: '#676769' },          
+      { name: '', hex: '#8B1AD7' },          
+      { name: '', hex: '#F5730F' },      
+      { name: '', hex: '#FF5733' },          
+      { name: '', hex: '#C70039' },     
+      { name: '', hex: '#900C3F' },        
+      { name: '', hex: '#581845' },         
+      { name: '', hex: '#D5A6BD' },    
+      { name: '', hex: '#FF8C00' },   
+      { name: '', hex: '#FF0000' },     
+      { name: '', hex: '#800080' },     
+      { name: '', hex: '#00FF00' }       
+    ];
     const targetData = ref<Event>({
       ApplicationUserId: "",
       NomeEvento: "",
@@ -268,7 +268,11 @@ export default defineComponent({
       Color: store.user.Color,
       Confirmed: false,
       Cancelled: false,
+<<<<<<< HEAD
       Postponed: false,
+=======
+      Postponed: false
+>>>>>>> 927e72c4e7657f951372fe9d9cda30648782daa4
     });
 
     function formattedDate(date) {
