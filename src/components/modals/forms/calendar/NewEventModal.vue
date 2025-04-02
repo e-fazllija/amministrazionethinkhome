@@ -268,11 +268,7 @@ export default defineComponent({
       Color: store.user.Color,
       Confirmed: false,
       Cancelled: false,
-<<<<<<< HEAD
-      Postponed: false,
-=======
       Postponed: false
->>>>>>> 927e72c4e7657f951372fe9d9cda30648782daa4
     });
 
     function formattedDate(date) {
