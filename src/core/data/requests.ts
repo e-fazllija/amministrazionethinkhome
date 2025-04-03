@@ -12,10 +12,9 @@ export class Request {
   Province: string;
   Town: string;
   Location:string;
-  Price: number;
   PriceTo: number;
   PriceFrom: number;
-  Garden: number;
+  MQGarden: number;
   GardenTo?: number;
   GardenFrom?: number;
   Archived: boolean;
@@ -48,7 +47,8 @@ export class RequestTabelData {
   CreationDate?: Date;
   Town:string;
   Locations: string;
-  Price: number;
+  PriceTo: number;
+  PriceFrom: number;
   PropertyType: string;
 }
 

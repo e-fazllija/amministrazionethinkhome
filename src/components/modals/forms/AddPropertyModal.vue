@@ -337,7 +337,7 @@
                   <label class="fs-6 fw-semobold mb-2">Giardino</label>
                   <!--end::Label-->
                   <!--begin::Input-->
-                  <el-form-item prop="Garden">
+                  <el-form-item prop="MQGarden">
                     <el-input v-model="formData.MQGarden" type="number" />
                   </el-form-item>
                   <!--end::Input-->
