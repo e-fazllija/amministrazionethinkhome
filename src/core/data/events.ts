@@ -182,11 +182,7 @@ const getToInsert = (): Promise<InsertModel> => {
       const properties = data.RealEstateProperties as Array<RealEstateProperty>;
       requests.forEach(x => x.label = x.Customer.Name + ' ' + x.Customer.LastName);
       customers.forEach(x => x.label = x.Name + ' ' + x.LastName);
-<<<<<<< HEAD
       properties.forEach(x => x.label = x.Town + ', ' + x.AddressLine + ', Cod. 00' + x.Id + ', Prezzo: € ' + x.Price);
-=======
-      properties.forEach(x => x.label = x.Town + ', ' + x.AddressLine + ', Cod. 00' + x.Id + ', Prezzo: ' + x.Price);
->>>>>>> 6811ced8615fc26d1a7476f81f24c2fb3cb5f063
       
       const result = <InsertModel>({
         Requests: requests,
