@@ -64,6 +64,11 @@
           Aggiungi Richiesta
         </button>
       </div>
+      <div class="d-flex align-items-center mb-3">
+         <div class="bg-light-primary rounded p-2 me-3">
+              <span class="text-primary fw-semibold">Risultati: {{ tableData.length }}</span>
+         </div>
+      </div>
 
     </div>
     <!--end::Search-->
@@ -85,8 +90,11 @@
         <template v-slot:CustomerPhone="{ row: request }">
           {{ request.CustomerPhone }}
         </template>
-        <template v-slot:Price="{ row: request }">
-          {{ request.Price }}
+        <template v-slot:PriceFrom="{ row: request }">
+          {{ request.PriceFrom }}
+        </template>
+        <template v-slot:PriceTo="{ row: request }">
+          {{ request.PriceTo }}
         </template>
         <template v-slot:Actions="{ row: request }">
           <router-link :to="{ name: 'request', params: { id: request.Id } }"
@@ -165,8 +173,14 @@ export default defineComponent({
         columnWidth: 160,
       },
       {
-        columnName: "Prezzo",
-        columnLabel: "Price",
+        columnName: "Prezzo Da",
+        columnLabel: "PriceFrom",
+        sortEnabled: true,
+        columnWidth: 100,
+      },
+      {
+        columnName: "Prezzo A",
+        columnLabel: "PriceTo",
         sortEnabled: true,
         columnWidth: 100,
       },
@@ -198,7 +212,8 @@ export default defineComponent({
           StringDate: results[key].CreationDate.toString().substring(0, 10).split('-').reverse().join('-'),
           Locations: results[key].Location,
           Town: results[key].Town,
-          Price: results[key].Price,
+          PriceTo: results[key].PriceTo,
+          PriceFrom: results[key].PriceFrom,
           PropertyType: results[key].PropertyType
         } as RequestTabelData;
 
@@ -255,10 +270,10 @@ export default defineComponent({
       }
       // Filtraggio per prezzo
       if (fromPrice.value > 0) {
-        filteredResults = filteredResults.filter(item => item.Price >= fromPrice.value);
+        filteredResults = filteredResults.filter(item => item.PriceFrom >= fromPrice.value);
       }
       if (toPrice.value > 0) {
-        filteredResults = filteredResults.filter(item => item.Price <= toPrice.value);
+        filteredResults = filteredResults.filter(item => item.PriceTo <= toPrice.value);
       }
       // Filtraggio per contratto con criteri specifici
       if (contract.value) {

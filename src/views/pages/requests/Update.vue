@@ -154,12 +154,27 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label fw-semobold fs-6"> Canone Mensile €
-            Prezzo - Massimo:</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6"> Canone - Prezzo: Da
+
+          </label>
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.Price" type="number" />
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.PriceFrom" type="number" />
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6"> Canone - Prezzo: A
+          </label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.PriceTo" type="number" />
           </div>
           <!--end::Col-->
         </div>
@@ -472,13 +487,12 @@ export default defineComponent({
       PropertyType: "",
       Province: "",
       Town: "",
-      Price: 0,
       PriceTo:0,
       PriceFrom:0,
       Archived: false,
       Closed: false,
       RoomsNumber: "",
-      Garden: 0,
+      MQGarden: 0,
       GardenTo:0,
       GardenFrom:0,
       MQFrom: 0,

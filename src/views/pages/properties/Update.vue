@@ -249,7 +249,7 @@
          <!--begin::Input group-->
          <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label fw-semobold fs-6">Giardino</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Giardino Mq</label>
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
@@ -1200,7 +1200,7 @@ export default defineComponent({
 
     async function checkMove(log) {
       // await updatePhotosOrder(formData.value.Photos)
-      console.log(formData.value.Photos)
+      // console.log(formData.value.Photos)
     }
 
     return {
