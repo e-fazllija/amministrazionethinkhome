@@ -769,7 +769,7 @@
       </div>
       <div v-if="user.Id === formData.AgentId || user.Role === 'Admin' || formData.Agent.AgencyId === user.Id"
            class="card-footer d-flex justify-content-between py-6 px-9">
-      <!-- <div>
+      <div>
         <AddNewForm/>
         <button 
           type="button" 
@@ -788,7 +788,7 @@
           <KTIcon icon-name="calculator" icon-class="fs-2 me-1" />
           Preventivo
         </button>
-      </div> -->
+      </div> 
      <div>
         <button v-if="user.Role === 'Admin'" type="button" @click="deleteItem()" class="btn btn-danger btn-active-light-primary me-2">
           Elimina
