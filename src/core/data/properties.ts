@@ -124,8 +124,8 @@ const getRealEstateProperty = (id: number) => {
     });
 };
 
-const getToInsert = () : Promise<InsertModel> => {
-  return ApiService.get(`RealEstateProperty/GetToInsert`, "")
+const getToInsert = (agencyId?: string) : Promise<InsertModel> => {
+  return ApiService.get(`RealEstateProperty/GetToInsert?agencyId=${agencyId}`, "")
     .then(({ data }) => {
       const agents = data.Agents as Array<User>;
       const customers = data.Customers as Array<Customer>;

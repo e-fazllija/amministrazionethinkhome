@@ -120,7 +120,7 @@
         <template v-slot:actions="{ row: item }">
           <router-link :to="{ name: 'property', params: { id: item.Id } }" class="btn btn-light-info me-1"
             target="_blank" rel="noopener noreferrer">Dettagli</router-link>
-          <!-- <button v-if="user.Id === item.AgentId || user.Role === 'Admin' || user.Role == 'Agency'"
+          <!-- <button v-if="user.Id === item.AgentId || user.Role === 'Admin' || user.Role == 'Agenzia'"
             @click="deleteItem(item.Id)" class="btn btn-light-danger me-1">Elimina</button> -->
         </template>
       </Datatable>

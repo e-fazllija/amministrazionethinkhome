@@ -230,12 +230,12 @@
             </button>
             <!--end::Button-->
             <!--begin::Button-->
-            <button v-if="user.Id == targetData.ApplicationUserId || user.Role == 'Admin' || user.Role == 'Agency'" @click="deleteItem(targetData.Id)" data-bs-dismiss="modal" type="button" class="btn btn-danger me-3">
+            <button v-if="user.Id == targetData.ApplicationUserId || user.Role == 'Admin' || user.Role == 'Agenzia'" @click="deleteItem(targetData.Id)" data-bs-dismiss="modal" type="button" class="btn btn-danger me-3">
               Elimina
             </button>
             <!--end::Button-->
             <!--begin::Button-->
-            <button v-if="user.Id == targetData.ApplicationUserId || user.Role == 'Admin' || user.Role == 'Agency'" :data-kt-indicator="loading ? 'on' : null" class="btn btn-lg btn-primary" type="submit">
+            <button v-if="user.Id == targetData.ApplicationUserId || user.Role == 'Admin' || user.Role == 'Agenzia'" :data-kt-indicator="loading ? 'on' : null" class="btn btn-lg btn-primary" type="submit">
               <span v-if="!loading" class="indicator-label">
                 Salva
                 <KTIcon icon-name="arrow-right" icon-class="fs-3 ms-2 me-0" />

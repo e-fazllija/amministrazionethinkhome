@@ -63,9 +63,9 @@ export class Notes {
   Text: string;
 }
 
-const getRequests = (filterRequest: string): Promise<Array<Request>> => {
+const getRequests = (agencyId: string, filterRequest: string): Promise<Array<Request>> => {
   return ApiService.get(
-    `Requests/Get?currentPage=0&filterRequest=${filterRequest}`,
+    `Requests/Get?currentPage=0&agencyId=${agencyId}&filterRequest=${filterRequest}`,
     ""
   )
     .then(({ data }) => {
@@ -144,8 +144,8 @@ const deleteRequest = async (id: number) => {
     });
 };
 
-const getToInsert = (): Promise<InsertModel> => {
-  return ApiService.get(`RealEstateProperty/GetToInsert`, "")
+const getToInsert = (agencyId?: string): Promise<InsertModel> => {
+  return ApiService.get(`RealEstateProperty/GetToInsert?agencyId=${agencyId}`, "")
     .then(({ data }) => {
       const agents = data.Agents as Array<User>;
       const customers = data.Customers as Array<Customer>;
