@@ -41,7 +41,7 @@ export class RequestHomeDetails {
 }
 
 const getDetails = (): Promise<DashboardDetails> => {
-    return ApiService.get(`Generic/GetAdminHomeDetails`, "")
+    return ApiService.get(`Generic/GetAdminHomeDetails?agencyId=${store.user.AgencyId}`, "")
         .then(({ data }) => {
             const result = data as Partial<DashboardDetails>
             return result;
