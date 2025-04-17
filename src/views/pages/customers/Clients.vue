@@ -177,7 +177,8 @@ export default defineComponent({
     const searchItems = async () => {
       await getItems(agencyId.value, "");
 
-      tableData.value = tableData.value.filter(x => x.Type == contract.value)
+      if(contract.value)
+        tableData.value = tableData.value.filter(x => x.Type == contract.value)
 
       if (search.value !== "") {
         let results: Array<CustomerTabelData> = [];
