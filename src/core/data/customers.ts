@@ -42,9 +42,9 @@ export class Notes {
   Text: string;
 }
 
-const getCustomers = (filterRequest: string) : Promise<Array<Customer>> => {
+const getCustomers = (agencyId: string, filterRequest: string) : Promise<Array<Customer>> => {
    return ApiService.get(
-    `Customers/Get?currentPage=0&filterRequest=${filterRequest}`,
+    `Customers/Get?currentPage=0&agencyId=${agencyId}&filterRequest=${filterRequest}`,
     ""
   )
     .then(({ data }) => {

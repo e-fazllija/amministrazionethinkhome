@@ -30,32 +30,30 @@
       </div>
     </div>
     <div class="row m-2">
-
-      <div class="col-md-3 col-lg-3 mb-2">
+      <div class="col-md-1 col-lg-1 mb-2">
         <input type="text" v-model="fromPrice" class="form-control form-control-solid" placeholder="Prezzo da " />
       </div>
-      <div class="col-md-3 col-lg-3 mb-2">
+      <div class="col-md-1 col-lg-1 mb-2">
         <input type="text" v-model="toPrice" class="form-control form-control-solid" placeholder="Prezzo a " />
       </div>
-      <div class="col-md-3 col-lg-3 mb-2">
-       <Multiselect 
-         v-model="locations" 
-         :options="options" 
-         mode="multiple" 
-         placeholder="Seleziona località" 
-         class="cform-control form-control-solid" 
-        :searchable="true"
-        />
-      <div v-if="locations.length" class="selected-box">
-          <strong></strong> 
-            <span v-for="(location, index) in locations" :key="index" class="selected-location">
-             {{ location }}
+      <div class="col-md-4 col-lg-4 mb-2">
+        <Multiselect v-model="locations" :options="options" mode="multiple" placeholder="Seleziona località"
+          class="cform-control form-control-solid" :searchable="true" />
+        <div v-if="locations.length" class="selected-box">
+          <strong></strong>
+          <span v-for="(location, index) in locations" :key="index" class="selected-location">
+            {{ location }}
             <span @click="removeLocation(index)" class="remove-btn">×</span>
-             {{ index < locations.length - 1 ? ', ' : '' }}
-           </span>
+            {{ index < locations.length - 1 ? ', ' : '' }} </span>
+        </div>
       </div>
-     </div>
-      <div class="col-md-3 col-lg-3 mb-2 d-flex justify-content-end">
+      <div v-if="user.Role == 'Admin'" class="col-lg-3 col-md-3 col-sm-12">
+        <select class="form-control selectpicker" v-model="agencyId">
+          <option v-for="(item, index) in defaultSearchItems.Agencies" :key="index" :value="item.Id">{{ item.Name }} {{
+            item.LastName }}</option>
+        </select>
+      </div>
+      <div class="col d-flex justify-content-end align-items-start mb-2">
         <button type="button" @click="searchItems" class="btn btn-light-primary me-3">
           <KTIcon icon-name="search" icon-class="fs-2" /> Cerca
         </button>
@@ -65,9 +63,9 @@
         </button>
       </div>
       <div class="d-flex align-items-center mb-3">
-         <div class="bg-light-primary rounded p-2 me-3">
-              <span class="text-primary fw-semibold">Risultati: {{ tableData.length }}</span>
-         </div>
+        <div class="bg-light-primary rounded p-2 me-3">
+          <span class="text-primary fw-semibold">Risultati: {{ tableData.length }}</span>
+        </div>
       </div>
 
     </div>
@@ -97,8 +95,7 @@
           {{ request.PriceTo }}
         </template>
         <template v-slot:Actions="{ row: request }">
-          <router-link :to="{ name: 'request', params: { id: request.Id } }"
-            class="btn btn-light-info me-1"
+          <router-link :to="{ name: 'request', params: { id: request.Id } }" class="btn btn-light-info me-1"
             target="_blank" rel="noopener noreferrer">Dettagli</router-link>
           <!-- <button @click="deleteItem(request.Id)" class="btn btn-light-danger me-1">Elimina</button> -->
         </template>
@@ -113,7 +110,7 @@
   </div>
 
   <ExportCustomerModal></ExportCustomerModal>
-  <AddRequestModal @formAddSubmitted="getItems('')"></AddRequestModal>
+  <AddRequestModal @formAddSubmitted="getItems(agencyId, '')"></AddRequestModal>
 </template>
 
 <script lang="ts">
@@ -129,7 +126,7 @@ import { getRequests, Request, deleteRequest, RequestTabelData } from "@/core/da
 import Swal from "sweetalert2";
 import { useAuthStore } from "@/stores/auth";
 import Multiselect from '@vueform/multiselect'
-
+import { getSearchItems, SearchModel } from "@/core/data/events";
 
 export default defineComponent({
   name: "requests",
@@ -197,9 +194,17 @@ export default defineComponent({
     const user = authStore.user;
     const tableData = ref<Array<RequestTabelData>>([]);
     const initItems = ref([]);
-    async function getItems(filterRequest: string) {
+    let agencyId = ref("");
+    const defaultSearchItems = ref<SearchModel>({
+      Agencies: [],
+      Agents: [],
+    })
+
+    async function getItems(agencyId, filterRequest: string) {
       loading.value = true;
-      const results = await getRequests(filterRequest);
+      tableData.value = [];
+      const results = await getRequests(agencyId, filterRequest);
+
       for (const key in results) {
         const item = {
           Id: results[key].Id,
@@ -224,7 +229,12 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      await getItems("");
+      if (authStore.user.Role == "Admin") {
+        defaultSearchItems.value = await getSearchItems(authStore.user.Id);
+      }
+      agencyId.value = authStore.user.AgencyId;
+
+      await getItems(agencyId.value, "");
     });
 
     const deleteFewItems = async () => {
@@ -232,7 +242,7 @@ export default defineComponent({
         await deleteRequest(item)
       });
       selectedIds.value.length = 0;
-      await getItems("");
+      await getItems(agencyId.value, "");
     };
 
     const search = ref<string>("");
@@ -259,53 +269,51 @@ export default defineComponent({
       return false;
     };
 
-    const searchItems = () => {
-      // Resetta la tabella ai dati iniziali
-      tableData.value.splice(0, tableData.value.length, ...initItems.value);
+    const searchItems = async () => {
+      await getItems(agencyId.value, "");
 
-      let filteredResults = [...initItems.value];
       // Filtraggio per testo (search)
       if (search.value !== "") {
-        filteredResults = filteredResults.filter(item => searchingFunc(item, search.value));
+        tableData.value = tableData.value.filter(item => item.CustomerName.includes(search.value));
       }
       // Filtraggio per prezzo
       if (fromPrice.value > 0) {
-        filteredResults = filteredResults.filter(item => item.PriceFrom >= fromPrice.value);
+        tableData.value = tableData.value.filter(item => item.PriceFrom >= fromPrice.value);
       }
       if (toPrice.value > 0) {
-        filteredResults = filteredResults.filter(item => item.PriceTo <= toPrice.value);
+        tableData.value = tableData.value.filter(item => item.PriceTo <= toPrice.value);
       }
       // Filtraggio per contratto con criteri specifici
       if (contract.value) {
-       filteredResults = filteredResults.filter(item => {
-        switch (contract.value) {
-          case 'Affitto':
-        return item.Contract === 'Affitto';
-          case 'Vendita':
-        return item.Contract === 'Vendita';
-          case 'Aste':
-        return item.Contract === 'Aste';
-          default:
-        return true; // Se il filtro non è valido, mostra tutto
-        }
-       });
+        tableData.value = tableData.value.filter(item => {
+          switch (contract.value) {
+            case 'Affitto':
+              return item.Contract === 'Affitto';
+            case 'Vendita':
+              return item.Contract === 'Vendita';
+            case 'Aste':
+              return item.Contract === 'Aste';
+            default:
+              return true; // Se il filtro non è valido, mostra tutto
+          }
+        });
       }
       // Filtraggio per tipologia
       if (typologie.value) {
-        filteredResults = filteredResults.filter(item => searchingFunc(item, typologie.value.toLowerCase()));
+        tableData.value = tableData.value.filter(item => searchingFunc(item, typologie.value.toLowerCase()));
       }
       // Filtraggio per località
       if (locations.value.length > 0) {
-        filteredResults = filteredResults.filter(item => {
+        tableData.value = tableData.value.filter(item => {
           // Verifica che l'elemento corrisponda a una delle località selezionate
           return locations.value.some(location => searchingFunc(item, location.toLowerCase()));
         });
       }
-      // Rimuove i duplicati se ce ne sono (ad esempio per la ricerca per località)
-      const uniqueResults = Array.from(new Set(filteredResults.map(item => JSON.stringify(item))))
-        .map(item => JSON.parse(item));
-      // Assegna i risultati unici alla tabella
-      tableData.value = uniqueResults;
+      // // Rimuove i duplicati se ce ne sono (ad esempio per la ricerca per località)
+      // const uniqueResults = Array.from(new Set(tableData.value.map(item => JSON.stringify(item))))
+      //   .map(item => JSON.parse(item));
+      // // Assegna i risultati unici alla tabella
+      // tableData.value = uniqueResults;
       // Richiama la re-inizializzazione del menu
       MenuComponent.reinitialization();
     };
@@ -322,7 +330,7 @@ export default defineComponent({
         },
       }).then(async () => {
         await deleteRequest(id)
-        await getItems("");
+        await getItems(agencyId.value, "");
         MenuComponent.reinitialization();
       });
     }
@@ -356,7 +364,9 @@ export default defineComponent({
       deleteItem,
       getItems,
       loading,
-      user
+      user,
+      agencyId,
+      defaultSearchItems
     };
   },
   data() {

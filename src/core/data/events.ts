@@ -144,9 +144,9 @@ export class SearchModel {
   Agents: User[];
 }
 
-const getEvents = (filterRequest: string): Promise<Array<Event>> => {
+const getEvents = (agencyId: string, agentId: string): Promise<Array<Event>> => {
   return ApiService.get(
-    `Calendar/Get?filterRequest=${filterRequest}`,
+    `Calendar/Get?agencyId=${agencyId}&agentId=${agentId}`,
     ""
   )
     .then(({ data }) => {
@@ -175,7 +175,7 @@ const getEvent = (id: number): Promise<Event> => {
 };
 
 const getToInsert = (): Promise<InsertModel> => {
-  return ApiService.get(`Calendar/GetToInsert?agencyId=${store.user.AgencyId || "admin"}`, "")
+  return ApiService.get(`Calendar/GetToInsert?agencyId=${store.user.AgencyId}`, "")
     .then(({ data }) => {
       const requests = data.Requests as Array<Request>;
       const customers = data.Customers as Array<Customer>;
@@ -197,9 +197,9 @@ const getToInsert = (): Promise<InsertModel> => {
     });
 };
 
-const getSearchItems = (agencyId: string): Promise<SearchModel> => {
+const getSearchItems = (userId: string, agencyId?: string): Promise<SearchModel> => {
   return ApiService.get(
-    `Calendar/GetSearchItems?agencyId=${agencyId}`,
+    `Calendar/GetSearchItems?userId=${userId}&agencyId=${agencyId}`,
     ""
   )
     .then(({ data }) => {

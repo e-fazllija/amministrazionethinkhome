@@ -505,9 +505,9 @@
 
         onMounted(async () => {
         loading.value = true;
-        inserModel.value = await getToInsert();
+        inserModel.value = await getToInsert(store.user.AgencyId);
         if(inserModel.value.Customers.length > 0){
-        formData.value.CustomerId = inserModel.value.Customers[0].Id;
+          formData.value.CustomerId = inserModel.value.Customers[0].Id;
         } 
         loading.value = false;
       })
