@@ -93,9 +93,9 @@ export class Notes {
   Text: string;
 }
 
-const getRealEstateProperties = (filterRequest: string) : Promise<Array<RealEstateProperty>> => {
+const getRealEstateProperties = (agencyId: string, filterRequest: string, contract?: string, priceFrom?: number, priceTo?: number, category?: string, typologie?: string, town?: string[]) : Promise<Array<RealEstateProperty>> => {
    return ApiService.get(
-    `RealEstateProperty/Get?currentPage=0&filterRequest=${filterRequest}`,
+    `RealEstateProperty/Get?currentPage=0&agencyId=${agencyId}&filterRequest=${filterRequest}&contract=${contract}&priceFrom=${priceFrom}&priceTo=${priceTo}&category=${category}&typologie=${typologie}&town=${town}`,
     ""
   )
     .then(({ data }) => {

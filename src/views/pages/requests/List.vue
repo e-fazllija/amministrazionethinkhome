@@ -274,7 +274,7 @@ export default defineComponent({
 
       // Filtraggio per testo (search)
       if (search.value !== "") {
-        tableData.value = tableData.value.filter(item => item.CustomerName.includes(search.value));
+        tableData.value = tableData.value.filter(item => item.CustomerName.toLowerCase().includes(search.value.toLowerCase()));
       }
       // Filtraggio per prezzo
       if (fromPrice.value > 0) {
@@ -309,12 +309,6 @@ export default defineComponent({
           return locations.value.some(location => searchingFunc(item, location.toLowerCase()));
         });
       }
-      // // Rimuove i duplicati se ce ne sono (ad esempio per la ricerca per località)
-      // const uniqueResults = Array.from(new Set(tableData.value.map(item => JSON.stringify(item))))
-      //   .map(item => JSON.parse(item));
-      // // Assegna i risultati unici alla tabella
-      // tableData.value = uniqueResults;
-      // Richiama la re-inizializzazione del menu
       MenuComponent.reinitialization();
     };
 

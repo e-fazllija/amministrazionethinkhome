@@ -48,17 +48,24 @@
           <option value="Non Edificabile">Non Edificabile</option>
         </select>
       </div>
+      <div class="col-md-3 col-lg-3 mb-2 d-flex justify-content-end">
+        <button type="button" @click="searchItems" class="btn btn-light-primary me-3">
+          <KTIcon icon-name="search" icon-class="fs-2" /> Cerca
+        </button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_property">
+          <KTIcon icon-name="plus" icon-class="fs-2" />
+          Aggiungi Immobile
+        </button>
+      </div>
     </div>
     <div class="row m-2">
-
-      
-      <div class="col-md-3 col-lg-3 mb-2">
+      <div class="col-md-1 col-lg-1 mb-2">
         <input type="text" v-model="fromPrice" class="form-control form-control-solid" placeholder="Prezzo da " />
       </div>
-      <div class="col-md-3 col-lg-3 mb-2">
+      <div class="col-md-1 col-lg-1 mb-2">
         <input type="text" v-model="toPrice" class="form-control form-control-solid" placeholder="Prezzo a " />
       </div>
-      <div class="col-md-3 col-lg-3 mb-2">
+      <div class="col-md-4 col-lg-4 mb-2">
        <Multiselect 
          v-model="locations" 
          :options="options" 
@@ -76,14 +83,11 @@
            </span>
       </div>
      </div>
-      <div class="col-md-3 col-lg-3 mb-2 d-flex justify-content-end">
-        <button type="button" @click="searchItems" class="btn btn-light-primary me-3">
-          <KTIcon icon-name="search" icon-class="fs-2" /> Cerca
-        </button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_property">
-          <KTIcon icon-name="plus" icon-class="fs-2" />
-          Aggiungi Immobile
-        </button>
+     <div v-if="user.Role == 'Admin'" class="col-lg-3 col-md-3 col-sm-12">
+        <select class="form-control selectpicker" v-model="agencyId">
+          <option v-for="(item, index) in defaultSearchItems.Agencies" :key="index" :value="item.Id">{{ item.Name }} {{
+            item.LastName }}</option>
+        </select>
       </div>
       <div class="d-flex align-items-center mb-3">
          <div class="bg-light-primary rounded p-2 me-3">
@@ -128,7 +132,7 @@
   </div>
 
   <ExportCustomerModal></ExportCustomerModal>
-  <AddPropertyModal @formAddSubmitted="getItems('')"></AddPropertyModal>
+  <AddPropertyModal @formAddSubmitted="getItems(agencyId, '')"></AddPropertyModal>
 </template>
 
 <script lang="ts">
@@ -138,14 +142,13 @@ import Datatable from "@/components/kt-datatable/KTDataTable.vue";
 import type { Sort } from "@/components/kt-datatable//table-partials/models";
 import ExportCustomerModal from "@/components/modals/forms/ExportCustomerModal.vue";
 import AddPropertyModal from "@/components/modals/forms/AddPropertyModal.vue";
-import { getRealEstateProperties, deleteRealEstateProperty, RealEstateProperty, RequestTabelData } from "@/core/data/properties";
+import { getRealEstateProperties, deleteRealEstateProperty, RequestTabelData } from "@/core/data/properties";
 import arraySort from "array-sort";
 import { MenuComponent } from "@/assets/ts/components";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import { useAuthStore } from "@/stores/auth";
 import Multiselect from '@vueform/multiselect'
-import { options } from "@fullcalendar/core/preact";
-
+import { getSearchItems, SearchModel } from "@/core/data/events";
 
 export default defineComponent({
   name: "properties",
@@ -206,9 +209,25 @@ export default defineComponent({
     const tableData = ref<Array<RequestTabelData>>([]);
     const initItems = ref([]);
     const user = authStore.user;
-    async function getItems(filterRequest: string) {
+    let agencyId = ref("");
+    const defaultSearchItems = ref<SearchModel>({
+      Agencies: [],
+      Agents: [],
+    });
+
+    const search = ref<string>("");
+    const fromPrice = ref<number>(0);
+    const toPrice = ref<number>(0);
+    const contract = ref<string>("");
+    const typologie = ref<string>("");
+    const category = ref<string>("");
+    const locations = ref<Array<string>>([]);
+
+    async function getItems(agencyId: string, filterRequest: string, contract?: string, priceFrom?: number, priceTo?: number, category?: string, typologie?: string, town?: string[]) {
       loading.value = true;
-      const results = await getRealEstateProperties(filterRequest);
+      tableData.value = [];
+
+      const results = await getRealEstateProperties(agencyId, filterRequest, contract, priceFrom, priceTo, category, typologie, town);
       for (const key in results) {
 
         const item = {
@@ -235,7 +254,12 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      await getItems("");
+      if (authStore.user.Role == "Admin") {
+        defaultSearchItems.value = await getSearchItems(authStore.user.Id);
+      }
+      agencyId.value = authStore.user.AgencyId;
+
+      await getItems(agencyId.value, search.value, contract.value, fromPrice.value, toPrice.value, category.value, typologie.value, locations.value);
     });
 
     const deleteFewItems = async () => {
@@ -244,17 +268,11 @@ export default defineComponent({
         await deleteRealEstateProperty(item)
       });
       selectedIds.value.length = 0;
-      await getItems("");
+      await getItems(agencyId.value, search.value, contract.value, fromPrice.value, toPrice.value, category.value, typologie.value, locations.value);
       loading.value = false;
     };
 
-    const search = ref<string>("");
-    const fromPrice = ref<number | undefined>(undefined);
-    const toPrice = ref<number | undefined>(undefined);
-    const contract = ref<string>("");
-    const typologie = ref<string>("");
-    const category = ref<string>("");
-    const locations = ref<Array<string>>([]);
+    
 
     const searchingFunc = (obj: any, value: string): boolean => {
       for (let key in obj) {
@@ -273,54 +291,9 @@ export default defineComponent({
       return false;
     };
 
-    const searchItems = () => {
-      // Resetta la tabella ai dati iniziali
-      tableData.value.splice(0, tableData.value.length, ...initItems.value);
+    const searchItems = async () => {
+      await getItems(agencyId.value, search.value, contract.value, fromPrice.value, toPrice.value, category.value, typologie.value, locations.value);
 
-      let filteredResults = [...initItems.value];
-      // Filtraggio per testo (search)
-      if (search.value !== "") {
-        filteredResults = filteredResults.filter(item => searchingFunc(item, search.value));
-      }
-      // Filtraggio per prezzo
-      if (fromPrice.value > 0) {
-        filteredResults = filteredResults.filter(item => item.Price >= fromPrice.value);
-      }
-      if (toPrice.value > 0) {
-        filteredResults = filteredResults.filter(item => item.Price <= toPrice.value);
-      }
-      // Filtraggio per contratto con criteri specifici
-      if (contract.value) {
-       filteredResults = filteredResults.filter(item => {
-        switch (contract.value) {
-          case 'Affitto':
-        return item.Status === 'Affitto' && item.Auction === false;
-          case 'Vendita':
-        return item.Status === 'Vendita' && item.Auction === false;
-          case 'Aste':
-        return item.Status === 'Vendita' && item.Auction === true;
-          default:
-        return true; // Se il filtro non è valido, mostra tutto
-        }
-       });
-      }
-      // Filtraggio per tipologia
-      if (typologie.value) {
-        filteredResults = filteredResults.filter(item => searchingFunc(item, typologie.value.toLowerCase()));
-      }
-      // Filtraggio per località
-      if (locations.value.length > 0) {
-        filteredResults = filteredResults.filter(item => {
-          // Verifica che l'elemento corrisponda a una delle località selezionate
-          return locations.value.some(location => searchingFunc(item, location.toLowerCase()));
-        });
-      }
-      // Rimuove i duplicati se ce ne sono (ad esempio per la ricerca per località)
-      const uniqueResults = Array.from(new Set(filteredResults.map(item => JSON.stringify(item))))
-        .map(item => JSON.parse(item));
-      // Assegna i risultati unici alla tabella
-      tableData.value = uniqueResults;
-      // Richiama la re-inizializzazione del menu
       MenuComponent.reinitialization();
     };
 
@@ -338,7 +311,7 @@ export default defineComponent({
         },
       }).then(async () => {
         await deleteRealEstateProperty(id)
-        await getItems("");
+        await getItems(agencyId.value, search.value, contract.value, fromPrice.value, toPrice.value, category.value, typologie.value, locations.value);
         loading.value = false;
         MenuComponent.reinitialization();
       });
@@ -375,7 +348,9 @@ export default defineComponent({
       getAssetPath,
       getItems,
       loading,
-      user
+      user,
+      agencyId,
+      defaultSearchItems
     };
   },
   data() {
