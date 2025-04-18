@@ -976,7 +976,7 @@ export default defineComponent({
       loading.value = true;
       formData.value = await getRealEstateProperty(id)
       formData.value.AssignmentEnd = formData.value.AssignmentEnd.split('T')[0]
-      inserModel.value = await getToInsert();
+      inserModel.value = await getToInsert(store.user.AgencyId);
       // if(inserModel.value.Customers.length > 0){
       //   formData.value.CustomerId = inserModel.value.Customers[0].Id;
       // }
