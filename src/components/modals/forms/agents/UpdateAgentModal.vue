@@ -28,6 +28,19 @@
               data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
               data-kt-scroll-dependencies="#kt_modal_add_agent_header"
               data-kt-scroll-wrappers="#kt_modal_add_agent_scroll" data-kt-scroll-offset="300px">
+                <!--begin::Input group-->
+                <!-- <div class="fv-row mb-7"> -->
+                <!--begin::Label-->
+                <!-- <label class="required fs-6 fw-semobold mb-2">Agenzia</label> -->
+                <!--end::Label-->
+
+                <!--begin::Input-->
+                <!-- <el-form-item prop="AgencyId">
+                  <el-input v-model="formData.AgencyId" type="text" placeholder="" />
+                </el-form-item> -->
+                <!--end::Input-->
+              <!-- </div> -->
+              <!--end::Input group-->
               <!--begin::Input group-->
               <div class="fv-row mb-7">
                 <!--begin::Label-->
@@ -284,7 +297,7 @@ export default defineComponent({
       AgencyId: "",
       Color: "#ffffff"
     });
-
+   
     watch(() => props.Id, async (first, second) => {
       if (first) {
         formData.value = await getAgent(props.Id)
@@ -403,7 +416,7 @@ export default defineComponent({
       loading,
       updateAgentModalRef,
       getAssetPath,
-      colorOptions
+      colorOptions,
     };
   },
 });
