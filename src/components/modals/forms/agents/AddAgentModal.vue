@@ -48,7 +48,7 @@
               data-kt-scroll-offset="300px"
             >
               <!--begin::Input group-->
-              <div v-if="agencies" class="d-flex flex-column mb-7 fv-row">
+              <div v-if="agencies && user.Role == 'Admin'" class="d-flex flex-column mb-7 fv-row">
                 <!--begin::Label-->
                 <label class="fs-6 fw-semobold mb-2">
                   <span class="required">Agenzia</span>
@@ -320,6 +320,7 @@ export default defineComponent({
     const addAgentModalRef = ref<null | HTMLElement>(null);
     const loading = ref<boolean>(false);
     const store = useAuthStore();
+    const user = store.user;
     const colorOptions = [
   { name: '', hex: '#408441' },       
   { name: '', hex: '#3412F2' },           
@@ -406,8 +407,12 @@ export default defineComponent({
     const agencies = ref();
 
     async function getItems(filterRequest: string) {
-      agencies.value = await getAgencies(filterRequest);
-      formData.value.AgencyId = agencies.value[0].Id;
+      if(store.user.Role == "Admin"){
+        agencies.value = await getAgencies(filterRequest);
+        formData.value.AgencyId = agencies.value[0].Id;
+      } else if(store.user.Role == "Agenzia") {
+        formData.value.AgencyId = store.user.Id;
+      }
     };
 
     onMounted(async () => {
@@ -469,7 +474,8 @@ export default defineComponent({
       getAssetPath,
       countries,
       agencies,
-      colorOptions
+      colorOptions,
+      user
     };
   },
 });

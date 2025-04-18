@@ -7,10 +7,10 @@
       <h2 class="card-title fw-bold">Calendar</h2>
       <div v-if="user.Role == 'Admin'" class="card-toolbar col-lg-3 col-md-9 col-sm-12">
         <select class="form-control selectpicker" v-model="agencyId">
-          <option v-for="(item, index) in searchItems.Agencies" :key="index" :value="item.Id">{{ item.Name }}</option>
+          <option v-for="(item, index) in searchItems.Agencies" :key="index" :value="item.Id">{{ item.Name }} {{ item.LastName }}</option>
         </select>
       </div>
-      <div v-if="user.Role == 'Admin' || user.Role == 'Agency'" class="card-toolbar col-lg-3 col-md-9 col-sm-12">
+      <div v-if="user.Role == 'Admin' || user.Role == 'Agenzia'" class="card-toolbar col-lg-3 col-md-9 col-sm-12">
         <select class="form-control selectpicker" v-model="agentId">
           <option value>Visualizza tutti gli agenti</option>
           <option v-for="(item, index) in searchItems.Agents" :key="index" :value="item.Id">{{ item.Name }} {{
@@ -41,9 +41,9 @@
   <!--end::Card-->
 
   <NewEventModal :UserId="userId" :Color="color" :SelectedDateStart="selectedDateStart"
-    :SelectedDateEnd="selectedDateEnd" @formAddSubmitted="getItems(user.Role == 'Admin' ? agentId : userId)">
+    :SelectedDateEnd="selectedDateEnd" @formAddSubmitted="getItems(agencyId, agentId)">
   </NewEventModal>
-  <UpdateEventModal :Id="selectedId" @formUpdateSubmitted="getItems(user.Role == 'Admin' ? agentId : userId)">
+  <UpdateEventModal :Id="selectedId" @formUpdateSubmitted="getItems(agencyId, agentId)">
   </UpdateEventModal>
 </template>
 
@@ -55,7 +55,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
-import events, { TODAY, todayDate, getEvents, getSearchItems, Event, SearchModel, getToInsert } from "@/core/data/events";
+import { TODAY, todayDate, getEvents, getSearchItems, SearchModel } from "@/core/data/events";
 import NewEventModal from "@/components/modals/forms/calendar/NewEventModal.vue";
 import UpdateEventModal from "@/components/modals/forms/calendar/UpdateEventModal.vue";
 import { Modal } from "bootstrap";
@@ -87,9 +87,18 @@ export default defineComponent({
     const newTargetModalRef = ref<null | HTMLElement>(null);
     const store = useAuthStore();
     const user = store.user;
+    const searchItems = ref<SearchModel>({
+      Agencies: [],
+      Agents: [],
+    })
+
+    const defaultSearchItems = ref<SearchModel>({
+      Agencies: [],
+      Agents: [],
+    })
 
     const userId = computed(() => {
-      if (user.Role == "Admin" || user.Role == "Agency") {
+      if (user.Role == "Admin" || user.Role == "Agenzia") {
         return agentId.value != null && agentId.value != "" ? agentId.value : user.Id
       }
       else {
@@ -99,8 +108,8 @@ export default defineComponent({
 
     const color = computed(() => {
       if (agentId.value != null && agentId.value != "") {
-        if (user.Role == "Admin" || user.Role == "Agency") {
-          const userSelected = defaultSearchItems.value.Agents.filter(x => x.Id == agentId.value)[0];
+        if (user.Role == "Admin" || user.Role == "Agenzia") {
+          const userSelected = searchItems.value.Agents.filter(x => x.Id == agentId.value)[0];
           return userSelected.Color;
         }
         else {
@@ -149,11 +158,11 @@ export default defineComponent({
 
     const tableData = ref<Array<EventInput>>([]);
 
-    async function getItems(filterRequest: string) {
+    async function getItems(_agencyId: string, _agentId: string) {
       tableData.value.splice(0);
       initItems.value.splice(0);
-      const results = await getEvents(filterRequest);
-      const addName = store.user.Role != "Agent" && agentId.value == "" ? true : false;
+      const results = await getEvents(_agencyId, _agentId);
+      const addName = store.user.Role != "Agente" && agentId.value == "" ? true : false;
       for (const key in results) {
 
         const item = {
@@ -169,52 +178,30 @@ export default defineComponent({
         tableData.value.push(item)
       }
       initItems.value.splice(0, tableData.value.length, ...tableData.value);
-
-      if (store.user.Role == "Agency" || store.user.Role == "Admin") {
-        defaultSearchItems.value = await getSearchItems(store.user.Id);
-        searchItems.value.Agencies = defaultSearchItems.value.Agencies;
-        if (store.user.Role == "Agency") {
-          agencyId.value = store.user.Id;
-          searchItems.value.Agents = defaultSearchItems.value.Agents.filter(x => x.AgencyId == agencyId.value);
-        } else {
-          agencyId.value = defaultSearchItems.value.Agencies[0].Id;
-          searchItems.value.Agents = defaultSearchItems.value.Agents;
-        }
-      }
-
-
     };
 
-    const searchItems = ref<SearchModel>({
-      Agencies: [],
-      Agents: [],
-    })
-
-    const defaultSearchItems = ref<SearchModel>({
-      Agencies: [],
-      Agents: [],
-    })
+    
 
     onMounted(async () => {
       loading.value = true;
-      await getItems(store.user.Role == "Admin" ? "" : store.user.Id);
+      if (store.user.Role == "Agenzia" || store.user.Role == "Admin") {
+        await getItems(store.user.AgencyId, "");
+        searchItems.value = await getSearchItems(store.user.Id, agencyId.value);
+        agencyId.value = store.user.AgencyId;
+      } else {
+        await getItems(store.user.AgencyId, store.user.Id);
+      }
+      
       loading.value = false;
     });
 
     watch(() => agencyId.value, async (first, second) => {
-      if (first) {
-        searchItems.value.Agents = defaultSearchItems.value.Agents.filter(x => x.AgencyId == first);
-      } else {
-        searchItems.value.Agents = defaultSearchItems.value.Agents;
-      }
+      await getItems(agencyId.value, "");
+      searchItems.value = await getSearchItems(store.user.Id, agencyId.value);
     })
 
     watch(() => agentId.value, async (first, second) => {
-      if (first) {
-        await getItems(first);
-      } else {
-        await getItems("");
-      }
+      await getItems(agencyId.value, agentId.value);
     })
 
 
