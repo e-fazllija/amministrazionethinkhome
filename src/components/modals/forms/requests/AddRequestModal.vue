@@ -266,7 +266,7 @@
                   <!--begin::Input-->
                   <el-form-item prop="RoomsNumber">
                     <el-input v-model="formData.RoomsNumber" 
-                    type= "number" />
+                    type= "text" />
                   </el-form-item>
                   <!--end::Input-->
                 </div>
