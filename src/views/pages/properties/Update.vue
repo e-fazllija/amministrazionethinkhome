@@ -30,16 +30,8 @@
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
             <!--begin::Input group-->
-              <Multiselect
-                v-model="formData.CustomerId"
-                :options="inserModel.Customers"
-                label="label"
-                valueProp="Id"
-                :searchable="true"
-                :close-on-select="true"
-                :clear-on-select="false"
-                placeholder="Seleziona il cliente"
-              />
+            <Multiselect v-model="formData.CustomerId" :options="inserModel.Customers" label="label" valueProp="Id"
+              :searchable="true" :close-on-select="true" :clear-on-select="false" placeholder="Seleziona il cliente" />
             <!--end::Input group-->
           </div>
         </div>
@@ -246,8 +238,8 @@
         </div>
         <!--end::Input group-->
 
-         <!--begin::Input group-->
-         <div class="row mb-6">
+        <!--begin::Input group-->
+        <div class="row mb-6">
           <!--begin::Label-->
           <label class="col-lg-4 col-form-label fw-semobold fs-6">Giardino Mq</label>
           <!--end::Label-->
@@ -527,14 +519,15 @@
         </div>
         <!--end::Input group-->
 
-         <!--begin::Input group-->
-         <div class="row mb-6">
+        <!--begin::Input group-->
+        <div class="row mb-6">
           <!--begin::Label-->
           <label class="col-lg-4 col-form-label required fw-semobold fs-6">Prezzo Ribassato</label>
           <!--end::Label-->
           <!--begin::Input-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.PriceReduced" type="number" required />
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.PriceReduced" type="number"
+              required />
           </div>
           <!--end::Input-->
         </div>
@@ -635,8 +628,8 @@
         </div>
         <!--end::Input group-->
 
-                <!--begin::Input group-->
-                <div class="row mb-6">
+        <!--begin::Input group-->
+        <div class="row mb-6">
           <!--begin::Label-->
           <label class="col-lg-4 col-form-label fw-semobold fs-6">In Trattativa</label>
           <!--end::Label-->
@@ -681,58 +674,57 @@
         </div>
         <!--end::Input group-->
 
-                      <!--begin::Input group-->
-                      <div class="d-flex flex-column mb-7 fv-row">
-                  <!--begin::Label-->
-                  <label class="fs-6 fw-semobold mb-2">
-                    <span class="required">Tipologia Incarico</span>
-                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i>
-                  </label>
-                  <!--end::Label-->
-                  <!--begin::Input-->
-                  <select class="form-control" v-model="formData.TypeOfAssignment">
-                    <option value="Verbale">Verbale</option>
-                    <option value="Esclusivo">Esclusivo</option>
-                    <option value="Semi-Verbale">Semi-Verbale</option>
-                  </select>
-                  <!--end::Input-->
-                </div>
-                <!--end::Input group-->
+        <!--begin::Input group-->
+        <!-- <div class="d-flex flex-column mb-7 fv-row"> -->
+          <!--begin::Label-->
+          <!-- <label class="fs-6 fw-semobold mb-2"> -->
+            <!-- <span class="required">Tipologia Incarico</span> -->
+            <!-- <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i> -->
+          <!-- </label> -->
+          <!--end::Label-->
+          <!--begin::Input-->
+          <!-- <select class="form-control" v-model="formData.TypeOfAssignment"> -->
+            <!-- <option value="Verbale">Verbale</option> -->
+            <!-- <option value="Esclusivo">Esclusivo</option> -->
+            <!-- <option value="Semi-Verbale">Semi-Verbale</option> -->
+          <!-- </select> -->
+          <!--end::Input-->
+        <!-- </div> -->
+        <!--end::Input group-->
 
-              <!--begin::Col-->
-              <div class="d-flex flex-column mb-2 fv-row">
-                <!--begin::Label-->
-                <label class="col-lg-4 col-form-label fw-semobold fs-6">Provvigione Concordata</label>
-                <!--end::Label-->
-                  <!--begin::Input-->
-                  <el-form-item prop="AgreedCommission">
-                    <el-input 
-                     v-model="formData.AgreedCommission" type="number" placeholder="Inserisci percentuale">
-                     <template #append>
-                      <span>%</span>
-                     </template>
-                    </el-input>
-                  </el-form-item>
-                  <!--end::Input-->
-              </div>
-              <!--end::Col-->
+        <!--begin::Col-->
+        <!-- <div class="d-flex flex-column mb-2 fv-row"> -->
+          <!--begin::Label-->
+          <!-- <label class="col-lg-4 col-form-label fw-semobold fs-6">Provvigione Concordata</label> -->
+          <!--end::Label-->
+          <!--begin::Input-->
+          <!-- <el-form-item prop="AgreedCommission"> -->
+            <!-- <el-input v-model="formData.AgreedCommission" type="number" placeholder="Inserisci percentuale"> -->
+              <!-- <template #append> -->
+                <!-- <span>%</span> -->
+              <!-- </template> -->
+            <!-- </el-input> -->
+          <!-- </el-form-item> -->
+          <!--end::Input-->
+        <!-- </div> -->
+        <!--end::Col-->
 
-              <!--begin::Col-->
-              <div class="d-flex flex-column mb-2 fv-row">
-               <!--begin::Label-->
-               <label class="col-lg-4 col-form-label fw-semobold fs-6">Provvigione Forfettaria</label>
-               <!--end::Label-->
-                  <!--begin::Input-->
-                  <el-form-item prop="FlatRateCommission">
-                    <el-input v-model="formData.FlatRateCommission" type="number" placeholder="Inserisci percentuale">
-                       <template #append>
-                        <span>%</span>
-                       </template>
-                    </el-input>
-                  </el-form-item>
-                  <!--end::Input-->
-              </div>
-              <!--end::Col-->
+        <!--begin::Col-->
+        <!-- <div class="d-flex flex-column mb-2 fv-row"> -->
+          <!--begin::Label-->
+          <!-- <label class="col-lg-4 col-form-label fw-semobold fs-6">Provvigione Forfettaria</label> -->
+          <!--end::Label-->
+          <!--begin::Input-->
+          <!-- <el-form-item prop="FlatRateCommission"> -->
+            <!-- <el-input v-model="formData.FlatRateCommission" type="number" placeholder="Inserisci percentuale"> -->
+              <!-- <template #append> -->
+                <!-- <span>%</span> -->
+              <!-- </template> -->
+            <!-- </el-input> -->
+          <!-- </el-form-item> -->
+          <!--end::Input-->
+        <!-- </div> -->
+        <!--end::Col-->
 
         <!--begin::Input group-->
         <div class="row mb-6">
@@ -821,42 +813,37 @@
 
       </div>
       <div v-if="user.Id === formData.AgentId || user.Role === 'Admin' || formData.Agent.AgencyId === user.Id"
-           class="card-footer d-flex justify-content-between py-6 px-9">
-      <div>
-        <AddNewForm/>
-        <button 
-          type="button" 
-          class="btn btn-info btn-active-light-primary me-2"
-          data-bs-toggle="modal" 
-          data-bs-target="#kt_modal_scheda">
-          <KTIcon icon-name="file" icon-class="fs-2 me-1" />
-          Scheda
-        </button>
-        <AddNewPreventive/>
-        <button 
-          type="button" 
-          class="btn btn-info btn-active-light-primary"
-          data-bs-toggle="modal" 
-          data-bs-target="#kt_modal_preventivo">
-          <KTIcon icon-name="calculator" icon-class="fs-2 me-1" />
-          Preventivo
-        </button>
+        class="card-footer d-flex justify-content-between py-6 px-9">
+        <div>
+          <AddNewForm />
+          <button type="button" class="btn btn-info btn-active-light-primary me-2" data-bs-toggle="modal"
+            data-bs-target="#kt_modal_scheda">
+            <KTIcon icon-name="file" icon-class="fs-2 me-1" />
+            Scheda
+          </button>
+          <AddNewPreventive />
+          <button type="button" class="btn btn-info btn-active-light-primary" data-bs-toggle="modal"
+            data-bs-target="#kt_modal_preventivo">
+            <KTIcon icon-name="calculator" icon-class="fs-2 me-1" />
+            Preventivo
+          </button>
+        </div>
+        <div>
+          <button v-if="user.Role === 'Admin'" type="button" @click="deleteItem()"
+            class="btn btn-danger btn-active-light-primary me-2">
+            Elimina
+          </button>
+          <button :data-kt-indicator="loading ? 'on' : null" class="btn btn-lg btn-primary" type="submit">
+            <span v-if="!loading" class="indicator-label">
+              Salva modifiche
+            </span>
+            <span v-if="loading" class="indicator-progress">
+              Attendere...
+              <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+            </span>
+          </button>
+        </div>
       </div>
-     <div>
-        <button v-if="user.Role === 'Admin'" type="button" @click="deleteItem()" class="btn btn-danger btn-active-light-primary me-2">
-          Elimina
-        </button>
-        <button :data-kt-indicator="loading ? 'on' : null" class="btn btn-lg btn-primary" type="submit">
-          <span v-if="!loading" class="indicator-label">
-            Salva modifiche
-          </span>
-          <span v-if="loading" class="indicator-progress">
-            Attendere...
-            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-          </span>
-        </button>
-     </div>
-</div>
       <!--end::Actions-->
     </el-form>
     <!--end::Form-->
@@ -909,7 +896,7 @@ export default defineComponent({
       InHome: false,
       Highlighted: false,
       Auction: false,
-      Negotiation:false,
+      Negotiation: false,
       Sold: false,
       Status: "",
       AddressLine: "",
@@ -935,7 +922,7 @@ export default defineComponent({
       YearOfConstruction: 0,
       Price: 0,
       PriceReduced: 0,
-      MQGarden:0,
+      MQGarden: 0,
       CondominiumExpenses: 0,
       Availability: "",
       Description: "",
@@ -945,9 +932,9 @@ export default defineComponent({
       AssignmentEnd: "",
       Agent: null,
       VideoUrl: "",
-      AgreedCommission: 0,
-      FlatRateCommission: 0,
-      TypeOfAssignment:"",
+      // AgreedCommission: 0,
+      // FlatRateCommission: 0,
+      // TypeOfAssignment: "",
     });
 
     const inserModel = ref<InsertModel>({
@@ -1178,16 +1165,16 @@ export default defineComponent({
           });
         });
     }
-    
+
     watch(
-  () => formData.value.AssignmentEnd,
-  (newVal) => {
-    if (newVal && newVal.includes('T')) {
-      formData.value.AssignmentEnd = newVal.split('T')[0]
-    }
-  },
-  { immediate: true }
-)
+      () => formData.value.AssignmentEnd,
+      (newVal) => {
+        if (newVal && newVal.includes('T')) {
+          formData.value.AssignmentEnd = newVal.split('T')[0]
+        }
+      },
+      { immediate: true }
+    )
 
     async function deleteItem() {
       loading.value = true;

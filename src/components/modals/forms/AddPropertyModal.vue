@@ -118,56 +118,56 @@
               <!--end::Col-->
 
               <!--begin::Input group-->
-              <div class="d-flex flex-column mb-7 fv-row">
+              <!-- <div class="d-flex flex-column mb-7 fv-row"> -->
                   <!--begin::Label-->
-                  <label class="fs-6 fw-semobold mb-2">
-                    <span class="required">Tipologia Incarico</span>
-                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i>
-                  </label>
+                  <!-- <label class="fs-6 fw-semobold mb-2"> -->
+                    <!-- <span class="required">Tipologia Incarico</span> -->
+                    <!-- <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i> -->
+                  <!-- </label> -->
                   <!--end::Label-->
                   <!--begin::Input-->
-                  <select class="form-control" v-model="formData.TypeOfAssignment">
-                    <option value="Verbale">Verbale</option>
-                    <option value="Esclusivo">Esclusivo</option>
-                    <option value="Semi-Verbale">Semi-Verbale</option>
-                  </select>
+                  <!-- <select class="form-control" v-model="formData.TypeOfAssignment"> -->
+                    <!-- <option value="Verbale">Verbale</option> -->
+                    <!-- <option value="Esclusivo">Esclusivo</option> -->
+                    <!-- <option value="Semi-Verbale">Semi-Verbale</option> -->
+                  <!-- </select> -->
                   <!--end::Input-->
-                </div>
-                <!--end::Input group-->
+                <!-- </div> -->
+              <!--end::Input group-->
 
               <!--begin::Col-->
-              <div class="d-flex flex-column mb-2 fv-row">
+              <!-- <div class="d-flex flex-column mb-2 fv-row"> -->
                 <!--begin::Label-->
-                <label class="col-lg-4 col-form-label fw-semobold fs-6">Provvigione Concordata</label>
+                <!-- <label class="col-lg-4 col-form-label fw-semobold fs-6">Provvigione Concordata</label> -->
                 <!--end::Label-->
                   <!--begin::Input-->
-                  <el-form-item prop="AgreedCommission">
-                    <el-input 
-                     v-model="formData.AgreedCommission" type="number" placeholder="Inserisci percentuale">
-                     <template #append>
-                      <span>%</span>
-                     </template>
-                    </el-input>
-                  </el-form-item>
+                  <!-- <el-form-item prop="AgreedCommission"> -->
+                    <!-- <el-input  -->
+                     <!-- v-model="formData.AgreedCommission" type="number" placeholder="Inserisci percentuale"> -->
+                     <!-- <template #append> -->
+                      <!-- <span>%</span> -->
+                     <!-- </template> -->
+                    <!-- </el-input> -->
+                  <!-- </el-form-item> -->
                   <!--end::Input-->
-              </div>
+              <!-- </div> -->
               <!--end::Col-->
 
               <!--begin::Col-->
-              <div class="d-flex flex-column mb-2 fv-row">
+              <!-- <div class="d-flex flex-column mb-2 fv-row"> -->
                <!--begin::Label-->
-               <label class="col-lg-4 col-form-label fw-semobold fs-6">Provvigione Forfettaria</label>
+               <!-- <label class="col-lg-4 col-form-label fw-semobold fs-6">Provvigione Forfettaria</label> -->
                <!--end::Label-->
                   <!--begin::Input-->
-                  <el-form-item prop="FlatRateCommission">
-                    <el-input v-model="formData.FlatRateCommission" type="number" placeholder="Inserisci percentuale">
-                       <template #append>
-                        <span>%</span>
-                       </template>
-                    </el-input>
-                  </el-form-item>
+                  <!-- <el-form-item prop="FlatRateCommission"> -->
+                    <!-- <el-input v-model="formData.FlatRateCommission" type="number" placeholder="Inserisci percentuale"> -->
+                       <!-- <template #append> -->
+                        <!-- <span>%</span> -->
+                       <!-- </template> -->
+                    <!-- </el-input> -->
+                  <!-- </el-form-item> -->
                   <!--end::Input-->
-              </div>
+              <!-- </div> -->
               <!--end::Col-->
 
               <!--begin::Col-->
@@ -861,11 +861,11 @@ export default defineComponent({
       CustomerId: null,
       AgentId: "",
       AssignmentEnd: "",
-      TypeOfAssignment:"",
+      // TypeOfAssignment:"",
       Agent: null,
       VideoUrl: "",
-      AgreedCommission: 0,
-      FlatRateCommission: 0,
+      // AgreedCommission: 0,
+      // FlatRateCommission: 0,
     });
     const inserModel = ref<InsertModel>({
       Customers: [],
