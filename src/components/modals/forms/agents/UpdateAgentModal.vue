@@ -28,18 +28,19 @@
               data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
               data-kt-scroll-dependencies="#kt_modal_add_agent_header"
               data-kt-scroll-wrappers="#kt_modal_add_agent_scroll" data-kt-scroll-offset="300px">
-                <!--begin::Input group-->
-                <!-- <div class="fv-row mb-7"> -->
-                <!--begin::Label-->
-                <!-- <label class="required fs-6 fw-semobold mb-2">Agenzia</label> -->
-                <!--end::Label-->
+              <!--begin::Input group-->
+              <div class="fv-row mb-7">
+                  <!--begin::Label-->
+                  <label class="required fs-6 fw-semobold mb-2">Seleziona l'agenzia</label>
+                  <!--end::Label-->
 
-                <!--begin::Input-->
-                <!-- <el-form-item prop="AgencyId">
-                  <el-input v-model="formData.AgencyId" type="text" placeholder="" />
-                </el-form-item> -->
-                <!--end::Input-->
-              <!-- </div> -->
+                  <!--begin::Input-->
+                  <select class="form-control" v-model="formData.AgencyId">
+                  <option v-for="(user, index) in agencies" :key="index" :value="user.Id">{{ user.Name }} {{
+                    user.LastName }}</option>
+                </select>
+                  <!--end::Input-->
+              </div>
               <!--end::Input group-->
               <!--begin::Input group-->
               <div class="fv-row mb-7">
@@ -68,14 +69,14 @@
               </div>
               <!--end::Input group-->
               <div class="d-flex align-items-center mb-7">
-                 <label class="required fs-6 fw-sembold me-3">Seleziona il colore:</label>
-                  <select v-model="formData.Color" class="fs-6 fw-sembold mb-2" style="width: 100px;"
-                         :style="{ backgroundColor: formData.Color, color: '#fff' }">
-                    <option v-for="(color, index) in colorOptions" :key="index" 
-                         :value="color.hex" :style="{ backgroundColor: color.hex, color: '#fff' }">
-                         {{ color.name }}
-                    </option>
-                  </select>
+                <label class="required fs-6 fw-sembold me-3">Seleziona il colore</label>
+                <select v-model="formData.Color" class="fs-6 fw-sembold mb-2" style="width: 100px;"
+                  :style="{ backgroundColor: formData.Color, color: '#fff' }">
+                  <option v-for="(color, index) in colorOptions" :key="index" :value="color.hex"
+                    :style="{ backgroundColor: color.hex, color: '#fff' }">
+                    {{ color.name }}
+                  </option>
+                </select>
               </div>
               <!--begin::Input group-->
               <div class="fv-row mb-7">
@@ -250,38 +251,38 @@ import { defineComponent, ref, watch } from "vue";
 import { hideModal } from "@/core/helpers/dom";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import { updateAgent, Agent, getAgent } from "@/core/data/agents";
-
+import { getAgencies, Agency } from "@/core/data/agencies";
 
 export default defineComponent({
   name: "update-agent-modal",
   components: {},
-  props:{Id:{type: String,Required: true}},
+  props: { Id: { type: String, Required: true } },
   setup(props, { emit }) {
     const formRef = ref<null | HTMLFormElement>(null);
     const updateAgentModalRef = ref<null | HTMLElement>(null);
     const loading = ref<boolean>(false);
     const colorOptions = [
-  { name: '', hex: '#408441' },       
-  { name: '', hex: '#3412F2' },           
-  { name: '', hex: '#FBC8FF' },          
-  { name: '', hex: '#23D8F4' },        
-  { name: '', hex: '#E70F86' },         
-  { name: '', hex: '#8973AE' },           
-  { name: '', hex: '#559F6D' },     
-  { name: '', hex: '#D6D00C' },          
-  { name: '', hex: '#676769' },          
-  { name: '', hex: '#8B1AD7' },          
-  { name: '', hex: '#F5730F' },      
-  { name: '', hex: '#FF5733' },          
-  { name: '', hex: '#C70039' },     
-  { name: '', hex: '#900C3F' },        
-  { name: '', hex: '#581845' },         
-  { name: '', hex: '#D5A6BD' },    
-  { name: '', hex: '#FF8C00' },   
-  { name: '', hex: '#FF0000' },     
-  { name: '', hex: '#800080' },     
-  { name: '', hex: '#00FF00' }       
-];
+      { name: '', hex: '#408441' },
+      { name: '', hex: '#3412F2' },
+      { name: '', hex: '#FBC8FF' },
+      { name: '', hex: '#23D8F4' },
+      { name: '', hex: '#E70F86' },
+      { name: '', hex: '#8973AE' },
+      { name: '', hex: '#559F6D' },
+      { name: '', hex: '#D6D00C' },
+      { name: '', hex: '#676769' },
+      { name: '', hex: '#8B1AD7' },
+      { name: '', hex: '#F5730F' },
+      { name: '', hex: '#FF5733' },
+      { name: '', hex: '#C70039' },
+      { name: '', hex: '#900C3F' },
+      { name: '', hex: '#581845' },
+      { name: '', hex: '#D5A6BD' },
+      { name: '', hex: '#FF8C00' },
+      { name: '', hex: '#FF0000' },
+      { name: '', hex: '#800080' },
+      { name: '', hex: '#00FF00' }
+    ];
     const formData = ref<Agent>({
       Id: 0,
       Name: "",
@@ -297,9 +298,11 @@ export default defineComponent({
       AgencyId: "",
       Color: "#ffffff"
     });
-   
+    const agencies = ref<Array<Agency>>([]);
+
     watch(() => props.Id, async (first, second) => {
-      if (first) {
+      if (props.Id) {
+        agencies.value = await getAgencies("");
         formData.value = await getAgent(props.Id)
       }
       else {
@@ -360,22 +363,22 @@ export default defineComponent({
         if (valid) {
           loading.value = true;
           await updateAgent(formData.value)
-          .then(() => {
-                loading.value = false;
+            .then(() => {
+              loading.value = false;
 
-                Swal.fire({
-                  text: "Continua!",
-                  icon: "success",
-                  buttonsStyling: false,
-                  confirmButtonText: "Continua!",
-                  heightAuto: false,
-                  customClass: {
-                    confirmButton: "btn btn-primary",
-                  },
-                }).then(() => {
-                  hideModal(updateAgentModalRef.value);
-                });
-                emit('formUpdateSubmitted', formData.value);
+              Swal.fire({
+                text: "Continua!",
+                icon: "success",
+                buttonsStyling: false,
+                confirmButtonText: "Continua!",
+                heightAuto: false,
+                customClass: {
+                  confirmButton: "btn btn-primary",
+                },
+              }).then(() => {
+                hideModal(updateAgentModalRef.value);
+              });
+              emit('formUpdateSubmitted', formData.value);
             })
             .catch(({ response }) => {
               console.log(response);
@@ -417,6 +420,7 @@ export default defineComponent({
       updateAgentModalRef,
       getAssetPath,
       colorOptions,
+      agencies
     };
   },
 });

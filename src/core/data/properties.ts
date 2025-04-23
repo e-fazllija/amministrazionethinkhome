@@ -56,6 +56,9 @@ export class RealEstateProperty {
   RealEstatePropertyNotes?: Notes[];
   VideoUrl?: string;
   label?: string;
+  // TypeOfAssignment: string;
+  // AgreedCommission: number;
+  // FlatRateCommission: number;
 }
 
 export class RequestTabelData {

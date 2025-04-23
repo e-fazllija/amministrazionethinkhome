@@ -232,7 +232,7 @@
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.RoomsNumber" type="number" />
+            <input class="form-control form-control-lg fw-semobold" v-model="formData.RoomsNumber" type="text" />
           </div>
           <!--end::Col-->
         </div>
