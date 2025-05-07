@@ -46,7 +46,7 @@
           <button class="btn btn-light-info me-1" data-bs-toggle="modal" data-bs-target="#kt_modal_update_agent"
             @click="selectId(agent.Id)">Dettagli</button>
 
-          <!-- <button @click="deleteItem(agent.Id)" class="btn btn-light-danger me-1">Elimina</button> -->
+          <button v-if="user.Role == 'Admin'" @click="deleteItem(agent.Id)" class="btn btn-light-danger me-1">Elimina</button>
         </template>
         <!--begin::Menu-->
         <div
