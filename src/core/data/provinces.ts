@@ -136,6 +136,7 @@ export const provinceCities = {
     { Id: 'Roma', Name: 'Roma' },
     { Id: 'Sacrofano', Name: 'Sacrofano' },
     { Id: 'San Cesareo', Name: 'San Cesareo' },
+    { Id: 'San Gregorio da Sassola', Name: 'San Gregorio da Sassola' },
     { Id: 'San Polo dei Cavalieri', Name: 'San Polo dei Cavalieri' },
     { Id: 'San Vito Romano', Name: 'San Vito Romano' },
     { Id: 'Sant\'Angelo Romano', Name: 'Sant\'Angelo Romano' },
