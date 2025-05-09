@@ -77,7 +77,13 @@ export const cityLocations = {
     { Id: 'Vermicino', Name: 'Vermicino' },
     { Id: 'Villa Verde', Name: 'Villa Verde' },
     { Id: 'Villaggio Breda', Name: 'Villaggio Breda' },
-    { Id: 'Villaggio Prenestino', Name: 'Villaggio Prenestino' }
+    { Id: 'Villaggio Prenestino', Name: 'Villaggio Prenestino' },
+    { Id: 'Alessandrino', Name: 'Alessandrino' },
+    { Id: 'Torre Maura', Name: 'Torre Maura' },
+    { Id: 'Torre Spaccata', Name: 'Torre Spaccata' },
+    { Id: 'Tor Tre Teste', Name: 'Tor Tre Teste' },
+    { Id: 'Infernetto', Name: 'Infernetto' },
+    { Id: 'Portuense', Name: 'Portuense' }
   ],
   "Rocca Priora": [
     { Id: 'Colle di Fuori', Name: 'Colle di Fuori' }
@@ -86,5 +92,4 @@ export const cityLocations = {
     { Id: 'Centro Paese', Name: 'Centro Paese' },
     { Id: 'Valle Martella', Name: 'Valle Martella' },
     { Id: 'Via Prenestina', Name: 'Via Prenestina' }
-  ]
-};
+  ],}
