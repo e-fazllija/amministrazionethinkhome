@@ -127,6 +127,7 @@ export const provinceCities = {
     { Id: 'Pisoniano', Name: 'Pisoniano' },
     { Id: 'Poli', Name: 'Poli' },
     { Id: 'Pomezia', Name: 'Pomezia' },
+    { Id: 'Portuense', Name: 'Portuense' }, // Aggiunto
     { Id: 'Riano', Name: 'Riano' },
     { Id: 'Rocca di Cave', Name: 'Rocca di Cave' },
     { Id: 'Rocca di Papa', Name: 'Rocca di Papa' },
@@ -136,6 +137,7 @@ export const provinceCities = {
     { Id: 'Roma', Name: 'Roma' },
     { Id: 'Sacrofano', Name: 'Sacrofano' },
     { Id: 'San Cesareo', Name: 'San Cesareo' },
+    { Id: 'San Gregorio da Sassola', Name: 'San Gregorio da Sassola' },
     { Id: 'San Polo dei Cavalieri', Name: 'San Polo dei Cavalieri' },
     { Id: 'San Vito Romano', Name: 'San Vito Romano' },
     { Id: 'Sant\'Angelo Romano', Name: 'Sant\'Angelo Romano' },
@@ -147,7 +149,13 @@ export const provinceCities = {
     { Id: 'Tolfa', Name: 'Tolfa' },
     { Id: 'Valmontone', Name: 'Valmontone' },
     { Id: 'Velletri', Name: 'Velletri' },
-    { Id: 'Zagarolo', Name: 'Zagarolo' }
+    { Id: 'Zagarolo', Name: 'Zagarolo' },
+    // Aggiunte mancanti da `options`:
+    { Id: 'Alessandrino', Name: 'Alessandrino' }, // Quartiere di Roma
+    { Id: 'Torre Maura', Name: 'Torre Maura' },    // Quartiere di Roma
+    { Id: 'Torre Spaccata', Name: 'Torre Spaccata' }, // Quartiere di Roma
+    { Id: 'Tor Tre Teste', Name: 'Tor Tre Teste' },    // Quartiere di Roma
+    { Id: 'Infernetto', Name: 'Infernetto' }       // Quartiere di Roma
   ],
   "Sassari": [
     { Id: 'Sassari', Name: 'Sassari' },
@@ -169,5 +177,5 @@ export const provinceCities = {
     { Id: 'Tarquinia', Name: 'Tarquinia' },
     { Id: 'Bolsena', Name: 'Bolsena' },
     { Id: 'Civita Castellana', Name: 'Civita Castellana' }
-  ],
+  ]
 };

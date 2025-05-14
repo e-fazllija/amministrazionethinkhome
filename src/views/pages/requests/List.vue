@@ -421,6 +421,7 @@ export default defineComponent({
         { value: "TORRE SPACCATA", label: "LAZIO \\ ROMA (RM) \\ TORRE SPACCATA" },
         { value: "INFERNETTO", label: "LAZIO \\ ROMA (RM) \\ INFERNETTO" },
         { value: "SAN CESAREO", label: "LAZIO \\ ROMA (RM) \\ SAN CESAREO" },
+        { value: "SAN GREGORIO DA SASSOLA", label: "LAZIO \\ ROMA (RM) \\ SAN GREGORIO DA SASSOLA" },
         { value: "SAN VITO ROMANO", label: "LAZIO \\ ROMA (RM) \\ SAN VITO ROMANO" },
         { value: "SEGNI", label: "LAZIO \\ ROMA (RM) \\ SEGNI" },
         { value: "SUBIACO", label: "LAZIO \\ ROMA (RM) \\ SUBIACO" },
