@@ -70,8 +70,7 @@
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
-            <select class="form-control" v-model="formData.PropertyType" required>
-              <option value="Qualsiasi">Qualsiasi</option>
+             <select class="form-control" multiple v-model="selectedPropertyTypes" required style="height: auto;">
               <option value="Appartamenti">Appartamenti</option>
               <option value="AttivitaCommerciale">Attività Commerciale</option>
               <option value="Box">Box</option>
@@ -479,6 +478,7 @@ export default defineComponent({
     const firtLoad = ref(false);
     const cities = ref([]);
     const locations = ref([]);
+    const selectedPropertyTypes = ref<Array<string>>([]);
     const selectedIds = ref<Array<Number>>([]);
     const initItems = ref([]);
     const formData = ref<Request>({
@@ -556,6 +556,7 @@ export default defineComponent({
       loading.value = true;
       firtLoad.value = true;
       formData.value = await getRequest(id);
+      selectedPropertyTypes.value = formData.value.PropertyType ? formData.value.PropertyType.split(',') : [];
       selectedCities.value = formData.value.Town.split(",")
       selectedLocations.value = formData.value.Location?.split(",")
       inserModel.value = await getToInsert(store.user.AgencyId);
@@ -616,6 +617,11 @@ export default defineComponent({
         }
       }
     );
+    watch(selectedPropertyTypes, (newVal) => {
+      if (newVal.includes('Qualsiasi')) {
+      selectedPropertyTypes.value = ['Qualsiasi'];
+     }
+    });
 
     async function deleteItem() {
       loading.value = true;
@@ -640,6 +646,7 @@ export default defineComponent({
       loading.value = true;
       formData.value.Town = selectedCities.value.toString()
       formData.value.Location = selectedLocations.value?.toString();
+      formData.value.PropertyType = selectedPropertyTypes.value.toString();
 
       await updateRequest(formData.value)
         .then(() => {
@@ -731,7 +738,8 @@ export default defineComponent({
       searchItems,
       search,
       selectedCities,
-      selectedLocations
+      selectedLocations,
+      selectedPropertyTypes
     };
   },
 });
