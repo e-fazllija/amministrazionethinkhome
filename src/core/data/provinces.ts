@@ -1,12 +1,12 @@
 export const provinceCities = {
   "Arezzo": [
     { Id: 'Arezzo', Name: 'Arezzo' },
-    { Id: 'Cortona', Name: 'Cortona' },
     { Id: 'Castiglion Fiorentino', Name: 'Castiglion Fiorentino' },
+    { Id: 'Cortona', Name: 'Cortona' },
   ],
   "Caserta": [
-    { Id: 'Caserta', Name: 'Caserta' },
     { Id: 'Aversa', Name: 'Aversa' },
+    { Id: 'Caserta', Name: 'Caserta' },
     { Id: 'Vairano Patenora', Name: 'Vairano Patenora' },
   ],
   "Chieti": [
@@ -15,18 +15,18 @@ export const provinceCities = {
     { Id: 'San Salvo Marina', Name: 'San Salvo Marina' },
   ],
   "Firenze": [
-    { Id: 'Firenze', Name: 'Firenze' },
     { Id: 'Empoli', Name: 'Empoli' },
+    { Id: 'Firenze', Name: 'Firenze' },
     { Id: 'Tavarnelle Val di Pesa', Name: 'Tavarnelle Val di Pesa' },
   ],
   "Frosinone": [
-    { Id: 'Frosinone', Name: 'Frosinone' },
-    { Id: 'Alatri', Name: 'Alatri' },
     { Id: 'Acuto', Name: 'Acuto' },
+    { Id: 'Alatri', Name: 'Alatri' },
     { Id: 'Anagni', Name: 'Anagni' },
     { Id: 'Arce', Name: 'Arce' },
     { Id: 'Boville Ernica', Name: 'Boville Ernica' },
     { Id: 'Fiuggi', Name: 'Fiuggi' },
+    { Id: 'Frosinone', Name: 'Frosinone' },
     { Id: 'Morolo', Name: 'Morolo' },
     { Id: 'Paliano', Name: 'Paliano' },
     { Id: 'Piglio', Name: 'Piglio' },
@@ -34,19 +34,19 @@ export const provinceCities = {
     { Id: 'Sgurgola', Name: 'Sgurgola' },
   ],
   "LAquila": [
-    { Id: 'L\'Aquila', Name: 'L\'Aquila' },
-    { Id: 'Sulmona', Name: 'Sulmona' },
     { Id: 'Campo di Giove', Name: 'Campo di Giove' },
     { Id: 'Carsoli', Name: 'Carsoli' },
+    { Id: 'L\'Aquila', Name: 'L\'Aquila' },
     { Id: 'Rocca di Cambio', Name: 'Rocca di Cambio' },
     { Id: 'Rocca di Mezzo', Name: 'Rocca di Mezzo' },
+    { Id: 'Sulmona', Name: 'Sulmona' },
     { Id: 'Tagliacozzo', Name: 'Tagliacozzo' },
     { Id: 'Tornimparte', Name: 'Tornimparte' },
   ],
   "Latina": [
-    { Id: 'Latina', Name: 'Latina' },
     { Id: 'Aprilia', Name: 'Aprilia' },
     { Id: 'Cori', Name: 'Cori' },
+    { Id: 'Latina', Name: 'Latina' },
     { Id: 'Rocca Massima', Name: 'Rocca Massima' },
     { Id: 'Sabaudia', Name: 'Sabaudia' },
     { Id: 'San Felice Circeo', Name: 'San Felice Circeo' },
@@ -54,29 +54,30 @@ export const provinceCities = {
     { Id: 'Terracina', Name: 'Terracina' },
   ],
   "Napoli": [
+    { Id: 'Forio d\'Ischia', Name: 'Forio d\'Ischia' },
     { Id: 'Napoli', Name: 'Napoli' },
     { Id: 'Pompei', Name: 'Pompei' },
-    { Id: 'Forio d\'Ischia', Name: 'Forio d\'Ischia' },
   ],
   "Perugia": [
-    { Id: 'Perugia', Name: 'Perugia' },
     { Id: 'Assisi', Name: 'Assisi' },
     { Id: 'Collazzone', Name: 'Collazzone' },
     { Id: 'Paciano', Name: 'Paciano' },
+    { Id: 'Perugia', Name: 'Perugia' },
   ],
   "Rieti": [
-    { Id: 'Rieti', Name: 'Rieti' },
     { Id: 'Amatrice', Name: 'Amatrice' },
     { Id: 'Leonessa', Name: 'Leonessa' },
     { Id: 'Mompeo', Name: 'Mompeo' },
     { Id: 'Petrella Salto', Name: 'Petrella Salto' },
     { Id: 'Poggio Nativo', Name: 'Poggio Nativo' },
+    { Id: 'Rieti', Name: 'Rieti' },
     { Id: 'Rocca Sinibalda', Name: 'Rocca Sinibalda' },
     { Id: 'Torre in Sabina', Name: 'Torre in Sabina' },
   ],
   "Roma": [
     { Id: 'Agosta', Name: 'Agosta' },
     { Id: 'Albano Laziale', Name: 'Albano Laziale' },
+    { Id: 'Alessandrino', Name: 'Alessandrino' },
     { Id: 'Allumiere', Name: 'Allumiere' },
     { Id: 'Anzio', Name: 'Anzio' },
     { Id: 'Arcinazzo Romano', Name: 'Arcinazzo Romano' },
@@ -108,6 +109,7 @@ export const provinceCities = {
     { Id: 'Gorga', Name: 'Gorga' },
     { Id: 'Grottaferrata', Name: 'Grottaferrata' },
     { Id: 'Guidonia Montecelio', Name: 'Guidonia Montecelio' },
+    { Id: 'Infernetto', Name: 'Infernetto' },
     { Id: 'Labico', Name: 'Labico' },
     { Id: 'Lanuvio', Name: 'Lanuvio' },
     { Id: 'Lariano', Name: 'Lariano' },
@@ -127,7 +129,7 @@ export const provinceCities = {
     { Id: 'Pisoniano', Name: 'Pisoniano' },
     { Id: 'Poli', Name: 'Poli' },
     { Id: 'Pomezia', Name: 'Pomezia' },
-    { Id: 'Portuense', Name: 'Portuense' }, // Aggiunto
+    { Id: 'Portuense', Name: 'Portuense' },
     { Id: 'Riano', Name: 'Riano' },
     { Id: 'Rocca di Cave', Name: 'Rocca di Cave' },
     { Id: 'Rocca di Papa', Name: 'Rocca di Papa' },
@@ -147,35 +149,32 @@ export const provinceCities = {
     { Id: 'Subiaco', Name: 'Subiaco' },
     { Id: 'Tivoli', Name: 'Tivoli' },
     { Id: 'Tolfa', Name: 'Tolfa' },
+    { Id: 'Torre Maura', Name: 'Torre Maura' },
+    { Id: 'Torre Spaccata', Name: 'Torre Spaccata' },
+    { Id: 'Tor Tre Teste', Name: 'Tor Tre Teste' },
     { Id: 'Valmontone', Name: 'Valmontone' },
     { Id: 'Velletri', Name: 'Velletri' },
     { Id: 'Zagarolo', Name: 'Zagarolo' },
-    // Aggiunte mancanti da `options`:
-    { Id: 'Alessandrino', Name: 'Alessandrino' }, // Quartiere di Roma
-    { Id: 'Torre Maura', Name: 'Torre Maura' },    // Quartiere di Roma
-    { Id: 'Torre Spaccata', Name: 'Torre Spaccata' }, // Quartiere di Roma
-    { Id: 'Tor Tre Teste', Name: 'Tor Tre Teste' },    // Quartiere di Roma
-    { Id: 'Infernetto', Name: 'Infernetto' }       // Quartiere di Roma
   ],
   "Sassari": [
-    { Id: 'Sassari', Name: 'Sassari' },
     { Id: 'Alghero', Name: 'Alghero' },
     { Id: 'Olbia', Name: 'Olbia' },
+    { Id: 'Sassari', Name: 'Sassari' },
   ],
   "Terni": [
-    { Id: 'Terni', Name: 'Terni' },
     { Id: 'Narni', Name: 'Narni' },
     { Id: 'Narni Scalo', Name: 'Narni Scalo' },
+    { Id: 'Terni', Name: 'Terni' },
   ],
   "Trento": [
-    { Id: 'Trento', Name: 'Trento' },
-    { Id: 'Rovereto', Name: 'Rovereto' },
     { Id: 'Mezzana', Name: 'Mezzana' },
+    { Id: 'Rovereto', Name: 'Rovereto' },
+    { Id: 'Trento', Name: 'Trento' },
   ],
   "Viterbo": [
-    { Id: 'Viterbo', Name: 'Viterbo' },
-    { Id: 'Tarquinia', Name: 'Tarquinia' },
     { Id: 'Bolsena', Name: 'Bolsena' },
-    { Id: 'Civita Castellana', Name: 'Civita Castellana' }
+    { Id: 'Civita Castellana', Name: 'Civita Castellana' },
+    { Id: 'Tarquinia', Name: 'Tarquinia' },
+    { Id: 'Viterbo', Name: 'Viterbo' },
   ]
 };

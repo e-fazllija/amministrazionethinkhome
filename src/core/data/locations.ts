@@ -26,8 +26,12 @@ export const cityLocations = {
     { Id: 'Carchitti', Name: 'Carchitti' },
     { Id: 'Valvarino', Name: 'Valvarino' }
   ],
+  "Rocca Priora": [
+    { Id: 'Colle di Fuori', Name: 'Colle di Fuori' }
+  ],
   "Roma": [
     { Id: 'Acilia', Name: 'Acilia' },
+    { Id: 'Alessandrino', Name: 'Alessandrino' },
     { Id: 'Boccea', Name: 'Boccea' },
     { Id: 'Borghesiana', Name: 'Borghesiana' },
     { Id: 'Casal Palocco', Name: 'Casal Palocco' },
@@ -48,6 +52,7 @@ export const cityLocations = {
     { Id: 'Fosso San Giuliano', Name: 'Fosso San Giuliano' },
     { Id: 'Giardinetti', Name: 'Giardinetti' },
     { Id: 'Giardini di Corcolle', Name: 'Giardini di Corcolle' },
+    { Id: 'Infernetto', Name: 'Infernetto' },
     { Id: 'La Pisana', Name: 'La Pisana' },
     { Id: 'La Storta', Name: 'La Storta' },
     { Id: 'Lunghezza', Name: 'Lunghezza' },
@@ -59,6 +64,7 @@ export const cityLocations = {
     { Id: 'Pantano Borghese', Name: 'Pantano Borghese' },
     { Id: 'Ponte Galeria', Name: 'Ponte Galeria' },
     { Id: 'Ponte di Nona', Name: 'Ponte di Nona' },
+    { Id: 'Portuense', Name: 'Portuense' },
     { Id: 'Prato Fiorito', Name: 'Prato Fiorito' },
     { Id: 'Prima Porta', Name: 'Prima Porta' },
     { Id: 'Rocca Cencia', Name: 'Rocca Cencia' },
@@ -68,28 +74,23 @@ export const cityLocations = {
     { Id: 'Saxa Rubra', Name: 'Saxa Rubra' },
     { Id: 'Settecamini', Name: 'Settecamini' },
     { Id: 'Tor Bella Monaca', Name: 'Tor Bella Monaca' },
+    { Id: 'Tor Tre Teste', Name: 'Tor Tre Teste' },
     { Id: 'Tor Vergata', Name: 'Tor Vergata' },
     { Id: 'Tor de Cenci', Name: 'Tor de Cenci' },
     { Id: 'Torre Angela', Name: 'Torre Angela' },
     { Id: 'Torre Gaia', Name: 'Torre Gaia' },
+    { Id: 'Torre Maura', Name: 'Torre Maura' },
+    { Id: 'Torre Spaccata', Name: 'Torre Spaccata' },
     { Id: 'Tuscolana', Name: 'Tuscolana' },
     { Id: 'Vallerano', Name: 'Vallerano' },
     { Id: 'Vermicino', Name: 'Vermicino' },
     { Id: 'Villa Verde', Name: 'Villa Verde' },
     { Id: 'Villaggio Breda', Name: 'Villaggio Breda' },
-    { Id: 'Villaggio Prenestino', Name: 'Villaggio Prenestino' },
-    { Id: 'Alessandrino', Name: 'Alessandrino' },
-    { Id: 'Torre Maura', Name: 'Torre Maura' },
-    { Id: 'Torre Spaccata', Name: 'Torre Spaccata' },
-    { Id: 'Tor Tre Teste', Name: 'Tor Tre Teste' },
-    { Id: 'Infernetto', Name: 'Infernetto' },
-    { Id: 'Portuense', Name: 'Portuense' }
-  ],
-  "Rocca Priora": [
-    { Id: 'Colle di Fuori', Name: 'Colle di Fuori' }
+    { Id: 'Villaggio Prenestino', Name: 'Villaggio Prenestino' }
   ],
   "Zagarolo": [
     { Id: 'Centro Paese', Name: 'Centro Paese' },
     { Id: 'Valle Martella', Name: 'Valle Martella' },
     { Id: 'Via Prenestina', Name: 'Via Prenestina' }
-  ],}
+  ]
+};
