@@ -260,7 +260,7 @@
                   <select class="form-control" v-model="formData.Category">
                     <option value="Residenziale">Residenziale</option>
                     <option value="Capannone">Capannone</option>
-                    <option value="Negozi-Locale Commerciale">Negozi/Locale Commerciale</option>
+                    <option value="Commerciale">Negozi/Locale Commerciale</option>
                     <option value="Magazzino">Magazzino</option>
                     <option value="Garage">Garage</option>
                     <option value="Ufficio">Ufficio</option>
@@ -882,9 +882,12 @@ export default defineComponent({
     };
 
     const tipologiePerCategoria = {
-      Residenziale: ["Appartamento", "Attico", "Mansarda", "Loft", "Soffitta", "Casale", "Rustico", "Villa Unifamiliare", "Villa Bifamiliare", "Villa Plurifamiliare", "Villa a Schiera"],
-      Garage: ["Box singolo", "Box doppio", "Posto auto"],
-      Terreno: ["Edificabile", "Agricolo", "Non Edificabile"]
+          Residenziale: ["Appartamento", "Attico", "Mansarda", "Loft", "Soffitta", "Casale", "Rustico", "Villa Unifamiliare",
+          "Villa Bifamiliare", "Villa Plurifamiliare", "Villa a Schiera"],
+          Commerciale :["Locale commerciale", "Negozio", "Ufficio"],
+          Capannone: ["Capannone artigianale", "Capannone industriale"],
+          Garage: ["Box singolo", "Box doppio", "Posto auto"],
+          Terreno: ["Edificabile", "Agricolo", "Non Edificabile"],
     };
 
     const typesavailable = ref<string[]>(tipologiePerCategoria[formData.value.Category]);
