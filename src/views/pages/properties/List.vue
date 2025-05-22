@@ -3,7 +3,7 @@
     <!--begin::Search-->
     <div class="row m-2">
       <div class="col-md-3 col-lg-3 mb-2">
-        <input type="text" v-model="search" class="form-control form-control-solid" placeholder="Cerca per Cod. \ Via"
+        <input type="text" v-model="search" class="form-control form-control-solid" placeholder="Cerca per Indirizzo"
         @keyup.enter="searchItems" />
       </div>
       <div class="col-md-3 col-lg-3 mb-2">
@@ -17,36 +17,38 @@
       <div class="col-md-3 col-lg-3 mb-2">
         <select class="form-control form-control-solid" v-model="typology">
           <option value="">Tipologia</option>
+          <!-- Residenziale -->
           <option value="Appartamento">Appartamento</option>
           <option value="Attico">Attico</option>
           <option value="Mansarda">Mansarda</option>
           <option value="Loft">Loft</option>
           <option value="Soffitta">Soffitta</option>
-          <option value="AttivitaCommerciale">Attività Commerciale</option>
-          <option value="Box singolo">Box singolo</option>
-          <option value="Box doppio">Box doppio</option>
-          <option value="Posto auto">Posto auto</option>
-          <option value="CapannoniLocArtigianali">Capannoni, Loc. Artigianali</option>
-          <option value="Capannone artigianale">Capannone artigianale</option>
-          <option value="Capannone industriale">Capannone industriale</option>
-          <option value="CasaliRuderi">Casali e Ruderi</option>
           <option value="Casale">Casale</option>
           <option value="Rustico">Rustico</option>
-          <option value="CaseSemindipendenti">Case Semindipendenti</option>
-          <option value="LocaliCommerciali">Locali Commerciali</option>
-          <option value="Locale commerciale">Locale commerciale</option>
-          <option value="Negozio">Negozio</option>
-          <option value="Ufficio">Ufficio</option>
-          <option value="NuoveCostruzioni">Nuove Costruzioni</option>
-          <option value="Terreni">Terreni</option>
-          <option value="Edificabile">Edificabile</option>
-          <option value="Agricolo">Agricolo</option>
-          <option value="Non Edificabile">Non Edificabile</option>
-          <option value="VilleCaseIndipendenti">Ville e Case Indipendenti</option>
           <option value="Villa Unifamiliare">Villa Unifamiliare</option>
           <option value="Villa Bifamiliare">Villa Bifamiliare</option>
           <option value="Villa Plurifamiliare">Villa Plurifamiliare</option>
           <option value="Villa a Schiera">Villa a Schiera</option>
+          <!-- Commerciale -->
+          <option value="Locale commerciale">Locale commerciale</option>
+          <option value="Negozio">Negozio</option>
+          <!-- Capannone -->
+          <option value="Capannone artigianale">Capannone artigianale</option>
+          <option value="Capannone industriale">Capannone industriale</option>
+          <!-- Garage -->
+          <option value="Box singolo">Box singolo</option>
+          <option value="Box doppio">Box doppio</option>
+          <option value="Posto auto">Posto auto</option>
+          <!-- Magazzino -->
+          <option value="Magazzino">Magazzino</option>
+          <!-- Rustico / Casale -->
+          <option value="Rustico / Casale">Rustico / Casale</option>
+          <!-- Terreno -->
+          <option value="Edificabile">Edificabile</option>
+          <option value="Agricolo">Agricolo</option>
+          <option value="Non Edificabile">Non Edificabile</option>
+          <!-- Ufficio -->
+          <option value="Ufficio">Ufficio</option>
         </select>
       </div>
     </div>
