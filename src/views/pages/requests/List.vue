@@ -461,6 +461,7 @@ options: [
     { value: "INFERNETTO", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ INFERNETTO" },
     { value: "LA PISANA", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ LA PISANA" },
     { value: "LA STORTA", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ LA STORTA" },
+    { value: "MONTE SACRO", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ MONTE SACRO" },
     { value: "LUNGHEZZA", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ LUNGHEZZA" },
     { value: "OSTERIA DEL CURATO", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ OSTERIA DEL CURATO" },
     { value: "OSTIA", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ OSTIA" },
@@ -468,6 +469,7 @@ options: [
     { value: "OSTIA LEVANTE", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ OSTIA LEVANTE" },
     { value: "OSTIA PONENTE", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ OSTIA PONENTE" },
     { value: "PANTANO BORGHESE", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ PANTANO BORGHESE" },
+    { value: "PIGNETO", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ PIGNETO" },
     { value: "PONTE GALERIA", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ PONTE GALERIA" },
     { value: "PONTE DI NONA", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ PONTE DI NONA" },
     { value: "PORTUENSE", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ PORTUENSE" },
@@ -508,17 +510,18 @@ options: [
     { value: "VITERBO", label: "LAZIO \\ VITERBO (VT) \\ VITERBO" }
 ],
 optionsPropertyType: [
-        { value: "Appartamenti", label: "Appartamenti" },
-        { value: "AttivitaCommerciale", label: "Attività Commerciale" },
-        { value: "Box", label: "Box" },
-        { value: "CapannoniLocArtigianali", label: "Capannoni, Loc. Artigianali" },
-        { value: "CasaliRuderi", label: "Casali e Ruderi" },
-        { value: "CaseSemindipendenti", label: "Case Semindipendenti" },
-        { value: "LocaliCommerciali", label: "Locali Commerciali" },
-        { value: "NuoveCostruzioni", label: "Nuove Costruzioni" },
-        { value: "Terreni", label: "Terreni" },
-        { value: "VilleCaseIndipendenti", label: "Ville e Case Indipendenti" }
-      ]
+  { value: "Appartamenti", label: "Appartamenti" },
+  { value: "AttivitaCommerciale", label: "Attività Commerciale" },
+  { value: "Box", label: "Box" },
+  { value: "CapannoniLocArtigianali", label: "Capannoni, Loc. Artigianali" },
+  { value: "CasaliRuderi", label: "Casali e Ruderi" },
+  { value: "CaseSemindipendenti", label: "Case Semindipendenti" },
+  { value: "LocaliCommerciali", label: "Locali Commerciali" },
+  { value: "NuoveCostruzioni", label: "Nuove Costruzioni" },
+  { value: "Terreni", label: "Terreni" },
+  { value: "VilleCaseIndipendenti", label: "Ville e Case Indipendenti" },
+  { value: "VillaASchiera", label: "Villa a Schiera" }
+]
     };
   },
   methods: {

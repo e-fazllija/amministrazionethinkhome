@@ -97,23 +97,18 @@
                         </label>
                     <!--end::Label-->
                     <!--begin::Input-->
-                  <select 
-  class="form-select" 
-  multiple 
-  v-model="formData.PropertyType"
-  style="height: auto;"
->
-  <option value="Appartamenti">Appartamenti</option>
-  <option value="AttivitaCommerciale">Attività Commerciale</option>
-  <option value="Box">Box</option>
-  <option value="CapannoniLocArtigianali">Capannoni, Loc. Artigianali</option>
-  <option value="CasaliRuderi">Casali e Ruderi</option>
-  <option value="CaseSemindipendenti">Case Semindipendenti</option>
-  <option value="LocaliCommerciali">Locali Commerciali</option>
-  <option value="NuoveCostruzioni">Nuove Costruzioni</option>
-  <option value="Terreni">Terreni</option>
-  <option value="VilleCaseIndipendenti">Ville e Case Indipendenti</option>
-</select>
+                  <select class="form-select" multiple v-model="formData.PropertyType" style="height: auto;">
+                       <option value="Appartamenti">Appartamenti</option>
+                        <option value="AttivitaCommerciale">Attività Commerciale</option>
+                        <option value="Box">Box</option>
+                        <option value="CapannoniLocArtigianali">Capannoni, Loc. Artigianali</option>
+                        <option value="CasaliRuderi">Casali e Ruderi</option>
+                        <option value="CaseSemindipendenti">Case Semindipendenti</option>
+                        <option value="LocaliCommerciali">Locali Commerciali</option>
+                        <option value="NuoveCostruzioni">Nuove Costruzioni</option>
+                        <option value="Terreni">Terreni</option>
+                        <option value="VilleCaseIndipendenti">Ville e Case Indipendenti</option>
+                  </select>
                     <!--end::Input-->
                 </div>
                 <!--end::Input group-->

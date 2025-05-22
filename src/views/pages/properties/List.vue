@@ -2,10 +2,11 @@
   <div class="card">
     <!--begin::Search-->
     <div class="row m-2">
-      <div class="col-md-2 col-lg-2 mb-2">
-        <input type="text" v-model="search" class="form-control form-control-solid" placeholder="Cerca Immobile" />
+      <div class="col-md-3 col-lg-3 mb-2">
+        <input type="text" v-model="search" class="form-control form-control-solid" placeholder="Cerca per Indirizzo"
+        @keyup.enter="searchItems" />
       </div>
-      <div class="col-md-2 col-lg-2 mb-2">
+      <div class="col-md-3 col-lg-3 mb-2">
         <select class="form-control form-control-solid" v-model="contract">
           <option value="">Contratto</option>
           <option value="Vendita">Vendita</option>
@@ -13,22 +14,10 @@
           <option value="Aste">Aste</option>
         </select>
       </div>
-      <div class="col-md-2 col-lg-2 mb-2">
-        <select class="form-control form-control-solid" v-model="category">
-          <option value="">Categoria</option>
-          <option value="Residenziale">Residenziale</option>
-          <option value="Capannone">Capannone</option>
-          <option value="Negozi-Locale Commerciale">Negozi/Locale Commerciale</option>
-          <option value="Magazzino">Magazzino</option>
-          <option value="Garage">Garage</option>
-          <option value="Ufficio">Ufficio</option>
-          <option value="Terreno">Terreno</option>
-          <option value="Rustico / Casale">Rustico / Casale</option>
-        </select>
-      </div>
       <div class="col-md-3 col-lg-3 mb-2">
-        <select class="form-control form-control-solid" v-model="typologie">
+        <select class="form-control form-control-solid" v-model="typology">
           <option value="">Tipologia</option>
+          <!-- Residenziale -->
           <option value="Appartamento">Appartamento</option>
           <option value="Attico">Attico</option>
           <option value="Mansarda">Mansarda</option>
@@ -40,22 +29,27 @@
           <option value="Villa Bifamiliare">Villa Bifamiliare</option>
           <option value="Villa Plurifamiliare">Villa Plurifamiliare</option>
           <option value="Villa a Schiera">Villa a Schiera</option>
+          <!-- Commerciale -->
+          <option value="Locale commerciale">Locale commerciale</option>
+          <option value="Negozio">Negozio</option>
+          <!-- Capannone -->
+          <option value="Capannone artigianale">Capannone artigianale</option>
+          <option value="Capannone industriale">Capannone industriale</option>
+          <!-- Garage -->
           <option value="Box singolo">Box singolo</option>
           <option value="Box doppio">Box doppio</option>
           <option value="Posto auto">Posto auto</option>
+          <!-- Magazzino -->
+          <option value="Magazzino">Magazzino</option>
+          <!-- Rustico / Casale -->
+          <option value="Rustico / Casale">Rustico / Casale</option>
+          <!-- Terreno -->
           <option value="Edificabile">Edificabile</option>
           <option value="Agricolo">Agricolo</option>
           <option value="Non Edificabile">Non Edificabile</option>
+          <!-- Ufficio -->
+          <option value="Ufficio">Ufficio</option>
         </select>
-      </div>
-      <div class="col-md-3 col-lg-3 mb-2 d-flex justify-content-end">
-        <button type="button" @click="searchItems" class="btn btn-light-primary me-3">
-          <KTIcon icon-name="search" icon-class="fs-2" /> Cerca
-        </button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_property">
-          <KTIcon icon-name="plus" icon-class="fs-2" />
-          Aggiungi Immobile
-        </button>
       </div>
     </div>
     <div class="row m-2">
@@ -88,6 +82,15 @@
           <option v-for="(item, index) in defaultSearchItems.Agencies" :key="index" :value="item.Id">{{ item.Name }} {{
             item.LastName }}</option>
         </select>
+      </div>
+            <div class="col-md-3 col-lg-3 mb-2 d-flex justify-content-end">
+        <button type="button" @click="searchItems" class="btn btn-light-primary me-3">
+          <KTIcon icon-name="search" icon-class="fs-2" /> Cerca
+        </button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_property">
+          <KTIcon icon-name="plus" icon-class="fs-2" />
+          Aggiungi Immobile
+        </button>
       </div>
       <div class="d-flex align-items-center mb-3">
          <div class="bg-light-primary rounded p-2 me-3">
@@ -219,15 +222,15 @@ export default defineComponent({
     const fromPrice = ref<number>(0);
     const toPrice = ref<number>(0);
     const contract = ref<string>("");
-    const typologie = ref<string>("");
+    const typology = ref<string>("");
     const category = ref<string>("");
     const locations = ref<Array<string>>([]);
 
-    async function getItems(agencyId: string, filterRequest: string, contract?: string, priceFrom?: number, priceTo?: number, category?: string, typologie?: string, town?: string[]) {
+    async function getItems(agencyId: string, filterRequest: string, contract?: string, priceFrom?: number, priceTo?: number, category?: string, typology?: string, town?: string[]) {
       loading.value = true;
       tableData.value = [];
 
-      const results = await getRealEstateProperties(agencyId, filterRequest, contract, priceFrom, priceTo, category, typologie, town);
+      const results = await getRealEstateProperties(agencyId, filterRequest, contract, priceFrom, priceTo, category, typology, town);
       for (const key in results) {
 
         const item = {
@@ -259,7 +262,7 @@ export default defineComponent({
       }
       agencyId.value = authStore.user.AgencyId;
 
-      await getItems(agencyId.value, search.value, contract.value, fromPrice.value, toPrice.value, category.value, typologie.value, locations.value);
+      await getItems(agencyId.value, search.value, contract.value, fromPrice.value, toPrice.value, category.value, typology.value, locations.value);
     });
 
     const deleteFewItems = async () => {
@@ -268,7 +271,7 @@ export default defineComponent({
         await deleteRealEstateProperty(item)
       });
       selectedIds.value.length = 0;
-      await getItems(agencyId.value, search.value, contract.value, fromPrice.value, toPrice.value, category.value, typologie.value, locations.value);
+      await getItems(agencyId.value, search.value, contract.value, fromPrice.value, toPrice.value, category.value, typology.value, locations.value);
       loading.value = false;
     };
 
@@ -292,7 +295,7 @@ export default defineComponent({
     };
 
     const searchItems = async () => {
-      await getItems(agencyId.value, search.value, contract.value, fromPrice.value, toPrice.value, category.value, typologie.value, locations.value);
+      await getItems(agencyId.value, search.value, contract.value, fromPrice.value, toPrice.value, category.value, typology.value, locations.value);
 
       MenuComponent.reinitialization();
     };
@@ -311,7 +314,7 @@ export default defineComponent({
         },
       }).then(async () => {
         await deleteRealEstateProperty(id)
-        await getItems(agencyId.value, search.value, contract.value, fromPrice.value, toPrice.value, category.value, typologie.value, locations.value);
+        await getItems(agencyId.value, search.value, contract.value, fromPrice.value, toPrice.value, category.value, typology.value, locations.value);
         loading.value = false;
         MenuComponent.reinitialization();
       });
@@ -337,7 +340,6 @@ export default defineComponent({
       searchItems,
       contract,
       locations,
-      typologie,
       fromPrice,
       category,
       toPrice,
@@ -350,7 +352,8 @@ export default defineComponent({
       loading,
       user,
       agencyId,
-      defaultSearchItems
+      defaultSearchItems,
+      typology
     };
   },
   data() {
@@ -450,12 +453,14 @@ options: [
     { value: "LA PISANA", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ LA PISANA" },
     { value: "LA STORTA", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ LA STORTA" },
     { value: "LUNGHEZZA", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ LUNGHEZZA" },
+    { value: "MONTE SACRO", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ MONTE SACRO" },
     { value: "OSTERIA DEL CURATO", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ OSTERIA DEL CURATO" },
     { value: "OSTIA", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ OSTIA" },
     { value: "OSTIA ANTICA", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ OSTIA ANTICA" },
     { value: "OSTIA LEVANTE", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ OSTIA LEVANTE" },
     { value: "OSTIA PONENTE", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ OSTIA PONENTE" },
     { value: "PANTANO BORGHESE", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ PANTANO BORGHESE" },
+    { value: "PIGNETO", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ PIGNETO" },
     { value: "PONTE GALERIA", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ PONTE GALERIA" },
     { value: "PONTE DI NONA", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ PONTE DI NONA" },
     { value: "PORTUENSE", label: "LAZIO \\ ROMA (RM) \\ ROMA \\ PORTUENSE" },
