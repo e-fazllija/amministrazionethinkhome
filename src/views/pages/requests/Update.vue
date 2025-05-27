@@ -617,6 +617,7 @@ export default defineComponent({
         }
       }
     );
+    
     watch(selectedPropertyTypes, (newVal) => {
       if (newVal.includes('Qualsiasi')) {
       selectedPropertyTypes.value = ['Qualsiasi'];

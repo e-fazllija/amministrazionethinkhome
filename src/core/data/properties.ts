@@ -19,6 +19,7 @@ export class RealEstateProperty {
   AddressLine: string;
   Town: string;
   State: string;
+  Location: string;
   PostCode: string;
   CommercialSurfaceate: number | 0;
   Floor?: string;
@@ -56,9 +57,9 @@ export class RealEstateProperty {
   RealEstatePropertyNotes?: Notes[];
   VideoUrl?: string;
   label?: string;
-  // TypeOfAssignment: string;
-  // AgreedCommission: number;
-  // FlatRateCommission: number;
+  TypeOfAssignment: string;
+  AgreedCommission: number;
+  FlatRateCommission: number;
 }
 
 export class RequestTabelData {
