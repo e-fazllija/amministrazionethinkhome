@@ -141,29 +141,66 @@
         </div>
         <!--end::Input group-->
 
-        <!--begin::Input group-->
+                <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Comune</label>
+          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Provincia</label>
           <!--end::Label-->
-          <!--begin::Input-->
+          <!--begin::Col-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.Town" type="text" required />
+            <select class="form-control" v-model="formData.State" required>
+              <option value="Arezzo">Arezzo</option>
+              <option value="Caserta">Caserta</option>
+              <option value="Chieti">Chieti</option>
+              <option value="Firenze">Firenze</option>
+              <option value="Frosinone">Frosinone</option>
+              <option value="LAquila">L'Aquila</option>
+              <option value="Latina">Latina</option>
+              <option value="Napoli">Napoli</option>
+              <option value="Perugia">Perugia</option>
+              <option value="Rieti">Rieti</option>
+              <option value="Roma">Roma</option>
+              <option value="Sassari">Sassari</option>
+              <option value="Terni">Terni</option>
+              <option value="Trento">Trento</option>
+              <option value="Viterbo">Viterbo</option>
+            </select>
           </div>
-          <!--end::Input-->
+          <!--end::Col-->
         </div>
         <!--end::Input group-->
 
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label required fw-semobold fs-6">Provincia</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6 required">Comune</label>
           <!--end::Label-->
-          <!--begin::Input-->
+          <!--begin::Col-->
           <div class="col-lg-8 fv-row">
-            <input class="form-control form-control-lg fw-semobold" v-model="formData.State" type="text" required />
+            <div class="form-check form-switch form-check-custom form-check-solid">
+              <select class="form-select" v-model="formData.Town" required>
+                <option v-for="(city, index) in cities" :key="index" :value="city.Id">{{ city.Name }} </option>
+              </select>
+            </div>
           </div>
-          <!--end::Input-->
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+                 <!--begin::Input group-->
+         <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6 required">Località</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <div class="form-check form-switch form-check-custom form-check-solid">
+              <select class="form-control" v-model="formData.Location">
+                <option v-for="(location, index) in locations" :key="index" :value="location.Id">{{ location.Name }} </option>
+              </select>
+            </div>
+          </div>
+          <!--end::Col-->
         </div>
         <!--end::Input group-->
 
@@ -675,55 +712,55 @@
         <!--end::Input group-->
 
         <!--begin::Input group-->
-        <!-- <div class="d-flex flex-column mb-7 fv-row"> -->
+        <div class="d-flex flex-column mb-7 fv-row">
           <!--begin::Label-->
-          <!-- <label class="fs-6 fw-semobold mb-2"> -->
-            <!-- <span class="required">Tipologia Incarico</span> -->
-            <!-- <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i> -->
-          <!-- </label> -->
+          <label class="fs-6 fw-semobold mb-2">
+            <span class="required">Tipologia Incarico</span>
+            <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i>
+          </label>
           <!--end::Label-->
           <!--begin::Input-->
-          <!-- <select class="form-control" v-model="formData.TypeOfAssignment"> -->
-            <!-- <option value="Verbale">Verbale</option> -->
-            <!-- <option value="Esclusivo">Esclusivo</option> -->
-            <!-- <option value="Semi-Verbale">Semi-Verbale</option> -->
-          <!-- </select> -->
+          <select class="form-control" v-model="formData.TypeOfAssignment">
+            <option value="Verbale">Verbale</option>
+            <option value="Esclusivo">Esclusivo</option>
+            <option value="Semi-Verbale">Semi-Verbale</option>
+          </select>
           <!--end::Input-->
-        <!-- </div> -->
+        </div>
         <!--end::Input group-->
 
-        <!--begin::Col-->
-        <!-- <div class="d-flex flex-column mb-2 fv-row"> -->
+         <!--begin::Col-->
+        <div class="col-md-4 fv-row">
           <!--begin::Label-->
-          <!-- <label class="col-lg-4 col-form-label fw-semobold fs-6">Provvigione Concordata</label> -->
+          <label class="fs-6 fw-semobold mb-2">Provvigione Concordata</label>
           <!--end::Label-->
           <!--begin::Input-->
-          <!-- <el-form-item prop="AgreedCommission"> -->
-            <!-- <el-input v-model="formData.AgreedCommission" type="number" placeholder="Inserisci percentuale"> -->
-              <!-- <template #append> -->
-                <!-- <span>%</span> -->
-              <!-- </template> -->
-            <!-- </el-input> -->
-          <!-- </el-form-item> -->
+          <el-form-item prop="AgreedCommission">
+            <el-input v-model="formData.AgreedCommission" type="number" placeholder="Inserisci percentuale">
+              <template #append>
+                <span>%</span>
+              </template>
+            </el-input>
+          </el-form-item>
           <!--end::Input-->
-        <!-- </div> -->
+        </div>
         <!--end::Col-->
 
         <!--begin::Col-->
-        <!-- <div class="d-flex flex-column mb-2 fv-row"> -->
+        <div class="col-md-4 fv-row">
           <!--begin::Label-->
-          <!-- <label class="col-lg-4 col-form-label fw-semobold fs-6">Provvigione Forfettaria</label> -->
+          <label class="fs-6 fw-semobold mb-2">Provvigione Forfettaria</label>
           <!--end::Label-->
           <!--begin::Input-->
-          <!-- <el-form-item prop="FlatRateCommission"> -->
-            <!-- <el-input v-model="formData.FlatRateCommission" type="number" placeholder="Inserisci percentuale"> -->
-              <!-- <template #append> -->
-                <!-- <span>%</span> -->
-              <!-- </template> -->
-            <!-- </el-input> -->
-          <!-- </el-form-item> -->
+          <el-form-item prop="FlatRateCommission">
+            <el-input v-model="formData.FlatRateCommission" type="number" placeholder="Inserisci percentuale">
+              <template #append>
+                <span>%</span>
+              </template>
+            </el-input>
+          </el-form-item>
           <!--end::Input-->
-        <!-- </div> -->
+        </div>
         <!--end::Col-->
 
         <!--begin::Input group-->
@@ -855,6 +892,8 @@
 import AddNewForm from "@/components/modals/forms/AddNewForm.vue";
 import AddNewPreventive from "@/components/modals/forms/AddNewPreventive.vue";
 import { getAssetPath } from "@/core/helpers/assets";
+import { provinceCities } from "@/core/data/provinces";
+import { cityLocations } from "@/core/data/locations";
 import { defineComponent, onMounted, ref, watch } from "vue";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import {
@@ -886,8 +925,11 @@ export default defineComponent({
     const formRef = ref<null | HTMLFormElement>(null);
     const updateModalRef = ref<null | HTMLElement>(null);
     const typesavailable = ref<string[]>([]);
+    const cities = ref([]);
+    const locations = ref([]);
     const showTipologia = ref(false);
     const loading = ref<boolean>(true);
+    const firtLoad = ref(false);
     const formData = ref<RealEstateProperty>({
       Title: "",
       ShortTitle: "",
@@ -902,6 +944,7 @@ export default defineComponent({
       AddressLine: "",
       Town: "",
       State: "",
+      Location:"",
       PostCode: "",
       CommercialSurfaceate: 0,
       TotalBuildingfloors: 0,
@@ -932,9 +975,9 @@ export default defineComponent({
       AssignmentEnd: "",
       Agent: null,
       VideoUrl: "",
-      // AgreedCommission: 0,
-      // FlatRateCommission: 0,
-      // TypeOfAssignment: "",
+      AgreedCommission: 0,
+      FlatRateCommission: 0,
+      TypeOfAssignment: "",
     });
 
     const inserModel = ref<InsertModel>({
@@ -1015,10 +1058,16 @@ export default defineComponent({
       ],
     });
 
+    let selectedCities = ref<string | null>(null);
+    let selectedLocations = ref<string | null>(null);
+
     onMounted(async () => {
       loading.value = true;
+      firtLoad.value = true;
       formData.value = await getRealEstateProperty(id)
       formData.value.AssignmentEnd = formData.value.AssignmentEnd.split('T')[0]
+      selectedCities.value = formData.value.Town;
+      selectedLocations.value = formData.value.Location;
       inserModel.value = await getToInsert(store.user.AgencyId);
       // if(inserModel.value.Customers.length > 0){
       //   formData.value.CustomerId = inserModel.value.Customers[0].Id;
@@ -1026,8 +1075,50 @@ export default defineComponent({
       if (inserModel.value.Users.length > 0) {
         formData.value.AgentId = formData.value.AgentId;
       }
+      if (formData.value.State && provinceCities[formData.value.State]) {
+        cities.value = provinceCities[formData.value.State];
+      } else {
+        cities.value = [];
+        // formData.value.Town = null;
+      }
+      if (selectedCities.value && cityLocations[selectedCities.value]) {
+       locations.value = cityLocations[selectedCities.value];
+       } else {
+       locations.value = [];
+      }
       loading.value = false;
+      setTimeout(() => firtLoad.value = false, 3000);
     })
+
+     watch(
+    () => formData.value.State,
+    (newProvince) => {
+        if (!firtLoad.value) {
+            if (newProvince && provinceCities[newProvince]) {
+                cities.value = provinceCities[newProvince];
+                formData.value.Town = formData.value.Town ??(cities.value[0]?.Id || null);
+            } else {
+                cities.value = [];
+                formData.value.Town = null;
+            }
+         } else {
+            firtLoad.value = false;
+        }
+       }
+    );
+    watch(
+    () => formData.value.Town,
+    (newTown) => {
+       console.log(formData.value.Town)
+            if (newTown && cityLocations[newTown]) {
+                locations.value = cityLocations[newTown];
+                formData.value.Location = null;
+            } else {
+                locations.value = [];
+                formData.value.Location = null;
+            }
+        }
+);
 
     const onFileChanged = async (event: Event) => {
       const target = event.target as HTMLInputElement;
@@ -1272,7 +1363,11 @@ export default defineComponent({
       deleteItem,
       inserModel,
       user,
-      checkMove
+      checkMove,
+      selectedCities,
+      selectedLocations,
+      cities,
+      locations,
     };
   },
 });

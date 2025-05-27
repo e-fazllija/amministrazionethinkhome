@@ -329,47 +329,81 @@
                 </div>
                 <!--end::Input group-->
 
-                <!--begin::Input group-->
-                <div class="d-flex flex-column mb-7 fv-row">
-                  <!--begin::Label-->
-                  <label class="required fs-6 fw-semobold mb-2">Comune</label>
-                  <!--end::Label-->
-                  <!--begin::Input-->
-                  <el-form-item prop="Town">
-                    <el-input v-model="formData.Town" type="text" />
-                  </el-form-item>
-                  <!--end::Input-->
+                                <!--begin::Input group-->
+               <div class="d-flex flex-column mb-5 fv-row">
+                    <!--begin::Label-->
+                    <label class="fs-6 fw-semobold mb-2">
+                        <span class="required">Provincia</span>
+                        </label>
+                    <!--end::Label-->
+                    <!--begin::Input-->
+                    <select class="form-control" v-model="formData.State">
+                      <option value="Arezzo">Arezzo</option>
+                        <option value="Caserta">Caserta</option>
+                        <option value="Chieti">Chieti</option>
+                        <option value="Firenze">Firenze</option>
+                        <option value="Frosinone">Frosinone</option>
+                        <option value="LAquila">L'Aquila</option>
+                        <option value="Latina">Latina</option>
+                        <option value="Napoli">Napoli</option>
+                        <option value="Perugia">Perugia</option>
+                        <option value="Rieti">Rieti</option>
+                        <option value="Roma">Roma</option>
+                        <option value="Sassari">Sassari</option>
+                        <option value="Terni">Terni</option>
+                        <option value="Trento">Trento</option>
+                        <option value="Viterbo">Viterbo</option>
+                    </select>
+                    <!--end::Input-->
                 </div>
                 <!--end::Input group-->
 
                 <!--begin::Input group-->
+               <div class="d-flex flex-column mb-5 fv-row">
+                    <!--begin::Label-->
+                    <label class="fs-6 fw-semobold mb-2">
+                        <span class="required">Comune</span>
+                        </label>
+                    <!--end::Label-->
+                    <!--begin::Input-->
+                    <select class="form-select"  aria-label="Single select example" v-model="formData.Town" required>
+                        <option v-for="(city, index) in cities" :key="index" :value="city.Id">{{ city.Name }} </option>
+                    </select>
+                    <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+              
+                <!--begin::Input group-->
                 <div class="row g-9 mb-7">
-                  <!--begin::Col-->
-                  <div class="col-md-6 fv-row">
+
+                <!--begin::Input group-->
+               <div class="d-flex flex-column mb-5 fv-row">
                     <!--begin::Label-->
-                    <label class="required fs-6 fw-semobold mb-2">Provincia</label>
+                    <label class="fs-6 fw-semobold mb-2">
+                        <span class="required">Località</span>
+                        </label>
                     <!--end::Label-->
                     <!--begin::Input-->
-                    <el-form-item prop="State">
-                      <el-input v-model="formData.State" type="text" />
-                    </el-form-item>
+                    <select  class="form-select"  aria-label="Single select example" v-model="formData.Location">
+                        <option v-for="(location, index) in locations" :key="index" :value="location.Id">{{ location.Name }} </option>
+                    </select>
                     <!--end::Input-->
-                  </div>
-                  <!--end::Col-->
+                </div>
+                <!--end::Input group-->
 
-                  <!--begin::Col-->
+                <!--begin::Col-->
                   <div class="col-md-6 fv-row">
-                    <!--begin::Label-->
-                    <label class="required fs-6 fw-semobold mb-2">Codice Postale</label>
-                    <!--end::Label-->
+                  <!--begin::Label-->
+                  <label class="fs-6 fw-semobold mb-2">Codice Postale</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <el-form-item prop="PostCode">
+                    <el-input v-model="formData.PostCode" type="number" />
+                  </el-form-item>
+                  <!--end::Input-->
+                </div>
+                <!--end::Col-->
 
-                    <!--begin::Input-->
-                    <el-form-item prop="PostCode">
-                      <el-input v-model="formData.PostCode" type="number" />
-                    </el-form-item>
-                    <!--end::Input-->
-                  </div>
-                  <!--end::Col-->
                 </div>
                 <!--end::Input group-->
               </div>
@@ -630,8 +664,7 @@
                   </label>
                   <!--end::Label-->
                   <!--begin::Input-->
-                  <select class="form-control" v-model="formData.Exposure">
-                    <option value="">Selezionare l'esposizione</option>
+                  <select class="form-control" v-model="formData.Exposure" multiple>
                     <option value="Nord">Nord</option>
                     <option value="Sud">Sud</option>
                     <option value="Est">Est</option>
@@ -746,6 +779,58 @@
                 </div>
                 <!--end::Input group-->
 
+                        <!--begin::Input group-->
+        <div class="d-flex flex-column mb-7 fv-row">
+          <!--begin::Label-->
+          <label class="fs-6 fw-semobold mb-2">
+            <span class="required">Tipologia Incarico</span>
+            <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"></i>
+          </label>
+          <!--end::Label-->
+          <!--begin::Input-->
+          <select class="form-control" v-model="formData.TypeOfAssignment">
+            <option value="Verbale">Verbale</option>
+            <option value="Esclusivo">Esclusivo</option>
+            <option value="Semi-Verbale">Semi-Verbale</option>
+          </select>
+          <!--end::Input-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Col-->
+        <div class="col-md-4 fv-row">
+          <!--begin::Label-->
+          <label class="fs-6 fw-semobold mb-2">Provvigione Concordata</label>
+          <!--end::Label-->
+          <!--begin::Input-->
+          <el-form-item prop="AgreedCommission">
+            <el-input v-model="formData.AgreedCommission" type="number" placeholder="Inserisci percentuale">
+              <template #append>
+                <span>%</span>
+              </template>
+            </el-input>
+          </el-form-item>
+          <!--end::Input-->
+        </div>
+        <!--end::Col-->
+
+        <!--begin::Col-->
+        <div class="col-md-4 fv-row">
+          <!--begin::Label-->
+          <label class="fs-6 fw-semobold mb-2">Provvigione Forfettaria</label>
+          <!--end::Label-->
+          <!--begin::Input-->
+          <el-form-item prop="FlatRateCommission">
+            <el-input v-model="formData.FlatRateCommission" type="number" placeholder="Inserisci percentuale">
+              <template #append>
+                <span>%</span>
+              </template>
+            </el-input>
+          </el-form-item>
+          <!--end::Input-->
+        </div>
+        <!--end::Col-->
+
                 <!--begin::Input group-->
                 <div class="d-flex flex-column mb-2 fv-row">
                   <!--begin::Label-->
@@ -810,6 +895,8 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import { createRealEstateProperty, RealEstateProperty, getToInsert, InsertModel } from "@/core/data/properties";
 import { useAuthStore } from "@/stores/auth";
 import Multiselect from '@vueform/multiselect'
+import {cityLocations } from "@/core/data/locations";
+import {provinceCities } from "@/core/data/provinces";
 
 export default defineComponent({
   name: "add-property-modal",
@@ -818,6 +905,8 @@ export default defineComponent({
     const formRef = ref<null | HTMLFormElement>(null);
     const addPropertyModalRef = ref<null | HTMLElement>(null);
     const store = useAuthStore();
+    const cities = ref([]);
+    const locations = ref([]);
     const loading = ref<boolean>(false);
     const formData = ref<RealEstateProperty>({
       Title: "",
@@ -833,6 +922,7 @@ export default defineComponent({
       AddressLine: "",
       Town: "",
       State: "",
+      Location:"",
       PostCode: "",
       CommercialSurfaceate: 0,
       TotalBuildingfloors: 0,
@@ -861,11 +951,11 @@ export default defineComponent({
       CustomerId: null,
       AgentId: "",
       AssignmentEnd: "",
-      // TypeOfAssignment:"",
       Agent: null,
       VideoUrl: "",
-      // AgreedCommission: 0,
-      // FlatRateCommission: 0,
+      AgreedCommission: 0,
+      FlatRateCommission: 0,
+      TypeOfAssignment: "",
     });
     const inserModel = ref<InsertModel>({
       Customers: [],
@@ -905,6 +995,33 @@ export default defineComponent({
         }
       }
     );
+
+     watch(
+        () => formData.value.State,
+        (newProvince) => {
+            if (newProvince && provinceCities[newProvince]) {
+            cities.value = provinceCities[newProvince];
+            formData.value.Town = null;
+            } else {
+            cities.value = [];
+            formData.value.Town = null;
+            }
+        }
+        );
+
+        watch(
+        () => formData.value.Town,
+        (newTown) => {
+            if (newTown && cityLocations[newTown]) {
+            locations.value = cityLocations[newTown];
+            formData.value.Location = null;
+            } else {
+            locations.value = [];
+            formData.value.Location = null;
+            }
+        }
+        );
+
 
     const rules = ref({
       Title: [
@@ -1054,7 +1171,9 @@ export default defineComponent({
       typesavailable,
       selectedFile,
       onFileChanged,
-      inserModel
+      inserModel,
+      cities,
+      locations
     };
   },
 });
