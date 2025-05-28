@@ -187,7 +187,7 @@
         </div>
         <!--end::Input group-->
 
-                 <!--begin::Input group-->
+         <!--begin::Input group-->
          <div class="row mb-6">
           <!--begin::Label-->
           <label class="col-lg-4 col-form-label fw-semobold fs-6 required">Località</label>
@@ -196,6 +196,7 @@
           <div class="col-lg-8 fv-row">
             <div class="form-check form-switch form-check-custom form-check-solid">
               <select class="form-control" v-model="formData.Location">
+                <option value=""> </option>
                 <option v-for="(location, index) in locations" :key="index" :value="location.Id">{{ location.Name }} </option>
               </select>
             </div>
@@ -1058,20 +1059,13 @@ export default defineComponent({
       ],
     });
 
-    let selectedCities = ref<string | null>(null);
-    let selectedLocations = ref<string | null>(null);
 
     onMounted(async () => {
       loading.value = true;
       firtLoad.value = true;
       formData.value = await getRealEstateProperty(id)
       formData.value.AssignmentEnd = formData.value.AssignmentEnd.split('T')[0]
-      selectedCities.value = formData.value.Town;
-      selectedLocations.value = formData.value.Location;
       inserModel.value = await getToInsert(store.user.AgencyId);
-      // if(inserModel.value.Customers.length > 0){
-      //   formData.value.CustomerId = inserModel.value.Customers[0].Id;
-      // }
       if (inserModel.value.Users.length > 0) {
         formData.value.AgentId = formData.value.AgentId;
       }
@@ -1079,21 +1073,20 @@ export default defineComponent({
         cities.value = provinceCities[formData.value.State];
       } else {
         cities.value = [];
-        // formData.value.Town = null;
       }
-      if (selectedCities.value && cityLocations[selectedCities.value]) {
-       locations.value = cityLocations[selectedCities.value];
+      if (formData.value.Town && cityLocations[formData.value.Town]) {
+       locations.value = cityLocations[formData.value.Town];
        } else {
        locations.value = [];
       }
-      loading.value = false;
       setTimeout(() => firtLoad.value = false, 3000);
+      loading.value = false;
+      console.log(formData.value.Location)
     })
 
      watch(
     () => formData.value.State,
     (newProvince) => {
-        if (!firtLoad.value) {
             if (newProvince && provinceCities[newProvince]) {
                 cities.value = provinceCities[newProvince];
                 formData.value.Town = formData.value.Town ??(cities.value[0]?.Id || null);
@@ -1101,18 +1094,13 @@ export default defineComponent({
                 cities.value = [];
                 formData.value.Town = null;
             }
-         } else {
-            firtLoad.value = false;
-        }
        }
     );
     watch(
     () => formData.value.Town,
     (newTown) => {
-       console.log(formData.value.Town)
             if (newTown && cityLocations[newTown]) {
                 locations.value = cityLocations[newTown];
-                formData.value.Location = null;
             } else {
                 locations.value = [];
                 formData.value.Location = null;
@@ -1364,8 +1352,6 @@ export default defineComponent({
       inserModel,
       user,
       checkMove,
-      selectedCities,
-      selectedLocations,
       cities,
       locations,
     };
