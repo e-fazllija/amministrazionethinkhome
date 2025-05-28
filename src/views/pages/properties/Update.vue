@@ -187,7 +187,7 @@
         </div>
         <!--end::Input group-->
 
-                 <!--begin::Input group-->
+         <!--begin::Input group-->
          <div class="row mb-6">
           <!--begin::Label-->
           <label class="col-lg-4 col-form-label fw-semobold fs-6 required">Località</label>
@@ -196,6 +196,7 @@
           <div class="col-lg-8 fv-row">
             <div class="form-check form-switch form-check-custom form-check-solid">
               <select class="form-control" v-model="formData.Location">
+                <option value=""> </option>
                 <option v-for="(location, index) in locations" :key="index" :value="location.Id">{{ location.Name }} </option>
               </select>
             </div>
