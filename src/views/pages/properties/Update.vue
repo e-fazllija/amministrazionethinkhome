@@ -701,6 +701,22 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Archiviato</label>
+          <!--end::Label-->
+          <!--begin::Input-->
+          <div class="col-lg-8 fv-row">
+            <div class="form-check form-switch form-check-custom form-check-solid">
+              <input class="form-check-input" type="checkbox" value="" v-model="formData.Archived" />
+            </div>
+
+          </div>
+          <!--end::Input-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
           <label class="col-lg-4 col-form-label fw-semobold fs-6">Data fine incarico</label>
           <!--end::Label-->
           <!--begin::Input-->
@@ -867,7 +883,7 @@
           </button>
         </div>
         <div>
-          <button v-if="user.Role === 'Admin'" type="button" @click="deleteItem()"
+          <button v-if="user.Role === 'Admin' || (user.Role === 'Agenzia' && user.Id === formData.Agent.AgencyId )" type="button" @click="deleteItem()"
             class="btn btn-danger btn-active-light-primary me-2">
             Elimina
           </button>
@@ -941,6 +957,7 @@ export default defineComponent({
       Auction: false,
       Negotiation: false,
       Sold: false,
+      Archived: false,
       Status: "",
       AddressLine: "",
       Town: "",

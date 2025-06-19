@@ -90,6 +90,9 @@
         <template v-slot:PriceTo="{ row: request }">
           {{ request.PriceTo }}
         </template>
+        <template v-slot:Status="{ row: request }">
+          {{ request.Status }}
+        </template>
         <template v-slot:Actions="{ row: request }">
           <router-link :to="{ name: 'request', params: { id: request.Id } }" class="btn btn-light-info me-1"
             target="_blank" rel="noopener noreferrer">Dettagli</router-link>
@@ -178,6 +181,12 @@ export default defineComponent({
         columnWidth: 100,
       },
       {
+        columnName: "Stato",
+        columnLabel: "Status",
+        sortEnabled: true,
+        columnWidth: 100,
+      },
+      {
         columnName: "Azioni",
         columnLabel: "Actions",
         sortEnabled: false,
@@ -215,7 +224,8 @@ export default defineComponent({
           Town: results[key].Town,
           PriceTo: results[key].PriceTo,
           PriceFrom: results[key].PriceFrom,
-          PropertyType: results[key].PropertyType
+          PropertyType: results[key].PropertyType,
+          Status: results[key].Archived == true ? "Archviviata" : results[key].Closed == true ? "Chiusa" : "Aperta"
         } as RequestTabelData;
 
         tableData.value.push(item)
