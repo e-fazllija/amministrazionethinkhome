@@ -15,6 +15,7 @@ export class RealEstateProperty {
   Auction: boolean;
   Negotiation: boolean;
   Sold: boolean;
+  Archived: boolean;
   Status: string;
   AddressLine: string;
   Town: string;

@@ -50,6 +50,7 @@ export class RequestTabelData {
   PriceTo: number;
   PriceFrom: number;
   PropertyType: string;
+  Status:string;
 }
 
 export class InsertModel {
