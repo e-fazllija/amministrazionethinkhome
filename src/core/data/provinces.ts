@@ -90,6 +90,7 @@ export const provinceCities = {
     { Id: 'Carpineto Romano', Name: 'Carpineto Romano' },
     { Id: 'Casape', Name: 'Casape' },
     { Id: 'Castel Gandolfo', Name: 'Castel Gandolfo' },
+    { Id: 'Castel Giubileo', Name: 'Castel Giubileo' },
     { Id: 'Castel Madama', Name: 'Castel Madama' },
     { Id: 'Castel San Pietro', Name: 'Castel San Pietro' },
     { Id: 'Castel San Pietro Romano', Name: 'Castel San Pietro Romano' },
