@@ -28,6 +28,23 @@
               data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
               data-kt-scroll-dependencies="#kt_modal_add_agency_header"
               data-kt-scroll-wrappers="#kt_modal_add_agency_scroll" data-kt-scroll-offset="300px">
+
+               <!--begin::Input group-->
+               <div class="fv-row mb-7">
+                <!--begin::Label-->
+                <label class="col-lg-4 col-form-label fw-semobold fs-6">Stato Attivo / Non Attivo</label>
+                <!--end::Label-->
+                <!--begin::Input-->
+                <div class="col-lg-8 fv-row">
+                  <div class="form-check form-switch form-check-custom form-check-solid">
+                    <input class="form-check-input" type="checkbox" value="" v-model="formData.EmailConfirmed" />
+                  </div>
+
+                </div>
+                <!--end::Input-->
+              </div>
+              <!--end::Input group-->
+
               <!--begin::Input group-->
               <div class="fv-row mb-7">
                 <!--begin::Label-->
@@ -254,7 +271,8 @@ export default defineComponent({
       Address: "",
       Town: "",
       Region: "",
-      Password: ""
+      Password: "",
+      EmailConfirmed: null
     });
 
     watch(() => props.Id, async (first, second) => {

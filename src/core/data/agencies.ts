@@ -18,6 +18,7 @@ export class Agency {
   Token?: string;
   Role? = "Agency";
   Password?: string;
+  EmailConfirmed: boolean;
 }
 
 const getAgencies = (filterRequest: string) : Promise<Array<Agency>> => {
