@@ -3,7 +3,7 @@ import { useAuthStore, type User } from "@/stores/auth";
 const store = useAuthStore();
 
 export class Agency {
-  Id?: number;
+  Id?: string;
   Name: string;
   LastName: string;
   Email: string;
@@ -31,8 +31,8 @@ const getAgencies = (filterRequest: string) : Promise<Array<Agency>> => {
       return result;
     })
     .catch(({ response }) => {
-      console.error(response);
-      return [];
+      store.setError(response.data.Message, response.status);
+      return undefined;
     });
 };
 
@@ -43,7 +43,7 @@ const getAgency = (id: String) : Promise<Agency> => {
       return result;
     })
     .catch(({ response }) => {
-      console.log(response);
+      store.setError(response.data.Message, response.status);
       return undefined;
     });
 };
@@ -62,7 +62,7 @@ const updateAgency = async (formData: any) => {
       return result;
     })
     .catch(({ response }) => {
-      console.log(response);
+      store.setError(response.data.Message, response.status);
       return undefined;
     });
 };
@@ -74,7 +74,7 @@ const deleteAgency = async (id: String) => {
       return result;
     })
     .catch(({ response }) => {
-      console.log(response);
+      store.setError(response.data.Message, response.status);
       return undefined;
     });
 };
