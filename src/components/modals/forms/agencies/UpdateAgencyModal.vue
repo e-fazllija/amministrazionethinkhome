@@ -217,6 +217,10 @@
             </button>
             <!--end::Button-->
 
+             <button v-if="user.Role == 'Admin'" type="button" @click="deleteItem" class="btn btn-danger me-3">
+              Elimina
+            </button>
+
             <!--begin::Button-->
             <button :data-kt-indicator="loading ? 'on' : null" class="btn btn-lg btn-primary" type="submit">
               <span v-if="!loading" class="indicator-label">
@@ -243,8 +247,8 @@ import { getAssetPath } from "@/core/helpers/assets";
 import { defineComponent, ref, watch } from "vue";
 import { hideModal } from "@/core/helpers/dom";
 import Swal from "sweetalert2/dist/sweetalert2.js";
-import { updateAgency, Agency, getAgency } from "@/core/data/agencies";
-
+import { updateAgency, Agency, getAgency, deleteAgency } from "@/core/data/agencies";
+import { useAuthStore, type User } from "@/stores/auth";
 
 export default defineComponent({
   name: "update-agency-modal",
@@ -260,8 +264,10 @@ export default defineComponent({
     const formRef = ref<null | HTMLFormElement>(null);
     const updateAgencyModalRef = ref<null | HTMLElement>(null);
     const loading = ref<boolean>(false);
+    const store = useAuthStore();
+    const user = store.user;
     const formData = ref<Agency>({
-      Id: 0,
+      Id: "",
       Name: "",
       LastName: "",
       Email: "",
@@ -337,37 +343,37 @@ export default defineComponent({
         if (valid) {
           loading.value = true;
           await updateAgency(formData.value)
-          .then(() => {
-                loading.value = false;
+          
+          const error = store.errors;
 
-                Swal.fire({
-                  text: "Continua!",
-                  icon: "success",
-                  buttonsStyling: false,
-                  confirmButtonText: "Continua!",
-                  heightAuto: false,
-                  customClass: {
-                    confirmButton: "btn btn-primary",
-                  },
-                }).then(() => {
-                  hideModal(updateAgencyModalRef.value);
-                });
-                emit('formUpdateSubmitted', formData.value);
-            })
-            .catch(({ response }) => {
-              console.log(response);
+          if (!error) {
+            Swal.fire({
+              text: "Operazione completata!",
+              icon: "success",
+              buttonsStyling: false,
+              confirmButtonText: "Continua!",
+              heightAuto: false,
+              customClass: {
+                confirmButton: "btn fw-semobold btn-light-primary",
+              },
+            }).then(function () {
+              hideModal(updateAgencyModalRef.value);
+              emit('formUpdateSubmitted', formData.value);
               loading.value = false;
-              Swal.fire({
-                text: "Attenzione, si è verificato un errore.",
-                icon: "error",
-                buttonsStyling: false,
-                confirmButtonText: "Continua!",
-                heightAuto: false,
-                customClass: {
-                  confirmButton: "btn btn-primary",
-                },
-              });
             });
+          } else {
+            loading.value = false;
+            Swal.fire({
+              text: error as string,
+              icon: "error",
+              buttonsStyling: false,
+              confirmButtonText: "Riprova!",
+              heightAuto: false,
+              customClass: {
+                confirmButton: "btn fw-semobold btn-light-danger",
+              },
+            });
+          }
         } else {
           loading.value = false;
           Swal.fire({
@@ -385,14 +391,53 @@ export default defineComponent({
       });
     };
 
+     const deleteItem = async () => {
+      
+          loading.value = true;
+          await deleteAgency(formData.value.Id)
+          
+          const error = store.errors;
+
+          if (!error) {
+            Swal.fire({
+              text: "Operazione completata!",
+              icon: "success",
+              buttonsStyling: false,
+              confirmButtonText: "Continua!",
+              heightAuto: false,
+              customClass: {
+                confirmButton: "btn fw-semobold btn-light-primary",
+              },
+            }).then(function () {
+              hideModal(updateAgencyModalRef.value);
+              emit('formUpdateSubmitted', formData.value);
+              loading.value = false;
+            });
+          } else {
+            loading.value = false;
+            Swal.fire({
+              text: error as string,
+              icon: "error",
+              buttonsStyling: false,
+              confirmButtonText: "Riprova!",
+              heightAuto: false,
+              customClass: {
+                confirmButton: "btn fw-semobold btn-light-danger",
+              },
+            });
+          }
+    };
+
     return {
       formData,
       rules,
       submit,
+      deleteItem,
       formRef,
       loading,
       updateAgencyModalRef,
-      getAssetPath
+      getAssetPath,
+      user
     };
   },
 });
