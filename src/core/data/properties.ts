@@ -98,6 +98,11 @@ export class Notes {
   Text: string;
 }
 
+export class SearchModel {
+  Agencies: User[];
+  Agents: User[];
+}
+
 const getRealEstateProperties = (agencyId: string, filterRequest: string, contract?: string, priceFrom?: number, priceTo?: number, category?: string, typologie?: string, town?: string[]) : Promise<Array<RealEstateProperty>> => {
    return ApiService.get(
     `RealEstateProperty/Get?currentPage=0&agencyId=${agencyId}&filterRequest=${filterRequest}&contract=${contract}&priceFrom=${priceFrom}&priceTo=${priceTo}&category=${category}&typologie=${typologie}&town=${town}`,
@@ -291,6 +296,26 @@ const deletePhoto = async (id: number) => {
     });
 }
 
+const getSearchItems = (userId: string, agencyId?: string): Promise<SearchModel> => {
+  return ApiService.get(
+    `RealEstateProperty/GetSearchItems?userId=${userId}&agencyId=${agencyId}`,
+    ""
+  )
+    .then(({ data }) => {
+      const agencies = data.Agencies as Array<User>;
+      const agents = data.Agents as Array<User>;
+      const result = <SearchModel>({
+        Agencies: agencies,
+        Agents: agents
+      })
+      return result;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
+
 export { 
   getRealEstateProperties, 
   getRealEstateProperty, 
@@ -301,4 +326,5 @@ export {
   setRealEstatePropertyPhotoHighlighted, 
   deletePhoto,
   uploadFiles,
-  updatePhotosOrder }
+  updatePhotosOrder,
+  getSearchItems }

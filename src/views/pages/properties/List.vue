@@ -77,8 +77,9 @@
            </span>
       </div>
      </div>
-     <div v-if="user.Role == 'Admin'" class="col-lg-3 col-md-3 col-sm-12">
+     <div class="col-lg-3 col-md-3 col-sm-12"><!-- v-if="user.Role == 'Admin'" -->
         <select class="form-control selectpicker" v-model="agencyId">
+          <option value="">Tutte le agenzie</option>
           <option v-for="(item, index) in defaultSearchItems.Agencies" :key="index" :value="item.Id">{{ item.Name }} {{
             item.LastName }}</option>
         </select>
@@ -145,13 +146,12 @@ import Datatable from "@/components/kt-datatable/KTDataTable.vue";
 import type { Sort } from "@/components/kt-datatable//table-partials/models";
 import ExportCustomerModal from "@/components/modals/forms/ExportCustomerModal.vue";
 import AddPropertyModal from "@/components/modals/forms/AddPropertyModal.vue";
-import { getRealEstateProperties, deleteRealEstateProperty, RequestTabelData } from "@/core/data/properties";
+import { getRealEstateProperties, deleteRealEstateProperty, RequestTabelData, getSearchItems, SearchModel } from "@/core/data/properties";
 import arraySort from "array-sort";
 import { MenuComponent } from "@/assets/ts/components";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import { useAuthStore } from "@/stores/auth";
 import Multiselect from '@vueform/multiselect'
-import { getSearchItems, SearchModel } from "@/core/data/events";
 
 export default defineComponent({
   name: "properties",
@@ -257,9 +257,9 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      if (authStore.user.Role == "Admin") {
+      // if (authStore.user.Role == "Admin") {
         defaultSearchItems.value = await getSearchItems(authStore.user.Id);
-      }
+      // }
       agencyId.value = authStore.user.AgencyId;
 
       await getItems(agencyId.value, search.value, contract.value, fromPrice.value, toPrice.value, category.value, typology.value, locations.value);
