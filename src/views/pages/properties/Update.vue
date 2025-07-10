@@ -832,7 +832,7 @@
                         <div class="overlay-wrapper">
                           <img :src="element.Url" alt="" class="w-100 card-rounded">
                         </div>
-                        <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
+                        <div v-if="user.Id === formData.AgentId || user.Role === 'Admin' || formData.Agent.AgencyId === user.Id" class="overlay-layer card-rounded bg-dark bg-opacity-25">
                           <button v-if="!element.Highlighted" type="button" class="btn btn-primary btn-shadow"
                             @click="setPhotoHighlighted(element.Id)">Imposta immagine principale</button>
                           <button class="btn btn-light-danger btn-shadow ms-2" type="button"
