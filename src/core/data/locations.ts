@@ -1,7 +1,28 @@
 export const cityLocations = {
+  "Ardea": [
+    { Id: 'Centro Storico', Name: 'Centro Storico' },
+    { Id: 'Nuova California', Name: 'Nuova California' },
+    { Id: 'Tor San Lorenzo', Name: 'Tor San Lorenzo' },
+    { Id: 'Marina di Ardea', Name: 'Marina di Ardea' },
+    { Id: 'Castagnetta', Name: 'Castagnetta' }
+  ],
   "Cave": [
     { Id: 'Colle Palme', Name: 'Colle Palme' },
     { Id: 'San Bartolomeo', Name: 'San Bartolomeo' }
+  ],
+  "Fiumicino": [
+    { Id: 'Fiumicino Paese', Name: 'Fiumicino Paese' },
+    { Id: 'Isola Sacra', Name: 'Isola Sacra' },
+    { Id: 'Focene', Name: 'Focene' },
+    { Id: 'Fregene', Name: 'Fregene' },
+    { Id: 'Palidoro', Name: 'Palidoro' },
+    { Id: 'Parco Leonardo', Name: 'Parco Leonardo' }
+  ],
+  "Genazzano": [
+    { Id: 'Centro Storico', Name: 'Centro Storico' },
+    { Id: 'San Vito', Name: 'San Vito' },
+    { Id: 'Colle Pizzuto', Name: 'Colle Pizzuto' },
+    { Id: 'Ponte Sfondato', Name: 'Ponte Sfondato' }
   ],
   "Guidonia Montecelio": [
     { Id: 'Albuccione', Name: 'Albuccione' },
@@ -99,13 +120,14 @@ export const cityLocations = {
     { Id: 'Villaggio Breda', Name: 'Villaggio Breda' },
     { Id: 'Villaggio Prenestino', Name: 'Villaggio Prenestino' }
   ],
-  "Fiumicino": [
-    { Id: 'Fiumicino Paese', Name: 'Fiumicino Paese' },
-    { Id: 'Isola Sacra', Name: 'Isola Sacra' },
-    { Id: 'Focene', Name: 'Focene' },
-    { Id: 'Fregene', Name: 'Fregene' },
-    { Id: 'Palidoro', Name: 'Palidoro' },
-    { Id: 'Parco Leonardo', Name: 'Parco Leonardo' }
+  "Tivoli": [
+    { Id: 'Centro Storico', Name: 'Centro Storico' },
+    { Id: 'Tivoli Terme', Name: 'Tivoli Terme' },
+    { Id: 'Villa Adriana', Name: 'Villa Adriana' },
+    { Id: 'Campolimpido', Name: 'Campolimpido' },
+    { Id: 'Colle di Tivoli', Name: 'Colle di Tivoli' },
+    { Id: 'Ponte Lucano', Name: 'Ponte Lucano' },
+    { Id: 'San Paolo', Name: 'San Paolo' }
   ],
   "Zagarolo": [
     { Id: 'Centro Paese', Name: 'Centro Paese' },
