@@ -291,3 +291,46 @@ export const updateLocationOrder = async (locations: LocationUpdateModel[]): Pro
     throw error;
   }
 };
+
+// Funzione per ottenere le città disponibili
+export const getCities = async (): Promise<Array<{Id: string, Name: string}>> => {
+  try {
+    const groupedData = await getGroupedLocations();
+    return groupedData.map(cityGroup => ({
+      Id: cityGroup.City,
+      Name: cityGroup.City
+    }));
+  } catch (error: any) {
+    store.setError(error.response?.data?.message || 'Errore nel caricamento delle città', error.response?.status || 500);
+    throw error;
+  }
+};
+
+// Funzione per ottenere le località di una città specifica
+export const getLocationsByCity = async (cityName: string): Promise<Array<{Id: string, Name: string}>> => {
+  try {
+    const groupedData = await getGroupedLocations();
+    const cityGroup = groupedData.find(city => city.City === cityName);
+    return cityGroup ? cityGroup.Locations : [];
+  } catch (error: any) {
+    store.setError(error.response?.data?.message || 'Errore nel caricamento delle località per città', error.response?.status || 500);
+    throw error;
+  }
+};
+
+// Funzione per ottenere tutte le località in formato compatibile con cityLocations
+export const getCityLocationsMap = async (): Promise<{[key: string]: Array<{Id: string, Name: string}>}> => {
+  try {
+    const groupedData = await getGroupedLocations();
+    const cityLocationsMap: {[key: string]: Array<{Id: string, Name: string}>} = {};
+    
+    groupedData.forEach(cityGroup => {
+      cityLocationsMap[cityGroup.City] = cityGroup.Locations;
+    });
+    
+    return cityLocationsMap;
+  } catch (error: any) {
+    store.setError(error.response?.data?.message || 'Errore nel caricamento della mappa città-località', error.response?.status || 500);
+    throw error;
+  }
+};

@@ -456,7 +456,7 @@
   import { countries } from "@/core/data/countries";
   import Swal from "sweetalert2/dist/sweetalert2.js";
   import {createRequest, Request, InsertModel, getToInsert } from "@/core/data/requests";
-  import {cityLocations } from "@/core/data/locations";
+  import { getCities, getLocationsByCity, getGroupedLocations } from "@/core/data/locations";
   import {provinceCities } from "@/core/data/provinces";
   import { useAuthStore, type User } from "@/stores/auth";
   import Multiselect from '@vueform/multiselect'
@@ -470,8 +470,9 @@
       const addRequestModalRef = ref<null | HTMLElement>(null);
       const loading = ref<boolean>(false);
       const store = useAuthStore();
-      const cities = ref([]);
-      const locations = ref([]);
+      const cities = ref<Array<{Id: string, Name: string}>>([]);
+      const locations = ref<Array<{Id: string, Name: string}>>([]);
+      const cityLocationsMap = ref<{[key: string]: Array<{Id: string, Name: string}>}>({});
       const formData = ref<Request>({
         CustomerId: null,  
         Contract: "Vendita",
@@ -502,12 +503,32 @@
             Users: []
         });
 
+        // Carica le città e le località dal database
+        const loadCitiesAndLocations = async () => {
+          try {
+            const citiesData = await getCities();
+            cities.value = citiesData;
+            
+            // Carica anche la mappa città-località per il watch
+            const groupedData = await getGroupedLocations();
+            groupedData.forEach(cityGroup => {
+              cityLocationsMap.value[cityGroup.City] = cityGroup.Locations;
+            });
+          } catch (error) {
+            console.error("Errore nel caricamento delle città:", error);
+          }
+        };
+
         onMounted(async () => {
         loading.value = true;
         inserModel.value = await getToInsert(store.user.AgencyId);
         if(inserModel.value.Customers.length > 0){
           formData.value.CustomerId = inserModel.value.Customers[0].Id;
         } 
+        
+        // Carica le città e le località dal database
+        await loadCitiesAndLocations();
+        
         loading.value = false;
       })
         
@@ -547,13 +568,14 @@
 
       watch(
         () => formData.value.Province,
-        (newProvince) => {
-            if (newProvince && provinceCities[newProvince]) {
-            cities.value = provinceCities[newProvince];
-            formData.value.Town = null;
+        async (newProvince) => {
+            if (newProvince) {
+                // Carica le città dal database invece di provinceCities
+                await loadCitiesAndLocations();
+                formData.value.Town = null;
             } else {
-            cities.value = [];
-            formData.value.Town = null;
+                cities.value = [];
+                formData.value.Town = null;
             }
         }
         );
@@ -563,8 +585,8 @@
         (newTown) => {
           if (Array.isArray(newTown) && newTown.length > 0) {
             locations.value = newTown
-              .filter(city => cityLocations[city])
-              .flatMap(city => cityLocations[city]);
+              .filter(city => cityLocationsMap.value[city])
+              .flatMap(city => cityLocationsMap.value[city]);
             formData.value.Location = null;
           } else {
             locations.value = [];
@@ -633,6 +655,7 @@
         cities,
         inserModel,
         locations,
+        loadCitiesAndLocations,
       };
     },
   });

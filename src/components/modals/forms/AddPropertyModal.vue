@@ -926,7 +926,7 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import { createRealEstateProperty, RealEstateProperty, getToInsert, InsertModel } from "@/core/data/properties";
 import { useAuthStore } from "@/stores/auth";
 import Multiselect from '@vueform/multiselect'
-import {cityLocations } from "@/core/data/locations";
+import { getCities, getLocationsByCity, getGroupedLocations } from "@/core/data/locations";
 import {provinceCities } from "@/core/data/provinces";
 
 export default defineComponent({
@@ -936,8 +936,9 @@ export default defineComponent({
     const formRef = ref<null | HTMLFormElement>(null);
     const addPropertyModalRef = ref<null | HTMLElement>(null);
     const store = useAuthStore();
-    const cities = ref([]);
-    const locations = ref([]);
+    const cities = ref<Array<{Id: string, Name: string}>>([]);
+    const locations = ref<Array<{Id: string, Name: string}>>([]);
+    const cityLocationsMap = ref<{[key: string]: Array<{Id: string, Name: string}>}>({});
     const loading = ref<boolean>(false);
     const formData = ref<RealEstateProperty>({
       Title: "",
@@ -996,6 +997,22 @@ export default defineComponent({
     });
     const showTipologia = ref(true);
 
+    // Carica le città e le località dal database
+    const loadCitiesAndLocations = async () => {
+      try {
+        const citiesData = await getCities();
+        cities.value = citiesData;
+        
+        // Carica anche la mappa città-località per il watch
+        const groupedData = await getGroupedLocations();
+        groupedData.forEach(cityGroup => {
+          cityLocationsMap.value[cityGroup.City] = cityGroup.Locations;
+        });
+      } catch (error) {
+        console.error("Errore nel caricamento delle città:", error);
+      }
+    };
+
     const selectedFile = ref<FileList | null>(null);
     const onFileChanged = (event: Event) => {
       const target = event.target as HTMLInputElement;
@@ -1031,13 +1048,14 @@ export default defineComponent({
 
      watch(
         () => formData.value.State,
-        (newProvince) => {
-            if (newProvince && provinceCities[newProvince]) {
-            cities.value = provinceCities[newProvince];
-            formData.value.Town = null;
+        async (newProvince) => {
+            if (newProvince) {
+                // Carica le città dal database invece di provinceCities
+                await loadCitiesAndLocations();
+                formData.value.Town = null;
             } else {
-            cities.value = [];
-            formData.value.Town = null;
+                cities.value = [];
+                formData.value.Town = null;
             }
         }
         );
@@ -1045,12 +1063,12 @@ export default defineComponent({
         watch(
         () => formData.value.Town,
         (newTown) => {
-            if (newTown && cityLocations[newTown]) {
-            locations.value = cityLocations[newTown];
-            formData.value.Location = null;
+            if (newTown && cityLocationsMap.value[newTown]) {
+                locations.value = cityLocationsMap.value[newTown];
+                formData.value.Location = null;
             } else {
-            locations.value = [];
-            formData.value.Location = null;
+                locations.value = [];
+                formData.value.Location = null;
             }
         }
         );
@@ -1144,6 +1162,9 @@ export default defineComponent({
       if (inserModel.value.Users.length > 0) {
         formData.value.AgentId = store.user.Id;
       }
+      
+      // Carica le città e le località dal database
+      await loadCitiesAndLocations();
     })
 
     const submit = async () => {
@@ -1206,7 +1227,8 @@ export default defineComponent({
       onFileChanged,
       inserModel,
       cities,
-      locations
+      locations,
+      loadCitiesAndLocations
     };
   },
 });
