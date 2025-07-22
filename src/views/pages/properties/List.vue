@@ -152,7 +152,7 @@ import { MenuComponent } from "@/assets/ts/components";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import { useAuthStore } from "@/stores/auth";
 import Multiselect from '@vueform/multiselect'
-import { cityLocations } from "@/core/data/locations";
+import { getGroupedLocations } from "@/core/data/locations";
 
 export default defineComponent({
   name: "properties",
@@ -218,6 +218,7 @@ export default defineComponent({
       Agencies: [],
       Agents: [],
     });
+    const groupedLocations = ref([]);
 
     const search = ref<string>("");
     const fromPrice = ref<number>(0);
@@ -262,6 +263,15 @@ export default defineComponent({
         defaultSearchItems.value = await getSearchItems(authStore.user.Id);
       // }
       agencyId.value = authStore.user.AgencyId;
+
+      // Carica le località dal database
+      try {
+        groupedLocations.value = await getGroupedLocations();
+        console.log("Località caricate (properties):", groupedLocations.value);
+      } catch (error) {
+        console.error("Errore nel caricamento delle località:", error);
+        groupedLocations.value = [];
+      }
 
       await getItems(agencyId.value, search.value, contract.value, fromPrice.value, toPrice.value, category.value, typology.value, locations.value);
     });
@@ -354,7 +364,8 @@ export default defineComponent({
       user,
       agencyId,
       defaultSearchItems,
-      typology
+      typology,
+      groupedLocations
     };
   },
   data() {
@@ -365,20 +376,31 @@ export default defineComponent({
     options() {
       const options = [{ value: "", label: "Qualsiasi" }];
       
-      // Add all cities and their zones from cityLocations
-      Object.entries(cityLocations).forEach(([city, zones]) => {
-        // Add the city itself
-        options.push({ value: city.toUpperCase(), label: `LAZIO \\ ROMA (RM) \\ ${city.toUpperCase()}` });
-        
-        // Add all zones for this city
-        zones.forEach(zone => {
+      console.log("groupedLocations in computed (properties):", this.groupedLocations);
+      
+      // Se abbiamo i dati dal database, li utilizziamo
+      if (this.groupedLocations && Array.isArray(this.groupedLocations)) {
+        this.groupedLocations.forEach((cityGroup) => {
+          console.log("Processing cityGroup (properties):", cityGroup);
+          
+          // Add the city itself
           options.push({ 
-            value: zone.Id.toUpperCase(), 
-            label: `LAZIO \\ ROMA (RM) \\ ${city.toUpperCase()} \\ ${zone.Name.toUpperCase()}` 
+            value: cityGroup.city.toUpperCase(), 
+            label: `LAZIO \\ ROMA (RM) \\ ${cityGroup.city.toUpperCase()}` 
+          });
+          
+          // Add all zones for this city
+          cityGroup.locations.forEach(location => {
+            console.log("Processing location (properties):", location);
+            options.push({ 
+              value: location.id.toUpperCase(), 
+              label: `LAZIO \\ ROMA (RM) \\ ${cityGroup.city.toUpperCase()} \\ ${location.name.toUpperCase()}` 
+            });
           });
         });
-      });
+      }
       
+      console.log("Final options (properties):", options);
       return options;
     }
   },
