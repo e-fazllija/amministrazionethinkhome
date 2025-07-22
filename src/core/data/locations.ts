@@ -1,7 +1,28 @@
 export const cityLocations = {
+  "Ardea": [
+    { Id: 'Centro Storico', Name: 'Centro Storico' },
+    { Id: 'Nuova California', Name: 'Nuova California' },
+    { Id: 'Tor San Lorenzo', Name: 'Tor San Lorenzo' },
+    { Id: 'Marina di Ardea', Name: 'Marina di Ardea' },
+    { Id: 'Castagnetta', Name: 'Castagnetta' }
+  ],
   "Cave": [
     { Id: 'Colle Palme', Name: 'Colle Palme' },
     { Id: 'San Bartolomeo', Name: 'San Bartolomeo' }
+  ],
+  "Fiumicino": [
+    { Id: 'Fiumicino Paese', Name: 'Fiumicino Paese' },
+    { Id: 'Isola Sacra', Name: 'Isola Sacra' },
+    { Id: 'Focene', Name: 'Focene' },
+    { Id: 'Fregene', Name: 'Fregene' },
+    { Id: 'Palidoro', Name: 'Palidoro' },
+    { Id: 'Parco Leonardo', Name: 'Parco Leonardo' }
+  ],
+  "Genazzano": [
+    { Id: 'Centro Storico', Name: 'Centro Storico' },
+    { Id: 'San Vito', Name: 'San Vito' },
+    { Id: 'Colle Pizzuto', Name: 'Colle Pizzuto' },
+    { Id: 'Ponte Sfondato', Name: 'Ponte Sfondato' }
   ],
   "Guidonia Montecelio": [
     { Id: 'Albuccione', Name: 'Albuccione' },
@@ -32,13 +53,16 @@ export const cityLocations = {
   "Roma": [
     { Id: 'Acilia', Name: 'Acilia' },
     { Id: 'Alessandrino', Name: 'Alessandrino' },
+    { Id: 'Axa', Name: 'Axa' },
     { Id: 'Boccea', Name: 'Boccea' },
     { Id: 'Borghesiana', Name: 'Borghesiana' },
+    { Id: 'Casal Bernocchi', Name: 'Casal Bernocchi' },
     { Id: 'Casal Palocco', Name: 'Casal Palocco' },
     { Id: 'Casalotti', Name: 'Casalotti' },
     { Id: 'Castel Fusano', Name: 'Castel Fusano' },
     { Id: 'Castelverde', Name: 'Castelverde' },
     { Id: 'Centocelle', Name: 'Centocelle' },
+    { Id: 'Centro Giano', Name: 'Centro Giano' },
     { Id: 'Cinecittà', Name: 'Cinecittà' },
     { Id: 'Colle Monfortani', Name: 'Colle Monfortani' },
     { Id: 'Colle Prenestino', Name: 'Colle Prenestino' },
@@ -46,6 +70,8 @@ export const cityLocations = {
     { Id: 'Corcolle', Name: 'Corcolle' },
     { Id: 'Corcolle Alto', Name: 'Corcolle Alto' },
     { Id: 'Don Bosco', Name: 'Don Bosco' },
+    { Id: 'Dragona', Name: 'Dragona' },
+    { Id: 'Dragoncello', Name: 'Dragoncello' },
     { Id: 'Eur', Name: 'Eur' },
     { Id: 'Finocchio', Name: 'Finocchio' },
     { Id: 'Fonte Laurentina', Name: 'Fonte Laurentina' },
@@ -55,7 +81,10 @@ export const cityLocations = {
     { Id: 'Infernetto', Name: 'Infernetto' },
     { Id: 'La Pisana', Name: 'La Pisana' },
     { Id: 'La Storta', Name: 'La Storta' },
+    { Id: 'Longarina', Name: 'Longarina' },
     { Id: 'Lunghezza', Name: 'Lunghezza' },
+    { Id: 'Madonnetta', Name: 'Madonnetta' },
+    { Id: 'Malafede', Name: 'Malafede' },
     { Id: 'Monte Sacro', Name: 'Monte Sacro' },
     { Id: 'Osteria del Curato', Name: 'Osteria del Curato' },
     { Id: 'Ostia', Name: 'Ostia' },
@@ -63,6 +92,7 @@ export const cityLocations = {
     { Id: 'Ostia Levante', Name: 'Ostia Levante' },
     { Id: 'Ostia Ponente', Name: 'Ostia Ponente' },
     { Id: 'Pantano Borghese', Name: 'Pantano Borghese' },
+    { Id: 'Piana del Sole', Name: 'Piana del Sole' },
     { Id: 'Pigneto', Name: 'Pigneto' },
     { Id: 'Ponte Galeria', Name: 'Ponte Galeria' },
     { Id: 'Ponte di Nona', Name: 'Ponte di Nona' },
@@ -89,6 +119,15 @@ export const cityLocations = {
     { Id: 'Villa Verde', Name: 'Villa Verde' },
     { Id: 'Villaggio Breda', Name: 'Villaggio Breda' },
     { Id: 'Villaggio Prenestino', Name: 'Villaggio Prenestino' }
+  ],
+  "Tivoli": [
+    { Id: 'Centro Storico', Name: 'Centro Storico' },
+    { Id: 'Tivoli Terme', Name: 'Tivoli Terme' },
+    { Id: 'Villa Adriana', Name: 'Villa Adriana' },
+    { Id: 'Campolimpido', Name: 'Campolimpido' },
+    { Id: 'Colle di Tivoli', Name: 'Colle di Tivoli' },
+    { Id: 'Ponte Lucano', Name: 'Ponte Lucano' },
+    { Id: 'San Paolo', Name: 'San Paolo' }
   ],
   "Zagarolo": [
     { Id: 'Centro Paese', Name: 'Centro Paese' },
