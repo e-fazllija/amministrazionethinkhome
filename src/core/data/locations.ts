@@ -120,6 +120,7 @@ export const cityLocations = {
     { Id: 'Villaggio Breda', Name: 'Villaggio Breda' },
     { Id: 'Villaggio Prenestino', Name: 'Villaggio Prenestino' }
   ],
+<<<<<<< HEAD
   "Tivoli": [
     { Id: 'Centro Storico', Name: 'Centro Storico' },
     { Id: 'Tivoli Terme', Name: 'Tivoli Terme' },
@@ -128,6 +129,15 @@ export const cityLocations = {
     { Id: 'Colle di Tivoli', Name: 'Colle di Tivoli' },
     { Id: 'Ponte Lucano', Name: 'Ponte Lucano' },
     { Id: 'San Paolo', Name: 'San Paolo' }
+=======
+  "Fiumicino": [
+    { Id: 'Fiumicino Paese', Name: 'Fiumicino Paese' },
+    { Id: 'Isola Sacra', Name: 'Isola Sacra' },
+    { Id: 'Focene', Name: 'Focene' },
+    { Id: 'Fregene', Name: 'Fregene' },
+    { Id: 'Palidoro', Name: 'Palidoro' },
+    { Id: 'Parco Leonardo', Name: 'Parco Leonardo' }
+>>>>>>> 1d1dd3f4c0edc976e9d9b031d8f9525247d44d8a
   ],
   "Zagarolo": [
     { Id: 'Centro Paese', Name: 'Centro Paese' },
