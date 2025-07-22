@@ -29,13 +29,13 @@ export interface LocationUpdateModel {
 }
 
 export interface LocationGroupedModel {
-  city: string;
-  locations: LocationItemModel[];
+  City: string;
+  Locations: LocationItemModel[];
 }
 
 export interface LocationItemModel {
-  id: string;
-  name: string;
+  Id: string;
+  Name: string;
 }
 
 export interface ListViewModel<T> {
@@ -200,7 +200,7 @@ export const getLocations = async (currentPage: number = 1, filterRequest?: stri
 
 export const getAllLocations = async (): Promise<Location[]> => {
   try {
-    const response = await ApiService.get('Location/GetAll', {});
+    const response = await ApiService.get('Location/GetAll', 'json');
     
     // Se response.data è una stringa, la parsiamo
     if (typeof response.data === 'string') {
@@ -227,7 +227,7 @@ export const getAllLocations = async (): Promise<Location[]> => {
 
 export const getGroupedLocations = async (): Promise<LocationGroupedModel[]> => {
   try {
-    const response = await ApiService.get('Location/GetGroupedByCity', {});
+    const response = await ApiService.get('Location/GetGroupedByCity', 'json');
     return response.data;
   } catch (error: any) {
     store.setError(error.response?.data?.message || 'Errore nel caricamento delle località raggruppate', error.response?.status || 500);
@@ -237,7 +237,7 @@ export const getGroupedLocations = async (): Promise<LocationGroupedModel[]> => 
 
 export const getLocationById = async (id: number): Promise<Location> => {
   try {
-    const response = await ApiService.get(`Location/GetById?id=${id}`, {});
+    const response = await ApiService.get(`Location/GetById?id=${id}`, 'json');
     return response.data;
   } catch (error: any) {
     store.setError(error.response?.data?.message || 'Errore nel caricamento della località', error.response?.status);

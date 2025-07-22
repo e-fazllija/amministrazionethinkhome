@@ -34,7 +34,7 @@
       </div>
       <div class="col-md-4 col-lg-4 mb-2">
         <Multiselect v-model="locations" :options="options" mode="multiple" placeholder="Seleziona località"
-          class="cform-control form-control-solid" :searchable="true" />
+          class="cform-control form-control-solid" :searchable="true" trackBy="value" label="label" />
         <div v-if="locations.length" class="selected-box">
           <strong></strong>
           <span v-for="(location, index) in locations" :key="index" class="selected-location">
@@ -114,7 +114,7 @@
 
 <script lang="ts">
 import { getAssetPath } from "@/core/helpers/assets";
-import { defineComponent, onMounted, ref, watch } from "vue";
+import { defineComponent, onMounted, ref, watch, computed } from "vue";
 import Datatable from "@/components/kt-datatable/KTDataTable.vue";
 import type { Sort } from "@/components/kt-datatable//table-partials/models";
 import ExportCustomerModal from "@/components/modals/forms/ExportCustomerModal.vue";
@@ -126,7 +126,7 @@ import Swal from "sweetalert2";
 import { useAuthStore } from "@/stores/auth";
 import Multiselect from '@vueform/multiselect'
 import { getSearchItems, SearchModel } from "@/core/data/events";
-import { getGroupedLocations } from "@/core/data/locations";
+import { getGroupedLocations, type LocationGroupedModel } from "@/core/data/locations";
 
 export default defineComponent({
   name: "requests",
@@ -205,7 +205,37 @@ export default defineComponent({
       Agencies: [],
       Agents: [],
     })
-    const groupedLocations = ref([]);
+    const groupedLocations = ref<LocationGroupedModel[]>([]);
+
+    // Opzioni delle località
+    const options = ref<Array<{value: string, label: string}>>([{value: "", label: "Qualsiasi"}]);
+
+    // Watch per aggiornare le opzioni quando groupedLocations cambia
+    watch(groupedLocations, (newValue) => {
+      if (newValue && Array.isArray(newValue) && newValue.length > 0) {
+        const optionsArray = [{value: "", label: "Qualsiasi"}];
+        
+        newValue.forEach((cityGroup) => {
+          // Add the city itself
+          optionsArray.push({
+            value: cityGroup.City.toUpperCase(),
+            label: `${cityGroup.City.toUpperCase()}`
+          });
+          
+          // Add all zones for this city
+          if (cityGroup.Locations && Array.isArray(cityGroup.Locations)) {
+            cityGroup.Locations.forEach(location => {
+              optionsArray.push({
+                value: location.Id.toUpperCase(),
+                label: `${cityGroup.City.toUpperCase()} \\ ${location.Name.toUpperCase()}`
+              });
+            });
+          }
+        });
+        
+        options.value = optionsArray;
+      }
+    }, { immediate: true });
 
     async function getItems(agencyId, filterRequest: string) {
       loading.value = true;
@@ -245,7 +275,6 @@ export default defineComponent({
       // Carica le località dal database
       try {
         groupedLocations.value = await getGroupedLocations();
-        console.log("Località caricate:", groupedLocations.value);
       } catch (error) {
         console.error("Errore nel caricamento delle località:", error);
         groupedLocations.value = [];
@@ -253,6 +282,8 @@ export default defineComponent({
 
       await getItems(agencyId.value, "");
     });
+
+
 
     const deleteFewItems = async () => {
       selectedIds.value.forEach(async (item) => {
@@ -269,6 +300,8 @@ export default defineComponent({
     const typologie = ref<string>("");
     const locations = ref<Array<string>>([]);
     const propertyType = ref<Array<string>>([]);
+
+
 
 
     const searchingFunc = (obj: any, value: string): boolean => {
@@ -362,6 +395,16 @@ export default defineComponent({
       selectedIds.value = selectedItems;
     };
 
+    const removeLocation = (index: number) => {
+      locations.value.splice(index, 1);
+    };
+
+    const removePropertyType = (index: number) => {
+      console.log("Removing propertyType at index:", index, "Current propertyType:", propertyType.value);
+      propertyType.value.splice(index, 1);
+      console.log("propertyType after removal:", propertyType.value);
+    };
+
     return {
       tableData,
       tableHeader,
@@ -384,7 +427,10 @@ export default defineComponent({
       user,
       agencyId,
       defaultSearchItems,
-      groupedLocations
+      groupedLocations,
+      options,
+      removeLocation,
+      removePropertyType
     };
   },
     data() {
@@ -404,46 +450,8 @@ export default defineComponent({
   ]
     };
   },
-  computed: {
-    options() {
-      const options = [{ value: "", label: "Qualsiasi" }];
-      
-      console.log("groupedLocations in computed:", this.groupedLocations);
-      
-      // Se abbiamo i dati dal database, li utilizziamo
-      if (this.groupedLocations && Array.isArray(this.groupedLocations)) {
-        this.groupedLocations.forEach((cityGroup) => {
-          console.log("Processing cityGroup:", cityGroup);
-          
-          // Add the city itself
-          options.push({ 
-            value: cityGroup.city.toUpperCase(), 
-            label: `LAZIO \\ ROMA (RM) \\ ${cityGroup.city.toUpperCase()}` 
-          });
-          
-          // Add all zones for this city
-          cityGroup.locations.forEach(location => {
-            console.log("Processing location:", location);
-            options.push({ 
-              value: location.id.toUpperCase(), 
-              label: `LAZIO \\ ROMA (RM) \\ ${cityGroup.city.toUpperCase()} \\ ${location.name.toUpperCase()}` 
-            });
-          });
-        });
-      }
-      
-      console.log("Final options:", options);
-      return options;
-    }
-  },
-  methods: {
-    removeLocation(index) {
-      this.locations.splice(index, 1);  // Rimuove l'elemento selezionato
-    },
-    removePropertyType(index) {
-      this.propertyType.splice(index, 1);  // Rimuove l'elemento selezionato
-    }
-  }
+
+
 });
 </script>
 <style>
