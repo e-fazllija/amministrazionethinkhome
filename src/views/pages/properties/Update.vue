@@ -741,7 +741,7 @@
             <option value="Verbale">Verbale</option>
             <option value="Esclusivo">Esclusivo</option>
             <option value="Semi-Verbale">Semi-Verbale</option>
-            <option value="Semi-Verbale">Immobile MLS</option>
+            <option value="Immobile MLS">Immobile MLS</option>
           </select>
           <!--end::Input-->
         </div>
