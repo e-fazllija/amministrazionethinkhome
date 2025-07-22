@@ -61,6 +61,7 @@ export class RealEstateProperty {
   TypeOfAssignment: string;
   AgreedCommission: number;
   FlatRateCommission: number;
+  StornoProvvigione: number;
 }
 
 export class RequestTabelData {

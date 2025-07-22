@@ -845,6 +845,23 @@
         </div>
         <!--end::Col-->
 
+        <!--begin::Col-->
+        <div class="col-md-4 fv-row">
+          <!--begin::Label-->
+          <label class="fs-6 fw-semobold mb-2">Storno Provvigione</label>
+          <!--end::Label-->
+          <!--begin::Input-->
+          <el-form-item prop="StornoProvvigione">
+            <el-input v-model="formData.StornoProvvigione" type="number" placeholder="Inserisci percentuale">
+              <template #append>
+                <span>%</span>
+              </template>
+            </el-input>
+          </el-form-item>
+          <!--end::Input-->
+        </div>
+        <!--end::Col-->
+
                 <!--begin::Input group-->
                 <div class="d-flex flex-column mb-2 fv-row">
                   <!--begin::Label-->
@@ -970,6 +987,7 @@ export default defineComponent({
       VideoUrl: "",
       AgreedCommission: 0,
       FlatRateCommission: 0,
+      StornoProvvigione: 0,
       TypeOfAssignment: "",
     });
     const inserModel = ref<InsertModel>({

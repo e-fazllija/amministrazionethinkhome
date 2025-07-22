@@ -99,6 +99,16 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
+        path: "locations",
+        name: "locations",
+        component: () => import("@/views/pages/locations/List.vue"),
+        meta: {
+          pageTitle: "Località",
+          breadcrumbs: ["Località"],
+          requiresAdminOrAgency: true
+        },
+      },
+      {
         path: "request/:id",
         name: "request",
         component: () => import("@/views/pages/requests/Update.vue"),
@@ -230,6 +240,13 @@ router.beforeEach(async (to, from, next) => {
     if (authStore.isAuthenticated) {
       if (to.meta.requiresAdmin) {
         if (authStore.user.Role == "Admin") {
+          next();
+        } else {
+          authStore.logout()
+          next({ name: "sign-in" });
+        }
+      } else if (to.meta.requiresAdminOrAgency) {
+        if (authStore.user.Role == "Admin" || authStore.user.Role == "Agenzia") {
           next();
         } else {
           authStore.logout()

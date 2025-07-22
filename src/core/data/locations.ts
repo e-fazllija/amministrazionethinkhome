@@ -1,3 +1,49 @@
+import ApiService from "@/core/services/ApiService";
+import { useAuthStore } from "@/stores/auth";
+
+const store = useAuthStore();
+
+export interface Location {
+  Id: number;
+  Name: string;
+  City: string;
+  IsActive: boolean;
+  OrderIndex: number;
+  CreationDate: string;
+  UpdateDate: string;
+}
+
+export interface LocationCreateModel {
+  Name: string;
+  City: string;
+  IsActive: boolean;
+  OrderIndex: number;
+}
+
+export interface LocationUpdateModel {
+  Id: number;
+  Name: string;
+  City: string;
+  IsActive: boolean;
+  OrderIndex: number;
+}
+
+export interface LocationGroupedModel {
+  city: string;
+  locations: LocationItemModel[];
+}
+
+export interface LocationItemModel {
+  id: string;
+  name: string;
+}
+
+export interface ListViewModel<T> {
+  data: T[];
+  total: number;
+}
+
+// Mantieni la struttura esistente per compatibilità
 export const cityLocations = {
   "Ardea": [
     { Id: 'Centro Storico', Name: 'Centro Storico' },
@@ -134,4 +180,114 @@ export const cityLocations = {
     { Id: 'Valle Martella', Name: 'Valle Martella' },
     { Id: 'Via Prenestina', Name: 'Via Prenestina' }
   ]
+};
+
+// API Functions
+export const getLocations = async (currentPage: number = 1, filterRequest?: string, city?: string): Promise<ListViewModel<Location>> => {
+  try {
+    const params = new URLSearchParams();
+    params.append('currentPage', currentPage.toString());
+    if (filterRequest) params.append('filterRequest', filterRequest);
+    if (city) params.append('city', city);
+
+    const response = await ApiService.get(`Location/Get?${params.toString()}`, {});
+    return response.data;
+  } catch (error: any) {
+    store.setError(error.response?.data?.message || 'Errore nel caricamento delle località', error.response?.status || 500);
+    throw error;
+  }
+};
+
+export const getAllLocations = async (): Promise<Location[]> => {
+  try {
+    const response = await ApiService.get('Location/GetAll', {});
+    
+    // Se response.data è una stringa, la parsiamo
+    if (typeof response.data === 'string') {
+      return JSON.parse(response.data);
+    }
+    
+    // Se è già un array, lo restituiamo direttamente
+    if (Array.isArray(response.data)) {
+      return response.data;
+    }
+    
+    // Se è un oggetto con una proprietà data, restituiamo quella
+    if (response.data && Array.isArray(response.data.data)) {
+      return response.data.data;
+    }
+    
+    // Fallback: restituiamo un array vuoto
+    return [];
+  } catch (error: any) {
+    store.setError(error.response?.data?.message || 'Errore nel caricamento delle località', error.response?.status || 500);
+    throw error;
+  }
+};
+
+export const getGroupedLocations = async (): Promise<LocationGroupedModel[]> => {
+  try {
+    const response = await ApiService.get('Location/GetGroupedByCity', {});
+    return response.data;
+  } catch (error: any) {
+    store.setError(error.response?.data?.message || 'Errore nel caricamento delle località raggruppate', error.response?.status || 500);
+    throw error;
+  }
+};
+
+export const getLocationById = async (id: number): Promise<Location> => {
+  try {
+    const response = await ApiService.get(`Location/GetById?id=${id}`, {});
+    return response.data;
+  } catch (error: any) {
+    store.setError(error.response?.data?.message || 'Errore nel caricamento della località', error.response?.status);
+    throw error;
+  }
+};
+
+export const createLocation = async (location: LocationCreateModel): Promise<Location> => {
+  try {
+    const response = await ApiService.post('Location/Create', location);
+    return response.data;
+  } catch (error: any) {
+    store.setError(error.response?.data?.message || 'Errore nella creazione della località', error.response?.status);
+    throw error;
+  }
+};
+
+export const updateLocation = async (location: LocationUpdateModel): Promise<Location> => {
+  try {
+    const response = await ApiService.post('Location/Update', location);
+    return response.data;
+  } catch (error: any) {
+    store.setError(error.response?.data?.message || 'Errore nell\'aggiornamento della località', error.response?.status);
+    throw error;
+  }
+};
+
+export const deleteLocation = async (id: number): Promise<void> => {
+  try {
+    await ApiService.delete(`Location/Delete?id=${id}`);
+  } catch (error: any) {
+    store.setError(error.response?.data?.message || 'Errore nell\'eliminazione della località', error.response?.status);
+    throw error;
+  }
+};
+
+export const toggleLocationActive = async (id: number): Promise<void> => {
+  try {
+    await ApiService.post(`Location/ToggleActive?id=${id}`, {});
+  } catch (error: any) {
+    store.setError(error.response?.data?.message || 'Errore nel cambio di stato della località', error.response?.status);
+    throw error;
+  }
+};
+
+export const updateLocationOrder = async (locations: LocationUpdateModel[]): Promise<void> => {
+  try {
+    await ApiService.post('Location/UpdateOrder', locations);
+  } catch (error: any) {
+    store.setError(error.response?.data?.message || 'Errore nell\'aggiornamento dell\'ordine', error.response?.status);
+    throw error;
+  }
 };
