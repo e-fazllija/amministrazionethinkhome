@@ -415,9 +415,15 @@ export default defineComponent({
               CustomerName: results[key].Customer.Name,
               CustomerLastName: results[key].Customer.LastName,
               CustomerEmail: results[key].Customer.Email,
-              CustomerPhone: results[key].Customer.Phone,
+              CustomerPhone: results[key].Customer.Phone.toString(),
               Contract: results[key].Contract,
-              CreationDate: results[key].CreationDate
+              CreationDate: results[key].CreationDate,
+              Town: results[key].Town,
+              Locations: results[key].Location,
+              PriceTo: results[key].PriceTo,
+              PriceFrom: results[key].PriceFrom,
+              PropertyType: results[key].PropertyType,
+              Status: results[key].Archived == true ? "Archviviata" : results[key].Closed == true ? "Chiusa" : "Aperta"
             } as RequestTabelData;
 
             requests.value.push(item)
