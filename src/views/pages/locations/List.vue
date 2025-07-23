@@ -371,6 +371,24 @@
     @modal-closed="editingLocation = null"
   />
   <!--end::Edit Location Modal-->
+
+  <!--begin::Edit Province Modal-->
+  <EditProvinceModal 
+    v-if="editingProvince" 
+    :province="editingProvince" 
+    @province-updated="onProvinceUpdated"
+    @modal-closed="editingProvince = null"
+  />
+  <!--end::Edit Province Modal-->
+
+  <!--begin::Edit City Modal-->
+  <EditCityModal 
+    v-if="editingCity" 
+    :city="editingCity" 
+    @city-updated="onCityUpdated"
+    @modal-closed="editingCity = null"
+  />
+  <!--end::Edit City Modal-->
 </template>
 
 <script lang="ts">
@@ -394,6 +412,8 @@ import AddProvinceModal from "@/components/modals/forms/AddProvinceModal.vue";
 import AddCityModal from "@/components/modals/forms/AddCityModal.vue";
 import AddLocationModal from "@/components/modals/forms/AddLocationModal.vue";
 import EditLocationModal from "@/components/modals/forms/EditLocationModal.vue";
+import EditProvinceModal from "@/components/modals/forms/EditProvinceModal.vue";
+import EditCityModal from "@/components/modals/forms/EditCityModal.vue";
 import arraySort from "array-sort";
 import { MenuComponent } from "@/assets/ts/components";
 
@@ -405,6 +425,8 @@ export default defineComponent({
     AddCityModal,
     AddLocationModal,
     EditLocationModal,
+    EditProvinceModal,
+    EditCityModal,
   },
   setup() {
     const authStore = useAuthStore();
@@ -418,6 +440,8 @@ export default defineComponent({
     const cities = ref<City[]>([]);
     const locations = ref<Location[]>([]);
     const editingLocation = ref<Location | null>(null);
+    const editingProvince = ref<Province | null>(null);
+    const editingCity = ref<City | null>(null);
     const loading = ref<boolean>(false);
     const selectedIds = ref<Array<number>>([]);
 
@@ -614,8 +638,7 @@ export default defineComponent({
 
     // Province methods
     const editProvince = (province: Province) => {
-      // TODO: Implement edit province modal
-      console.log("Edit province:", province);
+      editingProvince.value = { ...province };
     };
 
     const handleDeleteProvince = async (province: Province) => {
@@ -675,8 +698,7 @@ export default defineComponent({
 
     // City methods
     const editCity = (city: City) => {
-      // TODO: Implement edit city modal
-      console.log("Edit city:", city);
+      editingCity.value = { ...city };
     };
 
     const handleDeleteCity = async (city: City) => {
@@ -833,6 +855,16 @@ export default defineComponent({
       editingLocation.value = null;
     };
 
+    const onProvinceUpdated = () => {
+      loadData();
+      editingProvince.value = null;
+    };
+
+    const onCityUpdated = () => {
+      loadData();
+      editingCity.value = null;
+    };
+
     // Lifecycle
     onMounted(() => {
       loadData();
@@ -847,6 +879,8 @@ export default defineComponent({
       cities,
       locations,
       editingLocation,
+      editingProvince,
+      editingCity,
       loading,
       selectedIds,
       canManageLocations,
@@ -875,6 +909,8 @@ export default defineComponent({
       onCityAdded,
       onLocationAdded,
       onLocationUpdated,
+      onProvinceUpdated,
+      onCityUpdated,
     };
   },
   });
