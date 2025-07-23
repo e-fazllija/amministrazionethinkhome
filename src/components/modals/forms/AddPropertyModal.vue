@@ -83,10 +83,38 @@
               <!--begin::Input group-->
               <div class="d-flex flex-column mb-2 fv-row">
                 <!--begin::Label-->
+                <label class="required fs-6 fw-semobold mb-2">Titolo Breve</label>
+                <!--end::Label-->
+                <!--begin::Input-->
+                <el-form-item prop="ShortTitle">
+                  <el-input v-model="formData.ShortTitle" type="text" />
+                </el-form-item>
+                <!--end::Input-->
+              </div>
+              <!--end::Input group-->
+
+              <!--begin::Input group-->
+              <div class="d-flex flex-column mb-2 fv-row">
+                <!--begin::Label-->
                 <label class="required fs-6 fw-semobold mb-2">Descrizione</label>
                 <!--end::Label-->
                 <!--begin::Input-->
-                <textarea class="form-control" v-model="formData.Description"></textarea>
+                <el-form-item prop="Description">
+                  <textarea class="form-control" v-model="formData.Description"></textarea>
+                </el-form-item>
+                <!--end::Input-->
+              </div>
+              <!--end::Input group-->
+
+              <!--begin::Input group-->
+              <div class="d-flex flex-column mb-2 fv-row">
+                <!--begin::Label-->
+                <label class="required fs-6 fw-semobold mb-2">Descrizione Breve</label>
+                <!--end::Label-->
+                <!--begin::Input-->
+                <el-form-item prop="ShortDescription">
+                  <textarea class="form-control" v-model="formData.ShortDescription"></textarea>
+                </el-form-item>
                 <!--end::Input-->
               </div>
               <!--end::Input group-->
@@ -107,7 +135,7 @@
               <!--begin::Col-->
               <div class="d-flex flex-column mb-2 fv-row">
                 <!--begin::Label-->
-                <label class="col-lg-4 col-form-label fw-semobold fs-6">Data fine incarico</label>
+                <label class="required col-lg-4 col-form-label fw-semobold fs-6">Data fine incarico</label>
                 <!--end::Label-->
                 <!--begin::Input-->
                 <el-form-item prop="AssignmentEnd">
@@ -351,21 +379,8 @@
                     <!--end::Label-->
                     <!--begin::Input-->
                     <select class="form-control" v-model="formData.State">
-                      <option value="Arezzo">Arezzo</option>
-                        <option value="Caserta">Caserta</option>
-                        <option value="Chieti">Chieti</option>
-                        <option value="Firenze">Firenze</option>
-                        <option value="Frosinone">Frosinone</option>
-                        <option value="LAquila">L'Aquila</option>
-                        <option value="Latina">Latina</option>
-                        <option value="Napoli">Napoli</option>
-                        <option value="Perugia">Perugia</option>
-                        <option value="Rieti">Rieti</option>
-                        <option value="Roma">Roma</option>
-                        <option value="Sassari">Sassari</option>
-                        <option value="Terni">Terni</option>
-                        <option value="Trento">Trento</option>
-                        <option value="Viterbo">Viterbo</option>
+                      <option value="">Seleziona provincia</option>
+                      <option v-for="(province, index) in provinces" :key="index" :value="province.Id">{{ province.Name }}</option>
                     </select>
                     <!--end::Input-->
                 </div>
@@ -926,8 +941,7 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import { createRealEstateProperty, RealEstateProperty, getToInsert, InsertModel } from "@/core/data/properties";
 import { useAuthStore } from "@/stores/auth";
 import Multiselect from '@vueform/multiselect'
-import { getCities, getLocationsByCity, getGroupedLocations } from "@/core/data/locations";
-import {provinceCities } from "@/core/data/provinces";
+import { getCities, getLocationsByCity, getGroupedLocations, getProvincesForSelect, getCitiesByProvinceName, getLocationsByCityName } from "@/core/data/locations";
 
 export default defineComponent({
   name: "add-property-modal",
@@ -936,13 +950,14 @@ export default defineComponent({
     const formRef = ref<null | HTMLFormElement>(null);
     const addPropertyModalRef = ref<null | HTMLElement>(null);
     const store = useAuthStore();
+    const provinces = ref<Array<{Id: string, Name: string}>>([]);
     const cities = ref<Array<{Id: string, Name: string}>>([]);
     const locations = ref<Array<{Id: string, Name: string}>>([]);
     const cityLocationsMap = ref<{[key: string]: Array<{Id: string, Name: string}>}>({});
     const loading = ref<boolean>(false);
     const formData = ref<RealEstateProperty>({
       Title: "",
-      ShortTitle: "",
+      ShortTitle: "Titolo breve immobile",
       Category: "Residenziale",
       Typology: "Appartamento",
       InHome: false,
@@ -979,11 +994,11 @@ export default defineComponent({
       MQGarden:0,
       CondominiumExpenses: 0,
       Availability: "",
-      Description: "",
-      ShortDescription: "",
+      Description: "Descrizione dell'immobile",
+      ShortDescription: "Breve descrizione dell'immobile",
       CustomerId: null,
       AgentId: "",
-      AssignmentEnd: "",
+      AssignmentEnd: new Date().toISOString().split('T')[0], // Data odierna come default
       Agent: null,
       VideoUrl: "",
       AgreedCommission: 0,
@@ -997,19 +1012,43 @@ export default defineComponent({
     });
     const showTipologia = ref(true);
 
-    // Carica le città e le località dal database
-    const loadCitiesAndLocations = async () => {
+    // Carica le province dal database
+    const loadProvinces = async () => {
       try {
-        const citiesData = await getCities();
-        cities.value = citiesData;
-        
-        // Carica anche la mappa città-località per il watch
-        const groupedData = await getGroupedLocations();
-        groupedData.forEach(cityGroup => {
-          cityLocationsMap.value[cityGroup.City] = cityGroup.Locations;
-        });
+        const provincesData = await getProvincesForSelect();
+        provinces.value = provincesData;
+      } catch (error) {
+        console.error("Errore nel caricamento delle province:", error);
+      }
+    };
+
+    // Carica le città di una provincia specifica
+    const loadCitiesByProvince = async (provinceName: string) => {
+      try {
+        if (provinceName) {
+          const citiesData = await getCitiesByProvinceName(provinceName);
+          cities.value = citiesData;
+        } else {
+          cities.value = [];
+        }
       } catch (error) {
         console.error("Errore nel caricamento delle città:", error);
+        cities.value = [];
+      }
+    };
+
+    // Carica le località di una città specifica
+    const loadLocationsByCity = async (cityName: string) => {
+      try {
+        if (cityName) {
+          const locationsData = await getLocationsByCityName(cityName);
+          locations.value = locationsData;
+        } else {
+          locations.value = [];
+        }
+      } catch (error) {
+        console.error("Errore nel caricamento delle località:", error);
+        locations.value = [];
       }
     };
 
@@ -1050,21 +1089,25 @@ export default defineComponent({
         () => formData.value.State,
         async (newProvince) => {
             if (newProvince) {
-                // Carica le città dal database invece di provinceCities
-                await loadCitiesAndLocations();
+                // Carica le città della provincia selezionata
+                await loadCitiesByProvince(newProvince);
                 formData.value.Town = null;
+                formData.value.Location = null;
             } else {
                 cities.value = [];
+                locations.value = [];
                 formData.value.Town = null;
+                formData.value.Location = null;
             }
         }
         );
 
         watch(
         () => formData.value.Town,
-        (newTown) => {
-            if (newTown && cityLocationsMap.value[newTown]) {
-                locations.value = cityLocationsMap.value[newTown];
+        async (newTown) => {
+            if (newTown) {
+                // Carica le località della città selezionata
+                await loadLocationsByCity(newTown);
                 formData.value.Location = null;
             } else {
                 locations.value = [];
@@ -1078,77 +1121,84 @@ export default defineComponent({
       Title: [
         {
           required: true,
-          message: "E' obbligatorio",
+          message: "Il titolo è obbligatorio",
           trigger: "change",
         },
       ],
       ShortTitle: [
         {
           required: true,
-          message: "E' obbligatorio",
+          message: "Il titolo breve è obbligatorio",
           trigger: "change",
         },
       ],
-      Descriptio: [
+      Description: [
         {
           required: true,
-          message: "E' obbligatorio",
+          message: "La descrizione è obbligatoria",
           trigger: "change",
         },
       ],
-      ShortDescriptio: [
+      ShortDescription: [
         {
           required: true,
-          message: "E' obbligatorio",
+          message: "La descrizione breve è obbligatoria",
           trigger: "change",
         },
       ],
       AddressLine: [
         {
           required: true,
-          message: "E' obbligatorio",
+          message: "L'indirizzo è obbligatorio",
           trigger: "change",
         },
       ],
       Town: [
         {
           required: true,
-          message: "E' obbligatorio",
+          message: "Il comune è obbligatorio",
           trigger: "change",
         },
       ],
       State: [
         {
           required: true,
-          message: "E' obbligatorio",
+          message: "La provincia è obbligatoria",
           trigger: "change",
         },
       ],
       PostCode: [
         {
           required: true,
-          message: "E' obbligatorio",
+          message: "Il codice postale è obbligatorio",
           trigger: "change",
         },
       ],
       CommercialSurfaceate: [
         {
-          required: false,
-          message: "E' obbligatorio",
+          required: true,
+          message: "La superficie commerciale è obbligatoria",
           trigger: "change",
         },
       ],
       TotalBuildingfloors: [
         {
-          required: false,
-          message: "E' obbligatorio",
+          required: true,
+          message: "Il totale piani edificio è obbligatorio",
           trigger: "change",
         },
       ],
       Price: [
         {
           required: true,
-          message: "E' obbligatorio",
+          message: "Il prezzo è obbligatorio",
+          trigger: "change",
+        },
+      ],
+      AssignmentEnd: [
+        {
+          required: true,
+          message: "La data fine incarico è obbligatoria",
           trigger: "change",
         },
       ],
@@ -1163,8 +1213,8 @@ export default defineComponent({
         formData.value.AgentId = store.user.Id;
       }
       
-      // Carica le città e le località dal database
-      await loadCitiesAndLocations();
+      // Carica le province dal database
+      await loadProvinces();
     })
 
     const submit = async () => {
@@ -1226,9 +1276,12 @@ export default defineComponent({
       selectedFile,
       onFileChanged,
       inserModel,
+      provinces,
       cities,
       locations,
-      loadCitiesAndLocations
+      loadProvinces,
+      loadCitiesByProvince,
+      loadLocationsByCity
     };
   },
 });

@@ -122,21 +122,8 @@
                     <!--end::Label-->
                     <!--begin::Input-->
                     <select class="form-control" v-model="formData.Province">
-                      <option value="Arezzo">Arezzo</option>
-                        <option value="Caserta">Caserta</option>
-                        <option value="Chieti">Chieti</option>
-                        <option value="Firenze">Firenze</option>
-                        <option value="Frosinone">Frosinone</option>
-                        <option value="LAquila">L'Aquila</option>
-                        <option value="Latina">Latina</option>
-                        <option value="Napoli">Napoli</option>
-                        <option value="Perugia">Perugia</option>
-                        <option value="Rieti">Rieti</option>
-                        <option value="Roma">Roma</option>
-                        <option value="Sassari">Sassari</option>
-                        <option value="Terni">Terni</option>
-                        <option value="Trento">Trento</option>
-                        <option value="Viterbo">Viterbo</option>
+                      <option value="">Seleziona provincia</option>
+                      <option v-for="(province, index) in provinces" :key="index" :value="province.Id">{{ province.Name }}</option>
                     </select>
                     <!--end::Input-->
                 </div>
@@ -456,8 +443,8 @@
   import { countries } from "@/core/data/countries";
   import Swal from "sweetalert2/dist/sweetalert2.js";
   import {createRequest, Request, InsertModel, getToInsert } from "@/core/data/requests";
-  import { getCities, getLocationsByCity, getGroupedLocations } from "@/core/data/locations";
-  import {provinceCities } from "@/core/data/provinces";
+  import { getCities, getLocationsByCity, getGroupedLocations, getProvincesForSelect, getCitiesByProvinceName, getLocationsByCityName } from "@/core/data/locations";
+  
   import { useAuthStore, type User } from "@/stores/auth";
   import Multiselect from '@vueform/multiselect'
 
@@ -470,6 +457,7 @@
       const addRequestModalRef = ref<null | HTMLElement>(null);
       const loading = ref<boolean>(false);
       const store = useAuthStore();
+      const provinces = ref<Array<{Id: string, Name: string}>>([]);
       const cities = ref<Array<{Id: string, Name: string}>>([]);
       const locations = ref<Array<{Id: string, Name: string}>>([]);
       const cityLocationsMap = ref<{[key: string]: Array<{Id: string, Name: string}>}>({});
@@ -503,19 +491,43 @@
             Users: []
         });
 
-        // Carica le città e le località dal database
-        const loadCitiesAndLocations = async () => {
+        // Carica le province dal database
+        const loadProvinces = async () => {
           try {
-            const citiesData = await getCities();
-            cities.value = citiesData;
-            
-            // Carica anche la mappa città-località per il watch
-            const groupedData = await getGroupedLocations();
-            groupedData.forEach(cityGroup => {
-              cityLocationsMap.value[cityGroup.City] = cityGroup.Locations;
-            });
+            const provincesData = await getProvincesForSelect();
+            provinces.value = provincesData;
+          } catch (error) {
+            console.error("Errore nel caricamento delle province:", error);
+          }
+        };
+
+        // Carica le città di una provincia specifica
+        const loadCitiesByProvince = async (provinceName: string) => {
+          try {
+            if (provinceName) {
+              const citiesData = await getCitiesByProvinceName(provinceName);
+              cities.value = citiesData;
+            } else {
+              cities.value = [];
+            }
           } catch (error) {
             console.error("Errore nel caricamento delle città:", error);
+            cities.value = [];
+          }
+        };
+
+        // Carica le località di una città specifica
+        const loadLocationsByCity = async (cityName: string) => {
+          try {
+            if (cityName) {
+              const locationsData = await getLocationsByCityName(cityName);
+              locations.value = locationsData;
+            } else {
+              locations.value = [];
+            }
+          } catch (error) {
+            console.error("Errore nel caricamento delle località:", error);
+            locations.value = [];
           }
         };
 
@@ -526,8 +538,8 @@
           formData.value.CustomerId = inserModel.value.Customers[0].Id;
         } 
         
-        // Carica le città e le località dal database
-        await loadCitiesAndLocations();
+        // Carica le province dal database
+        await loadProvinces();
         
         loading.value = false;
       })
@@ -570,23 +582,26 @@
         () => formData.value.Province,
         async (newProvince) => {
             if (newProvince) {
-                // Carica le città dal database invece di provinceCities
-                await loadCitiesAndLocations();
+                // Carica le città della provincia selezionata
+                await loadCitiesByProvince(newProvince);
                 formData.value.Town = null;
+                formData.value.Location = null;
             } else {
                 cities.value = [];
+                locations.value = [];
                 formData.value.Town = null;
+                formData.value.Location = null;
             }
         }
         );
 
       watch(
         () => formData.value.Town,
-        (newTown) => {
+        async (newTown) => {
           if (Array.isArray(newTown) && newTown.length > 0) {
-            locations.value = newTown
-              .filter(city => cityLocationsMap.value[city])
-              .flatMap(city => cityLocationsMap.value[city]);
+            // Per le richieste, prendiamo la prima città selezionata per caricare le località
+            const firstCity = newTown[0];
+            await loadLocationsByCity(firstCity);
             formData.value.Location = null;
           } else {
             locations.value = [];
@@ -654,8 +669,11 @@
         countries,
         cities,
         inserModel,
+        provinces,
         locations,
-        loadCitiesAndLocations,
+        loadProvinces,
+        loadCitiesByProvince,
+        loadLocationsByCity,
       };
     },
   });

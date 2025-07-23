@@ -36,8 +36,37 @@
                 </label>
                 <!--end::Label-->
                 <!--begin::Input-->
-                <el-form-item prop="name">
-                  <el-input v-model="formData.name" type="text" placeholder="Inserisci il nome della località" />
+                <el-form-item prop="Name">
+                  <el-input v-model="formData.Name" type="text" placeholder="Inserisci il nome della località" />
+                </el-form-item>
+                <!--end::Input-->
+              </div>
+              <!--end::Input group-->
+
+              <!--begin::Input group-->
+              <div class="d-flex flex-column mb-5 fv-row">
+                <!--begin::Label-->
+                <label class="fs-6 fw-semobold mb-2">
+                  <span class="required">Provincia</span>
+                </label>
+                <!--end::Label-->
+                <!--begin::Input-->
+                <el-form-item prop="ProvinceId">
+                  <el-select 
+                    v-model="formData.ProvinceId" 
+                    placeholder="Seleziona una provincia" 
+                    class="w-100"
+                    :loading="provincesLoading"
+                    @change="handleProvinceChange"
+                    clearable
+                  >
+                    <el-option
+                      v-for="province in provinces"
+                      :key="province.Id"
+                      :label="province.Name"
+                      :value="province.Id"
+                    />
+                  </el-select>
                 </el-form-item>
                 <!--end::Input-->
               </div>
@@ -51,38 +80,23 @@
                 </label>
                 <!--end::Label-->
                 <!--begin::Input-->
-                <el-form-item prop="city">
-                  <el-input v-model="formData.city" type="text" placeholder="Inserisci la città" />
+                <el-form-item prop="CityId">
+                  <el-select 
+                    v-model="formData.CityId" 
+                    placeholder="Seleziona una città" 
+                    class="w-100"
+                    :loading="citiesLoading"
+                    :disabled="!formData.ProvinceId"
+                    clearable
+                  >
+                    <el-option
+                      v-for="city in filteredCities"
+                      :key="city.Id"
+                      :label="city.Name"
+                      :value="city.Id"
+                    />
+                  </el-select>
                 </el-form-item>
-                <!--end::Input-->
-              </div>
-              <!--end::Input group-->
-
-              <!--begin::Input group-->
-              <div class="d-flex flex-column mb-5 fv-row">
-                <!--begin::Label-->
-                <label class="fs-6 fw-semobold mb-2">Ordine</label>
-                <!--end::Label-->
-                <!--begin::Input-->
-                <el-form-item prop="orderIndex">
-                  <el-input v-model="formData.orderIndex" type="number" placeholder="Inserisci l'ordine di visualizzazione" />
-                </el-form-item>
-                <!--end::Input-->
-              </div>
-              <!--end::Input group-->
-
-              <!--begin::Input group-->
-              <div class="d-flex flex-column mb-5 fv-row">
-                <!--begin::Label-->
-                <label class="fs-6 fw-semobold mb-2">Stato</label>
-                <!--end::Label-->
-                <!--begin::Input-->
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" v-model="formData.isActive" id="locationActiveEdit">
-                  <label class="form-check-label" for="locationActiveEdit">
-                    Attiva
-                  </label>
-                </div>
                 <!--end::Input-->
               </div>
               <!--end::Input group-->
@@ -125,9 +139,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch, onMounted, computed } from "vue";
 import Swal from "sweetalert2/dist/sweetalert2.js";
-import { updateLocation, type LocationUpdateModel, type Location } from "@/core/data/locations";
+import { 
+  updateLocation, 
+  type LocationUpdateModel, 
+  type Location, 
+  getAllCities,
+  getAllProvinces,
+  type City,
+  type Province
+} from "@/core/data/locations";
 import { useAuthStore } from "@/stores/auth";
 
 export default defineComponent({
@@ -143,24 +165,77 @@ export default defineComponent({
     const editLocationModalRef = ref<null | HTMLElement>(null);
     const store = useAuthStore();
     const loading = ref<boolean>(false);
+    const citiesLoading = ref<boolean>(false);
+    const provincesLoading = ref<boolean>(false);
+    const cities = ref<City[]>([]);
+    const provinces = ref<Province[]>([]);
 
-    const formData = ref<LocationUpdateModel>({
-      id: 0,
-      name: "",
-      city: "",
-      isActive: true,
-      orderIndex: 0,
+    // Computed per filtrare le città in base alla provincia selezionata
+    const filteredCities = computed(() => {
+      if (!formData.value.ProvinceId) {
+        return [];
+      }
+      return cities.value.filter(city => city.ProvinceId === formData.value.ProvinceId);
+    });
+
+    // Carica le province dal database
+    const loadProvinces = async () => {
+      provincesLoading.value = true;
+      try {
+        provinces.value = await getAllProvinces();
+      } catch (error) {
+        console.error("Errore nel caricamento delle province:", error);
+      } finally {
+        provincesLoading.value = false;
+      }
+    };
+
+    // Carica le città dal database
+    const loadCities = async () => {
+      citiesLoading.value = true;
+      try {
+        cities.value = await getAllCities();
+      } catch (error) {
+        console.error("Errore nel caricamento delle città:", error);
+      } finally {
+        citiesLoading.value = false;
+      }
+    };
+
+    // Gestisce il cambio di provincia
+    const handleProvinceChange = (provinceId: number) => {
+      // Reset della città selezionata quando cambia la provincia
+      formData.value.CityId = 0;
+    };
+
+    onMounted(() => {
+      loadProvinces();
+      loadCities();
+    });
+
+    const formData = ref<LocationUpdateModel & { ProvinceId: number }>({
+      Id: 0,
+      Name: "",
+      CityId: 0,
+      ProvinceId: 0,
     });
 
     const rules = ref({
-      name: [
+      Name: [
         {
           required: true,
           message: "Il nome della località è obbligatorio",
           trigger: "change",
         },
       ],
-      city: [
+      ProvinceId: [
+        {
+          required: true,
+          message: "La provincia è obbligatoria",
+          trigger: "change",
+        },
+      ],
+      CityId: [
         {
           required: true,
           message: "La città è obbligatoria",
@@ -173,11 +248,10 @@ export default defineComponent({
     watch(() => props.location, (newLocation) => {
       if (newLocation) {
         formData.value = {
-          id: newLocation.id,
-          name: newLocation.name,
-          city: newLocation.city,
-          isActive: newLocation.isActive,
-          orderIndex: newLocation.orderIndex,
+          Id: newLocation.Id,
+          Name: newLocation.Name,
+          CityId: newLocation.CityId,
+          ProvinceId: newLocation.ProvinceId,
         };
       }
     }, { immediate: true });
@@ -196,10 +270,11 @@ export default defineComponent({
           loading.value = true;
           
           try {
-            await updateLocation(formData.value);
+            // Rimuovi ProvinceId dal formData prima di inviare
+            const { ProvinceId, ...locationData } = formData.value;
+            const result = await updateLocation(locationData);
             
-            const error = store.errors;
-            if (!error) {
+            if (result) {
               Swal.fire({
                 text: "Località aggiornata con successo!",
                 icon: "success",
@@ -216,8 +291,9 @@ export default defineComponent({
               });
             } else {
               loading.value = false;
+              const error = store.errors;
               Swal.fire({
-                text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
+                text: error || "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
                 icon: "error",
                 buttonsStyling: false,
                 confirmButtonText: "Ok, capito!",
@@ -241,6 +317,12 @@ export default defineComponent({
       formData,
       rules,
       loading,
+      provinces,
+      provincesLoading,
+      cities,
+      citiesLoading,
+      filteredCities,
+      handleProvinceChange,
       submit,
       closeModal,
     };

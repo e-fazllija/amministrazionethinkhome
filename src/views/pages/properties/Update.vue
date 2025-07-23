@@ -149,21 +149,8 @@
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
             <select class="form-control" v-model="formData.State" required>
-              <option value="Arezzo">Arezzo</option>
-              <option value="Caserta">Caserta</option>
-              <option value="Chieti">Chieti</option>
-              <option value="Firenze">Firenze</option>
-              <option value="Frosinone">Frosinone</option>
-              <option value="LAquila">L'Aquila</option>
-              <option value="Latina">Latina</option>
-              <option value="Napoli">Napoli</option>
-              <option value="Perugia">Perugia</option>
-              <option value="Rieti">Rieti</option>
-              <option value="Roma">Roma</option>
-              <option value="Sassari">Sassari</option>
-              <option value="Terni">Terni</option>
-              <option value="Trento">Trento</option>
-              <option value="Viterbo">Viterbo</option>
+              <option value="">Seleziona provincia</option>
+              <option v-for="(province, index) in provinces" :key="index" :value="province.Name">{{ province.Name }}</option>
             </select>
           </div>
           <!--end::Col-->
@@ -179,7 +166,8 @@
           <div class="col-lg-8 fv-row">
             <div class="form-check form-switch form-check-custom form-check-solid">
               <select class="form-select" v-model="formData.Town" required>
-                <option v-for="(city, index) in cities" :key="index" :value="city.Id">{{ city.Name }} </option>
+                <option value="">Seleziona città</option>
+                <option v-for="(city, index) in cities" :key="index" :value="city.Name">{{ city.Name }}</option>
               </select>
             </div>
           </div>
@@ -196,8 +184,8 @@
           <div class="col-lg-8 fv-row">
             <div class="form-check form-switch form-check-custom form-check-solid">
               <select class="form-control" v-model="formData.Location">
-                <option value=""> </option>
-                <option v-for="(location, index) in locations" :key="index" :value="location.Id">{{ location.Name }} </option>
+                <option value="">Seleziona località</option>
+                <option v-for="(location, index) in locations" :key="index" :value="location.Name">{{ location.Name }}</option>
               </select>
             </div>
           </div>
@@ -927,9 +915,8 @@
 import AddNewForm from "@/components/modals/forms/AddNewForm.vue";
 import AddNewPreventive from "@/components/modals/forms/AddNewPreventive.vue";
 import { getAssetPath } from "@/core/helpers/assets";
-import { provinceCities } from "@/core/data/provinces";
-import { cityLocations } from "@/core/data/locations";
-import { defineComponent, onMounted, ref, watch } from "vue";
+import { getProvincesForSelect, getCitiesByProvinceName, getLocationsByCityName } from "@/core/data/locations";
+import { defineComponent, onMounted, ref, watch, nextTick } from "vue";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import {
   updateRealEstateProperty,
@@ -960,11 +947,52 @@ export default defineComponent({
     const formRef = ref<null | HTMLFormElement>(null);
     const updateModalRef = ref<null | HTMLElement>(null);
     const typesavailable = ref<string[]>([]);
-    const cities = ref([]);
-    const locations = ref([]);
+    const provinces = ref<Array<{Id: string, Name: string}>>([]);
+    const cities = ref<Array<{Id: string, Name: string}>>([]);
+    const locations = ref<Array<{Id: string, Name: string}>>([]);
     const showTipologia = ref(false);
     const loading = ref<boolean>(true);
     const firtLoad = ref(false);
+
+    // Funzioni per caricare i dati dal database
+    const loadProvinces = async () => {
+      try {
+        const provincesData = await getProvincesForSelect();
+        provinces.value = provincesData;
+      } catch (error) {
+        console.error("Errore nel caricamento delle province:", error);
+      }
+    };
+
+    const loadCitiesByProvince = async (provinceName: string) => {
+      try {
+        if (provinceName) {
+          const citiesData = await getCitiesByProvinceName(provinceName);
+          cities.value = citiesData;
+        } else {
+          cities.value = [];
+        }
+      } catch (error) {
+        console.error("Errore nel caricamento delle città:", error);
+        cities.value = [];
+      }
+    };
+
+    const loadLocationsByCity = async (cityName: string) => {
+      try {
+        if (cityName) {
+          const locationsData = await getLocationsByCityName(cityName);
+          locations.value = locationsData;
+        } else {
+          locations.value = [];
+        }
+      } catch (error) {
+        console.error("Errore nel caricamento delle località:", error);
+        locations.value = [];
+      }
+    };
+
+
     const formData = ref<RealEstateProperty>({
       Title: "",
       ShortTitle: "",
@@ -980,7 +1008,7 @@ export default defineComponent({
       AddressLine: "",
       Town: "",
       State: "",
-      Location:"",
+      Location: "",
       PostCode: "",
       CommercialSurfaceate: 0,
       TotalBuildingfloors: 0,
@@ -1105,43 +1133,56 @@ export default defineComponent({
       if (inserModel.value.Users.length > 0) {
         formData.value.AgentId = formData.value.AgentId;
       }
-      if (formData.value.State && provinceCities[formData.value.State]) {
-        cities.value = provinceCities[formData.value.State];
-      } else {
-        cities.value = [];
+      
+      // Carica le province
+      await loadProvinces();
+      
+      // Se c'è già una provincia selezionata, carica le città
+      if (formData.value.State) {
+        await loadCitiesByProvince(formData.value.State);
       }
-      if (formData.value.Town && cityLocations[formData.value.Town]) {
-       locations.value = cityLocations[formData.value.Town];
-       } else {
-       locations.value = [];
+      
+      // Se c'è già una città selezionata, carica le località
+      if (formData.value.Town) {
+        await loadLocationsByCity(formData.value.Town);
       }
-      setTimeout(() => firtLoad.value = false, 3000);
+      
       loading.value = false;
-      console.log(formData.value.Location)
+      firtLoad.value = false;
     })
 
      watch(
     () => formData.value.State,
-    (newProvince) => {
-            if (newProvince && provinceCities[newProvince]) {
-                cities.value = provinceCities[newProvince];
-                formData.value.Town = formData.value.Town ??(cities.value[0]?.Id || null);
-            } else {
-                cities.value = [];
-                formData.value.Town = null;
-            }
-       }
+    async (newProvince) => {
+      if (!firtLoad.value) {
+        console.log("watch state")
+        if (newProvince) {
+          await loadCitiesByProvince(newProvince);
+          formData.value.Town = "";
+          formData.value.Location = "";
+        } else {
+          cities.value = [];
+          locations.value = [];
+          formData.value.Town = "";
+          formData.value.Location = "";
+        }
+      }
+    }
     );
     watch(
     () => formData.value.Town,
-    (newTown) => {
-            if (newTown && cityLocations[newTown]) {
-                locations.value = cityLocations[newTown];
-            } else {
-                locations.value = [];
-                formData.value.Location = null;
-            }
+    async (newTown) => {
+      if (!firtLoad.value) {
+        console.log("watch localita")
+        if (newTown) {
+          await loadLocationsByCity(newTown);
+          formData.value.Location = "";
+        } else {
+          locations.value = [];
+          formData.value.Location = "";
         }
+      }
+    }
 );
 
     const onFileChanged = async (event: Event) => {
@@ -1388,6 +1429,7 @@ export default defineComponent({
       inserModel,
       user,
       checkMove,
+      provinces,
       cities,
       locations,
     };

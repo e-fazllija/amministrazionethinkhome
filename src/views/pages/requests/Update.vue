@@ -95,21 +95,8 @@
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
             <select class="form-control" v-model="formData.Province" required>
-              <option value="Arezzo">Arezzo</option>
-              <option value="Caserta">Caserta</option>
-              <option value="Chieti">Chieti</option>
-              <option value="Firenze">Firenze</option>
-              <option value="Frosinone">Frosinone</option>
-              <option value="LAquila">L'Aquila</option>
-              <option value="Latina">Latina</option>
-              <option value="Napoli">Napoli</option>
-              <option value="Perugia">Perugia</option>
-              <option value="Rieti">Rieti</option>
-              <option value="Roma">Roma</option>
-              <option value="Sassari">Sassari</option>
-              <option value="Terni">Terni</option>
-              <option value="Trento">Trento</option>
-              <option value="Viterbo">Viterbo</option>
+              <option value="">Seleziona provincia</option>
+              <option v-for="(province, index) in provinces" :key="index" :value="province.Id">{{ province.Name }}</option>
             </select>
           </div>
           <!--end::Col-->
@@ -457,7 +444,7 @@ import { Request, InsertModel, getToInsert, getRequest, updateRequest, deleteReq
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import Datatable from "@/components/kt-datatable/KTDataTable.vue";
-import { provinceCities } from "@/core/data/provinces";
+import { getProvincesForSelect, getCitiesByProvinceName, getLocationsByCityName } from "@/core/data/locations";
 import type { Sort } from "@/components/kt-datatable//table-partials/models";
 import arraySort from "array-sort";
 import type { RealEstateProperty } from "@/core/data/properties";
@@ -548,9 +535,48 @@ export default defineComponent({
       },
     ]);
 
+    const provinces = ref<Array<{Id: string, Name: string}>>([]);
     let selectedCities = ref<Array<string>>([]);
     let selectedLocations = ref<Array<string>>([]);
 
+
+    // Funzioni per caricare i dati dal database
+    const loadProvinces = async () => {
+      try {
+        const provincesData = await getProvincesForSelect();
+        provinces.value = provincesData;
+      } catch (error) {
+        console.error("Errore nel caricamento delle province:", error);
+      }
+    };
+
+    const loadCitiesByProvince = async (provinceName: string) => {
+      try {
+        if (provinceName) {
+          const citiesData = await getCitiesByProvinceName(provinceName);
+          cities.value = citiesData;
+        } else {
+          cities.value = [];
+        }
+      } catch (error) {
+        console.error("Errore nel caricamento delle città:", error);
+        cities.value = [];
+      }
+    };
+
+    const loadLocationsByCity = async (cityName: string) => {
+      try {
+        if (cityName) {
+          const locationsData = await getLocationsByCityName(cityName);
+          locations.value = locationsData;
+        } else {
+          locations.value = [];
+        }
+      } catch (error) {
+        console.error("Errore nel caricamento delle località:", error);
+        locations.value = [];
+      }
+    };
 
     onMounted(async () => {
       loading.value = true;
@@ -564,18 +590,18 @@ export default defineComponent({
       // if (inserModel.value.Customers.length > 0) {
       //   formData.value.CustomerId = inserModel.value.Customers[0].Id;
       // }
-      if (formData.value.Province && provinceCities[formData.value.Province]) {
-        cities.value = provinceCities[formData.value.Province];
-      } else {
-        cities.value = [];
-        formData.value.Town = null;
+      // Carica le province
+      await loadProvinces();
+      
+      // Se c'è già una provincia selezionata, carica le città
+      if (formData.value.Province) {
+        await loadCitiesByProvince(formData.value.Province);
       }
 
+      // Se ci sono città selezionate, carica le località
       if (selectedCities.value.length > 0) {
-        locations.value = selectedCities.value
-                .filter(city => cityLocations[city]) 
-                .flatMap(city => cityLocations[city]);
-          }
+        await loadLocationsByCity(selectedCities.value[0]);
+      }
 
       loading.value = false;
       setTimeout(() => firtLoad.value = false, 3000);
@@ -584,14 +610,17 @@ export default defineComponent({
 
     watch(
       () => formData.value.Province,
-      (newProvince) => {
+      async (newProvince) => {
         if (!firtLoad.value) {
-          if (newProvince && provinceCities[newProvince]) {
-            cities.value = provinceCities[newProvince];
-            formData.value.Town = cities.value[0].Id;
+          if (newProvince) {
+            await loadCitiesByProvince(newProvince);
+            formData.value.Town = null;
+            formData.value.Location = null;
           } else {
             cities.value = [];
+            locations.value = [];
             formData.value.Town = null;
+            formData.value.Location = null;
           }
         } else {
           firtLoad.value = false;
@@ -731,6 +760,7 @@ export default defineComponent({
       deleteItem,
       user,
       inserModel,
+      provinces,
       cities,
       locations,
       sort,
