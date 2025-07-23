@@ -536,3 +536,45 @@ export const getLocationsByCityName = async (cityName: string): Promise<Array<{I
     throw error;
   }
 };
+
+// Funzione per ottenere i dati strutturati per i filtri a tre livelli
+export const getStructuredLocationData = async (): Promise<{
+  provinces: Array<{value: string, label: string, id: number}>,
+  cities: Array<{value: string, label: string, provinceId: number, provinceName: string}>,
+  locations: Array<{value: string, label: string, cityId: number, provinceId: number, cityName: string, provinceName: string}>
+}> => {
+  try {
+    const [provincesData, citiesData, locationsData] = await Promise.all([
+      getAllProvinces(),
+      getAllCities(),
+      getAllLocations()
+    ]);
+
+    const provinces = provincesData.map(province => ({
+      value: province.Name.toUpperCase(),
+      label: province.Name.toUpperCase(),
+      id: province.Id
+    }));
+
+    const cities = citiesData.map(city => ({
+      value: city.Name.toUpperCase(),
+      label: `${city.Name.toUpperCase()} (${city.ProvinceName.toUpperCase()})`,
+      provinceId: city.ProvinceId,
+      provinceName: city.ProvinceName.toUpperCase()
+    }));
+
+    const locations = locationsData.map(location => ({
+      value: location.Name.toUpperCase(),
+      label: `${location.Name.toUpperCase()} - ${location.CityName.toUpperCase()} (${location.ProvinceName.toUpperCase()})`,
+      cityId: location.CityId,
+      provinceId: location.ProvinceId,
+      cityName: location.CityName.toUpperCase(),
+      provinceName: location.ProvinceName.toUpperCase()
+    }));
+
+    return { provinces, cities, locations };
+  } catch (error: any) {
+    store.setError(error.response?.data?.message || 'Errore nel caricamento dei dati strutturati', error.response?.status || 500);
+    throw error;
+  }
+};

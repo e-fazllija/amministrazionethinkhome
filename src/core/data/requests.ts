@@ -42,7 +42,7 @@ export class RequestTabelData {
   CustomerName: string;
   CustomerLastName: string;
   CustomerEmail: string;
-  CustomerPhone: number;
+  CustomerPhone: string;
   Contract: string;
   CreationDate?: Date;
   Town:string;
@@ -72,6 +72,36 @@ const getRequests = (agencyId: string, filterRequest: string): Promise<Array<Req
     .then(({ data }) => {
       const result = data.Data as Partial<Array<Request>>
       return result;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
+
+const getRequestsList = (agencyId: string, filterRequest: string): Promise<Array<RequestTabelData>> => {
+  return ApiService.get(
+    `Requests/GetList?currentPage=0&agencyId=${agencyId}&filterRequest=${filterRequest}`,
+    ""
+  )
+    .then(({ data }) => {
+      const result = data.Data as Array<any>;
+      return result.map(item => ({
+        Id: item.Id,
+        CustomerName: item.CustomerName,
+        CustomerLastName: item.CustomerLastName,
+        CustomerEmail: item.CustomerEmail,
+        CustomerPhone: item.CustomerPhone,
+        Contract: item.Contract,
+        CreationDate: item.CreationDate,
+        StringDate: item.CreationDate.toString().substring(0, 10).split('-').reverse().join('-'),
+        Locations: item.Location,
+        Town: item.Town,
+        PriceTo: item.PriceTo,
+        PriceFrom: item.PriceFrom,
+        PropertyType: item.PropertyType,
+        Status: item.Archived == true ? "Archviviata" : item.Closed == true ? "Chiusa" : "Aperta"
+      } as RequestTabelData));
     })
     .catch(({ response }) => {
       store.setError(response.data.Message, response.status);
@@ -164,4 +194,4 @@ const getToInsert = (agencyId?: string): Promise<InsertModel> => {
     });
 };
 
-export { getRequests, getRequest, createRequest, updateRequest, deleteRequest, getToInsert, getCustomerRequests }
+export { getRequests, getRequestsList, getRequest, createRequest, updateRequest, deleteRequest, getToInsert, getCustomerRequests }
