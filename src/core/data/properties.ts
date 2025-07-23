@@ -61,6 +61,7 @@ export class RealEstateProperty {
   TypeOfAssignment: string;
   AgreedCommission: number;
   FlatRateCommission: number;
+  StornoProvvigione: number;
 }
 
 export class RequestTabelData {
@@ -75,6 +76,8 @@ export class RequestTabelData {
   AssignmentEnd?: string;
   Status: string;
   Town: string;
+  Region?: string;
+  Photos?: string | null;
   Auction:Boolean;
 }
 
@@ -111,6 +114,36 @@ const getRealEstateProperties = (agencyId: string, filterRequest: string, contra
     .then(({ data }) => {
       const result = data.Data as Partial<Array<RealEstateProperty>>
       return result;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
+
+const getRealEstatePropertiesList = (agencyId: string, filterRequest: string, contract?: string, priceFrom?: number, priceTo?: number, category?: string, typologie?: string, town?: string[]) : Promise<Array<RequestTabelData>> => {
+   return ApiService.get(
+    `RealEstateProperty/GetList?currentPage=0&agencyId=${agencyId}&filterRequest=${filterRequest}&contract=${contract}&priceFrom=${priceFrom}&priceTo=${priceTo}&category=${category}&typologie=${typologie}&town=${town}`,
+    ""
+  )
+    .then(({ data }) => {
+      const result = data.Data as Array<any>;
+      return result.map(item => ({
+        Id: item.Id,
+        CreationDate: item.CreationDate,
+        CommercialSurfaceate: item.CommercialSurfaceate,
+        AddressLine: item.AddressLine,
+        Price: item.Price,
+        Category: item.Category,
+        Typology: item.Typology,
+        StateOfTheProperty: item.StateOfTheProperty,
+        AssignmentEnd: item.AssignmentEnd,
+        Status: item.Status,
+        Town: item.Town,
+        Region: item.Region,
+        Photos: item.FirstPhotoUrl || null,
+        Auction: item.Auction
+      } as RequestTabelData));
     })
     .catch(({ response }) => {
       store.setError(response.data.Message, response.status);
@@ -318,6 +351,7 @@ const getSearchItems = (userId: string, agencyId?: string): Promise<SearchModel>
 
 export { 
   getRealEstateProperties, 
+  getRealEstatePropertiesList,
   getRealEstateProperty, 
   createRealEstateProperty, 
   updateRealEstateProperty, 
