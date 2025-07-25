@@ -230,7 +230,7 @@
       <Datatable @on-sort="sort" @on-items-select="onItemSelect" :data="tableData" :header="tableHeader"
         :enable-items-per-page-dropdown="true" :checkbox-enabled="true" checkbox-label="Id" :loading="loading">
         <template v-slot:CustomerName="{ row: request }">
-          {{ request.CustomerName }}
+          {{ request.CustomerName }} {{ request.CustomerLastName }}
         </template>
         <template v-slot:Contract="{ row: request }">
           {{ request.Contract }}
@@ -484,7 +484,10 @@ export default defineComponent({
 
       // Filtraggio per testo (search)
       if (search.value !== "") {
-        tableData.value = tableData.value.filter(item => item.CustomerName.toLowerCase().includes(search.value.toLowerCase()));
+        tableData.value = tableData.value.filter(item => 
+          item.CustomerName.toLowerCase().includes(search.value.toLowerCase()) ||
+          item.CustomerLastName.toLowerCase().includes(search.value.toLowerCase())
+        );
       }
       // Filtraggio per prezzo
       if (fromPrice.value > 0) {
