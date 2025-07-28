@@ -995,7 +995,6 @@ export default defineComponent({
 
     const formData = ref<RealEstateProperty>({
       Title: "",
-      ShortTitle: "",
       Category: "",
       Typology: "",
       InHome: false,
@@ -1033,7 +1032,6 @@ export default defineComponent({
       CondominiumExpenses: 0,
       Availability: "",
       Description: "",
-      ShortDescription: "",
       CustomerId: null,
       AgentId: "",
       AssignmentEnd: "",
