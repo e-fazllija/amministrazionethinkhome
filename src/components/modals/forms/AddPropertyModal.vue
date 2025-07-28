@@ -80,18 +80,7 @@
               </div>
               <!--end::Input group-->
 
-              <!--begin::Input group-->
-              <div class="d-flex flex-column mb-2 fv-row">
-                <!--begin::Label-->
-                <label class="required fs-6 fw-semobold mb-2">Titolo Breve</label>
-                <!--end::Label-->
-                <!--begin::Input-->
-                <el-form-item prop="ShortTitle">
-                  <el-input v-model="formData.ShortTitle" type="text" />
-                </el-form-item>
-                <!--end::Input-->
-              </div>
-              <!--end::Input group-->
+
 
               <!--begin::Input group-->
               <div class="d-flex flex-column mb-2 fv-row">
@@ -106,18 +95,7 @@
               </div>
               <!--end::Input group-->
 
-              <!--begin::Input group-->
-              <div class="d-flex flex-column mb-2 fv-row">
-                <!--begin::Label-->
-                <label class="required fs-6 fw-semobold mb-2">Descrizione Breve</label>
-                <!--end::Label-->
-                <!--begin::Input-->
-                <el-form-item prop="ShortDescription">
-                  <textarea class="form-control" v-model="formData.ShortDescription"></textarea>
-                </el-form-item>
-                <!--end::Input-->
-              </div>
-              <!--end::Input group-->
+
 
               <!--begin::Col-->
               <div class="d-flex flex-column mb-2 fv-row">
@@ -957,7 +935,6 @@ export default defineComponent({
     const loading = ref<boolean>(false);
     const formData = ref<RealEstateProperty>({
       Title: "",
-      ShortTitle: "Titolo breve immobile",
       Category: "Residenziale",
       Typology: "Appartamento",
       InHome: false,
@@ -995,7 +972,6 @@ export default defineComponent({
       CondominiumExpenses: 0,
       Availability: "",
       Description: "Descrizione dell'immobile",
-      ShortDescription: "Breve descrizione dell'immobile",
       CustomerId: null,
       AgentId: "",
       AssignmentEnd: new Date().toISOString().split('T')[0], // Data odierna come default
@@ -1125,13 +1101,7 @@ export default defineComponent({
           trigger: "change",
         },
       ],
-      ShortTitle: [
-        {
-          required: true,
-          message: "Il titolo breve è obbligatorio",
-          trigger: "change",
-        },
-      ],
+
       Description: [
         {
           required: true,
@@ -1139,13 +1109,7 @@ export default defineComponent({
           trigger: "change",
         },
       ],
-      ShortDescription: [
-        {
-          required: true,
-          message: "La descrizione breve è obbligatoria",
-          trigger: "change",
-        },
-      ],
+
       AddressLine: [
         {
           required: true,

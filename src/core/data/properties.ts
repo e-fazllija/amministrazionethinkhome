@@ -7,7 +7,6 @@ const store = useAuthStore();
 export class RealEstateProperty {
   Id?: number;
   Title: string;
-  ShortTitle: string;
   Category: string;
   Typology: string;
   InHome: boolean;
@@ -46,7 +45,6 @@ export class RealEstateProperty {
   CondominiumExpenses: number | 0;
   Availability?: string;
   Description?: string;
-  ShortDescription?: string;
   AssignmentEnd?: string;
   CreationDate?: Date;
   UpdateDate?: Date;
