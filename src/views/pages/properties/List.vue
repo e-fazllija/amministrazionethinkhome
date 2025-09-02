@@ -259,7 +259,12 @@
           {{ item.Region }}
         </template>
         <template v-slot:Price="{ row: item }">
-          {{ item.Price }}
+          <template v-if="item.Price === -1">
+            <span>Trattativa riservata</span>
+          </template>
+          <template v-else>
+            € {{ item.Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") }}
+          </template>
         </template>
         <template v-slot:Photos="{ row: item }">
           <img v-if="item.Photos && item.Photos !== 'null'" :src="item.Photos" style="height: 100px; width: 200px; object-fit: cover;" />

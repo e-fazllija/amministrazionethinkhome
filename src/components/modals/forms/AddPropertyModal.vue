@@ -100,6 +100,19 @@
               <!--begin::Col-->
               <div class="d-flex flex-column mb-2 fv-row">
                 <!--begin::Label-->
+                <label class="fs-6 fw-semobold mb-2">Trattativa riservata</label>
+                <!--end::Label-->
+                <!--begin::Input-->
+                <div class="form-check form-switch form-check-custom form-check-solid">
+                  <input class="form-check-input" type="checkbox" value="" v-model="isTrattativaRiservata" />
+                </div>
+                <!--end::Input-->
+              </div>
+              <!--end::Col-->
+
+              <!--begin::Col-->
+              <div v-if="!isTrattativaRiservata" class="d-flex flex-column mb-2 fv-row">
+                <!--begin::Label-->
                 <label class="required fs-6 fw-semobold mb-2">Prezzo</label>
                 <!--end::Label-->
                 <!--begin::Input-->
@@ -933,6 +946,7 @@ export default defineComponent({
     const locations = ref<Array<{Id: string, Name: string}>>([]);
     const cityLocationsMap = ref<{[key: string]: Array<{Id: string, Name: string}>}>({});
     const loading = ref<boolean>(false);
+    const isTrattativaRiservata = ref(false);
     const formData = ref<RealEstateProperty>({
       Title: "",
       Category: "Residenziale",
@@ -1188,6 +1202,12 @@ export default defineComponent({
       await formRef.value.validate(async (valid: boolean) => {
         if (valid) {
           loading.value = true;
+          
+          // Se la checkbox "Trattativa riservata" è selezionata, imposta il prezzo a -1
+          if (isTrattativaRiservata.value) {
+            formData.value.Price = -1;
+          }
+          
           await createRealEstateProperty(formData.value);
 
           const error = store.errors;
@@ -1245,7 +1265,8 @@ export default defineComponent({
       locations,
       loadProvinces,
       loadCitiesByProvince,
-      loadLocationsByCity
+      loadLocationsByCity,
+      isTrattativaRiservata
     };
   },
 });
