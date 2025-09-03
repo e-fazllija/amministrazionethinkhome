@@ -4,28 +4,78 @@
   <div v-else class="card">
     <!--begin::Card header-->
     <div class="card-header">
-      <h2 class="card-title fw-bold">Calendar</h2>
-      <div v-if="user.Role == 'Admin'" class="card-toolbar col-lg-3 col-md-9 col-sm-12">
-        <select class="form-control selectpicker" v-model="agencyId">
-          <option v-for="(item, index) in searchItems.Agencies" :key="index" :value="item.Id">{{ item.Name }} {{ item.LastName }}</option>
-        </select>
+      <!-- Title Section -->
+      <div class="card-title">
+        <h2 class="fw-bold mb-0">
+          <KTIcon icon-name="calendar" icon-class="fs-2 me-2" />
+          Calendario Eventi
+        </h2>
       </div>
-      <div v-if="user.Role == 'Admin' || user.Role == 'Agenzia'" class="card-toolbar col-lg-3 col-md-9 col-sm-12">
-        <select class="form-control selectpicker" v-model="agentId">
-          <option value>Visualizza tutti gli agenti</option>
-          <option v-for="(item, index) in searchItems.Agents" :key="index" :value="item.Id">{{ item.Name }} {{
-            item.LastName }}</option>
-        </select>
-      </div>
-      <div class="card-toolbar col-lg-3 col-md-9 col-sm-12">
-        <input type="text" class="form-control" v-model="search" @input="searchItemsFunc()"
-          placeholder="Cerca evento, descrizione..." />
-      </div>
-      <div class="card-toolbar">
-        <button class="btn btn-flex btn-primary" @click="newEvent(null, null)">
-          <KTIcon icon-name="plus" icon-class="fs-2" />
-          Aggiungi Evento
-        </button>
+      
+      <!-- Filters Section -->
+      <div class="card-toolbar d-flex flex-wrap gap-3">
+        <!-- Agency Filter (Admin only) -->
+        <div v-if="user.Role == 'Admin'" class="d-flex flex-column">
+          <label class="form-label fs-7 fw-semibold text-gray-600 mb-1">
+            <KTIcon icon-name="office-bag" icon-class="fs-7 me-1" />
+            Agenzia
+          </label>
+          <select class="form-select form-select-sm min-w-150px" v-model="agencyId">
+            <option v-for="(item, index) in searchItems.Agencies" :key="index" :value="item.Id">
+              {{ item.Name }} {{ item.LastName }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Agent Filter -->
+        <div v-if="user.Role == 'Admin' || user.Role == 'Agenzia'" class="d-flex flex-column">
+          <label class="form-label fs-7 fw-semibold text-gray-600 mb-1">
+            <KTIcon icon-name="profile-user" icon-class="fs-7 me-1" />
+            Agente
+          </label>
+          <select class="form-select form-select-sm min-w-150px" v-model="agentId">
+            <option value="">Tutti gli agenti</option>
+            <option v-for="(item, index) in searchItems.Agents" :key="index" :value="item.Id">
+              {{ item.Name }} {{ item.LastName }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="d-flex flex-column">
+          <label class="form-label fs-7 fw-semibold text-gray-600 mb-1">
+            <KTIcon icon-name="check-circle" icon-class="fs-7 me-1" />
+            Stato
+          </label>
+          <select class="form-select form-select-sm min-w-150px" v-model="statusFilter">
+            <option value="">Tutti gli stati</option>
+            <option value="confirmed">✓ Confermati</option>
+            <option value="cancelled">✗ Disdetti</option>
+            <option value="postponed">⏸ Rimandati</option>
+            <option value="pending">⏳ In attesa</option>
+          </select>
+        </div>
+
+        <!-- Search -->
+        <div class="d-flex flex-column">
+          <label class="form-label fs-7 fw-semibold text-gray-600 mb-1">
+            <KTIcon icon-name="magnifier" icon-class="fs-7 me-1" />
+            Cerca
+          </label>
+          <div class="position-relative">
+            <KTIcon icon-name="magnifier" icon-class="fs-6 position-absolute ms-3 top-50 translate-middle-y text-gray-500" />
+            <input type="text" class="form-control form-control-sm ps-10 min-w-200px" v-model="search" 
+                   @input="searchItemsFunc()" placeholder="Cerca evento, descrizione..." />
+          </div>
+        </div>
+
+        <!-- Add Event Button -->
+        <div class="d-flex flex-column justify-content-end">
+          <button class="btn btn-primary btn-sm" @click="newEvent(null, null)">
+            <KTIcon icon-name="plus" icon-class="fs-6 me-1" />
+            Nuovo Evento
+          </button>
+        </div>
       </div>
     </div>
     <!--end::Card header-->
@@ -55,7 +105,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
-import { TODAY, todayDate, getEvents, getSearchItems, SearchModel } from "@/core/data/events";
+import { TODAY, todayDate, getEvents, getSearchItems, SearchModel, Event } from "@/core/data/events";
 import NewEventModal from "@/components/modals/forms/calendar/NewEventModal.vue";
 import UpdateEventModal from "@/components/modals/forms/calendar/UpdateEventModal.vue";
 import { Modal } from "bootstrap";
@@ -83,6 +133,7 @@ export default defineComponent({
     let selectedDateEnd = ref<string>("");
     let agentId = ref("");
     let agencyId = ref("");
+    let statusFilter = ref("");
     const initItems = ref([]);
     const newTargetModalRef = ref<null | HTMLElement>(null);
     const store = useAuthStore();
@@ -163,11 +214,30 @@ export default defineComponent({
       initItems.value.splice(0);
       const results = await getEvents(_agencyId, _agentId);
       const addName = store.user.Role != "Agente" && agentId.value == "" ? true : false;
+      
       for (const key in results) {
+        // Apply status filter
+        if (statusFilter.value && !matchesStatusFilter(results[key], statusFilter.value)) {
+          continue;
+        }
 
+        // Add status indicator to title
+        let statusIndicator = "";
+        if (results[key].Confirmed) {
+          statusIndicator = " ✓";
+        } else if (results[key].Cancelled) {
+          statusIndicator = " ✗";
+        } else if (results[key].Postponed) {
+          statusIndicator = " ⏸";
+        } else {
+          statusIndicator = " ⏳";
+        }
+
+        const baseTitle = addName ? `${results[key].ApplicationUser.Name} ${results[key].ApplicationUser.LastName}: ${results[key].NomeEvento}` : results[key].NomeEvento;
+        
         const item = {
           id: results[key].Id.toString(),
-          title: addName ? `${results[key].ApplicationUser.Name} ${results[key].ApplicationUser.LastName}: ${results[key].NomeEvento}` : results[key].NomeEvento,
+          title: baseTitle + statusIndicator,
           start: results[key].DataInizioEvento,
           end: results[key].DataFineEvento,
           description: results[key].DescrizioneEvento,
@@ -204,6 +274,10 @@ export default defineComponent({
       await getItems(agencyId.value, agentId.value);
     })
 
+    watch(() => statusFilter.value, async (first, second) => {
+      await getItems(agencyId.value, agentId.value);
+    })
+
 
     const search = ref<string>("");
     const searchItemsFunc = () => {
@@ -233,6 +307,21 @@ export default defineComponent({
         }
       }
       return false;
+    };
+
+    const matchesStatusFilter = (event: Event, filter: string): boolean => {
+      switch (filter) {
+        case "confirmed":
+          return event.Confirmed === true && event.Cancelled === false && event.Postponed === false;
+        case "cancelled":
+          return event.Cancelled === true;
+        case "postponed":
+          return event.Postponed === true;
+        case "pending":
+          return event.Confirmed === false && event.Cancelled === false && event.Postponed === false;
+        default:
+          return true;
+      }
     };
 
     const calendarOptions = {
@@ -297,6 +386,7 @@ export default defineComponent({
       selectedId,
       agentId,
       agencyId,
+      statusFilter,
       user,
       searchItems,
       selectedDateStart,
