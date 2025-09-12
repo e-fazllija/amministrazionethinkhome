@@ -535,6 +535,21 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Trattativa riservata</label>
+          <!--end::Label-->
+          <!--begin::Input-->
+          <div class="col-lg-8 fv-row">
+            <div class="form-check form-switch form-check-custom form-check-solid">
+              <input class="form-check-input" type="checkbox" value="" v-model="isTrattativaRiservata" />
+            </div>
+          </div>
+          <!--end::Input-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div v-if="!isTrattativaRiservata" class="row mb-6">
+          <!--begin::Label-->
           <label class="col-lg-4 col-form-label required fw-semobold fs-6">Prezzo</label>
           <!--end::Label-->
           <!--begin::Input-->
@@ -953,6 +968,7 @@ export default defineComponent({
     const showTipologia = ref(false);
     const loading = ref<boolean>(true);
     const firtLoad = ref(false);
+    const isTrattativaRiservata = ref(false);
 
     // Funzioni per caricare i dati dal database
     const loadProvinces = async () => {
@@ -1131,6 +1147,9 @@ export default defineComponent({
       if (inserModel.value.Users.length > 0) {
         formData.value.AgentId = formData.value.AgentId;
       }
+      
+      // Inizializza la checkbox "Trattativa riservata" in base al prezzo
+      isTrattativaRiservata.value = formData.value.Price === -1;
       
       // Carica le province
       await loadProvinces();
@@ -1356,6 +1375,12 @@ export default defineComponent({
       formRef.value.validate(async (valid: boolean) => {
         if (valid) {
           loading.value = true;
+          
+          // Se la checkbox "Trattativa riservata" è selezionata, imposta il prezzo a -1
+          if (isTrattativaRiservata.value) {
+            formData.value.Price = -1;
+          }
+          
           await updatePhotosOrder(formData.value.Photos)
           await updateRealEstateProperty(formData.value)
             .then(() => {
@@ -1430,6 +1455,7 @@ export default defineComponent({
       provinces,
       cities,
       locations,
+      isTrattativaRiservata,
     };
   },
 });
