@@ -19,6 +19,7 @@ export class Agency {
   Role? = "Agency";
   Password?: string;
   EmailConfirmed?: boolean;
+  Color?: string;
 }
 
 const getAgencies = (filterRequest: string) : Promise<Array<Agency>> => {

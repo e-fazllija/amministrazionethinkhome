@@ -188,6 +188,26 @@
             </div>
           </div>
           <!--end::Input group-->
+
+          <!--begin::Input group-->
+          <div class="row mb-6">
+            <!--begin::Label-->
+            <label class="col-lg-4 col-form-label fw-semobold fs-6">Colore</label>
+            <!--end::Label-->
+
+            <!--begin::Col-->
+            <div class="col-lg-8 fv-row">
+              <Field type="color" name="Color" class="form-control form-control-lg form-control-solid"
+                placeholder="Colore" v-model="profileDetails.Color" />
+              <div class="fv-plugins-message-container">
+                <div class="fv-help-block">
+                  <ErrorMessage name="Color" />
+                </div>
+              </div>
+            </div>
+            <!--end::Col-->
+          </div>
+          <!--end::Input group-->
         </div>
         <!--end::Card body-->
 
@@ -425,6 +445,7 @@ export default defineComponent({
       Address: Yup.string().required().label("Address"),
       Town: Yup.string().required().label("Town"),
       Region: Yup.string().label("Region"),
+      Color: Yup.string().label("Color"),
     });
 
     const changeEmail = Yup.object().shape({
