@@ -199,6 +199,20 @@
                   </div>
                   <!--end::Col-->
 
+                  <!--begin::Col-->
+                  <div class="col-md-6 fv-row">
+                    <!--begin::Label-->
+                    <label>Colore</label>
+                    <!--end::Label-->
+
+                    <!--begin::Input-->
+                    <el-form-item prop="color">
+                      <el-input v-model="formData.Color" type="color" />
+                    </el-form-item>
+                    <!--end::Input-->
+                  </div>
+                  <!--end::Col-->
+
                 </div>
                 <!--end::Input group-->
 
@@ -278,7 +292,8 @@ export default defineComponent({
       Town: "",
       Region: "",
       Password: "",
-      EmailConfirmed: null
+      EmailConfirmed: null,
+      Color: ""
     });
 
     watch(() => props.Id, async (first, second) => {
