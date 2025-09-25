@@ -2,12 +2,12 @@
   <tbody class="fw-semibold text-gray-600">
     <template v-for="(row, i) in data" :key="i">
       <tr>
-        <td v-if="checkboxEnabled">
+        <td v-if="checkboxEnabled" class="checkbox-cell">
           <div
-            class="form-check form-check-sm form-check-custom form-check-solid"
+            class="form-check form-check-sm form-check-custom form-check-solid checkbox-wrapper"
           >
             <input
-              class="form-check-input"
+              class="form-check-input checkbox-input"
               type="checkbox"
               :value="row[checkboxLabel]"
               v-model="selectedItems"
@@ -72,3 +72,68 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.checkbox-cell {
+  width: 30px;
+  min-width: 30px;
+  max-width: 30px;
+  padding: 0.875rem 0.5rem !important;
+  text-align: center;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+  }
+
+  .checkbox-input {
+    margin: 0;
+    transform: scale(1.1);
+    border-radius: 4px;
+    border: 1px solid var(--bs-gray-300);
+    width: 16px;
+    height: 16px;
+
+    &:checked {
+      background-color: var(--bs-primary);
+      border-color: var(--bs-primary);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 2px rgba(54, 153, 255, 0.1);
+    }
+  }
+}
+
+// Ensure proper alignment with header checkbox
+tbody {
+  tr {
+    td.checkbox-cell {
+      position: relative;
+
+      .form-check {
+        position: relative;
+        width: 16px;
+        height: 16px;
+        margin: 0 auto;
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .checkbox-cell {
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    padding: 0.5rem 0.25rem !important;
+  }
+}
+</style>

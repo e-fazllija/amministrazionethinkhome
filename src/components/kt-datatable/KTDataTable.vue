@@ -126,3 +126,222 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+// Professional table styling that matches the sidebar design
+.dataTables_wrapper {
+  .table {
+    // Clean, professional table styling
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0;
+
+    // Professional header styling
+    thead {
+      th {
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        padding: 0.875rem 1rem;
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: #495057;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        position: relative;
+
+        // Subtle hover effect
+        &:hover {
+          background: #e9ecef;
+        }
+
+        // Professional sort indicators
+        .table-sort,
+        .table-sort-asc,
+        .table-sort-desc {
+          &:after {
+            margin-left: 0.5rem;
+            font-size: 0.75rem;
+          }
+        }
+
+        .table-sort-asc:after {
+          content: "↑";
+          color: var(--bs-primary);
+        }
+
+        .table-sort-desc:after {
+          content: "↓";
+          color: var(--bs-primary);
+        }
+      }
+    }
+
+    // Professional row styling
+    tbody {
+      tr {
+        transition: background-color 0.2s ease;
+        border-bottom: 1px solid var(--bs-border-color);
+
+        &:hover {
+          background: #f8f9fa;
+        }
+
+        td {
+          padding: 0.75rem 1rem;
+          vertical-align: middle;
+          border: none;
+          font-size: 0.875rem;
+          color: #495057;
+
+          &:first-child {
+            font-weight: 600;
+            color: #343a40;
+          }
+
+          // Ensure checkbox column has consistent width
+          &:first-child {
+            width: 30px;
+            min-width: 30px;
+            max-width: 30px;
+            text-align: center;
+          }
+        }
+      }
+    }
+
+    // Professional checkbox styling (general - not for header/body specific)
+    .form-check-input:not(.checkbox-input):not(.header-checkbox-input) {
+      border-radius: 4px;
+      border: 1px solid var(--bs-gray-300);
+      width: 16px;
+      height: 16px;
+
+      &:checked {
+        background-color: var(--bs-primary);
+        border-color: var(--bs-primary);
+      }
+
+      &:focus {
+        box-shadow: 0 0 0 2px rgba(54, 153, 255, 0.1);
+      }
+    }
+  }
+
+  // Professional empty state
+  .dataTables_empty {
+    text-align: center;
+    padding: 2rem !important;
+    color: var(--bs-gray-500);
+    font-size: 0.875rem;
+    background: var(--bs-gray-25);
+  }
+}
+
+// Professional pagination matching sidebar style
+.pagination {
+  margin: 0;
+  gap: 0.125rem;
+
+  .page-item {
+    .page-link {
+      border: 1px solid var(--bs-border-color);
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      color: var(--bs-gray-600);
+      font-weight: 500;
+      transition: all 0.2s ease;
+      min-width: 36px;
+      text-align: center;
+      background: var(--bs-body-bg);
+      font-size: 0.875rem;
+
+      &:hover {
+        background: var(--bs-gray-100);
+        color: var(--bs-gray-800);
+        border-color: var(--bs-gray-300);
+      }
+
+      &:focus {
+        box-shadow: 0 0 0 2px rgba(54, 153, 255, 0.1);
+      }
+    }
+
+    &.active .page-link {
+      background: var(--bs-primary);
+      color: white;
+      border-color: var(--bs-primary);
+    }
+
+    &.disabled .page-link {
+      color: var(--bs-gray-400);
+      background: var(--bs-gray-50);
+      border-color: var(--bs-gray-200);
+    }
+  }
+}
+
+// Professional form select styling
+.form-select {
+  border: 1px solid var(--bs-border-color);
+  border-radius: 6px;
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  font-size: 0.875rem;
+  background-position: right 0.75rem center;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-gray-700);
+
+  &:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 2px rgba(54, 153, 255, 0.1);
+  }
+}
+
+// Subtle professional enhancements for real estate
+.kt-professional-table {
+  .table {
+    thead {
+      th {
+        background: linear-gradient(135deg, var(--bs-gray-50) 0%, var(--bs-gray-100) 100%);
+        border-bottom: 2px solid var(--bs-border-color);
+      }
+    }
+
+    tbody {
+      tr {
+        &:hover {
+          background: linear-gradient(135deg, var(--bs-gray-25) 0%, rgba(54, 153, 255, 0.02) 100%);
+        }
+      }
+    }
+  }
+}
+
+// Mobile responsive adjustments
+@media (max-width: 768px) {
+  .dataTables_wrapper {
+    .table {
+      th, td {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+      }
+    }
+
+    .dataTables_empty {
+      padding: 1rem !important;
+    }
+  }
+
+  .pagination {
+    .page-item .page-link {
+      padding: 0.4rem 0.6rem;
+      min-width: 32px;
+      font-size: 0.8rem;
+    }
+  }
+
+  .form-select {
+    font-size: 0.8rem;
+    padding: 0.4rem 1.5rem 0.4rem 0.75rem;
+  }
+}
+</style>

@@ -1,60 +1,99 @@
 <template>
   <div class="card">
+    <!--begin::Search-->
     <div class="card-header border-0 pt-6">
-      <!--begin::Card title-->
       <div class="card-title">
-        <!--begin::Search-->
-        <div class="d-flex align-items-center position-relative my-1">
-          <KTIcon icon-name="magnifier" icon-class="fs-1 position-absolute ms-6" />
-          <input type="text" v-model="search" @input="searchItems()"
-            class="form-control form-control-solid w-250px ps-15" placeholder="Ricerca" />
-        </div>
-        <!--end::Search-->
+        <h3 class="fw-bold m-0 text-gray-800">
+          <KTIcon icon-name="search" icon-class="fs-2 text-primary me-2" />
+          Filtri di Ricerca
+        </h3>
       </div>
-      <!--begin::Card title-->
-      <!--begin::Card toolbar-->
-      <div class="card-toolbar">
-        <!--begin::Toolbar-->
-        <div v-if="selectedIds.length === 0" class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-          <!--begin::Export-->
-          <!-- <button
-            type="button"
-            class="btn btn-light-primary me-3"
-            data-bs-toggle="modal"
-            data-bs-target="#kt_customers_export_modal"
-          >
-            <KTIcon icon-name="exit-up" icon-class="fs-2" />
-            Export
-          </button> -->
-          <!--end::Export-->
-          <!--begin::Add customer-->
-          <input class="form-control" type="file" multiple @change="handleFileUpload">
-          <!--end::Add customer-->
-        </div>
-        <!--end::Toolbar-->
-        <!--begin::Group actions-->
-        <div v-else class="d-flex justify-content-end align-items-center" data-kt-customer-table-toolbar="selected">
-          <div class="fw-bold me-5">
-            <span class="me-2">{{ selectedIds.length }}</span>Seleziona
-          </div>
-          <button type="button" class="btn btn-danger" @click="deleteFewItems()">
-            Cancella Selezionati
-          </button>
-        </div>
-        <!--end::Group actions-->
-        <!--begin::Group actions-->
-        <div class="d-flex justify-content-end align-items-center d-none" data-kt-customer-table-toolbar="selected">
-          <div class="fw-bold me-5">
-            <span class="me-2" data-kt-customer-table-select="selected_count"></span>Seleziona
-          </div>
-          <button type="button" class="btn btn-danger" data-kt-customer-table-select="delete_selected">
-            Cancella Selezionati
-          </button>
-        </div>
-        <!--end::Group actions-->
-      </div>
-      <!--end::Card toolbar-->
     </div>
+    
+    <div class="card-body pt-0">
+      <!-- Filtri principali -->
+      <div class="row g-4 mb-6">
+        <div class="col-md-6 col-lg-6">
+          <label class="form-label fw-semibold text-gray-700">
+            <KTIcon icon-name="document" icon-class="fs-6 me-1" />
+            Cerca Documento
+          </label>
+          <div class="position-relative">
+            <input 
+              type="text" 
+              v-model="search" 
+              @input="searchItems()"
+              class="form-control form-control-solid ps-12" 
+              placeholder="Nome file, tipo documento..." 
+            />
+            <KTIcon 
+              icon-name="search" 
+              icon-class="fs-4 position-absolute top-50 start-0 translate-middle-y ms-4 text-gray-500" 
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Pulsanti azione -->
+      <div class="row g-4 mb-6">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <button 
+              type="button" 
+              @click="clearAllFilters" 
+              class="btn btn-light-secondary me-3"
+            >
+              <KTIcon icon-name="cross" icon-class="fs-2 me-2" />
+              Pulisci Filtri
+            </button>
+          </div>
+          
+          <div class="d-flex align-items-center">
+            <div class="bg-light-primary rounded p-3 me-3">
+              <span class="text-primary fw-bold fs-6">
+                <KTIcon icon-name="chart-simple" icon-class="fs-4 me-2" />
+                Risultati: {{ tableData.length }}
+              </span>
+            </div>
+            
+            <div class="d-flex align-items-center">
+              <input 
+                class="form-control me-3" 
+                type="file" 
+                multiple 
+                @change="handleFileUpload"
+                accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif"
+              />
+              <span class="text-muted fs-7">Carica documenti</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--end::Search-->
+    
+    <!--begin::Card toolbar-->
+    <div class="card-toolbar">
+      <!--begin::Group actions-->
+      <div
+        v-if="selectedIds.length > 0"
+        class="d-flex justify-content-end align-items-center"
+        data-kt-customer-table-toolbar="selected"
+      >
+        <div class="fw-bold me-5">
+          <span class="me-2">{{ selectedIds.length }}</span>Selezionati
+        </div>
+        <button
+          type="button"
+          class="btn btn-danger"
+          @click="deleteFewItems()"
+        >
+          Cancella Selezionati
+        </button>
+      </div>
+      <!--end::Group actions-->
+    </div>
+    <!--end::Card toolbar-->
     <div class="card-body pt-0">
       <Datatable @on-sort="sort" @on-items-select="onItemSelect" :data="tableData" :header="tableHeader"
         :loading="loading" :enable-items-per-page-dropdown="true" :checkbox-enabled="true" checkbox-label="Id">
@@ -131,8 +170,15 @@ export default defineComponent({
     };
 
     const getItems = async () => {
-      tableData.value = await getDocumentations();
-      initItems.value.splice(0, tableData.value.length, ...tableData.value);
+      try {
+        const result = await getDocumentations();
+        tableData.value = result || [];
+        initItems.value.splice(0, tableData.value.length, ...tableData.value);
+      } catch (error) {
+        console.error('Error fetching documentations:', error);
+        tableData.value = [];
+        initItems.value = [];
+      }
     };
 
     onMounted(async () => {
@@ -228,6 +274,12 @@ export default defineComponent({
     const onItemSelect = (selectedItems: Array<number>) => {
       selectedIds.value = selectedItems;
     };
+
+    const clearAllFilters = () => {
+      search.value = "";
+      searchItems();
+    };
+
     async function deleteItem(id: number) {
       loading.value = true;
       Swal.fire({
@@ -261,8 +313,81 @@ export default defineComponent({
       sort,
       onItemSelect,
       tableHeader,
-      deleteItem
+      deleteItem,
+      clearAllFilters
     };
   },
 });
 </script>
+
+<style>
+/* Stili per i filtri a cascata */
+.form-control:disabled,
+.form-select:disabled {
+  background-color: #f8f9fa;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Stili per i campi di input con icone */
+.position-relative .form-control {
+  padding-left: 3rem;
+}
+
+/* Stili per i pulsanti */
+.btn {
+  transition: all 0.2s ease;
+  border-radius: 0.5rem;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Stili per il contatore risultati */
+.bg-light-primary {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border: 1px solid #90caf9;
+}
+
+/* Animazioni per i filtri */
+.form-label {
+  transition: color 0.2s ease;
+}
+
+.form-label:hover {
+  color: #1976d2;
+}
+
+/* Stili per i dropdown */
+.form-select {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-select:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .row.g-4 {
+    margin: 0;
+  }
+  
+  .col-md-2, .col-md-3, .col-md-4, .col-md-6 {
+    margin-bottom: 1rem;
+  }
+  
+  .d-flex.justify-content-between {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .d-flex.justify-content-between > div {
+    width: 100%;
+    justify-content: center;
+  }
+}
+</style>

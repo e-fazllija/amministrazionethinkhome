@@ -51,7 +51,7 @@
                   <span class="menu-title">{{ translate(menuItem.heading) }}</span>
                   
                   <!-- Badge for notifications -->
-                  <span v-if="getMenuBadge(menuItem.route)" class="menu-badge badge badge-sm badge-circle badge-light-danger">
+                  <span v-if="getMenuBadge(menuItem.route)" class="menu-badge badge badge-sm badge-circle">
                     {{ getMenuBadge(menuItem.route) }}
                   </span>
                 </router-link>
