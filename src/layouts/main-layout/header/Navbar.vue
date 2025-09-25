@@ -100,20 +100,6 @@
       <!--end::Menu wrapper-->
     </div>
     <!--end::User menu-->
-    <!--begin::Header menu toggle-->
-    <div
-      class="app-navbar-item d-lg-none ms-2 me-n2"
-      v-tooltip
-      title="Show header menu"
-    >
-      <div
-        class="btn btn-flex btn-icon btn-active-color-primary w-30px h-30px"
-        id="kt_app_header_menu_toggle"
-      >
-        <KTIcon icon-name="element-4" icon-class="fs-2" />
-      </div>
-    </div>
-    <!--end::Header menu toggle-->
   </div>
   <!--end::Navbar-->
 </template>
