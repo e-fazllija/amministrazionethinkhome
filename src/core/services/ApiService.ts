@@ -20,8 +20,8 @@ class ApiService {
     ApiService.vueInstance = app;
     ApiService.vueInstance.use(VueAxios, axios);
     ApiService.vueInstance.axios.defaults.baseURL =
-      "https://thinkhomebe.azurewebsites.net/api/";
-      //"https://localhost:7267/api/";
+      // "https://thinkhomebe.azurewebsites.net/api/";
+      "https://localhost:7267/api/";
   }
 
   /**
@@ -30,7 +30,7 @@ class ApiService {
   public static setHeader(): void {
     ApiService.vueInstance.axios.defaults.headers.common[
       "Authorization"
-    ] = `Token ${JwtService.getToken()}`;
+    ] = `Bearer ${JwtService.getToken()}`;
     ApiService.vueInstance.axios.defaults.headers.common["Accept"] =
       "application/json";
   }
