@@ -266,6 +266,9 @@
             € {{ item.Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") }}
           </template>
         </template>
+        <template v-slot:Status="{ row: item }">
+          <span class="badge badge-light-primary">{{ item.Status || 'N/D' }}</span>
+        </template>
         <template v-slot:Photos="{ row: item }">
           <img v-if="item.Photos && item.Photos !== 'null'" :src="item.Photos" style="height: 100px; width: 200px; object-fit: cover;" />
           <div v-else style="height: 100px; width: 200px; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999;">
@@ -339,6 +342,12 @@ export default defineComponent({
         columnLabel: "Price",
         sortEnabled: true,
         columnWidth: 150,
+      },
+      {
+        columnName: "Stato",
+        columnLabel: "Status",
+        sortEnabled: true,
+        columnWidth: 120,
       },
       {
         columnName: "Immagine",
