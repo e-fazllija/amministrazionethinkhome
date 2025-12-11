@@ -30,12 +30,15 @@ export const useAuthStore = defineStore("auth", () => {
   const errors = ref("");
   const user = ref<User>({} as User);
   const isAuthenticated = ref(!!JwtService.getToken());
+  const isVerifying = ref(false);
+  const hasVerified = ref(false);
 
   function setAuth(authUser: User) {
     isAuthenticated.value = true;
     user.value = authUser;
     errors.value = "";
     JwtService.saveToken(user.value.Token);
+    hasVerified.value = true;
   }
 
   function setError(error: any, status?: number) {
@@ -54,6 +57,7 @@ export const useAuthStore = defineStore("auth", () => {
     user.value = {} as User;
     errors.value = "";
     JwtService.destroyToken();
+    hasVerified.value = false;
   }
 
   async function login(credentials: User) {
@@ -92,7 +96,13 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   async function verifyAuth() {
+    // Evita chiamate multiple: se è già in corso o già verificato, esci
+    if (isVerifying.value || hasVerified.value) {
+      return;
+    }
+
     if (JwtService.getToken()) {
+      isVerifying.value = true;
       ApiService.setHeader();
       await ApiService.post("auth/VerifyToken", { api_token: JwtService.getToken() })
         .then(({ data }) => {
@@ -101,6 +111,9 @@ export const useAuthStore = defineStore("auth", () => {
         .catch(({ response }) => {
           setError(response.data.Message);
           purgeAuth();
+        })
+        .finally(() => {
+          isVerifying.value = false;
         });
     } else {
       purgeAuth();

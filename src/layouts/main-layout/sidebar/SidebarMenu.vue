@@ -97,12 +97,13 @@
 
 <script lang="ts">
 import { getAssetPath } from "@/core/helpers/assets";
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import MainMenuConfig from "@/core/config/MainMenuConfig";
 import { sidebarMenuIcons } from "@/core/helpers/config";
 import { useI18n } from "vue-i18n";
 import { useAuthStore } from "@/stores/auth";
+import type { MenuItem } from "@/core/config/MainMenuConfig";
 
 export default defineComponent({
   name: "sidebar-menu",
@@ -113,7 +114,31 @@ export default defineComponent({
     const scrollElRef = ref<null | HTMLElement>(null);
     const authStore = useAuthStore();
 
-    MainMenuConfig[0].pages = MainMenuConfig[0].pages.filter(x => x.roleEnabled.includes(authStore.user.Role))
+    // Computed property reattiva che filtra il menu in base al ruolo dell'utente
+    const filteredMenuConfig = computed(() => {
+      // Se il ruolo non è ancora disponibile, restituisci il menu completo
+      if (!authStore.user?.Role) {
+        return MainMenuConfig;
+      }
+
+      // Crea una copia profonda del menu config per evitare mutazioni
+      return MainMenuConfig.map((section) => {
+        if (section.pages) {
+          return {
+            ...section,
+            pages: section.pages.filter((page) => {
+              // Se la pagina non ha roleEnabled, la mostriamo sempre
+              if (!page.roleEnabled || page.roleEnabled.length === 0) {
+                return true;
+              }
+              // Altrimenti filtriamo in base al ruolo
+              return page.roleEnabled.includes(authStore.user.Role);
+            }),
+          };
+        }
+        return section;
+      });
+    });
 
     onMounted(() => {
       if (scrollElRef.value) {
@@ -135,7 +160,7 @@ export default defineComponent({
 
     return {
       hasActiveChildren,
-      MainMenuConfig,
+      MainMenuConfig: filteredMenuConfig,
       sidebarMenuIcons,
       translate,
       getAssetPath,
