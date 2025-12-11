@@ -1,16 +1,22 @@
 <template>
-  <RouterView />
+  <div v-if="showLoader" class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  <RouterView v-if="!showLoader" />
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, onBeforeMount, onMounted } from "vue";
-import { RouterView } from "vue-router";
+import { defineComponent, nextTick, onBeforeMount, onMounted, computed } from "vue";
+import { RouterView, useRoute } from "vue-router";
 import { useConfigStore } from "@/stores/config";
 import { useThemeStore } from "@/stores/theme";
 import { useBodyStore } from "@/stores/body";
 import { useAuthStore } from "@/stores/auth";
 import { themeConfigValue } from "@/core/helpers/config";
 import { initializeComponents } from "@/core/plugins/keenthemes";
+import JwtService from "@/core/services/JwtService";
 
 export default defineComponent({
   name: "app",
@@ -22,6 +28,19 @@ export default defineComponent({
     const themeStore = useThemeStore();
     const bodyStore = useBodyStore();
     const authStore = useAuthStore();
+    const route = useRoute();
+
+    // Route pubbliche che non richiedono autenticazione
+    const publicRoutes = ['sign-in', 'sign-up', 'password-reset', 'email-confirmation', 'multi-step-sign-up', '404', '500'];
+    
+    const isPublicRoute = computed(() => {
+      return publicRoutes.includes(route.name as string);
+    });
+
+    // Mostra il loader solo se non siamo verificati E non siamo su una route pubblica E c'è un token (quindi stiamo aspettando la verifica)
+    const showLoader = computed(() => {
+      return !authStore.hasVerified && !isPublicRoute.value && !!JwtService.getToken();
+    });
 
     onBeforeMount(async () => {
       /**
@@ -29,7 +48,10 @@ export default defineComponent({
        * remove this to use static config (@/core/config/DefaultLayoutConfig.ts)
        */
       await configStore.overrideLayoutConfig();
+      
+      // Verifica sempre l'autenticazione
       await authStore.verifyAuth();
+      
       /**
        *  Sets a mode from configuration
        */
@@ -43,6 +65,12 @@ export default defineComponent({
         bodyStore.removeBodyClassName("page-loading");
       });
     });
+
+    return {
+      authStore,
+      isPublicRoute,
+      showLoader
+    };
   },
 });
 </script>

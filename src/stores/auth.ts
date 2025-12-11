@@ -110,13 +110,21 @@ export const useAuthStore = defineStore("auth", () => {
         })
         .catch(({ response }) => {
           setError(response.data.Message);
-          purgeAuth();
+          isAuthenticated.value = false;
+          user.value = {} as User;
+          errors.value = "";
+          JwtService.destroyToken();
+          hasVerified.value = true; // Marca come verificato anche in caso di errore
         })
         .finally(() => {
           isVerifying.value = false;
         });
     } else {
-      purgeAuth();
+      isAuthenticated.value = false;
+      user.value = {} as User;
+      errors.value = "";
+      JwtService.destroyToken();
+      hasVerified.value = true; // Marca come verificato quando non c'è token
     }
   }
   
@@ -168,6 +176,7 @@ export const useAuthStore = defineStore("auth", () => {
     errors,
     user,
     isAuthenticated,
+    hasVerified,
     login,
     logout,
     register,
