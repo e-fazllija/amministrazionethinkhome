@@ -85,8 +85,8 @@ const routes: Array<RouteRecordRaw> = [
         name: "documentations",
         component: () => import("@/views/pages/documentations/Documentations.vue"),
         meta: {
-          pageTitle: "Modulistica",
-          breadcrumbs: ["Modulistica"],
+          pageTitle: "Archivio File",
+          breadcrumbs: ["Archivio File"],
         },
       },
       {
