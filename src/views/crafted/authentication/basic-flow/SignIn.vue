@@ -14,25 +14,8 @@
         <!--begin::Title-->
         <h1 class="text-dark mb-3">Accedi</h1>
         <!--end::Title-->
-
-        <!--begin::Link-->
-        <!-- <div class="text-gray-400 fw-semobold fs-4">
-          New Here?
-
-          <router-link to="/sign-up" class="link-primary fw-bold">
-            Create an Account
-          </router-link>
-        </div> -->
-        <!--end::Link-->
       </div>
       <!--begin::Heading-->
-
-      <!-- <div class="mb-10 bg-light-info p-8 rounded">
-        <div class="text-info">
-          Use account <strong>admin@demo.com</strong> and password
-          <strong>demo</strong> to continue.
-        </div>
-      </div> -->
 
       <!--begin::Input group-->
       <div class="fv-row mb-10">
@@ -64,11 +47,6 @@
           <!--begin::Label-->
           <label class="form-label fw-bold text-dark fs-6 mb-0">Password</label>
           <!--end::Label-->
-
-          <!--begin::Link-->
-          <!-- <router-link to="/password-reset" class="link-primary fs-6 fw-bold">
-            Password Dimenticata?
-          </router-link> -->
           <!--end::Link-->
         </div>
         <!--end::Wrapper-->
