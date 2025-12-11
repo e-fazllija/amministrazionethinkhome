@@ -1,0 +1,59 @@
+// Folder Cards Styles
+// Support for both light and dark themes
+
+.folder-card {
+  cursor: pointer;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.475rem;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  background-color: var(--bs-body-bg);
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border-color: var(--bs-primary);
+  }
+}
+
+.folder-icon {
+  margin-bottom: 1rem;
+}
+
+.folder-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--bs-gray-800);
+  margin-bottom: 0.5rem;
+}
+
+.folder-count {
+  font-size: 0.875rem;
+  color: var(--bs-gray-600);
+}
+
+// Dark theme support
+[data-bs-theme="dark"] {
+  .folder-card {
+    background-color: var(--bs-gray-800);
+    border-color: var(--bs-gray-700);
+
+    &:hover {
+      border-color: var(--bs-primary);
+    }
+  }
+
+  .folder-title {
+    color: var(--bs-gray-200);
+  }
+
+  .folder-count {
+    color: var(--bs-gray-400);
+  }
+}

@@ -4,8 +4,9 @@ const store = useAuthStore();
 
 export class Documentation{
   Id?: number;
-  File: File;
+  File?: File;
   FileName?: string;
+  FileUrl?: string;
   FolderName: string;
 }
 
@@ -25,7 +26,9 @@ const getDocumentations = () : Promise<Array<Documentation>> => {
 
 const uploadFile = async (file: Documentation) => {
   const formData = new FormData();
-  formData.append("File", file.File);
+  if (file.File) {
+    formData.append("File", file.File);
+  }
   formData.append("FolderName", file.FolderName);
   return ApiService.post("BlobStorage/InsertDocument", formData)
     .then(({ data }) => {
@@ -38,8 +41,8 @@ const uploadFile = async (file: Documentation) => {
     });
 };
 
-const deleteDocumentation = async (id: number) => {
-  return await ApiService.delete(`BlobStorage/DeleteModule?id=${id}&folderName=Moduli`)
+const deleteDocumentation = async (id: number, folderName: string) => {
+  return await ApiService.delete(`BlobStorage/DeleteModule?id=${id}&folderName=${folderName}`)
     .then(({ data }) => {
       const result = data as Partial<Documentation>;
       return result;
