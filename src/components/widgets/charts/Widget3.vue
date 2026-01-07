@@ -71,15 +71,32 @@ export default defineComponent({
     const chartRef = ref<typeof VueApexCharts | null>(null);
     let chart: ApexOptions = {};
     const store = useThemeStore();
-    const keys = Object.keys(props.datas).slice(1);
-    const values = Object.values(props.datas).slice(1);
 
-    const series = [
+    const categories = computed(() => {
+      const entries = Object.entries(props.datas || {}).map(([key, value]) => {
+        const [m, y] = key.split("/").map((v) => parseInt(v));
+        return { key, value: Number(value), year: y, month: m };
+      });
+
+      // Ordina cronologicamente; se parsing fallisce, mantiene l'ordine originale
+      const sorted = entries.every((e) => !isNaN(e.year) && !isNaN(e.month))
+        ? entries.sort((a, b) =>
+            a.year === b.year ? a.month - b.month : a.year - b.year
+          )
+        : entries;
+
+      return {
+        keys: sorted.map((e) => e.key),
+        values: sorted.map((e) => e.value),
+      };
+    });
+
+    const series = computed(() => [
       {
         name: "Inserimenti",
-        data: values,
+        data: categories.value.values,
       },
-    ];
+    ]);
 
     const themeMode = computed(() => {
       return store.mode;
@@ -95,7 +112,6 @@ export default defineComponent({
       }
 
       Object.assign(chart, chartOptions());
-
       chartRef.value.refresh();
     };
 
@@ -126,8 +142,30 @@ export default defineComponent({
       enabled: false,
     },
     fill: {
-      type: "solid",
-      opacity: 1,
+      type: "gradient",
+      gradient: {
+        shadeIntensity: 1,
+        opacityFrom: 0.45,
+        opacityTo: 0.05,
+        stops: [15, 80, 100],
+        colorStops: [
+          {
+            offset: 0,
+            color: lightColor,
+            opacity: 0.8,
+          },
+          {
+            offset: 50,
+            color: baseColor,
+            opacity: 0.25,
+          },
+          {
+            offset: 100,
+            color: baseColor,
+            opacity: 0.05,
+          },
+        ],
+      },
     },
     stroke: {
       curve: "smooth",
@@ -136,7 +174,7 @@ export default defineComponent({
       colors: [baseColor],
     },
     xaxis: {
-      categories: keys,
+      categories: categories.value.keys,
       axisBorder: {
         show: false,
       },
@@ -158,7 +196,7 @@ export default defineComponent({
         },
       },
       tooltip: {
-        enabled: false,
+        enabled: true,
       },
     },
     yaxis: {
@@ -167,6 +205,22 @@ export default defineComponent({
           colors: labelColor,
           fontSize: "12px",
         },
+      },
+    },
+    grid: {
+      borderColor: borderColor,
+      strokeDashArray: 4,
+      padding: {
+        top: 10,
+      },
+    },
+    markers: {
+      size: 4,
+      colors: [baseColor],
+      strokeColors: "#fff",
+      strokeWidth: 2,
+      hover: {
+        size: 6,
       },
     },
     states: {
@@ -191,12 +245,14 @@ export default defineComponent({
       },
     },
     tooltip: {
+      shared: true,
+      intersect: false,
       style: {
         fontSize: "12px",
       },
       y: {
         formatter: function (val) {
-          return val.toString();
+          return val?.toString?.() ?? "0";
         },
       },
     },
