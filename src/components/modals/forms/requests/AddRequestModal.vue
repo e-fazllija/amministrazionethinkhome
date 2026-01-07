@@ -531,18 +531,30 @@
           }
         };
 
+        // Flag per tracciare se i dati sono già stati caricati
+        let dataLoaded = false;
+
+        // Carica i dati solo quando il modal si apre (lazy loading)
+        const loadModalData = async () => {
+          if (!dataLoaded) {
+            loading.value = true;
+            inserModel.value = await getToInsert(store.user.AgencyId);
+            if(inserModel.value.Customers.length > 0){
+              formData.value.CustomerId = inserModel.value.Customers[0].Id;
+            }
+            await loadProvinces();
+            dataLoaded = true;
+            loading.value = false;
+          }
+        };
+
         onMounted(async () => {
-        loading.value = true;
-        inserModel.value = await getToInsert(store.user.AgencyId);
-        if(inserModel.value.Customers.length > 0){
-          formData.value.CustomerId = inserModel.value.Customers[0].Id;
-        } 
-        
-        // Carica le province dal database
-        await loadProvinces();
-        
-        loading.value = false;
-      })
+          // Aggiungi listener per quando il modal si apre
+          if (addRequestModalRef.value) {
+            const modalElement = addRequestModalRef.value as HTMLElement;
+            modalElement.addEventListener('shown.bs.modal', loadModalData);
+          }
+        })
         
       const rules = ref({
         Type: [

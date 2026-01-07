@@ -6,8 +6,8 @@
   </div>
 
   <div v-else-if="data" class="dashboard-wrapper">
-    <!-- Admin Dashboard -->
-    <div v-if="isAdmin">
+    <!-- Dashboard -->
+    <div>
       <!-- Filtri -->
       <div class="card theme-dark-bg-body mb-5">
         <div class="card-header border-0 pt-5">
@@ -473,208 +473,6 @@
         </div>
     </div>
     </div>
-
-    <!-- Agent Dashboard -->
-    <div v-else-if="isAgent">
-      <!-- KPI Cards -->
-      <div class="row gy-5 g-xl-10 mb-5">
-        <div class="col-md-4">
-          <div class="card dashboard-card theme-dark-bg-body">
-            <div class="card-body">
-              <p class="dashboard-card-title mb-1">Immobili Assegnati</p>
-              <p class="dashboard-card-value mb-0">{{ agentSelf?.PropertiesTotal || 0 }}</p>
-              <p class="dashboard-card-sub text-muted mb-0">
-                Attivi: {{ agentSelf?.PropertiesActive || 0 }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card dashboard-card theme-dark-bg-body">
-            <div class="card-body">
-              <p class="dashboard-card-title mb-1">Appuntamenti Oggi</p>
-              <p class="dashboard-card-value mb-0">{{ calendarDetails?.Today || 0 }}</p>
-              <p class="dashboard-card-sub text-muted mb-0">
-                Questa settimana: {{ calendarDetails?.ThisWeek || 0 }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card dashboard-card theme-dark-bg-body">
-            <div class="card-body">
-              <p class="dashboard-card-title mb-1">Appuntamenti in Arrivo</p>
-              <p class="dashboard-card-value mb-0">{{ calendarDetails?.Upcoming || 0 }}</p>
-              <p class="dashboard-card-sub text-muted mb-0">
-                Confermati: {{ calendarDetails?.Confirmed || 0 }}
-              </p>
-            </div>
-          </div>
-    </div>
-  </div>
-
-      <!-- Filtri Appuntamenti -->
-      <div class="card theme-dark-bg-body mb-5">
-        <div class="card-header border-0 pt-5">
-          <h3 class="card-title">
-            <span class="card-label fw-bold fs-3">Filtri Appuntamenti</span>
-          </h3>
-        </div>
-        <div class="card-body">
-          <div class="row g-3">
-            <div class="col-md-4">
-              <label class="form-label fw-semibold">Periodo</label>
-              <select v-model="appointmentFilter" @change="filterAppointments" class="form-select form-select-solid">
-                <option value="upcoming">Prossimi</option>
-                <option value="today">Oggi</option>
-                <option value="week">Questa settimana</option>
-                <option value="month">Questo mese</option>
-                <option value="past">Passati</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label fw-semibold">Stato</label>
-              <select v-model="appointmentStatusFilter" @change="filterAppointments" class="form-select form-select-solid">
-                <option value="all">Tutti</option>
-                <option value="confirmed">Confermati</option>
-                <option value="pending">Da confermare</option>
-                <option value="cancelled">Cancellati</option>
-              </select>
-            </div>
-            <div class="col-md-4 d-flex align-items-end">
-              <button @click="refreshAppointments" :disabled="loadingAppointments" class="btn btn-primary w-100 position-relative">
-                <span v-if="loadingAppointments" class="spinner-border spinner-border-sm me-2" role="status">
-                  <span class="sr-only">Loading...</span>
-                </span>
-                <i v-else class="ki-duotone ki-arrows-circle fs-2 me-2">
-                  <span class="path1"></span>
-                  <span class="path2"></span>
-                </i>
-                Aggiorna Appuntamenti
-              </button>
-            </div>
-          </div>
-        </div>
-</div>
-
-      <!-- Appuntamenti -->
-      <div class="card theme-dark-bg-body">
-        <div class="card-header border-0 pt-5">
-          <h3 class="card-title">
-            <span class="card-label fw-bold fs-3">Appuntamenti</span>
-          </h3>
-        </div>
-        <div class="card-body">
-          <div v-if="filteredAppointments.length === 0" class="text-center py-10">
-            <p class="text-muted">Nessun appuntamento trovato con i filtri selezionati.</p>
-          </div>
-          <div v-else class="table-responsive">
-            <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
-              <thead>
-                <tr class="fw-bold text-muted">
-                  <th class="min-w-150px">Evento</th>
-                  <th class="min-w-120px">Tipo</th>
-                  <th class="min-w-150px">Data/Ora</th>
-                  <th class="min-w-120px">Agente</th>
-                  <th class="min-w-100px">Immobile</th>
-                  <th class="min-w-80px text-end">Stato</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="appt in filteredAppointments" :key="appt.Id">
-                  <td>
-                    <span class="text-dark fw-bold d-block fs-6">{{ appt.NomeEvento }}</span>
-                  </td>
-                  <td>
-                    <span class="badge badge-light-primary">{{ appt.Type }}</span>
-                  </td>
-                  <td>
-                    <span class="text-dark fw-semibold d-block fs-7">{{ formatDateTime(appt.DataInizioEvento) }}</span>
-                    <span class="text-muted fw-semibold d-block fs-8">{{ formatTime(appt.DataInizioEvento) }} - {{ formatTime(appt.DataFineEvento) }}</span>
-                  </td>
-                  <td>
-                    <span class="text-dark fw-semibold d-block fs-7">{{ appt.AgentName }}</span>
-                  </td>
-                  <td>
-                    <span v-if="appt.PropertyTitle" class="text-dark fw-semibold d-block fs-7">{{ appt.PropertyTitle }}</span>
-                    <span v-else class="text-muted fs-7">-</span>
-                  </td>
-                  <td class="text-end">
-                    <span v-if="appt.Confirmed" class="badge badge-success">Confermato</span>
-                    <span v-else-if="appt.Cancelled" class="badge badge-danger">Cancellato</span>
-                    <span v-else class="badge badge-warning">Da confermare</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Agency Dashboard -->
-    <div v-else-if="isAgency">
-      <!-- KPI Cards simili ad Admin ma solo per la propria agenzia -->
-      <div class="row gy-5 g-xl-10 mb-5">
-        <div class="col-md-6 col-lg-3">
-          <div class="card dashboard-card theme-dark-bg-body">
-            <div class="card-body">
-              <p class="dashboard-card-title mb-1">Immobili Totali</p>
-              <p class="dashboard-card-value mb-0">{{ data.RealEstatePropertyHomeDetails.Total }}</p>
-              <p class="dashboard-card-sub text-muted mb-0">
-                Vendita: {{ data.RealEstatePropertyHomeDetails.TotalSale }} | 
-                Affitto: {{ data.RealEstatePropertyHomeDetails.TotalRent }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card dashboard-card theme-dark-bg-body">
-            <div class="card-body">
-              <p class="dashboard-card-title mb-1">Richieste Totali</p>
-              <p class="dashboard-card-value mb-0">{{ data.RequestHomeDetails.Total }}</p>
-              <p class="dashboard-card-sub text-muted mb-0">
-                Attive: {{ data.RequestHomeDetails.TotalActive }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card dashboard-card theme-dark-bg-body">
-            <div class="card-body">
-              <p class="dashboard-card-title mb-1">Agenti</p>
-              <p class="dashboard-card-value mb-0">{{ data.TotalAgents }}</p>
-              <p class="dashboard-card-sub text-muted mb-0">
-                Clienti: {{ data.TotalCustomers }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card dashboard-card theme-dark-bg-body">
-            <div class="card-body">
-              <p class="dashboard-card-title mb-1">Appuntamenti Oggi</p>
-              <p class="dashboard-card-value mb-0">{{ calendarDetails?.Today || 0 }}</p>
-              <p class="dashboard-card-sub text-muted mb-0">
-                Questa settimana: {{ calendarDetails?.ThisWeek || 0 }}
-              </p>
-            </div>
-          </div>
-        </div>
-    </div>
-
-      <!-- Grafici -->
-      <div class="row gy-5 g-xl-10">
-        <div class="col-xl-6">
-          <Chart3 widget-classes="card-xl-stretch mb-xl-10" chart-height="100" title="Immobili Inseriti"
-            subTitle="Andamento mensile" :datas="propertiesTrend" />
-        </div>
-        <div class="col-xl-6">
-          <Chart3 widget-classes="card-xl-stretch mb-xl-10" chart-height="100" title="Richieste Inserite"
-            subTitle="Andamento mensile" :datas="requestsTrend" />
-        </div>
-      </div>
-    </div>
   </div>
 
   <div v-else class="text-center py-10">
@@ -1037,7 +835,7 @@ export default defineComponent({
 
     async function getItems() {
       initialLoading.value = true;
-      const agencyId = isAdmin.value && selectedAgencyId.value ? selectedAgencyId.value : undefined;
+      const agencyId = selectedAgencyId.value ? selectedAgencyId.value : undefined;
       
       // Carica dati principali e appuntamenti in parallelo al primo caricamento
       const [dashboardData, appointments] = await Promise.all([
@@ -1064,7 +862,7 @@ export default defineComponent({
 
     async function refreshData() {
       loadingData.value = true;
-      const agencyId = isAdmin.value && selectedAgencyId.value ? selectedAgencyId.value : undefined;
+      const agencyId = selectedAgencyId.value ? selectedAgencyId.value : undefined;
       const dashboardData = await getDashboardData(agencyId);
       
       if (dashboardData && data.value) {
@@ -1079,7 +877,7 @@ export default defineComponent({
 
     async function refreshAppointments() {
       loadingAppointments.value = true;
-      const agencyId = isAdmin.value && selectedAgencyId.value ? selectedAgencyId.value : undefined;
+      const agencyId = selectedAgencyId.value ? selectedAgencyId.value : undefined;
       const appointments = await getDashboardAppointments(agencyId);
       
       if (appointments) {

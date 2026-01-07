@@ -252,29 +252,55 @@ export default defineComponent({
 
     
 
+    // Flag per evitare che i watch si attivino durante l'inizializzazione
+    const isInitializing = ref(true);
+
     onMounted(async () => {
       loading.value = true;
+      agencyId.value = store.user.AgencyId; // Imposta prima per evitare chiamate duplicate
+      
+      // Carica i dati in parallelo
+      const loadPromises: Promise<any>[] = [];
+      
       if (store.user.Role == "Agenzia" || store.user.Role == "Admin") {
-        await getItems(store.user.AgencyId, "");
-        searchItems.value = await getSearchItems(store.user.Id, agencyId.value);
-        agencyId.value = store.user.AgencyId;
+        loadPromises.push(
+          getItems(store.user.AgencyId, ""),
+          getSearchItems(store.user.Id, store.user.AgencyId).then(result => {
+            searchItems.value = result;
+          })
+        );
       } else {
-        await getItems(store.user.AgencyId, store.user.Id);
+        loadPromises.push(getItems(store.user.AgencyId, store.user.Id));
       }
       
+      await Promise.all(loadPromises);
+      isInitializing.value = false;
       loading.value = false;
     });
 
-    watch(() => agencyId.value, async (first, second) => {
-      await getItems(agencyId.value, "");
-      searchItems.value = await getSearchItems(store.user.Id, agencyId.value);
+    watch(() => agencyId.value, async (newVal, oldVal) => {
+      // Evita chiamate durante l'inizializzazione
+      if (isInitializing.value || !newVal || newVal === oldVal) return;
+      
+      await Promise.all([
+        getItems(newVal, ""),
+        getSearchItems(store.user.Id, newVal).then(result => {
+          searchItems.value = result;
+        })
+      ]);
     })
 
-    watch(() => agentId.value, async (first, second) => {
-      await getItems(agencyId.value, agentId.value);
+    watch(() => agentId.value, async (newVal, oldVal) => {
+      // Evita chiamate durante l'inizializzazione
+      if (isInitializing.value || newVal === oldVal) return;
+      
+      await getItems(agencyId.value, newVal);
     })
 
-    watch(() => statusFilter.value, async (first, second) => {
+    watch(() => statusFilter.value, async (newVal, oldVal) => {
+      // Evita chiamate durante l'inizializzazione
+      if (isInitializing.value || newVal === oldVal) return;
+      
       await getItems(agencyId.value, agentId.value);
     })
 

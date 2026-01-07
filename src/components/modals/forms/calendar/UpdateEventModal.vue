@@ -346,10 +346,31 @@ export default defineComponent({
       // Agents: []
     });
 
+    // Flag per tracciare se i dati sono già stati caricati
+    let dataLoaded = false;
+
+    // Carica i dati solo quando il modal si apre (lazy loading)
+    const loadModalData = async () => {
+      if (!dataLoaded) {
+        loading.value = true;
+        inserModel.value = await getToInsert();
+        dataLoaded = true;
+        loading.value = false;
+      }
+    };
+
     onMounted(async () => {
-      loading.value = true;
-      inserModel.value = await getToInsert();
-      loading.value = false;
+      // Aggiungi listener per quando il modal si apre
+      if (updateTargetModalRef.value) {
+        const modalElement = updateTargetModalRef.value as HTMLElement;
+        modalElement.addEventListener('shown.bs.modal', loadModalData);
+      } else {
+        // Fallback se il ref non è disponibile
+        const modalElement = document.getElementById("kt_modal_update_event");
+        if (modalElement) {
+          modalElement.addEventListener('shown.bs.modal', loadModalData);
+        }
+      }
     })
 
     watch(() => props.Id, async (first, second) => {

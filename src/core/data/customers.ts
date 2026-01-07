@@ -44,12 +44,35 @@ export class Notes {
 
 const getCustomers = (agencyId: string, filterRequest: string) : Promise<Array<Customer>> => {
    return ApiService.get(
-    `Customers/Get?currentPage=0&agencyId=${agencyId}&filterRequest=${filterRequest}`,
+    `Customers/GetList?currentPage=0&agencyId=${agencyId}&filterRequest=${filterRequest}`,
     ""
   )
     .then(({ data }) => {
-      const result = data.Data as Partial<Array<Customer>>
-      return result;
+      const result = data.Data as Partial<Array<CustomerTabelData>>;
+      // Convertiamo CustomerListModel in Customer per compatibilità con il componente esistente
+      if (result) {
+        return result.map(item => ({
+          Id: item.Id,
+          Name: item.Name,
+          LastName: item.LastName,
+          Email: item.Email,
+          Phone: parseInt(item.Phone) || 0,
+          Buyer: item.Type === "Compratore",
+          Seller: item.Type === "Venditore",
+          Builder: item.Type === "Costruttore",
+          GoldCustomer: item.Type === "Cliente gold",
+          Other: false,
+          Description: "",
+          AdressLine: "",
+          Town: "",
+          State: "",
+          Code: "",
+          AcquisitionDone: false,
+          OngoingAssignment: false,
+          AgencyId: agencyId
+        } as Customer));
+      }
+      return [];
     })
     .catch(({ response }) => {
       store.setError(response.data.Message, response.status);

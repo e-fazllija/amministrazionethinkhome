@@ -285,7 +285,7 @@ import { getRequestsList, Request, deleteRequest, RequestTabelData } from "@/cor
 import Swal from "sweetalert2";
 import { useAuthStore } from "@/stores/auth";
 import { getSearchItems, SearchModel } from "@/core/data/events";
-import { getGroupedLocations, type LocationGroupedModel, getStructuredLocationData } from "@/core/data/locations";
+import { type LocationGroupedModel, getStructuredLocationData } from "@/core/data/locations";
 import Multiselect from '@vueform/multiselect'
 
 export default defineComponent({
@@ -365,7 +365,7 @@ export default defineComponent({
       Agencies: [],
       Agents: [],
     })
-    const groupedLocations = ref<LocationGroupedModel[]>([]);
+    // Rimosso groupedLocations - non più utilizzato
 
     // Nuovi dati strutturati per i filtri a tre livelli
     const structuredLocationData = ref<{
@@ -382,35 +382,8 @@ export default defineComponent({
     const filteredCities = ref<Array<{value: string, label: string}>>([]);
     const filteredLocations = ref<Array<{value: string, label: string}>>([]);
 
-    // Opzioni delle località
+    // Opzioni delle località - non più utilizzato, rimosso watch su groupedLocations
     const options = ref<Array<{value: string, label: string}>>([{value: "", label: "Qualsiasi"}]);
-
-    // Watch per aggiornare le opzioni quando groupedLocations cambia
-    watch(groupedLocations, (newValue) => {
-      if (newValue && Array.isArray(newValue) && newValue.length > 0) {
-        const optionsArray = [{value: "", label: "Qualsiasi"}];
-        
-        newValue.forEach((cityGroup) => {
-          // Add the city itself
-          optionsArray.push({
-            value: cityGroup.City.toUpperCase(),
-            label: `${cityGroup.City.toUpperCase()}`
-          });
-          
-          // Add all zones for this city
-          if (cityGroup.Locations && Array.isArray(cityGroup.Locations)) {
-            cityGroup.Locations.forEach(location => {
-              optionsArray.push({
-                value: location.Id.toUpperCase(),
-                label: `${cityGroup.City.toUpperCase()} \\ ${location.Name.toUpperCase()}`
-              });
-            });
-          }
-        });
-        
-        options.value = optionsArray;
-      }
-    }, { immediate: true });
 
     async function getItems(agencyId, filterRequest: string) {
       loading.value = true;
@@ -421,22 +394,7 @@ export default defineComponent({
       loading.value = false;
     };
 
-    onMounted(async () => {
-      if (authStore.user.Role == "Admin") {
-        defaultSearchItems.value = await getSearchItems(authStore.user.Id);
-      }
-      agencyId.value = authStore.user.AgencyId;
-
-      // Carica le località dal database
-      try {
-        groupedLocations.value = await getGroupedLocations();
-      } catch (error) {
-        console.error("Errore nel caricamento delle località:", error);
-        groupedLocations.value = [];
-      }
-
-      await getItems(agencyId.value, "");
-    });
+    // Rimosso onMounted duplicato - tutto viene gestito nel secondo onMounted
 
 
 
@@ -626,15 +584,25 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      if (authStore.user.Role == "Admin") {
-        defaultSearchItems.value = await getSearchItems(authStore.user.Id);
-      }
       agencyId.value = authStore.user.AgencyId;
 
-      // Carica i dati strutturati per i filtri
-      await loadStructuredData();
+      // Carica solo i dati essenziali in parallelo
+      const loadPromises: Promise<any>[] = [
+        getItems(agencyId.value, ""), // Carica le richieste
+        loadStructuredData() // Carica i dati delle località
+      ];
 
-      await getItems(agencyId.value, "");
+      // Carica i dati di ricerca solo se Admin
+      if (authStore.user.Role == "Admin") {
+        loadPromises.push(
+          getSearchItems(authStore.user.Id, agencyId.value).then(result => {
+            defaultSearchItems.value = result;
+          })
+        );
+      }
+
+      // Esegui tutte le chiamate in parallelo
+      await Promise.all(loadPromises);
     });
 
           return {
@@ -659,8 +627,6 @@ export default defineComponent({
         user,
         agencyId,
         defaultSearchItems,
-        groupedLocations,
-        options,
         removeLocation,
         removePropertyType,
         selectedProvince,
@@ -695,96 +661,7 @@ export default defineComponent({
 
 });
 </script>
+
 <style>
-/* Stili per i filtri a cascata */
-.form-control:disabled,
-.form-select:disabled {
-  background-color: #f8f9fa;
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* Stili per i badge delle tipologie selezionate */
-.selected-tags .badge {
-  font-size: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
-}
-
-.selected-tags .badge:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.selected-tags .cursor-pointer {
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
-.selected-tags .cursor-pointer:hover {
-  color: #dc3545 !important;
-}
-
-/* Stili per i campi di input con icone */
-.position-relative .form-control {
-  padding-left: 3rem;
-}
-
-/* Stili per i pulsanti */
-.btn {
-  transition: all 0.2s ease;
-  border-radius: 0.5rem;
-}
-
-.btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-/* Stili per il contatore risultati */
-.bg-light-primary {
-  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-  border: 1px solid #90caf9;
-}
-
-/* Animazioni per i filtri */
-.form-label {
-  transition: color 0.2s ease;
-}
-
-.form-label:hover {
-  color: #1976d2;
-}
-
-/* Stili per i dropdown */
-.form-select {
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.form-select:focus {
-  border-color: #1976d2;
-  box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .row.g-4 {
-    margin: 0;
-  }
-  
-  .col-md-2, .col-md-3, .col-md-4, .col-md-6 {
-    margin-bottom: 1rem;
-  }
-  
-  .d-flex.justify-content-between {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .d-flex.justify-content-between > div {
-    width: 100%;
-    justify-content: center;
-  }
-}
+@import "@/assets/css/filters.css";
 </style>

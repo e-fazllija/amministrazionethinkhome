@@ -1,35 +1,111 @@
 <template>
   <div class="card">
-    <div class="row m-2">
-      <div class="col-md-3 col-lg-3 mb-2">
-        <input type="text" v-model="search" class="form-control form-control-solid" placeholder="Cerca" />
-      </div>
-      <div class="col-lg-3 col-md-6 col-sm-12 d-flex gap-2">
-        <select class="form-control selectpicker" v-model="contract">
-          <option value="">Tipologia</option>
-          <option value="Compratore">Compratore</option>
-          <option value="Venditore">Venditore</option>
-          <option value="Costruttore">Costruttore</option>
-          <option value="Cliente gold">Cliente gold</option>
-        </select>
-      </div>
-      <div class="col-lg-3 col-md-6 col-sm-12 d-flex gap-2">
-        <select v-if="user.Role == 'Admin'" class="form-control selectpicker" v-model="agencyId">
-          <option v-for="(item, index) in defaultSearchItems.Agencies" :key="index" :value="item.Id">
-            {{ item.Name }} {{ item.LastName }}
-          </option>
-        </select>
-      </div>
-      <div class="col-md-3 d-flex justify-content-end align-items-start mb-2">
-        <button type="button" @click="searchItems" class="btn btn-light-primary me-3">
-          <KTIcon icon-name="search" icon-class="fs-2" /> Cerca
-        </button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_customer">
-          <KTIcon icon-name="plus" icon-class="fs-2" />
-          Aggiungi Cliente
-        </button>
+    <!--begin::Search-->
+    <div class="card-header border-0 pt-6">
+      <div class="card-title">
+        <h3 class="fw-bold m-0 text-gray-800">
+          <KTIcon icon-name="search" icon-class="fs-2 text-primary me-2" />
+          Filtri di Ricerca
+        </h3>
       </div>
     </div>
+    
+    <div class="card-body pt-0">
+      <!-- Filtri principali -->
+      <div class="row g-4 mb-6">
+        <div class="col-md-3 col-lg-3">
+          <label class="form-label fw-semibold text-gray-700">
+            <KTIcon icon-name="user" icon-class="fs-6 me-1" />
+            Cerca Cliente
+          </label>
+          <div class="position-relative">
+            <input 
+              type="text" 
+              v-model="search" 
+              class="form-control form-control-solid ps-12" 
+              placeholder="Nome cliente, email, telefono..." 
+            />
+            <KTIcon 
+              icon-name="search" 
+              icon-class="fs-4 position-absolute top-50 start-0 translate-middle-y ms-4 text-gray-500" 
+            />
+          </div>
+        </div>
+        
+        <div class="col-md-3 col-lg-3">
+          <label class="form-label fw-semibold text-gray-700">
+            <KTIcon icon-name="briefcase" icon-class="fs-6 me-1" />
+            Tipologia
+          </label>
+          <select class="form-select form-select-solid" v-model="contract">
+            <option value="">Tutte le tipologie</option>
+            <option value="Compratore">Compratore</option>
+            <option value="Venditore">Venditore</option>
+            <option value="Costruttore">Costruttore</option>
+            <option value="Cliente gold">Cliente gold</option>
+          </select>
+        </div>
+        
+        <div v-if="user.Role == 'Admin'" class="col-md-3 col-lg-3">
+          <label class="form-label fw-semibold text-gray-700">
+            <KTIcon icon-name="office-bag" icon-class="fs-6 me-1" />
+            Agenzia
+          </label>
+          <select class="form-select form-select-solid" v-model="agencyId">
+            <option value="">Tutte le agenzie</option>
+            <option v-for="(item, index) in defaultSearchItems.Agencies" :key="index" :value="item.Id">
+              {{ item.Name }} {{ item.LastName }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Pulsanti azione -->
+      <div class="row g-4 mb-6">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <button 
+              type="button" 
+              @click="searchItems" 
+              class="btn btn-primary me-3"
+              :disabled="loading"
+            >
+              <KTIcon icon-name="search" icon-class="fs-2 me-2" />
+              {{ loading ? 'Ricerca...' : 'Cerca' }}
+            </button>
+            
+            <button 
+              type="button" 
+              @click="clearAllFilters" 
+              class="btn btn-light-secondary me-3"
+            >
+              <KTIcon icon-name="cross" icon-class="fs-2 me-2" />
+              Pulisci Filtri
+            </button>
+          </div>
+          
+          <div class="d-flex align-items-center">
+            <div class="bg-light-primary rounded p-3 me-3">
+              <span class="text-primary fw-bold fs-6">
+                <KTIcon icon-name="chart-simple" icon-class="fs-4 me-2" />
+                Risultati: {{ tableData.length }}
+              </span>
+            </div>
+            
+            <button 
+              type="button" 
+              class="btn btn-success" 
+              data-bs-toggle="modal" 
+              data-bs-target="#kt_modal_add_customer"
+            >
+              <KTIcon icon-name="plus" icon-class="fs-2 me-2" />
+              Aggiungi Cliente
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--end::Search-->
     <div class="card-body pt-0">
       <Datatable @on-sort="sort" @on-items-select="onItemSelect" :data="tableData" :header="tableHeader"
         :enable-items-per-page-dropdown="true" :checkbox-enabled="false" checkbox-label="Id">
@@ -193,6 +269,17 @@ export default defineComponent({
       MenuComponent.reinitialization();
     };
 
+    // Funzione per pulire tutti i filtri
+    const clearAllFilters = () => {
+      search.value = "";
+      contract.value = "";
+      if (user.Role == "Admin") {
+        agencyId.value = user.AgencyId;
+      } else {
+        agencyId.value = user.AgencyId;
+      }
+    };
+
     const searchingFunc = (obj: any, value: string): boolean => {
       for (let key in obj) {
         if (
@@ -258,8 +345,14 @@ export default defineComponent({
       contract,
       user,
       agencyId,
-      defaultSearchItems
+      defaultSearchItems,
+      clearAllFilters,
+      loading
     };
   },
 });
 </script>
+
+<style>
+@import "@/assets/css/filters.css";
+</style>
