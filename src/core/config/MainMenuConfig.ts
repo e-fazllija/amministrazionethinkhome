@@ -75,6 +75,13 @@ const MainMenuConfig: Array<MenuItem> = [
         bootstrapIcon: "bi-app-indicator",
         roleEnabled: ["Admin", "Agenzia", "Agente"],
       },
+      {
+        heading: "Invia Reclamo",
+        route: "/segnalazione",
+        keenthemesIcon: "element-11",
+        bootstrapIcon: "bi-exclamation-triangle",
+        roleEnabled: ["Admin", "Agenzia", "Agente"],
+      },
     ],
   }
 ];

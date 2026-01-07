@@ -135,6 +135,15 @@ const routes: Array<RouteRecordRaw> = [
           breadcrumbs: ["Calendario"],
         },
       },
+      {
+        path: "segnalazione",
+        name: "segnalazione",
+        component: () => import("@/views/pages/segnalazione/Segnalazione.vue"),
+        meta: {
+          pageTitle: "Segnalazione",
+          breadcrumbs: ["Segnalazione"],
+        },
+      },
     ],
   },
   {
