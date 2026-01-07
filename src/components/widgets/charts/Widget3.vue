@@ -257,19 +257,6 @@ export default defineComponent({
       },
     },
     colors: [lightColor],
-    grid: {
-      borderColor: borderColor,
-      strokeDashArray: 4,
-      yaxis: {
-        lines: {
-          show: true,
-        },
-      },
-    },
-    markers: {
-      strokeColors: baseColor,
-      strokeWidth: 3,
-    },
   };
 };
 
