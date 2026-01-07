@@ -31,6 +31,7 @@ export class Customer{
 export class CustomerTabelData {
   Id?: number;
   Name: string;
+  LastName: string;
   Type: string;
   Email: string;
   Phone: string;

@@ -284,7 +284,7 @@ export default defineComponent({
       { name: '', hex: '#00FF00' }
     ];
     const formData = ref<Agent>({
-      Id: 0,
+      Id: "",
       Name: "",
       LastName: "",
       Email: "",
