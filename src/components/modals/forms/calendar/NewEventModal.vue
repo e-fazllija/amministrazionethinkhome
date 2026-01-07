@@ -334,10 +334,25 @@ export default defineComponent({
       RealEstateProperties: [],
     });
 
+    // Flag per tracciare se i dati sono già stati caricati
+    let dataLoaded = false;
+
+    // Carica i dati solo quando il modal si apre (lazy loading)
+    const loadModalData = async () => {
+      if (!dataLoaded) {
+        loading.value = true;
+        inserModel.value = await getToInsert();
+        dataLoaded = true;
+        loading.value = false;
+      }
+    };
+
     onMounted(async () => {
-      loading.value = true
-      inserModel.value = await getToInsert();
-      loading.value = false
+      // Aggiungi listener per quando il modal si apre
+      if (newTargetModalRef.value) {
+        const modalElement = newTargetModalRef.value as HTMLElement;
+        modalElement.addEventListener('shown.bs.modal', loadModalData);
+      }
     })
 
     const submit = async () => {

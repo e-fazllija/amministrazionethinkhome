@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import type { ApexOptions } from "apexcharts";
 import type VueApexCharts from "vue3-apexcharts";
 
@@ -42,24 +42,87 @@ export default defineComponent({
   setup(props) {
     const chartRef = ref<typeof VueApexCharts | null>(null);
     let chart: ApexOptions = {};
-    const keys = Object.keys(props.datas).slice(1);
-    const values = Object.values(props.datas).slice(1);
-    
-    const series = values;
+
+    const preparedData = computed(() => {
+      const entries = Object.entries(props.datas || {}).map(([k, v]) => ({
+        key: k,
+        value: Number(v),
+      }));
+      // ordina per valore desc e prende i primi 6 per leggibilità
+      const top = entries
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 6)
+        .filter((e) => !isNaN(e.value) && e.value > 0);
+
+      return {
+        labels: top.map((e) => e.key),
+        series: top.map((e) => e.value),
+      };
+    });
+
+    const series = computed(() => preparedData.value.series);
 
     return {
       chart,
-      series,
       chartRef,
-      chartOptions: {
+      series,
+      chartOptions: computed<ApexOptions>(() => ({
         chart: {
-          height: 100,
-          width: 380,
-          type: "pie",
+          height: 320,
+          type: "donut",
         },
-        labels: keys, // Etichette
-        
-      },
+        labels: preparedData.value.labels,
+        legend: {
+          show: true,
+          position: "bottom",
+          fontSize: "12px",
+        },
+        dataLabels: {
+          enabled: true,
+          style: {
+            fontSize: "12px",
+            fontWeight: "600",
+          },
+          dropShadow: {
+            enabled: false,
+          },
+        },
+        stroke: {
+          width: 1,
+          colors: ["transparent"],
+        },
+        plotOptions: {
+          pie: {
+            donut: {
+              size: "55%",
+            },
+          },
+        },
+        responsive: [
+          {
+            breakpoint: 992,
+            options: {
+              chart: {
+                height: 300,
+              },
+              legend: {
+                position: "bottom",
+              },
+            },
+          },
+          {
+            breakpoint: 768,
+            options: {
+              chart: {
+                height: 260,
+              },
+            },
+          },
+        ],
+        noData: {
+          text: "Nessun dato",
+        },
+      })),
     };
   }  
 });

@@ -116,13 +116,17 @@ export class Event {
   Id?: number;
   ApplicationUserId: string;
   ApplicationUser?: User;
+  // Campi ottimizzati per la lista (CalendarListModel)
+  AgentName?: string;
+  AgentLastName?: string;
+  AgentColor?: string;
   NomeEvento: string;
   Type: string;
-  CustomerId: number;
-  RealEstatePropertyId: number;
-  RequestId: number;
-  DescrizioneEvento: string;
-  LuogoEvento: string;
+  CustomerId?: number;
+  RealEstatePropertyId?: number;
+  RequestId?: number;
+  DescrizioneEvento?: string;
+  LuogoEvento?: string;
   DataInizioEvento?: string;
   DataFineEvento?: string;
   CreationDate?: Date;
@@ -146,11 +150,27 @@ export class SearchModel {
 
 const getEvents = (agencyId: string, agentId: string): Promise<Array<Event>> => {
   return ApiService.get(
-    `Calendar/Get?agencyId=${agencyId}&agentId=${agentId}`,
+    `Calendar/GetList?agencyId=${agencyId}&agentId=${agentId}`,
     ""
   )
     .then(({ data }) => {
-      const result = data.Data as Partial<Array<Event>>
+      const result = data.Data as Partial<Array<Event>>;
+      // Mappiamo i campi ottimizzati per compatibilità con il componente esistente
+      if (result) {
+        result.forEach(event => {
+          // Se abbiamo AgentName/AgentLastName invece di ApplicationUser completo, creiamo un oggetto compatibile
+          if (event.AgentName && event.AgentLastName) {
+            event.ApplicationUser = {
+              Id: event.ApplicationUserId || "",
+              Name: event.AgentName,
+              LastName: event.AgentLastName,
+              Color: event.AgentColor || "#ffffff",
+              Email: "",
+              Role: "Agent"
+            } as User;
+          }
+        });
+      }
       return result;
     })
     .catch(({ response }) => {

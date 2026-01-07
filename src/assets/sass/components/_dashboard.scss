@@ -1,0 +1,64 @@
+.dashboard-section-title {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--bs-gray-900);
+}
+
+.dashboard-card {
+  border: 1px solid var(--bs-border-color);
+}
+
+.dashboard-card-title {
+  font-weight: 600;
+  color: var(--bs-body-color);
+}
+
+.dashboard-card-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--bs-gray-900);
+}
+
+.dashboard-card-sub {
+  color: var(--bs-body-color-secondary);
+}
+
+body[data-theme="dark"] .dashboard-section-title {
+  color: var(--bs-gray-100);
+}
+
+.dashboard-appointments-table {
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.35em 0.65em;
+  }
+  
+  td {
+    vertical-align: middle;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-appointments-table {
+    font-size: 0.875rem;
+    
+    th, td {
+      padding: 0.5rem;
+    }
+  }
+}
+
+.dashboard-wrapper .card {
+  border-radius: 0.9rem;
+}
+
+.dashboard-wrapper .apexcharts-legend {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 991px) {
+  .dashboard-wrapper .card {
+    margin-bottom: 1rem;
+  }
+}
+
