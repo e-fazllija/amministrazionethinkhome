@@ -66,7 +66,7 @@
 
               <Multiselect
                 v-model="targetData.RealEstatePropertyId"
-                :options="inserModel.RealEstateProperties"
+                :options="inserModel?.RealEstateProperties || []"
                 label="label"
                 valueProp="Id"
                 :searchable="true"
@@ -90,7 +90,7 @@
 
               <Multiselect
                 v-model="targetData.RequestId"
-                :options="inserModel.Requests"
+                :options="inserModel?.Requests || []"
                 label="label"
                 valueProp="Id"
                 :searchable="true"
@@ -114,7 +114,7 @@
 
               <Multiselect
                 v-model="targetData.CustomerId"
-                :options="inserModel.Customers"
+                :options="inserModel?.Customers || []"
                 label="label"
                 valueProp="Id"
                 :searchable="true"
@@ -134,7 +134,7 @@
              <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
-          <label class="col-lg-4 col-form-label fw-semobold fs-6">Confermata</label>
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Confermato</label>
           <!--end::Label-->
           <!--begin::Col-->
           <div class="col-lg-8 fv-row">
@@ -352,30 +352,54 @@ export default defineComponent({
     // Carica i dati solo quando il modal si apre (lazy loading)
     const loadModalData = async () => {
       if (!dataLoaded) {
-        loading.value = true;
-        inserModel.value = await getToInsert();
+        const result = await getToInsert();
+        // Assicurati che inserModel abbia sempre una struttura valida
+        if (result) {
+          inserModel.value = {
+            Customers: result.Customers || [],
+            Requests: result.Requests || [],
+            RealEstateProperties: result.RealEstateProperties || [],
+          };
+        } else {
+          // Se c'è un errore, mantieni gli array vuoti invece di undefined
+          inserModel.value = {
+            Customers: [],
+            Requests: [],
+            RealEstateProperties: [],
+          };
+        }
         dataLoaded = true;
-        loading.value = false;
       }
+      // Carica sempre i dati dell'evento quando il modal è aperto
+      if (props.Id > 0) {
+        targetData.value = await getEvent(props.Id);
+      }
+      loading.value = false;
     };
 
     onMounted(async () => {
       // Aggiungi listener per quando il modal si apre
-      if (updateTargetModalRef.value) {
-        const modalElement = updateTargetModalRef.value as HTMLElement;
+      const modalElement = updateTargetModalRef.value || document.getElementById("kt_modal_update_event");
+      if (modalElement) {
+        // Imposta il loading immediatamente quando il modal sta per aprirsi
+        modalElement.addEventListener('show.bs.modal', () => {
+          loading.value = true;
+        });
+        // Carica i dati quando il modal è completamente aperto
         modalElement.addEventListener('shown.bs.modal', loadModalData);
-      } else {
-        // Fallback se il ref non è disponibile
-        const modalElement = document.getElementById("kt_modal_update_event");
-        if (modalElement) {
-          modalElement.addEventListener('shown.bs.modal', loadModalData);
-        }
+        // Resetta il loading quando il modal viene nascosto (fallback)
+        modalElement.addEventListener('hidden.bs.modal', () => {
+          loading.value = false;
+        });
       }
     })
 
     watch(() => props.Id, async (first, second) => {
       if (first > 0) {
-        targetData.value = await getEvent(props.Id)
+        // Se il modal è già aperto, carica immediatamente i dati
+        loading.value = true;
+        targetData.value = await getEvent(props.Id);
+        loading.value = false;
       }
       else {
         targetData.value = null;

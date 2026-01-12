@@ -91,9 +91,9 @@
   <!--end::Card-->
 
   <NewEventModal :UserId="userId" :Color="color" :SelectedDateStart="selectedDateStart"
-    :SelectedDateEnd="selectedDateEnd" @formAddSubmitted="getItems(agencyId, agentId)">
+    :SelectedDateEnd="selectedDateEnd" @formAddSubmitted="refreshEvents">
   </NewEventModal>
-  <UpdateEventModal :Id="selectedId" @formUpdateSubmitted="getItems(agencyId, agentId)">
+  <UpdateEventModal :Id="selectedId" @formUpdateSubmitted="refreshEvents">
   </UpdateEventModal>
 </template>
 
@@ -168,6 +168,23 @@ export default defineComponent({
         }
       }
     })
+
+    // Funzione per determinare i parametri corretti per getItems in base al ruolo
+    const getItemsParams = () => {
+      if (user.Role == "Admin" || user.Role == "Agenzia") {
+        // Admin e Agenzia possono filtrare per agente
+        return { agencyId: agencyId.value, agentId: agentId.value };
+      } else {
+        // Agente: mostra sempre solo i propri eventi
+        return { agencyId: user.AgencyId, agentId: user.Id };
+      }
+    }
+
+    // Funzione per aggiornare gli eventi dopo aggiunta/modifica
+    const refreshEvents = () => {
+      const params = getItemsParams();
+      getItems(params.agencyId, params.agentId);
+    }
 
     const newEvent = async (start: string, end: string) => {
       if (!start || !end) {
@@ -422,7 +439,8 @@ export default defineComponent({
       userId,
       color,
       search,
-      searchItemsFunc
+      searchItemsFunc,
+      refreshEvents
     };
   },
 });

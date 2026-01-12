@@ -38,6 +38,7 @@ export const useAuthStore = defineStore("auth", () => {
     user.value = authUser;
     errors.value = "";
     JwtService.saveToken(user.value.Token);
+    ApiService.setHeader(); // Aggiorna gli header di axios con il nuovo token
     hasVerified.value = true;
   }
 

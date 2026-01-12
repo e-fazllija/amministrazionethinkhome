@@ -197,12 +197,26 @@ const getEvent = (id: number): Promise<Event> => {
 const getToInsert = (): Promise<InsertModel> => {
   return ApiService.get(`Calendar/GetToInsert?agencyId=${store.user.AgencyId}`, "")
     .then(({ data }) => {
-      const requests = data.Requests as Array<Request>;
-      const customers = data.Customers as Array<Customer>;
-      const properties = data.RealEstateProperties as Array<RealEstateProperty>;
-      requests.forEach(x => x.label = x.Customer.Name + ' ' + x.Customer.LastName);
-      customers.forEach(x => x.label = x.Name + ' ' + x.LastName);
-      properties.forEach(x => x.label = x.Town + ', ' + x.AddressLine + ', Cod. 00' + x.Id + ', Prezzo: € ' + x.Price);
+      const requests = (data.Requests as Array<Request>) || [];
+      const customers = (data.Customers as Array<Customer>) || [];
+      const properties = (data.RealEstateProperties as Array<RealEstateProperty>) || [];
+      
+      // Aggiungi label solo se gli array non sono vuoti
+      requests.forEach(x => {
+        if (x.Customer) {
+          x.label = x.Customer.Name + ' ' + x.Customer.LastName;
+        }
+      });
+      customers.forEach(x => {
+        if (x.Name && x.LastName) {
+          x.label = x.Name + ' ' + x.LastName;
+        }
+      });
+      properties.forEach(x => {
+        if (x.Town && x.AddressLine) {
+          x.label = x.Town + ', ' + x.AddressLine + ', Cod. 00' + x.Id + ', Prezzo: € ' + x.Price;
+        }
+      });
       
       const result = <InsertModel>({
         Requests: requests,
