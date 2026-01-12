@@ -426,25 +426,25 @@
             <span class="card-label fw-bold fs-3">Lista Appuntamenti</span>
           </h3>
         </div>
-        <div class="card-body">
+        <div class="card-body p-0">
           <div v-if="filteredAdminAppointments.length === 0" class="text-center py-10">
             <p class="text-muted">Nessun appuntamento trovato con i filtri selezionati.</p>
           </div>
-          <div v-else class="table-responsive">
+          <div v-else class="table-responsive" style="max-height: 400px; overflow-y: auto;">
             <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
-              <thead>
+              <thead class="sticky-top bg-light">
                 <tr class="fw-bold text-muted">
-                  <th class="min-w-150px">Evento</th>
+                  <th class="min-w-150px ps-5">Evento</th>
                   <th class="min-w-120px">Tipo</th>
                   <th class="min-w-150px">Data/Ora</th>
                   <th class="min-w-120px">Agente</th>
                   <th class="min-w-100px">Immobile</th>
-                  <th class="min-w-80px text-end">Stato</th>
+                  <th class="min-w-80px text-end pe-5">Stato</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="appt in filteredAdminAppointments" :key="appt.Id">
-                  <td>
+                  <td class="ps-5"> 
                     <span class="text-dark fw-bold d-block fs-6">{{ appt.NomeEvento }}</span>
                   </td>
                   <td>
@@ -461,9 +461,10 @@
                     <span v-if="appt.PropertyTitle" class="text-dark fw-semibold d-block fs-7">{{ appt.PropertyTitle }}</span>
                     <span v-else class="text-muted fs-7">-</span>
                   </td>
-                  <td class="text-end">
+                  <td class="text-end pe-5">
                     <span v-if="appt.Confirmed" class="badge badge-success">Confermato</span>
-                    <span v-else-if="appt.Cancelled" class="badge badge-danger">Cancellato</span>
+                    <span v-else-if="appt.Cancelled" class="badge badge-danger">Disdetto</span>
+                    <span v-else-if="appt.Postponed" class="badge badge-info">Rimandato</span>
                     <span v-else class="badge badge-warning">Da confermare</span>
                   </td>
                 </tr>

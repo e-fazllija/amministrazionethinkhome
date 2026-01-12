@@ -24,6 +24,7 @@ export class UpcomingAppointment {
     DataFineEvento: string;
     Confirmed: boolean;
     Cancelled: boolean;
+    Postponed: boolean;
     AgentName: string;
     PropertyTitle?: string;
 }
