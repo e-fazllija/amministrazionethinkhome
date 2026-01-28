@@ -60,6 +60,7 @@ export class RealEstateProperty {
   AgreedCommission: number;
   FlatRateCommission: number;
   StornoProvvigione: number;
+  DocumentaryNotes?: string;
 }
 
 export class RequestTabelData {

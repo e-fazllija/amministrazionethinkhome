@@ -17,7 +17,7 @@
         </div>
         <div class="card-body">
           <div class="row g-3">
-            <div class="col-md-4">
+            <div v-if="isAdmin" class="col-md-4">
               <label class="form-label fw-semibold">Agenzia</label>
               <select v-model="selectedAgencyId" class="form-select form-select-solid">
                 <option value="">Tutte le agenzie</option>
@@ -26,13 +26,19 @@
                 </option>
               </select>
             </div>
-            <div class="col-md-4">
+            <div :class="{'col-md-4': !isAgent || !isAgency, 'col-md-8': isAgent || isAgency}">
               <label class="form-label fw-semibold">Periodo</label>
               <select v-model="selectedPeriod" class="form-select form-select-solid">
                 <option value="all">Tutti i periodi</option>
-                <option value="month">Questo mese</option>
-                <option value="week">Questa settimana</option>
                 <option value="today">Oggi</option>
+                <option value="yesterday">Ieri</option>
+                <option value="lastWeek">Settimana precedente</option>
+                <option value="week">Questa settimana</option>
+                <option value="month">Questo mese</option>
+                <option value="lastMonth">Mese precedente</option>
+                <option value="last3Months">Ultimi 3 mesi</option>
+                <option value="last6Months">Ultimi 6 mesi</option>
+                <option value="lastYear">Ultimo anno</option>
               </select>
             </div>
             <div class="col-md-4 d-flex align-items-end">
@@ -53,16 +59,17 @@
 
       <!-- KPI Cards -->
       <div class="row gy-5 g-xl-10 mb-5">
-        <div class="col-md-6 col-lg-3">
+        <div class="col-md-6 col-lg-6">
           <div class="card dashboard-card theme-dark-bg-body">
             <div class="card-body">
               <div class="d-flex align-items-center">
                 <div class="flex-grow-1">
-                  <p class="dashboard-card-title mb-1">Immobili Totali</p>
+                  <p class="dashboard-card-title mb-1">Immobili Totali Inseriti</p>
                   <p class="dashboard-card-value mb-0">{{ data.RealEstatePropertyHomeDetails.Total }}</p>
                   <p class="dashboard-card-sub text-muted mb-0">
                     Vendita: {{ data.RealEstatePropertyHomeDetails.TotalSale }} | 
-                    Affitto: {{ data.RealEstatePropertyHomeDetails.TotalRent }}
+                    Affitto: {{ data.RealEstatePropertyHomeDetails.TotalRent }} |
+                    Attivi: {{ agentStats?.ActivePropertiesManaged || 0 }}
                   </p>
                 </div>
                 <div class="symbol symbol-50px">
@@ -75,28 +82,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card dashboard-card theme-dark-bg-body">
-            <div class="card-body">
-              <div class="d-flex align-items-center">
-                <div class="flex-grow-1">
-                  <p class="dashboard-card-title mb-1">Immobili Venduti</p>
-                  <p class="dashboard-card-value mb-0">{{ data.SalesDetails.TotalSold }}</p>
-                  <p class="dashboard-card-sub text-muted mb-0">
-                    Questo mese: {{ data.SalesDetails.SoldThisMonth }}
-                  </p>
-                </div>
-                <div class="symbol symbol-50px">
-                  <i class="ki-duotone ki-check-circle fs-2x text-success">
-                    <span class="path1"></span>
-                    <span class="path2"></span>
-                  </i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
+        <div class="col-md-6 col-lg-6">
           <div class="card dashboard-card theme-dark-bg-body">
             <div class="card-body">
               <div class="d-flex align-items-center">
@@ -109,27 +95,6 @@
                 </div>
                 <div class="symbol symbol-50px">
                   <i class="ki-duotone ki-document fs-2x text-info">
-                    <span class="path1"></span>
-                    <span class="path2"></span>
-                  </i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card dashboard-card theme-dark-bg-body">
-            <div class="card-body">
-              <div class="d-flex align-items-center">
-                <div class="flex-grow-1">
-                  <p class="dashboard-card-title mb-1">Valore Vendite</p>
-                  <p class="dashboard-card-value mb-0">{{ formatCurrency(data.SalesDetails.TotalSalesValue) }}</p>
-                  <p class="dashboard-card-sub text-muted mb-0">
-                    Commissioni: {{ formatCurrency(data.SalesDetails.TotalCommissions) }}
-                  </p>
-                </div>
-                <div class="symbol symbol-50px">
-                  <i class="ki-duotone ki-dollar fs-2x text-warning">
                     <span class="path1"></span>
                     <span class="path2"></span>
                   </i>
@@ -180,167 +145,78 @@
     </div>
     </div>
 
-      <!-- Sezione Appuntamenti -->
+      <!-- Sezione Agenti -->
       <div class="row gy-5 g-xl-10 mb-5">
         <div class="col-xl-12">
-          <h2 class="dashboard-section-title mb-4">Appuntamenti</h2>
-    </div>
-  </div>
+          <h2 class="dashboard-section-title mb-4">Agenti</h2>
+        </div>
+      </div>
 
-      <!-- KPI Appuntamenti -->
+      <!-- KPI Agenti -->
       <div class="row gy-5 g-xl-10 mb-5">
-        <div class="col-md-6 col-lg-3">
+        <div class="col-md-6 col-lg-6">
           <div class="card dashboard-card theme-dark-bg-body">
             <div class="card-body">
-              <p class="dashboard-card-title mb-1">Appuntamenti Oggi</p>
-              <p class="dashboard-card-value mb-0">{{ calendarDetails?.Today || 0 }}</p>
-              <p class="dashboard-card-sub text-muted mb-0">
-                Questa settimana: {{ calendarDetails?.ThisWeek || 0 }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card dashboard-card theme-dark-bg-body">
-            <div class="card-body">
-              <p class="dashboard-card-title mb-1">Questo Mese</p>
-              <p class="dashboard-card-value mb-0">{{ calendarDetails?.ThisMonth || 0 }}</p>
-              <p class="dashboard-card-sub text-muted mb-0">
-                In arrivo: {{ calendarDetails?.Upcoming || 0 }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card dashboard-card theme-dark-bg-body">
-            <div class="card-body">
-              <p class="dashboard-card-title mb-1">Confermati</p>
-              <p class="dashboard-card-value mb-0">{{ calendarDetails?.Confirmed || 0 }}</p>
-              <p class="dashboard-card-sub text-muted mb-0">
-                Cancellati: {{ calendarDetails?.Cancelled || 0 }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card dashboard-card theme-dark-bg-body">
-            <div class="card-body">
-              <p class="dashboard-card-title mb-1">Collegati</p>
-              <p class="dashboard-card-value mb-0">{{ (calendarDetails?.LinkedToProperties || 0) + (calendarDetails?.LinkedToRequests || 0) }}</p>
-              <p class="dashboard-card-sub text-muted mb-0">
-                Immobili: {{ calendarDetails?.LinkedToProperties || 0 }} | Richieste: {{ calendarDetails?.LinkedToRequests || 0 }}
-              </p>
-    </div>
-    </div>
-    </div>
-  </div>
-
-      <!-- Filtri Appuntamenti Admin -->
-      <div class="card theme-dark-bg-body mb-5">
-        <div class="card-header border-0 pt-5">
-          <h3 class="card-title">
-            <span class="card-label fw-bold fs-3">Filtri Appuntamenti</span>
-          </h3>
-        </div>
-        <div class="card-body">
-          <div class="row g-3">
-            <div class="col-md-3">
-              <label class="form-label fw-semibold">Periodo</label>
-              <select v-model="adminAppointmentFilter" @change="filterAdminAppointments" class="form-select form-select-solid">
-                <option value="upcoming">Prossimi</option>
-                <option value="today">Oggi</option>
-                <option value="week">Questa settimana</option>
-                <option value="month">Questo mese</option>
-                <option value="past">Passati</option>
-                <option value="all">Tutti</option>
-              </select>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label fw-semibold">Stato</label>
-              <select v-model="adminAppointmentStatusFilter" @change="filterAdminAppointments" class="form-select form-select-solid">
-                <option value="all">Tutti</option>
-                <option value="confirmed">Confermati</option>
-                <option value="pending">Da confermare</option>
-                <option value="cancelled">Cancellati</option>
-              </select>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label fw-semibold">Tipo</label>
-              <select v-model="adminAppointmentTypeFilter" @change="filterAdminAppointments" class="form-select form-select-solid">
-                <option value="all">Tutti i tipi</option>
-                <option v-for="(count, type) in calendarByType" :key="type" :value="type">
-                  {{ type }} ({{ count }})
-                </option>
-              </select>
-            </div>
-            <div class="col-md-3 d-flex align-items-end">
-              <button @click="refreshAppointments" :disabled="loadingAppointments" class="btn btn-primary w-100 position-relative">
-                <span v-if="loadingAppointments" class="spinner-border spinner-border-sm me-2" role="status">
-                  <span class="sr-only">Loading...</span>
-                </span>
-                <i v-else class="ki-duotone ki-arrows-circle fs-2 me-2">
-                  <span class="path1"></span>
-                  <span class="path2"></span>
-                </i>
-                Aggiorna Appuntamenti
-              </button>
-            </div>
-    </div>
-    </div>
-  </div>
-
-      <!-- Tabelle Appuntamenti -->
-      <div class="row gy-5 g-xl-10 mb-5">
-        <div class="col-xl-12">
-          <div class="card theme-dark-bg-body">
-            <div class="card-header border-0 pt-5">
-              <div class="card-title d-flex justify-content-between align-items-center w-100">
-                <span class="card-label fw-bold fs-3">Appuntamenti per Tipo</span>
-                <div class="d-flex align-items-center">
-                  <input 
-                    v-model="searchType" 
-                    type="text" 
-                    class="form-control form-control-solid w-200px" 
-                    placeholder="Cerca tipo..."
-                  />
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                  <p class="dashboard-card-title mb-1">Acquisizioni</p>
+                  <p class="dashboard-card-value mb-0">{{ agentStats?.TotalAcquisitions || 0 }}</p>
+                  <p class="dashboard-card-sub text-muted mb-0">
+                    Questo mese: {{ agentStats?.AcquisitionsThisMonth || 0 }}
+                  </p>
+                </div>
+                <div class="symbol symbol-50px">
+                  <i class="ki-duotone ki-chart-simple fs-2x text-success">
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                  </i>
                 </div>
               </div>
             </div>
-            <div class="card-body p-0">
-              <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
-                  <thead class="sticky-top bg-light">
-                    <tr class="fw-bold text-muted">
-                      <th class="min-w-150px ps-5">Tipo</th>
-                      <th class="min-w-100px text-end pe-5">Quantità</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(count, type) in filteredCalendarByTypeTable" :key="type">
-                      <td class="ps-5">
-                        <span class="text-dark fw-semibold d-block fs-7">{{ type }}</span>
-                      </td>
-                      <td class="text-end pe-5">
-                        <span class="badge badge-light-primary">{{ count }}</span>
-                      </td>
-                    </tr>
-                    <tr v-if="!filteredCalendarByTypeTable || Object.keys(filteredCalendarByTypeTable).length === 0">
-                      <td colspan="2" class="text-center text-muted py-5">Nessun dato disponibile</td>
-                    </tr>
-                  </tbody>
-                </table>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+          <div class="card dashboard-card theme-dark-bg-body">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                  <p class="dashboard-card-title mb-1">Appuntamenti</p>
+                  <p class="dashboard-card-value mb-0">{{ agentStats?.TotalAppointments || 0 }}</p>
+                  <p class="dashboard-card-sub text-muted mb-0">
+                    Evasi: {{ agentStats?.AppointmentsEvasi || 0 }} | Disdetti: {{ agentStats?.AppointmentsDisdetti || 0 }} | Confermati: {{ agentStats?.AppointmentsConfermati || 0 }}
+                  </p>
+                </div>
+                <div class="symbol symbol-50px">
+                  <i class="ki-duotone ki-calendar fs-2x text-info">
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                  </i>
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- Tabella Dettagli Agenti -->
+      <div class="row gy-5 g-xl-10 mb-5">
         <div class="col-xl-12">
           <div class="card theme-dark-bg-body">
             <div class="card-header border-0 pt-5">
               <div class="card-title d-flex justify-content-between align-items-center w-100">
-                <span class="card-label fw-bold fs-3">Appuntamenti per Agente</span>
-                <div class="d-flex align-items-center">
+                <span class="card-label fw-bold fs-3">Dettagli per Agente</span>
+                <div class="d-flex align-items-center gap-3">
+                  <select 
+                    v-model="selectedEventType" 
+                    class="form-select form-select-solid w-200px"
+                  >
+                    <option value="">Tutte le tipologie</option>
+                    <option v-for="tipologia in tipologieEvento" :key="tipologia" :value="tipologia">
+                      {{ tipologia }}
+                    </option>
+                  </select>
                   <input 
-                    v-model="searchAgent" 
+                    v-model="searchAgentDetails" 
                     type="text" 
                     class="form-control form-control-solid w-200px" 
                     placeholder="Cerca agente..."
@@ -354,20 +230,40 @@
                   <thead class="sticky-top bg-light">
                     <tr class="fw-bold text-muted">
                       <th class="min-w-150px ps-5">Agente</th>
-                      <th class="min-w-100px text-end pe-5">Quantità</th>
+                      <th class="min-w-120px text-end">Immobili Gestiti</th>
+                      <th class="min-w-120px text-end">Acquisizioni</th>
+                      <th class="min-w-140px text-end">Appuntamenti Evasi</th>
+                      <th class="min-w-140px text-end">Appuntamenti Disdetti</th>
+                      <th class="min-w-140px text-end">Appuntamenti Confermati</th>
+                      <th class="min-w-140px text-end pe-5">Appuntamenti Effettuati</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(count, agent) in filteredCalendarByAgentTable" :key="agent">
+                    <tr v-for="agent in filteredAgentDetails" :key="agent.name">
                       <td class="ps-5">
-                        <span class="text-dark fw-semibold d-block fs-7">{{ agent }}</span>
+                        <span class="text-dark fw-semibold d-block fs-7">{{ agent.name }}</span>
+                      </td>
+                      <td class="text-end">
+                        <span class="badge badge-light-primary">{{ agent.propertiesManaged }}</span>
+                      </td>
+                      <td class="text-end">
+                        <span class="badge badge-light-success">{{ agent.acquisitions }}</span>
+                      </td>
+                      <td class="text-end">
+                        <span class="badge badge-light-info">{{ agent.appointmentsEvasi }}</span>
+                      </td>
+                      <td class="text-end">
+                        <span class="badge badge-light-danger">{{ agent.appointmentsDisdetti }}</span>
+                      </td>
+                      <td class="text-end">
+                        <span class="badge badge-light-success">{{ agent.appointmentsConfermati }}</span>
                       </td>
                       <td class="text-end pe-5">
-                        <span class="badge badge-light-info">{{ count }}</span>
+                        <span class="badge badge-light-primary">{{ agent.appointmentsEffettuati }}</span>
                       </td>
                     </tr>
-                    <tr v-if="!filteredCalendarByAgentTable || Object.keys(filteredCalendarByAgentTable).length === 0">
-                      <td colspan="2" class="text-center text-muted py-5">Nessun dato disponibile</td>
+                    <tr v-if="!filteredAgentDetails || filteredAgentDetails.length === 0">
+                      <td colspan="7" class="text-center text-muted py-5">Nessun dato disponibile</td>
                     </tr>
                   </tbody>
                 </table>
@@ -375,17 +271,28 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- Sezione Immobili -->
+      <div class="row gy-5 g-xl-10 mb-5">
         <div class="col-xl-12">
+          <h2 class="dashboard-section-title mb-4">Immobili</h2>
+        </div>
+      </div>
+
+      <!-- Immobili con più appuntamenti -->
+      <div class="row gy-5 g-xl-10 mb-5">
+        <div class="col-xl-6">
           <div class="card theme-dark-bg-body">
             <div class="card-header border-0 pt-5">
               <div class="card-title d-flex justify-content-between align-items-center w-100">
-                <span class="card-label fw-bold fs-3">Appuntamenti per Città</span>
+                <span class="card-label fw-bold fs-3">Immobili con più Appuntamenti</span>
                 <div class="d-flex align-items-center">
                   <input 
-                    v-model="searchLocation" 
+                    v-model="searchPropertyAppointments" 
                     type="text" 
                     class="form-control form-control-solid w-200px" 
-                    placeholder="Cerca città..."
+                    placeholder="Cerca immobile..."
                   />
                 </div>
               </div>
@@ -395,20 +302,20 @@
                 <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
                   <thead class="sticky-top bg-light">
                     <tr class="fw-bold text-muted">
-                      <th class="min-w-150px ps-5">Città</th>
-                      <th class="min-w-100px text-end pe-5">Quantità</th>
+                      <th class="min-w-200px ps-5">Immobile</th>
+                      <th class="min-w-100px text-end pe-5">Appuntamenti</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(count, location) in filteredCalendarByLocationTable" :key="location">
+                    <tr v-for="property in filteredPropertiesWithAppointments" :key="property.id">
                       <td class="ps-5">
-                        <span class="text-dark fw-semibold d-block fs-7">{{ location }}</span>
+                        <span class="text-dark fw-semibold d-block fs-7">{{ property.title }}</span>
                       </td>
                       <td class="text-end pe-5">
-                        <span class="badge badge-light-success">{{ count }}</span>
+                        <span class="badge badge-light-primary">{{ property.count }}</span>
                       </td>
                     </tr>
-                    <tr v-if="!filteredCalendarByLocationTable || Object.keys(filteredCalendarByLocationTable).length === 0">
+                    <tr v-if="!filteredPropertiesWithAppointments || filteredPropertiesWithAppointments.length === 0">
                       <td colspan="2" class="text-center text-muted py-5">Nessun dato disponibile</td>
                     </tr>
                   </tbody>
@@ -417,62 +324,55 @@
             </div>
           </div>
         </div>
-</div>
+        <div class="col-xl-6">
+          <div class="card theme-dark-bg-body">
+            <div class="card-header border-0 pt-5">
+              <div class="card-title d-flex justify-content-between align-items-center w-100">
+                <span class="card-label fw-bold fs-3">Immobili Caricati</span>
+                <div class="d-flex align-items-center">
+                  <input 
+                    v-model="searchLoadedProperties" 
+                    type="text" 
+                    class="form-control form-control-solid w-200px" 
+                    placeholder="Cerca immobile..."
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                  <thead class="sticky-top bg-light">
+                    <tr class="fw-bold text-muted">
+                      <th class="min-w-200px ps-5">Immobile</th>
+                      <th class="min-w-150px">Data Caricamento</th>
+                      <th class="min-w-100px text-end pe-5">Stato</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="property in filteredLoadedProperties" :key="property.id">
+                      <td class="ps-5">
+                        <span class="text-dark fw-semibold d-block fs-7">{{ property.title }}</span>
+                      </td>
+                      <td>
+                        <span class="text-dark fw-semibold d-block fs-7">{{ formatDateTime(property.createdDate) }}</span>
+                      </td>
+                      <td class="text-end pe-5">
+                        <span v-if="property.active" class="badge badge-success">Attivo</span>
+                        <span v-else class="badge badge-secondary">Archiviato</span>
+                      </td>
+                    </tr>
+                    <tr v-if="!filteredLoadedProperties || filteredLoadedProperties.length === 0">
+                      <td colspan="3" class="text-center text-muted py-5">Nessun dato disponibile</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <!-- Tabella Appuntamenti Admin -->
-      <div class="card theme-dark-bg-body">
-        <div class="card-header border-0 pt-5">
-          <h3 class="card-title">
-            <span class="card-label fw-bold fs-3">Lista Appuntamenti</span>
-          </h3>
-        </div>
-        <div class="card-body p-0">
-          <div v-if="filteredAdminAppointments.length === 0" class="text-center py-10">
-            <p class="text-muted">Nessun appuntamento trovato con i filtri selezionati.</p>
-          </div>
-          <div v-else class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-            <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
-              <thead class="sticky-top bg-light">
-                <tr class="fw-bold text-muted">
-                  <th class="min-w-150px ps-5">Evento</th>
-                  <th class="min-w-120px">Tipo</th>
-                  <th class="min-w-150px">Data/Ora</th>
-                  <th class="min-w-120px">Agente</th>
-                  <th class="min-w-100px">Immobile</th>
-                  <th class="min-w-80px text-end pe-5">Stato</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="appt in filteredAdminAppointments" :key="appt.Id">
-                  <td class="ps-5"> 
-                    <span class="text-dark fw-bold d-block fs-6">{{ appt.NomeEvento }}</span>
-                  </td>
-                  <td>
-                    <span class="badge badge-light-primary">{{ appt.Type }}</span>
-                  </td>
-                  <td>
-                    <span class="text-dark fw-semibold d-block fs-7">{{ formatDateTime(appt.DataInizioEvento) }}</span>
-                    <span class="text-muted fw-semibold d-block fs-8">{{ formatTime(appt.DataInizioEvento) }} - {{ formatTime(appt.DataFineEvento) }}</span>
-                  </td>
-                  <td>
-                    <span class="text-dark fw-semibold d-block fs-7">{{ appt.AgentName }}</span>
-                  </td>
-                  <td>
-                    <span v-if="appt.PropertyTitle" class="text-dark fw-semibold d-block fs-7">{{ appt.PropertyTitle }}</span>
-                    <span v-else class="text-muted fs-7">-</span>
-                  </td>
-                  <td class="text-end pe-5">
-                    <span v-if="appt.Confirmed" class="badge badge-success">Confermato</span>
-                    <span v-else-if="appt.Cancelled" class="badge badge-danger">Disdetto</span>
-                    <span v-else-if="appt.Postponed" class="badge badge-info">Rimandato</span>
-                    <span v-else class="badge badge-warning">Da confermare</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-    </div>
     </div>
   </div>
 
@@ -498,38 +398,44 @@ export default defineComponent({
   setup() {
     const initialLoading = ref<boolean>(true);
     const loadingData = ref<boolean>(false);
-    const loadingAppointments = ref<boolean>(false);
     const data = ref<DashboardDetails>();
     const calendarData = ref<CalendarDetails>();
     const authStore = useAuthStore();
-    const selectedAgencyId = ref<string>("");
-    const selectedPeriod = ref<string>("all");
-    const appointmentFilter = ref<string>("upcoming");
-    const appointmentStatusFilter = ref<string>("all");
-    const adminAppointmentFilter = ref<string>("upcoming");
-    const adminAppointmentStatusFilter = ref<string>("all");
-    const adminAppointmentTypeFilter = ref<string>("all");
-    const searchType = ref<string>("");
-    const searchAgent = ref<string>("");
-    const searchLocation = ref<string>("");
-    const agencies = ref<Array<{ Id: string; Name: string; LastName: string }>>([]);
-
     const role = computed(() => authStore.user?.Role || "");
     const isAdmin = computed(() => role.value === "Admin");
     const isAgency = computed(() => role.value === "Agenzia");
     const isAgent = computed(() => role.value === "Agente");
+    
+    // Filtri di default:
+    // - Admin: periodo = "month", agenzia = "" (tutte)
+    // - Agenzia: periodo = "month", agenzia = ID utente corrente
+    // - Agente: periodo = "month", agenzia = non visibile (solo suoi dati)
+    const selectedAgencyId = ref<string>("");
+    const selectedPeriod = ref<string>("today");
+    const searchAgentDetails = ref<string>("");
+    const searchPropertyAppointments = ref<string>("");
+    const searchLoadedProperties = ref<string>("");
+    const selectedEventType = ref<string>("");
+    const agencies = ref<Array<{ Id: string; Name: string; LastName: string }>>([]);
+
+    // Tipologie evento
+    const tipologieEvento = [
+      "Appuntamento interno",
+      "Consulenza di mutuo",
+      "Consulenza generica",
+      "Acquisizione",
+      "Proposta di acquisto",
+      "Proposta di locazione",
+      "Ribasso immobile",
+      "Aggiornamento mandato di vendita",
+      "Appuntamento MLS di vendita",
+      "Appuntamento MLS di locazione",
+      "Altro"
+    ];
+
     const agentSelf = computed(() => data.value?.AgentSelf);
 
     const calendarDetails = computed(() => calendarData.value || data.value?.CalendarDetails);
-
-    const formatCurrency = (value: number) => {
-      return new Intl.NumberFormat('it-IT', {
-        style: 'currency',
-        currency: 'EUR',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-      }).format(value || 0);
-    };
 
     const formatDateTime = (dateString: string) => {
       const date = new Date(dateString);
@@ -590,237 +496,165 @@ export default defineComponent({
       topEntries(data.value?.RequestHomeDetails?.DistinctByTownSale as Record<string, number> | undefined)
     );
 
-    const calendarByType = computed(() => {
-      const source = (calendarData.value?.ByType || data.value?.CalendarDetails?.ByType) as Record<string, number> | undefined;
-      if (!source) return {};
-      return Object.entries(source)
-        .map(([k, v]) => ({ k, v }))
-        .filter((e) => typeof e.v === "number" && e.v > 0)
-        .sort((a, b) => b.v - a.v)
-        .slice(0, 6)
-        .reduce((acc, cur) => {
-          acc[cur.k] = cur.v;
-          return acc;
-        }, {} as Record<string, number>);
-    });
-    const calendarByLocation = computed(() =>
-      topEntries((calendarData.value?.ByLocation || data.value?.CalendarDetails?.ByLocation) as Record<string, number> | undefined)
-    );
-    const calendarByAgent = computed(() =>
-      topEntries((calendarData.value?.ByAgent || data.value?.CalendarDetails?.ByAgent) as Record<string, number> | undefined)
-    );
-
-    // Tabelle ordinate per quantità (decrescente)
-    const calendarByTypeTable = computed(() => {
-      const source = (calendarData.value?.ByType || data.value?.CalendarDetails?.ByType) as Record<string, number> | undefined;
-      if (!source) return {};
-      return Object.entries(source)
-        .map(([k, v]) => ({ k, v: Number(v) }))
-        .filter((e) => !isNaN(e.v) && e.v > 0)
-        .sort((a, b) => b.v - a.v)
-        .reduce((acc, cur) => {
-          acc[cur.k] = cur.v;
-          return acc;
-        }, {} as Record<string, number>);
+    // Statistiche aggregate agenti - ora vengono dal backend
+    const agentStats = computed(() => {
+      return data.value?.AgentStats || {
+        TotalPropertiesManaged: 0,
+        ActivePropertiesManaged: 0,
+        TotalAcquisitions: 0,
+        AcquisitionsThisMonth: 0,
+        TotalAppointments: 0,
+        AppointmentsEvasi: 0,
+        AppointmentsDisdetti: 0,
+        AppointmentsConfermati: 0
+      };
     });
 
-    const calendarByAgentTable = computed(() => {
-      const source = (calendarData.value?.ByAgent || data.value?.CalendarDetails?.ByAgent) as Record<string, number> | undefined;
-      if (!source) return {};
-      return Object.entries(source)
-        .map(([k, v]) => ({ k, v: Number(v) }))
-        .filter((e) => !isNaN(e.v) && e.v > 0)
-        .sort((a, b) => b.v - a.v)
-        .reduce((acc, cur) => {
-          acc[cur.k] = cur.v;
-          return acc;
-        }, {} as Record<string, number>);
-    });
-
-    const calendarByLocationTable = computed(() => {
-      const source = (calendarData.value?.ByLocation || data.value?.CalendarDetails?.ByLocation) as Record<string, number> | undefined;
-      if (!source) return {};
-      return Object.entries(source)
-        .map(([k, v]) => ({ k, v: Number(v) }))
-        .filter((e) => !isNaN(e.v) && e.v > 0)
-        .sort((a, b) => b.v - a.v)
-        .reduce((acc, cur) => {
-          acc[cur.k] = cur.v;
-          return acc;
-        }, {} as Record<string, number>);
-    });
-
-    // Tabelle filtrate per ricerca
-    const filteredCalendarByTypeTable = computed(() => {
-      if (!searchType.value.trim()) return calendarByTypeTable.value;
-      const search = searchType.value.toLowerCase().trim();
-      const filtered: Record<string, number> = {};
-      Object.entries(calendarByTypeTable.value).forEach(([key, value]) => {
-        if (key.toLowerCase().includes(search)) {
-          filtered[key] = value;
-        }
-      });
-      return filtered;
-    });
-
-    const filteredCalendarByAgentTable = computed(() => {
-      if (!searchAgent.value.trim()) return calendarByAgentTable.value;
-      const search = searchAgent.value.toLowerCase().trim();
-      const filtered: Record<string, number> = {};
-      Object.entries(calendarByAgentTable.value).forEach(([key, value]) => {
-        if (key.toLowerCase().includes(search)) {
-          filtered[key] = value;
-        }
-      });
-      return filtered;
-    });
-
-    const filteredCalendarByLocationTable = computed(() => {
-      if (!searchLocation.value.trim()) return calendarByLocationTable.value;
-      const search = searchLocation.value.toLowerCase().trim();
-      const filtered: Record<string, number> = {};
-      Object.entries(calendarByLocationTable.value).forEach(([key, value]) => {
-        if (key.toLowerCase().includes(search)) {
-          filtered[key] = value;
-        }
-      });
-      return filtered;
-    });
-
+    // Appuntamenti filtrati per tipologia evento
     const filteredAppointments = computed(() => {
-      const appointmentsList = calendarData.value?.UpcomingAppointments || data.value?.CalendarDetails?.UpcomingAppointments;
-      if (!appointmentsList) return [];
-      let appointments = [...appointmentsList];
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
-
-      // Filtro per periodo
-      if (appointmentFilter.value === "today") {
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        appointments = appointments.filter(a => {
-          const apptDate = new Date(a.DataInizioEvento);
-          apptDate.setHours(0, 0, 0, 0);
-          return apptDate >= today && apptDate < tomorrow;
-        });
-      } else if (appointmentFilter.value === "week") {
-        const weekStart = new Date(now);
-        weekStart.setDate(now.getDate() - now.getDay());
-        weekStart.setHours(0, 0, 0, 0);
-        const weekEnd = new Date(weekStart);
-        weekEnd.setDate(weekStart.getDate() + 7);
-        appointments = appointments.filter(a => {
-          const apptDate = new Date(a.DataInizioEvento);
-          return apptDate >= weekStart && apptDate < weekEnd;
-        });
-      } else if (appointmentFilter.value === "month") {
-        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-        const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-        appointments = appointments.filter(a => {
-          const apptDate = new Date(a.DataInizioEvento);
-          return apptDate >= monthStart && apptDate < monthEnd;
-        });
-      } else if (appointmentFilter.value === "past") {
-        appointments = appointments.filter(a => {
-          const apptDate = new Date(a.DataInizioEvento);
-          return apptDate < now;
-        });
-      }
-      // "upcoming" mostra tutti (già filtrati dal backend)
-
-      // Filtro per stato
-      if (appointmentStatusFilter.value === "confirmed") {
-        appointments = appointments.filter(a => a.Confirmed && !a.Cancelled);
-      } else if (appointmentStatusFilter.value === "pending") {
-        appointments = appointments.filter(a => !a.Confirmed && !a.Cancelled);
-      } else if (appointmentStatusFilter.value === "cancelled") {
-        appointments = appointments.filter(a => a.Cancelled);
-      }
-
-      // Ordina: futuri prima (crescente), poi passati (decrescente)
-      return appointments.sort((a, b) => {
-        const dateA = new Date(a.DataInizioEvento);
-        const dateB = new Date(b.DataInizioEvento);
-        const isFutureA = dateA >= now;
-        const isFutureB = dateB >= now;
-        
-        if (isFutureA && !isFutureB) return -1;
-        if (!isFutureA && isFutureB) return 1;
-        if (isFutureA && isFutureB) return dateA.getTime() - dateB.getTime();
-        return dateB.getTime() - dateA.getTime();
-      });
+      const appointments = calendarData.value?.UpcomingAppointments || data.value?.CalendarDetails?.UpcomingAppointments || [];
+      if (!selectedEventType.value) return appointments;
+      return appointments.filter(appt => appt.Type === selectedEventType.value);
     });
 
-    const filteredAdminAppointments = computed(() => {
-      const appointmentsList = calendarData.value?.UpcomingAppointments || data.value?.CalendarDetails?.UpcomingAppointments;
-      if (!appointmentsList) return [];
-      let appointments = [...appointmentsList];
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
-
-      // Filtro per periodo
-      if (adminAppointmentFilter.value === "today") {
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        appointments = appointments.filter(a => {
-          const apptDate = new Date(a.DataInizioEvento);
-          apptDate.setHours(0, 0, 0, 0);
-          return apptDate >= today && apptDate < tomorrow;
-        });
-      } else if (adminAppointmentFilter.value === "week") {
-        const weekStart = new Date(now);
-        weekStart.setDate(now.getDate() - now.getDay());
-        weekStart.setHours(0, 0, 0, 0);
-        const weekEnd = new Date(weekStart);
-        weekEnd.setDate(weekStart.getDate() + 7);
-        appointments = appointments.filter(a => {
-          const apptDate = new Date(a.DataInizioEvento);
-          return apptDate >= weekStart && apptDate < weekEnd;
-        });
-      } else if (adminAppointmentFilter.value === "month") {
-        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-        const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-        appointments = appointments.filter(a => {
-          const apptDate = new Date(a.DataInizioEvento);
-          return apptDate >= monthStart && apptDate < monthEnd;
-        });
-      } else if (adminAppointmentFilter.value === "past") {
-        appointments = appointments.filter(a => {
-          const apptDate = new Date(a.DataInizioEvento);
-          return apptDate < now;
-        });
+    // Dettagli per agente - ora vengono dal backend, con filtro per tipologia evento
+    const agentDetails = computed(() => {
+      const backendDetails = data.value?.AgentDetails || [];
+      const appointments = filteredAppointments.value;
+      
+      // Se non c'è filtro per tipologia evento, usa i dati del backend
+      if (!selectedEventType.value) {
+        return backendDetails.map(agent => ({
+          name: agent.Name,
+          propertiesManaged: agent.PropertiesManaged,
+          acquisitions: agent.Acquisitions,
+          appointmentsEvasi: agent.AppointmentsEvasi,
+          appointmentsDisdetti: agent.AppointmentsDisdetti,
+          appointmentsConfermati: agent.AppointmentsConfermati,
+          appointmentsEffettuati: agent.AppointmentsEffettuati,
+          totalAppointments: agent.TotalAppointments
+        }));
       }
-      // "upcoming" e "all" mostrano tutti (già filtrati dal backend)
-
-      // Filtro per stato
-      if (adminAppointmentStatusFilter.value === "confirmed") {
-        appointments = appointments.filter(a => a.Confirmed && !a.Cancelled);
-      } else if (adminAppointmentStatusFilter.value === "pending") {
-        appointments = appointments.filter(a => !a.Confirmed && !a.Cancelled);
-      } else if (adminAppointmentStatusFilter.value === "cancelled") {
-        appointments = appointments.filter(a => a.Cancelled);
-      }
-
-      // Filtro per tipo
-      if (adminAppointmentTypeFilter.value !== "all") {
-        appointments = appointments.filter(a => a.Type === adminAppointmentTypeFilter.value);
-      }
-
-      // Ordina: futuri prima (crescente), poi passati (decrescente)
-      return appointments.sort((a, b) => {
-        const dateA = new Date(a.DataInizioEvento);
-        const dateB = new Date(b.DataInizioEvento);
-        const isFutureA = dateA >= now;
-        const isFutureB = dateB >= now;
-        
-        if (isFutureA && !isFutureB) return -1;
-        if (!isFutureA && isFutureB) return 1;
-        if (isFutureA && isFutureB) return dateA.getTime() - dateB.getTime();
-        return dateB.getTime() - dateA.getTime();
+      
+      // Se c'è filtro per tipologia evento, ricalcola le statistiche dagli appuntamenti filtrati
+      const agentStatsMap: Record<string, {
+        name: string;
+        propertiesManaged: number;
+        acquisitions: number;
+        appointmentsEvasi: number;
+        appointmentsDisdetti: number;
+        appointmentsConfermati: number;
+        appointmentsEffettuati: number;
+        totalAppointments: number;
+      }> = {};
+      
+      // Inizializza con i dati base del backend
+      backendDetails.forEach(agent => {
+        agentStatsMap[agent.Name] = {
+          name: agent.Name,
+          propertiesManaged: agent.PropertiesManaged,
+          acquisitions: agent.Acquisitions,
+          appointmentsEvasi: 0,
+          appointmentsDisdetti: 0,
+          appointmentsConfermati: 0,
+          appointmentsEffettuati: 0,
+          totalAppointments: 0
+        };
       });
+      
+      // Ricalcola le statistiche dagli appuntamenti filtrati
+      appointments.forEach(appt => {
+        if (appt.AgentName && agentStatsMap[appt.AgentName]) {
+          agentStatsMap[appt.AgentName].totalAppointments++;
+          
+          if (appt.Cancelled) {
+            agentStatsMap[appt.AgentName].appointmentsDisdetti++;
+          } else {
+            // Appuntamento non cancellato
+            if (appt.Confirmed && !appt.Postponed) {
+              agentStatsMap[appt.AgentName].appointmentsConfermati++;
+            }
+            
+            // Appuntamento evaso: non cancellato e non posticipato
+            if (!appt.Cancelled && !appt.Postponed) {
+              agentStatsMap[appt.AgentName].appointmentsEvasi++;
+            }
+            
+            // Appuntamento effettuato: confermato e non posticipato (considerato come effettuato)
+            if (appt.Confirmed && !appt.Postponed) {
+              agentStatsMap[appt.AgentName].appointmentsEffettuati++;
+            }
+          }
+        }
+      });
+      
+      return Object.values(agentStatsMap);
     });
+
+    const filteredAgentDetails = computed(() => {
+      let filtered = agentDetails.value;
+      
+      // Filtro per nome agente
+      if (searchAgentDetails.value.trim()) {
+        const search = searchAgentDetails.value.toLowerCase().trim();
+        filtered = filtered.filter(agent => 
+          agent.name.toLowerCase().includes(search)
+        );
+      }
+      
+      return filtered;
+    });
+
+    // Immobili con più appuntamenti
+    const propertiesWithAppointments = computed(() => {
+      const appointments = calendarData.value?.UpcomingAppointments || data.value?.CalendarDetails?.UpcomingAppointments || [];
+      const propertyCounts: Record<string, { id: string; title: string; count: number }> = {};
+      
+      appointments.forEach(appt => {
+        if (appt.PropertyTitle) {
+          if (!propertyCounts[appt.PropertyTitle]) {
+            propertyCounts[appt.PropertyTitle] = {
+              id: appt.PropertyTitle,
+              title: appt.PropertyTitle,
+              count: 0
+            };
+          }
+          propertyCounts[appt.PropertyTitle].count++;
+        }
+      });
+      
+      return Object.values(propertyCounts)
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 20); // Top 20
+    });
+
+    const filteredPropertiesWithAppointments = computed(() => {
+      if (!searchPropertyAppointments.value.trim()) return propertiesWithAppointments.value;
+      const search = searchPropertyAppointments.value.toLowerCase().trim();
+      return propertiesWithAppointments.value.filter(property => 
+        property.title.toLowerCase().includes(search)
+      );
+    });
+
+    // Immobili caricati - ora vengono dal backend
+    const loadedProperties = computed(() => {
+      const backendProperties = data.value?.LoadedProperties || [];
+      return backendProperties.map(property => ({
+        id: property.Id,
+        title: property.Title,
+        createdDate: property.CreationDate,
+        active: property.Active
+      }));
+    });
+
+    const filteredLoadedProperties = computed(() => {
+      if (!searchLoadedProperties.value.trim()) return loadedProperties.value;
+      const search = searchLoadedProperties.value.toLowerCase().trim();
+      return loadedProperties.value.filter((property: any) => 
+        property.title.toLowerCase().includes(search)
+      );
+    });
+
 
     async function loadAgencies() {
       if (!isAdmin.value) return;
@@ -836,18 +670,29 @@ export default defineComponent({
 
     async function getItems() {
       initialLoading.value = true;
-      const agencyId = selectedAgencyId.value ? selectedAgencyId.value : undefined;
+      // Se è un agente, non passare agencyId (il backend filtra automaticamente)
+      // Se è un'agenzia, usa l'ID dell'utente corrente se non è selezionata un'agenzia
+      let agencyId: string | undefined = undefined;
+      if (isAdmin.value && selectedAgencyId.value) {
+        agencyId = selectedAgencyId.value;
+      } else if (isAgency.value) {
+        agencyId = selectedAgencyId.value || authStore.user?.Id;
+      }
+      // Per gli agenti, agencyId rimane undefined così il backend usa automaticamente currentUser.AgencyId
+      
+      const period = selectedPeriod.value;
       
       // Carica dati principali e appuntamenti in parallelo al primo caricamento
       const [dashboardData, appointments] = await Promise.all([
-        getDashboardData(agencyId),
-        getDashboardAppointments(agencyId)
+        getDashboardData(agencyId, period),
+        getDashboardAppointments(agencyId, period)
       ]);
       
       if (dashboardData) {
         data.value = {
           ...dashboardData,
-          CalendarDetails: appointments || {} as CalendarDetails
+          CalendarDetails: appointments || {} as CalendarDetails,
+          SalesDetails: undefined
         } as DashboardDetails;
       }
       
@@ -863,23 +708,31 @@ export default defineComponent({
 
     async function refreshData() {
       loadingData.value = true;
-      const agencyId = selectedAgencyId.value ? selectedAgencyId.value : undefined;
-      const dashboardData = await getDashboardData(agencyId);
+      // Se è un agente, non passare agencyId (il backend filtra automaticamente)
+      // Se è un'agenzia, usa l'ID dell'utente corrente se non è selezionata un'agenzia
+      let agencyId: string | undefined = undefined;
+      if (isAdmin.value && selectedAgencyId.value) {
+        agencyId = selectedAgencyId.value;
+      } else if (isAgency.value) {
+        agencyId = selectedAgencyId.value || authStore.user?.Id;
+      }
+      // Per gli agenti, agencyId rimane undefined così il backend usa automaticamente currentUser.AgencyId
+      
+      const period = selectedPeriod.value;
+      
+      // Carica dati principali e appuntamenti in parallelo quando si aggiornano i filtri principali
+      const [dashboardData, appointments] = await Promise.all([
+        getDashboardData(agencyId, period),
+        getDashboardAppointments(agencyId, period)
+      ]);
       
       if (dashboardData && data.value) {
         data.value = {
           ...dashboardData,
-          CalendarDetails: data.value.CalendarDetails
+          CalendarDetails: appointments || data.value.CalendarDetails,
+          SalesDetails: undefined
         } as DashboardDetails;
       }
-      
-      loadingData.value = false;
-    }
-
-    async function refreshAppointments() {
-      loadingAppointments.value = true;
-      const agencyId = selectedAgencyId.value ? selectedAgencyId.value : undefined;
-      const appointments = await getDashboardAppointments(agencyId);
       
       if (appointments) {
         calendarData.value = appointments;
@@ -888,30 +741,35 @@ export default defineComponent({
         }
       }
       
-      loadingAppointments.value = false;
+      loadingData.value = false;
     }
 
-    function onAgencyChange() {
-      // Non fa nulla, l'aggiornamento avviene solo tramite il pulsante
-    }
 
-    function filterAppointments() {
-      // Il computed filteredAppointments si aggiorna automaticamente
-    }
-
-    function filterAdminAppointments() {
-      // Il computed filteredAdminAppointments si aggiorna automaticamente
-    }
 
     onMounted(async () => {
       await loadAgencies();
+      
+      // Imposta filtri di default in base al ruolo
+      if (isAdmin.value) {
+        // Admin: periodo = questo mese, agenzia = tutte
+        selectedPeriod.value = "today";
+        selectedAgencyId.value = "";
+      } else if (isAgency.value) {
+        // Agenzia: periodo = questo mese, agenzia = ID utente corrente
+        selectedPeriod.value = "today";
+        selectedAgencyId.value = authStore.user?.Id || "";
+      } else if (isAgent.value) {
+        // Agente: periodo = questo mese, agenzia non visibile (backend filtra automaticamente)
+        selectedPeriod.value = "today";
+        selectedAgencyId.value = ""; // Non viene usato per gli agenti
+      }
+      
       await getItems();
     });
 
     return {
       initialLoading,
       loadingData,
-      loadingAppointments,
       data,
       isAdmin,
       isAgency,
@@ -919,10 +777,7 @@ export default defineComponent({
       agentSelf,
       selectedAgencyId,
       selectedPeriod,
-      appointmentFilter,
-      appointmentStatusFilter,
       agencies,
-      formatCurrency,
       formatDateTime,
       formatTime,
       propertiesTrend,
@@ -930,28 +785,19 @@ export default defineComponent({
       topTownSale,
       topReqTownSale,
       calendarDetails,
-      calendarByType,
-      calendarByLocation,
-      calendarByAgent,
-      calendarByTypeTable,
-      calendarByAgentTable,
-      calendarByLocationTable,
-      filteredCalendarByTypeTable,
-      filteredCalendarByAgentTable,
-      filteredCalendarByLocationTable,
-      searchType,
-      searchAgent,
-      searchLocation,
-      filteredAppointments,
-      filteredAdminAppointments,
-      adminAppointmentFilter,
-      adminAppointmentStatusFilter,
-      adminAppointmentTypeFilter,
-      onAgencyChange,
-      filterAppointments,
-      filterAdminAppointments,
-      refreshData,
-      refreshAppointments
+      searchAgentDetails,
+      searchPropertyAppointments,
+      searchLoadedProperties,
+      selectedEventType,
+      tipologieEvento,
+      agentStats,
+      agentDetails,
+      filteredAgentDetails,
+      propertiesWithAppointments,
+      filteredPropertiesWithAppointments,
+      loadedProperties,
+      filteredLoadedProperties,
+      refreshData
     };
   },
 });

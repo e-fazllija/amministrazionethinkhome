@@ -817,6 +817,19 @@
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Note documentali e varie</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <textarea class="form-control form-control-lg fw-semobold" v-model="formData.DocumentaryNotes" rows="4"></textarea>
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="row mb-6">
+          <!--begin::Label-->
           <label class="col-lg-4 col-form-label required fw-semobold fs-6">Carica immagini</label>
           <!--end::Label-->
           <!--begin::Input-->
@@ -1057,6 +1070,7 @@ export default defineComponent({
       FlatRateCommission: 0,
       StornoProvvigione: 0,
       TypeOfAssignment: "",
+      DocumentaryNotes: "",
     });
 
     const inserModel = ref<InsertModel>({
