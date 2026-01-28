@@ -43,6 +43,7 @@
             <option value="Vendita">Vendita</option>
             <option value="Affitto">Affitto</option>
             <option value="Aste">Aste</option>
+            <option value="MLS">MLS</option>
           </select>
         </div>
         

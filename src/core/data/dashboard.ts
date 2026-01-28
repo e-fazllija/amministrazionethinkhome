@@ -66,7 +66,6 @@ export class AgentStatsDetails {
     TotalAcquisitions: number;
     AcquisitionsThisMonth: number;
     TotalAppointments: number;
-    AppointmentsEvasi: number;
     AppointmentsDisdetti: number;
     AppointmentsConfermati: number;
 }
@@ -75,7 +74,6 @@ export class AgentDetail {
     Name: string;
     PropertiesManaged: number;
     Acquisitions: number;
-    AppointmentsEvasi: number;
     AppointmentsDisdetti: number;
     AppointmentsConfermati: number;
     AppointmentsEffettuati: number;

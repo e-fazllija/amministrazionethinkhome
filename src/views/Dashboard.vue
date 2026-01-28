@@ -183,7 +183,7 @@
                   <p class="dashboard-card-title mb-1">Appuntamenti</p>
                   <p class="dashboard-card-value mb-0">{{ agentStats?.TotalAppointments || 0 }}</p>
                   <p class="dashboard-card-sub text-muted mb-0">
-                    Evasi: {{ agentStats?.AppointmentsEvasi || 0 }} | Disdetti: {{ agentStats?.AppointmentsDisdetti || 0 }} | Confermati: {{ agentStats?.AppointmentsConfermati || 0 }}
+                    Disdetti: {{ agentStats?.AppointmentsDisdetti || 0 }} | Confermati: {{ agentStats?.AppointmentsConfermati || 0 }}
                   </p>
                 </div>
                 <div class="symbol symbol-50px">
@@ -232,7 +232,6 @@
                       <th class="min-w-150px ps-5">Agente</th>
                       <th class="min-w-120px text-end">Immobili Gestiti</th>
                       <th class="min-w-120px text-end">Acquisizioni</th>
-                      <th class="min-w-140px text-end">Appuntamenti Evasi</th>
                       <th class="min-w-140px text-end">Appuntamenti Disdetti</th>
                       <th class="min-w-140px text-end">Appuntamenti Confermati</th>
                       <th class="min-w-140px text-end pe-5">Appuntamenti Effettuati</th>
@@ -250,9 +249,6 @@
                         <span class="badge badge-light-success">{{ agent.acquisitions }}</span>
                       </td>
                       <td class="text-end">
-                        <span class="badge badge-light-info">{{ agent.appointmentsEvasi }}</span>
-                      </td>
-                      <td class="text-end">
                         <span class="badge badge-light-danger">{{ agent.appointmentsDisdetti }}</span>
                       </td>
                       <td class="text-end">
@@ -263,7 +259,7 @@
                       </td>
                     </tr>
                     <tr v-if="!filteredAgentDetails || filteredAgentDetails.length === 0">
-                      <td colspan="7" class="text-center text-muted py-5">Nessun dato disponibile</td>
+                      <td colspan="6" class="text-center text-muted py-5">Nessun dato disponibile</td>
                     </tr>
                   </tbody>
                 </table>
@@ -504,7 +500,6 @@ export default defineComponent({
         TotalAcquisitions: 0,
         AcquisitionsThisMonth: 0,
         TotalAppointments: 0,
-        AppointmentsEvasi: 0,
         AppointmentsDisdetti: 0,
         AppointmentsConfermati: 0
       };
@@ -517,6 +512,16 @@ export default defineComponent({
       return appointments.filter(appt => appt.Type === selectedEventType.value);
     });
 
+    // Funzione helper per verificare se un evento è un'acquisizione valida
+    const isValidAcquisition = (appt: any): boolean => {
+      const now = new Date();
+      const eventDate = new Date(appt.DataInizioEvento);
+      return appt.Type === "Acquisizione" 
+        && eventDate < now 
+        && !appt.Cancelled 
+        && !appt.Postponed;
+    };
+
     // Dettagli per agente - ora vengono dal backend, con filtro per tipologia evento
     const agentDetails = computed(() => {
       const backendDetails = data.value?.AgentDetails || [];
@@ -528,7 +533,6 @@ export default defineComponent({
           name: agent.Name,
           propertiesManaged: agent.PropertiesManaged,
           acquisitions: agent.Acquisitions,
-          appointmentsEvasi: agent.AppointmentsEvasi,
           appointmentsDisdetti: agent.AppointmentsDisdetti,
           appointmentsConfermati: agent.AppointmentsConfermati,
           appointmentsEffettuati: agent.AppointmentsEffettuati,
@@ -541,7 +545,6 @@ export default defineComponent({
         name: string;
         propertiesManaged: number;
         acquisitions: number;
-        appointmentsEvasi: number;
         appointmentsDisdetti: number;
         appointmentsConfermati: number;
         appointmentsEffettuati: number;
@@ -553,8 +556,7 @@ export default defineComponent({
         agentStatsMap[agent.Name] = {
           name: agent.Name,
           propertiesManaged: agent.PropertiesManaged,
-          acquisitions: agent.Acquisitions,
-          appointmentsEvasi: 0,
+          acquisitions: 0, // Verrà ricalcolato dagli appuntamenti filtrati
           appointmentsDisdetti: 0,
           appointmentsConfermati: 0,
           appointmentsEffettuati: 0,
@@ -575,15 +577,15 @@ export default defineComponent({
               agentStatsMap[appt.AgentName].appointmentsConfermati++;
             }
             
-            // Appuntamento evaso: non cancellato e non posticipato
-            if (!appt.Cancelled && !appt.Postponed) {
-              agentStatsMap[appt.AgentName].appointmentsEvasi++;
-            }
-            
             // Appuntamento effettuato: confermato e non posticipato (considerato come effettuato)
             if (appt.Confirmed && !appt.Postponed) {
               agentStatsMap[appt.AgentName].appointmentsEffettuati++;
             }
+          }
+          
+          // Calcola acquisizioni: solo eventi passati con tipo "Acquisizione" che NON sono disdetti o rimandati
+          if (isValidAcquisition(appt)) {
+            agentStatsMap[appt.AgentName].acquisitions++;
           }
         }
       });
