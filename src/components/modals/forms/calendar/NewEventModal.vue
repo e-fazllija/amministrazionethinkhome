@@ -20,11 +20,18 @@
             <!--begin::Input group-->
             <div class="fv-row mb-9 fv-plugins-icon-container">
               <!--begin::Label-->
-              <label class="fs-6 fw-semobold required mb-2">Nome evento</label>
+              <label class="fs-6 fw-semobold required mb-2">Tipologia evento</label>
               <!--end::Label-->
               <!--begin::Input-->
               <el-form-item prop="NomeEvento">
-                <el-input v-model="targetData.NomeEvento" type="text" name="NomeEvento" />
+                <el-select v-model="targetData.NomeEvento" placeholder="Seleziona la tipologia evento" name="NomeEvento">
+                  <el-option
+                    v-for="tipologia in tipologieEvento"
+                    :key="tipologia"
+                    :label="tipologia"
+                    :value="tipologia"
+                  />
+                </el-select>
               </el-form-item>
               <!--end::Input-->
               <div class="fv-plugins-message-container invalid-feedback"></div>
@@ -254,6 +261,20 @@ export default defineComponent({
       { name: '', hex: '#800080' },     
       { name: '', hex: '#00FF00' }       
     ];
+
+    const tipologieEvento = [
+      "Appuntamento interno",
+      "Consulenza di mutuo",
+      "Consulenza generica",
+      "Acquisizione",
+      "Proposta di acquisto",
+      "Proposta di locazione",
+      "Ribasso immobile",
+      "Aggiornamento mandato di vendita",
+      "Appuntamento MLS di vendita",
+      "Appuntamento MLS di locazione",
+      "Altro"
+    ];
     const targetData = ref<Event>({
       ApplicationUserId: "",
       NomeEvento: "",
@@ -303,7 +324,7 @@ export default defineComponent({
       NomeEvento: [
         {
           required: true,
-          message: "Inserisci il nome dell'evento",
+          message: "Seleziona la tipologia evento",
           trigger: "blur",
         },
       ],
@@ -465,7 +486,8 @@ export default defineComponent({
       getAssetPath,
       inserModel,
       removeModalBackdrop,
-      colorOptions
+      colorOptions,
+      tipologieEvento
     };
   },
   data() {

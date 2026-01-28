@@ -60,13 +60,44 @@ export class SalesDetails {
     SalesValuePerMonth: Object;
 }
 
+export class AgentStatsDetails {
+    TotalPropertiesManaged: number;
+    ActivePropertiesManaged: number;
+    TotalAcquisitions: number;
+    AcquisitionsThisMonth: number;
+    TotalAppointments: number;
+    AppointmentsEvasi: number;
+    AppointmentsDisdetti: number;
+    AppointmentsConfermati: number;
+}
+
+export class AgentDetail {
+    Name: string;
+    PropertiesManaged: number;
+    Acquisitions: number;
+    AppointmentsEvasi: number;
+    AppointmentsDisdetti: number;
+    AppointmentsConfermati: number;
+    AppointmentsEffettuati: number;
+    TotalAppointments: number;
+}
+
+export class LoadedProperty {
+    Id: number;
+    Title: string;
+    CreationDate: string;
+    Active: boolean;
+}
+
 export class DashboardDataResponse {
     Role: string;
     ScopeAgencyId?: string;
     ScopeUserId?: string;
     RealEstatePropertyHomeDetails: RealEstatePropertyHomeDetails;
     RequestHomeDetails: RequestHomeDetails;
-    SalesDetails: SalesDetails;
+    AgentStats: AgentStatsDetails;
+    AgentDetails: AgentDetail[];
+    LoadedProperties: LoadedProperty[];
     TotalCustomers: number;
     TotalAgents: number;
     AgencySummary?: AgencySummary;
@@ -80,7 +111,10 @@ export class DashboardDetails {
     RealEstatePropertyHomeDetails: RealEstatePropertyHomeDetails;
     RequestHomeDetails: RequestHomeDetails;
     CalendarDetails: CalendarDetails;
-    SalesDetails: SalesDetails;
+    SalesDetails?: SalesDetails;
+    AgentStats?: AgentStatsDetails;
+    AgentDetails?: AgentDetail[];
+    LoadedProperties?: LoadedProperty[];
     TotalCustomers: number;
     TotalAgents: number;
     AgencySummary?: AgencySummary;
@@ -131,8 +165,12 @@ const getDetails = (agencyId?: string): Promise<DashboardDetails> => {
         });
 };
 
-const getDashboardData = (agencyId?: string): Promise<DashboardDataResponse> => {
-    const url = agencyId ? `Generic/GetDashboardData?agencyId=${agencyId}` : `Generic/GetDashboardData`;
+const getDashboardData = (agencyId?: string, period?: string): Promise<DashboardDataResponse> => {
+    let url = `Generic/GetDashboardData`;
+    const params: string[] = [];
+    if (agencyId) params.push(`agencyId=${agencyId}`);
+    if (period) params.push(`period=${period}`);
+    if (params.length > 0) url += `?${params.join('&')}`;
     return ApiService.get(url, "")
         .then(({ data }) => {
             const result = data as Partial<DashboardDataResponse>
@@ -144,8 +182,12 @@ const getDashboardData = (agencyId?: string): Promise<DashboardDataResponse> => 
         });
 };
 
-const getDashboardAppointments = (agencyId?: string): Promise<CalendarDetails> => {
-    const url = agencyId ? `Generic/GetDashboardAppointments?agencyId=${agencyId}` : `Generic/GetDashboardAppointments`;
+const getDashboardAppointments = (agencyId?: string, period?: string): Promise<CalendarDetails> => {
+    let url = `Generic/GetDashboardAppointments`;
+    const params: string[] = [];
+    if (agencyId) params.push(`agencyId=${agencyId}`);
+    if (period) params.push(`period=${period}`);
+    if (params.length > 0) url += `?${params.join('&')}`;
     return ApiService.get(url, "")
         .then(({ data }) => {
             const result = data as Partial<CalendarDetails>

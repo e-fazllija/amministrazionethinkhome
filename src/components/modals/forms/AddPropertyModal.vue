@@ -881,6 +881,19 @@
                 </div>
                 <!--end::Input group-->
 
+                <!--begin::Input group-->
+                <div class="d-flex flex-column mb-2 fv-row">
+                  <!--begin::Label-->
+                  <label class="fs-6 fw-semobold mb-2">Note documentali e varie</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <el-form-item prop="DocumentaryNotes">
+                    <textarea class="form-control" v-model="formData.DocumentaryNotes" rows="4"></textarea>
+                  </el-form-item>
+                  <!--end::Input-->
+                </div>
+                <!--end::Input group-->
+
               </div>
 
               <div class="fv-row mb-15">
@@ -995,6 +1008,7 @@ export default defineComponent({
       FlatRateCommission: 0,
       StornoProvvigione: 0,
       TypeOfAssignment: "",
+      DocumentaryNotes: "",
     });
     const inserModel = ref<InsertModel>({
       Customers: [],
