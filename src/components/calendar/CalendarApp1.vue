@@ -250,7 +250,7 @@ export default defineComponent({
           statusIndicator = " ⏳";
         }
 
-        const baseTitle = addName ? `${results[key].ApplicationUser.Name} ${results[key].ApplicationUser.LastName}: ${results[key].DescrizioneEvento} - ${results[key].NomeEvento} ` : results[key].NomeEvento;
+        const baseTitle = addName ? `${results[key].ApplicationUser.Name} ${results[key].ApplicationUser.LastName}: ${results[key].DescrizioneEvento} - ${results[key].NomeEvento} ` : `${results[key].DescrizioneEvento} - ${results[key].NomeEvento} `;
         
         const item = {
           id: results[key].Id.toString(),
