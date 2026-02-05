@@ -316,6 +316,8 @@ export default defineComponent({
       "Aggiornamento mandato di vendita",
       "Appuntamento MLS di vendita",
       "Appuntamento MLS di locazione",
+      "Rogito",
+      "Zona",
       "Altro"
     ];
     const targetData = ref<Event>({
