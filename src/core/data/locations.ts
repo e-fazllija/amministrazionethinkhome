@@ -228,14 +228,38 @@ export const getProvinces = async (filterRequest?: string): Promise<Province[]> 
   }
 };
 
+// Cache per evitare chiamate duplicate alle province
+let provincesCache: Province[] | null = null;
+let provincesPromise: Promise<Province[]> | null = null;
+
 export const getAllProvinces = async (): Promise<Province[]> => {
-  try {
-    const response = await ApiService.get('Province/GetAll', 'json');
-    return Array.isArray(response.data) ? response.data : [];
-  } catch (error: any) {
-    store.setError(error.response?.data?.message || 'Errore nel caricamento delle province', error.response?.status || 500);
-    throw error;
+  // Se c'è già una cache, restituiscila
+  if (provincesCache) {
+    return provincesCache;
   }
+  
+  // Se c'è già una chiamata in corso, attendi quella
+  if (provincesPromise) {
+    return provincesPromise;
+  }
+  
+  // Crea una nuova chiamata
+  provincesPromise = (async () => {
+    try {
+      const response = await ApiService.get('Province/GetAll', 'json');
+      const data = Array.isArray(response.data) ? response.data : [];
+      provincesCache = data;
+      provincesPromise = null; // Reset della promise dopo il successo
+      return data;
+    } catch (error: any) {
+      // Reset della promise in caso di errore per permettere retry
+      provincesPromise = null;
+      store.setError(error.response?.data?.message || 'Errore nel caricamento delle province', error.response?.status || 500);
+      throw error;
+    }
+  })();
+  
+  return provincesPromise;
 };
 
 export const getProvinceById = async (id: number): Promise<Province> => {
