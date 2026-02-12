@@ -105,6 +105,13 @@ export class SearchModel {
   Agents: User[];
 }
 
+export class Documentation {
+  Id: number;
+  FileName: string;
+  FileUrl: string;
+  RealEstatePropertyId?: number;
+}
+
 const getRealEstateProperties = (agencyId: string, filterRequest: string, contract?: string, priceFrom?: number, priceTo?: number, category?: string, typologie?: string, town?: string[]) : Promise<Array<RealEstateProperty>> => {
    return ApiService.get(
     `RealEstateProperty/Get?currentPage=0&agencyId=${agencyId}&filterRequest=${filterRequest}&contract=${contract}&priceFrom=${priceFrom}&priceTo=${priceTo}&category=${category}&typologie=${typologie}&town=${town}`,
@@ -348,6 +355,69 @@ const getSearchItems = (userId: string, agencyId?: string): Promise<SearchModel>
     });
 };
 
+const uploadPropertyDocument = async (file: File, realEstatePropertyId: number) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("realEstatePropertyId", realEstatePropertyId.toString());
+
+  return await ApiService.post("BlobStorage/UploadPropertyDocument", formData)
+    .then(({ data }) => data as Documentation)
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
+
+const getPropertyDocuments = (realEstatePropertyId: number): Promise<Array<Documentation>> => {
+  return ApiService.get(
+    `BlobStorage/GetPropertyDocuments?realEstatePropertyId=${realEstatePropertyId}`,
+    ""
+  )
+    .then(({ data }) => {
+      return data as Array<Documentation>;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return [];
+    });
+};
+
+const getDocumentDownloadUrl = (fileName: string): Promise<string> => {
+  return ApiService.get(
+    `BlobStorage/GetDocumentDownloadUrl?fileName=${encodeURIComponent(fileName)}`,
+    ""
+  )
+    .then(({ data }) => {
+      return data.url as string;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
+
+const deletePropertyDocument = async (id: number) => {
+  return await ApiService.delete(`BlobStorage/DeletePropertyDocument?id=${id}`)
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
+
+const getDocumentById = (id: number): Promise<Documentation> => {
+  return ApiService.get(`BlobStorage/GetDocumentById?id=${id}`, "")
+    .then(({ data }) => {
+      return data as Documentation;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
+
 export { 
   getRealEstateProperties, 
   getRealEstatePropertiesList,
@@ -360,4 +430,10 @@ export {
   deletePhoto,
   uploadFiles,
   updatePhotosOrder,
-  getSearchItems }
+  getSearchItems,
+  uploadPropertyDocument,
+  getPropertyDocuments,
+  getDocumentDownloadUrl,
+  deletePropertyDocument,
+  getDocumentById
+}

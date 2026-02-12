@@ -840,6 +840,47 @@
         </div>
         <!--end::Input group-->
 
+        <!--begin::Input group Documents-->
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Carica documenti</label>
+          <!--end::Label-->
+          <!--begin::Input-->
+          <div class="col-lg-8 fv-row">
+            <input class="form-control" type="file" multiple @change="onDocumentChanged" accept=".pdf,.doc,.docx,.xls,.xlsx,.zip,.rar">
+          </div>
+          <!--end::Input-->
+        </div>
+        <!--end::Input group Documents-->
+
+        <!--begin::Documents List-->
+        <div v-if="documents && documents.length > 0" class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-semobold fs-6">Documenti caricati</label>
+          <!--end::Label-->
+          <!--begin::Col-->
+          <div class="col-lg-8 fv-row">
+            <div class="documents-list">
+              <div v-for="(doc, index) in documents" :key="index" class="document-item">
+                <div class="document-info">
+                  <i class="bi bi-file-earmark-text fs-2 me-2"></i>
+                  <span class="document-name">{{ getDocumentName(doc.FileName) }}</span>
+                </div>
+                <div class="document-actions">
+                  <button type="button" class="btn btn-sm btn-light-primary me-2" @click="downloadDocument(doc)">
+                    <i class="bi bi-download"></i> Scarica
+                  </button>
+                  <button type="button" class="btn btn-sm btn-light-danger" @click="deleteDocument(doc.Id)">
+                    <i class="bi bi-trash"></i> Elimina
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--end::Col-->
+        </div>
+        <!--end::Documents List-->
+
         <!--begin::Input group-->
         <div class="row mb-6">
           <!--begin::Label-->
@@ -854,67 +895,66 @@
         </div>
         <!--end::Input group-->
 
+        <!--begin::Photos Gallery-->
         <div class="py-5">
           <div class="rounded border p-10">
-            <div class="row justify-content-center">
-              <div class="col-lg-4">
-                <draggable :list="formData.Photos" :disabled="false" item-key="name" class="list-group"
-                  ghost-class="ghost" @start="true" @end="false" :move="checkMove" :animation="300">
-                  <template #item="{ element }">
-                    <div class="card overlay">
-                      <div class="card-body p-0">
-                        <div class="overlay-wrapper">
-                          <img :src="element.Url" alt="" class="w-100 card-rounded">
-                        </div>
-                        <div v-if="user.Id === formData.AgentId || user.Role === 'Admin' || formData.Agent.AgencyId === user.Id" class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                          <button v-if="!element.Highlighted" type="button" class="btn btn-primary btn-shadow"
-                            @click="setPhotoHighlighted(element.Id)">Imposta immagine principale</button>
-                          <button class="btn btn-light-danger btn-shadow ms-2" type="button"
-                            @click="deleteFile(element.Id)">Elimina</button>
-                        </div>
+            <h4 class="mb-5 fw-bold">Galleria Foto ({{ formData.Photos?.length || 0 }})</h4>
+            <div v-if="formData.Photos && formData.Photos.length > 0" class="photo-gallery">
+              <draggable 
+                :list="formData.Photos" 
+                :disabled="false" 
+                item-key="Id" 
+                class="photo-grid"
+                ghost-class="photo-ghost" 
+                @start="isDragging = true" 
+                @end="isDragging = false" 
+                :move="checkMove" 
+                :animation="300">
+                <template #item="{ element, index }">
+                  <div class="photo-item" @click="openPhotoModal(index)">
+                    <div class="photo-thumbnail">
+                      <img :src="element.Url" alt="" class="photo-img">
+                      <div class="photo-overlay">
+                        <i class="bi bi-eye fs-1 text-white"></i>
+                      </div>
+                      <div class="photo-badges">
+                        <span class="badge badge-order">{{ index + 1 }}</span>
+                        <span v-if="element.Highlighted" class="badge badge-primary">
+                          <i class="bi bi-star-fill"></i> Principale
+                        </span>
+                      </div>
+                      <div class="photo-drag-handle">
+                        <i class="bi bi-grip-vertical"></i>
                       </div>
                     </div>
-                  </template>
-                </draggable>
-              </div>
-              <!-- <div v-for="(photo, index) in formData.Photos" :key="index" class="col-lg-4"> -->
-              <!--begin::Card-->
-              <!-- <div class="card  overlay">
-                  <div class="card-body p-0">
-                    <div class="overlay-wrapper">
-                      <img :src="photo.Url" alt="" class="w-100 card-rounded">
-                    </div>
-                    <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
-                      <button v-if="!photo.Highlighted" type="button" class="btn btn-primary btn-shadow"
-                        @click="setPhotoHighlighted(photo.Id)">Imposta immagine principale</button>
-                      <button class="btn btn-light-danger btn-shadow ms-2" type="button"
-                        @click="deleteFile(photo.Id)">Elimina</button>
-                    </div>
                   </div>
-                </div> -->
-              <!--end::Card-->
-              <!-- </div> -->
-
+                </template>
+              </draggable>
+            </div>
+            <div v-else class="text-center py-10">
+              <i class="bi bi-images fs-3x text-muted mb-3"></i>
+              <p class="text-muted">Nessuna foto caricata</p>
             </div>
           </div>
         </div>
+        <!--end::Photos Gallery-->
 
       </div>
       <div v-if="user.Id === formData.AgentId || user.Role === 'Admin' || formData.Agent.AgencyId === user.Id"
         class="card-footer d-flex justify-content-between py-6 px-9">
         <div>
-          <AddNewForm />
+          <AddNewForm :realEstatePropertyId="id" />
           <button type="button" class="btn btn-info btn-active-light-primary me-2" data-bs-toggle="modal"
             data-bs-target="#kt_modal_scheda">
             <KTIcon icon-name="file" icon-class="fs-2 me-1" />
             Scheda
           </button>
           <AddNewPreventive />
-          <button type="button" class="btn btn-info btn-active-light-primary" data-bs-toggle="modal"
+          <!-- <button type="button" class="btn btn-info btn-active-light-primary" data-bs-toggle="modal"
             data-bs-target="#kt_modal_preventivo">
             <KTIcon icon-name="calculator" icon-class="fs-2 me-1" />
             Preventivo
-          </button>
+          </button> -->
         </div>
         <div>
           <button v-if="user.Role === 'Admin' || (user.Role === 'Agenzia' && user.Id === formData.Agent.AgencyId )" type="button" @click="deleteItem()"
@@ -935,6 +975,61 @@
       <!--end::Actions-->
     </el-form>
     <!--end::Form-->
+
+    <!--begin::Photo Modal-->
+    <div v-if="showPhotoModal" class="photo-modal" @click.self="closePhotoModal">
+      <div class="photo-modal-content">
+        <button type="button" class="photo-modal-close" @click.stop="closePhotoModal">
+          <i class="bi bi-x-lg"></i>
+        </button>
+        
+        <button 
+          type="button"
+          v-if="currentPhotoIndex > 0" 
+          class="photo-modal-nav photo-modal-prev" 
+          @click.stop="previousPhoto">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        
+        <button 
+          type="button"
+          v-if="currentPhotoIndex < formData.Photos.length - 1" 
+          class="photo-modal-nav photo-modal-next" 
+          @click.stop="nextPhoto">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+
+        <div class="photo-modal-image-wrapper">
+          <img :src="currentPhoto?.Url" alt="" class="photo-modal-image">
+        </div>
+
+        <div class="photo-modal-info">
+          <div class="photo-modal-counter">
+            {{ currentPhotoIndex + 1 }} / {{ formData.Photos.length }}
+          </div>
+          
+          <div v-if="user.Id === formData.AgentId || user.Role === 'Admin' || formData.Agent?.AgencyId === user.Id" class="photo-modal-actions">
+            <button 
+              v-if="!currentPhoto?.Highlighted" 
+              type="button" 
+              class="btn btn-primary" 
+              @click.stop="setPhotoHighlighted(currentPhoto.Id)">
+              <i class="bi bi-star"></i> Imposta come Principale
+            </button>
+            <span v-else class="badge badge-lg badge-light-primary">
+              <i class="bi bi-star-fill"></i> Immagine Principale
+            </span>
+            <button 
+              type="button" 
+              class="btn btn-danger ms-3" 
+              @click.stop="confirmDeletePhoto(currentPhoto.Id)">
+              <i class="bi bi-trash"></i> Elimina
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--end::Photo Modal-->
   </div>
   <!--end::Content-->
 </template>
@@ -944,7 +1039,8 @@ import AddNewForm from "@/components/modals/forms/AddNewForm.vue";
 import AddNewPreventive from "@/components/modals/forms/AddNewPreventive.vue";
 import { getAssetPath } from "@/core/helpers/assets";
 import { getProvincesForSelect, getCitiesByProvinceName, getLocationsByCityName } from "@/core/data/locations";
-import { defineComponent, onMounted, ref, watch, nextTick } from "vue";
+import { defineComponent, onMounted, ref, watch, nextTick, computed } from "vue";
+import "@/assets/css/properties-update.css";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import {
   updateRealEstateProperty,
@@ -956,7 +1052,12 @@ import {
   uploadFiles,
   InsertModel,
   getToInsert,
-  updatePhotosOrder
+  updatePhotosOrder,
+  uploadPropertyDocument,
+  getPropertyDocuments,
+  getDocumentDownloadUrl,
+  deletePropertyDocument,
+  Documentation
 } from "@/core/data/properties";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
@@ -982,8 +1083,14 @@ export default defineComponent({
     const loading = ref<boolean>(true);
     const firtLoad = ref(false);
     const isTrattativaRiservata = ref(false);
+    const documents = ref<Documentation[]>([]);
+    const showPhotoModal = ref(false);
+    const currentPhotoIndex = ref(0);
+    const isDragging = ref(false);
+    const documentsLoaded = ref(false);
 
     // Funzioni per caricare i dati dal database
+    // La cache è gestita a livello di modulo in locations.ts per evitare chiamate duplicate
     const loadProvinces = async () => {
       try {
         const provincesData = await getProvincesForSelect();
@@ -1176,6 +1283,12 @@ export default defineComponent({
       // Se c'è già una città selezionata, carica le località
       if (formData.value.Town) {
         await loadLocationsByCity(formData.value.Town);
+      }
+      
+      // Carica i documenti (evita chiamate duplicate)
+      if (!documentsLoaded.value) {
+        documentsLoaded.value = true;
+        documents.value = await getPropertyDocuments(id);
       }
       
       loading.value = false;
@@ -1449,7 +1562,191 @@ export default defineComponent({
       // console.log(formData.value.Photos)
     }
 
+    const onDocumentChanged = async (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      if (target.files && target.files.length > 0) {
+        loading.value = true;
+        
+        try {
+          const uploadPromises = Array.from(target.files).map(file => 
+            uploadPropertyDocument(file, id)
+          );
+          
+          await Promise.all(uploadPromises);
+          
+          const error = store.errors;
+          if (!error) {
+            Swal.fire({
+              text: "Documenti caricati con successo!",
+              icon: "success",
+              buttonsStyling: false,
+              confirmButtonText: "Continua!",
+              heightAuto: false,
+              customClass: {
+                confirmButton: "btn fw-semobold btn-light-primary",
+              },
+            }).then(async function () {
+              documents.value = await getPropertyDocuments(id);
+              target.value = '';
+            });
+          } else {
+            Swal.fire({
+              text: "Siamo spiacenti, sembra che siano stati rilevati alcuni errori, riprova.",
+              icon: "error",
+              buttonsStyling: false,
+              confirmButtonText: "Ok, capito!",
+              heightAuto: false,
+              customClass: {
+                confirmButton: "btn btn-primary",
+              },
+            });
+          }
+        } catch (error) {
+          Swal.fire({
+            text: "Attenzione, si è verificato un errore.",
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: "Continua!",
+            heightAuto: false,
+            customClass: {
+              confirmButton: "btn btn-primary",
+            },
+          });
+        } finally {
+          loading.value = false;
+        }
+      }
+    };
+
+    const downloadDocument = async (doc: Documentation) => {
+      try {
+        const urlWithSas = await getDocumentDownloadUrl(doc.FileName);
+        if (urlWithSas) {
+          window.open(urlWithSas, '_blank');
+        }
+      } catch (error) {
+        Swal.fire({
+          text: "Errore durante il download del documento.",
+          icon: "error",
+          buttonsStyling: false,
+          confirmButtonText: "Ok",
+          heightAuto: false,
+          customClass: {
+            confirmButton: "btn btn-primary",
+          },
+        });
+      }
+    };
+
+    const deleteDocument = async (documentId: number) => {
+      Swal.fire({
+        text: "Confermare l'eliminazione del documento?",
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Elimina",
+        cancelButtonText: "Annulla",
+        heightAuto: false,
+        customClass: {
+          confirmButton: "btn btn-danger",
+          cancelButton: "btn btn-secondary"
+        },
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          loading.value = true;
+          await deletePropertyDocument(documentId);
+          documents.value = await getPropertyDocuments(id);
+          loading.value = false;
+          
+          Swal.fire({
+            text: "Documento eliminato con successo!",
+            icon: "success",
+            buttonsStyling: false,
+            confirmButtonText: "Ok",
+            heightAuto: false,
+            customClass: {
+              confirmButton: "btn btn-primary",
+            },
+          });
+        }
+      });
+    };
+
+    const getDocumentName = (fileName: string) => {
+      const parts = fileName.split('/');
+      return parts[parts.length - 1];
+    };
+
+    const currentPhoto = computed(() => {
+      return formData.value.Photos?.[currentPhotoIndex.value];
+    });
+
+    const openPhotoModal = (index: number) => {
+      if (!isDragging.value) {
+        currentPhotoIndex.value = index;
+        showPhotoModal.value = true;
+        document.body.style.overflow = 'hidden';
+        window.addEventListener('keydown', handleKeyPress);
+      }
+    };
+
+    const closePhotoModal = () => {
+      showPhotoModal.value = false;
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (!showPhotoModal.value) return;
+      
+      switch (event.key) {
+        case 'Escape':
+          closePhotoModal();
+          break;
+        case 'ArrowLeft':
+          previousPhoto();
+          break;
+        case 'ArrowRight':
+          nextPhoto();
+          break;
+      }
+    };
+
+    const nextPhoto = () => {
+      if (currentPhotoIndex.value < formData.value.Photos.length - 1) {
+        currentPhotoIndex.value++;
+      }
+    };
+
+    const previousPhoto = () => {
+      if (currentPhotoIndex.value > 0) {
+        currentPhotoIndex.value--;
+      }
+    };
+
+    const confirmDeletePhoto = (photoId: number) => {
+      Swal.fire({
+        text: "Sei sicuro di voler eliminare questa foto?",
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Elimina",
+        cancelButtonText: "Annulla",
+        heightAuto: false,
+        customClass: {
+          confirmButton: "btn btn-danger",
+          cancelButton: "btn btn-secondary"
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          deleteFile(photoId);
+          closePhotoModal();
+        }
+      });
+    };
+
     return {
+      id,
       formData,
       rules,
       submit,
@@ -1470,7 +1767,74 @@ export default defineComponent({
       cities,
       locations,
       isTrattativaRiservata,
+      documents,
+      onDocumentChanged,
+      downloadDocument,
+      deleteDocument,
+      getDocumentName,
+      showPhotoModal,
+      currentPhotoIndex,
+      currentPhoto,
+      isDragging,
+      openPhotoModal,
+      closePhotoModal,
+      nextPhoto,
+      previousPhoto,
+      confirmDeletePhoto,
     };
   },
 });
 </script>
+
+<style scoped>
+.documents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.document-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid var(--bs-gray-300);
+  border-radius: 8px;
+  background-color: var(--bs-body-bg);
+  transition: all 0.3s ease;
+}
+
+.document-item:hover {
+  border-color: var(--bs-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.document-info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.document-name {
+  font-weight: 500;
+  color: var(--bs-gray-800);
+  word-break: break-word;
+}
+
+.document-actions {
+  display: flex;
+  gap: 8px;
+}
+
+[data-bs-theme="dark"] .document-item {
+  border-color: var(--bs-gray-600);
+}
+
+[data-bs-theme="dark"] .document-name {
+  color: var(--bs-gray-200);
+}
+
+[data-bs-theme="dark"] .document-item:hover {
+  border-color: var(--bs-primary);
+}
+</style>
