@@ -15,138 +15,198 @@
           <!-- Documento di Riconoscimento -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Documento di riconoscimento</h4>
-              <p class="text-muted fs-6 mb-3">(Carta d'Identità o Passaporto - se persona giuridica del legale rappresentante o del titolare)</p>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('IdentificationDocumentDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('IdentificationDocumentDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('IdentificationDocumentDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('IdentificationDocumentDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('IdentificationDocumentDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('IdentificationDocumentDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('IdentificationDocumentDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadIdentificationDocument" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            <p class="text-muted fs-6 mb-3">(Carta d'Identità o Passaporto - se persona giuridica del legale rappresentante o del titolare)</p>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="IdentificationDocument" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('IdentificationDocument')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('IdentificationDocument').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('IdentificationDocument')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
           <!-- Codice Fiscale -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Codice Fiscale o Tessera Sanitaria</h4>
             <p class="text-muted fs-6 mb-3">(se persona giuridica del legale rappresentante o del titolare)</p>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('TaxCodeOrHealthCardDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('TaxCodeOrHealthCardDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('TaxCodeOrHealthCardDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('TaxCodeOrHealthCardDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('TaxCodeOrHealthCardDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('TaxCodeOrHealthCardDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('TaxCodeOrHealthCardDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadTaxCodeOrHealthCard" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="TaxCodeOrHealthCard" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('TaxCodeOrHealthCard')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('TaxCodeOrHealthCard').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('TaxCodeOrHealthCard')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
           <!-- Estratto atto matrimonio -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Estratto per riassunto dell'atto di matrimonio</h4>
             <p class="text-muted fs-6 mb-3">(con indicato il regime coniugale e patrimoniale o Certificato di stato libero o Certificato di unione civile)</p>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('MarriageCertificateSummaryDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('MarriageCertificateSummaryDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('MarriageCertificateSummaryDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('MarriageCertificateSummaryDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('MarriageCertificateSummaryDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('MarriageCertificateSummaryDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('MarriageCertificateSummaryDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadMarriageCertificateSummary" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="MarriageCertificateSummary" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('MarriageCertificateSummary')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('MarriageCertificateSummary').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('MarriageCertificateSummary')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
           <!-- Atto di provenienza -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Atto/i di provenienza</h4>
             <p class="text-muted fs-6 mb-3">(Acquisto, Successione + Accettazione eredità, Divisione, Donazione, Permuta, Decreto di Trasferimento, Sentenza, Usucapione, etc.)</p>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('DeedOfOriginDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('DeedOfOriginDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('DeedOfOriginDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('DeedOfOriginDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('DeedOfOriginDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('DeedOfOriginDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('DeedOfOriginDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadDeedOfOrigin" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadDeedOfOrigin" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('DeedOfOrigin')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('DeedOfOrigin').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('DeedOfOrigin')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
           <!-- Impianti -->
           <div class="document-item mb-5">
@@ -154,335 +214,461 @@
 
             <div class="ps-5 mb-4">
               <h5 class="fw-semibold text-dark mb-1">- elettrico/elettronico</h5>
-              <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('ElectricalElectronicSystemDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
+              <div class="mb-3">
                 <button 
                   type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('ElectricalElectronicSystemDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('ElectricalElectronicSystemDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('ElectricalElectronicSystemDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('ElectricalElectronicSystemDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('ElectricalElectronicSystemDocumentId')"
+                  class="btn btn-sm btn-light-primary" 
+                  title="Carica documenti" 
+                  data-document-type="UploadElectricalElectronicSystem" 
+                  @click="triggerFileInput" 
                   :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
+                  <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                  Carica documenti
                 </button>
-                <button v-if="!hasDocument('ElectricalElectronicSystemDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadElectricalElectronicSystem" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+              </div>
+              <div v-if="hasSpecificDocuments('ElectricalElectronicSystem')" class="documents-list-container">
+                <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('ElectricalElectronicSystem').length }})</label>
+                <div class="documents-list">
+                  <div v-for="doc in getSpecificDocsForType('ElectricalElectronicSystem')" :key="doc.Id" class="document-item-generic">
+                    <div class="document-info-generic">
+                      <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                      <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                    </div>
+                    <div class="document-actions-generic">
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-primary me-2" 
+                        @click="downloadSpecificDoc(doc)"
+                        title="Scarica documento">
+                        <i class="bi bi-download"></i>
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-danger" 
+                        @click="deleteSpecificDoc(doc)"
+                        title="Elimina documento">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
             </div>
 
             <div class="ps-5 mb-4">
               <h5 class="fw-semibold text-dark mb-1">- idrico/sanitario</h5>
-              <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('PlumbingSanitarySystemDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
+              <div class="mb-3">
                 <button 
                   type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('PlumbingSanitarySystemDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('PlumbingSanitarySystemDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('PlumbingSanitarySystemDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('PlumbingSanitarySystemDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('PlumbingSanitarySystemDocumentId')"
+                  class="btn btn-sm btn-light-primary" 
+                  title="Carica documenti" 
+                  data-document-type="UploadPlumbingSanitarySystem" 
+                  @click="triggerFileInput" 
                   :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
+                  <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                  Carica documenti
                 </button>
-                <button v-if="!hasDocument('PlumbingSanitarySystemDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadPlumbingSanitarySystem" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+              </div>
+              <div v-if="hasSpecificDocuments('PlumbingSanitarySystem')" class="documents-list-container">
+                <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('PlumbingSanitarySystem').length }})</label>
+                <div class="documents-list">
+                  <div v-for="doc in getSpecificDocsForType('PlumbingSanitarySystem')" :key="doc.Id" class="document-item-generic">
+                    <div class="document-info-generic">
+                      <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                      <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                    </div>
+                    <div class="document-actions-generic">
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-primary me-2" 
+                        @click="downloadSpecificDoc(doc)"
+                        title="Scarica documento">
+                        <i class="bi bi-download"></i>
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-danger" 
+                        @click="deleteSpecificDoc(doc)"
+                        title="Elimina documento">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
             </div>
 
             <div class="ps-5 mb-4">
               <h5 class="fw-semibold text-dark mb-1">- gas</h5>
-              <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('GasSystemDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
+              <div class="mb-3">
                 <button 
                   type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('GasSystemDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('GasSystemDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('GasSystemDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('GasSystemDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('GasSystemDocumentId')"
+                  class="btn btn-sm btn-light-primary" 
+                  title="Carica documenti" 
+                  data-document-type="UploadGasSystem" 
+                  @click="triggerFileInput" 
                   :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
+                  <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                  Carica documenti
                 </button>
-                <button v-if="!hasDocument('GasSystemDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadGasSystem" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+              </div>
+              <div v-if="hasSpecificDocuments('GasSystem')" class="documents-list-container">
+                <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('GasSystem').length }})</label>
+                <div class="documents-list">
+                  <div v-for="doc in getSpecificDocsForType('GasSystem')" :key="doc.Id" class="document-item-generic">
+                    <div class="document-info-generic">
+                      <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                      <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                    </div>
+                    <div class="document-actions-generic">
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-primary me-2" 
+                        @click="downloadSpecificDoc(doc)"
+                        title="Scarica documento">
+                        <i class="bi bi-download"></i>
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-danger" 
+                        @click="deleteSpecificDoc(doc)"
+                        title="Elimina documento">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
             </div>
 
             <div class="ps-5 mb-4">
               <h5 class="fw-semibold text-dark mb-1">- riscaldamento/condizionamento</h5>
-              <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('HeatingAirConditioningSystemDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
+              <div class="mb-3">
                 <button 
                   type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('HeatingAirConditioningSystemDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('HeatingAirConditioningSystemDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('HeatingAirConditioningSystemDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('HeatingAirConditioningSystemDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('HeatingAirConditioningSystemDocumentId')"
+                  class="btn btn-sm btn-light-primary" 
+                  title="Carica documenti" 
+                  data-document-type="UploadHeatingAirConditioningSystem" 
+                  @click="triggerFileInput" 
                   :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
+                  <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                  Carica documenti
                 </button>
-                <button v-if="!hasDocument('HeatingAirConditioningSystemDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadHeatingAirConditioningSystem" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+              </div>
+              <div v-if="hasSpecificDocuments('HeatingAirConditioningSystem')" class="documents-list-container">
+                <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('HeatingAirConditioningSystem').length }})</label>
+                <div class="documents-list">
+                  <div v-for="doc in getSpecificDocsForType('HeatingAirConditioningSystem')" :key="doc.Id" class="document-item-generic">
+                    <div class="document-info-generic">
+                      <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                      <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                    </div>
+                    <div class="document-actions-generic">
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-primary me-2" 
+                        @click="downloadSpecificDoc(doc)"
+                        title="Scarica documento">
+                        <i class="bi bi-download"></i>
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-danger" 
+                        @click="deleteSpecificDoc(doc)"
+                        title="Elimina documento">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
             </div>
 
             <div class="ps-5 mb-4">
               <h5 class="fw-semibold text-dark mb-1">- sollevamento</h5>
-              <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('LiftingSystemDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
+              <div class="mb-3">
                 <button 
                   type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('LiftingSystemDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('LiftingSystemDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('LiftingSystemDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('LiftingSystemDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('LiftingSystemDocumentId')"
+                  class="btn btn-sm btn-light-primary" 
+                  title="Carica documenti" 
+                  data-document-type="UploadLiftingSystem" 
+                  @click="triggerFileInput" 
                   :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
+                  <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                  Carica documenti
                 </button>
-                <button v-if="!hasDocument('LiftingSystemDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadLiftingSystem" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+              </div>
+              <div v-if="hasSpecificDocuments('LiftingSystem')" class="documents-list-container">
+                <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('LiftingSystem').length }})</label>
+                <div class="documents-list">
+                  <div v-for="doc in getSpecificDocsForType('LiftingSystem')" :key="doc.Id" class="document-item-generic">
+                    <div class="document-info-generic">
+                      <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                      <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                    </div>
+                    <div class="document-actions-generic">
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-primary me-2" 
+                        @click="downloadSpecificDoc(doc)"
+                        title="Scarica documento">
+                        <i class="bi bi-download"></i>
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-danger" 
+                        @click="deleteSpecificDoc(doc)"
+                        title="Elimina documento">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
             </div>
 
             <div class="ps-5 mb-4">
               <h5 class="fw-semibold text-dark mb-1">- antincendio</h5>
-              <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('FireSafetySystemDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
+              <div class="mb-3">
                 <button 
                   type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('FireSafetySystemDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('FireSafetySystemDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('FireSafetySystemDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('FireSafetySystemDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('FireSafetySystemDocumentId')"
+                  class="btn btn-sm btn-light-primary" 
+                  title="Carica documenti" 
+                  data-document-type="UploadFireSafetySystem" 
+                  @click="triggerFileInput" 
                   :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
+                  <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                  Carica documenti
                 </button>
-                <button v-if="!hasDocument('FireSafetySystemDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadFireSafetySystem" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+              </div>
+              <div v-if="hasSpecificDocuments('FireSafetySystem')" class="documents-list-container">
+                <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('FireSafetySystem').length }})</label>
+                <div class="documents-list">
+                  <div v-for="doc in getSpecificDocsForType('FireSafetySystem')" :key="doc.Id" class="document-item-generic">
+                    <div class="document-info-generic">
+                      <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                      <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                    </div>
+                    <div class="document-actions-generic">
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-primary me-2" 
+                        @click="downloadSpecificDoc(doc)"
+                        title="Scarica documento">
+                        <i class="bi bi-download"></i>
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-danger" 
+                        @click="deleteSpecificDoc(doc)"
+                        title="Elimina documento">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
             </div>
           </div>
           <!-- Libretto caldaia -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Libretto della caldaia</h4>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('BoilerMaintenanceLogDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('BoilerMaintenanceLogDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('BoilerMaintenanceLogDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('BoilerMaintenanceLogDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('BoilerMaintenanceLogDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('BoilerMaintenanceLogDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('BoilerMaintenanceLogDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadBoilerMaintenanceLog" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadBoilerMaintenanceLog" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('BoilerMaintenanceLog')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('BoilerMaintenanceLog').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('BoilerMaintenanceLog')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
           <!-- Abitabilità/Agibilità -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Abitabilità / Agibilità</h4>
             <p class="text-muted fs-6 mb-3">(Certificato rilasciato dal Comune o Attestazione redatta dal Tecnico)</p>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('HabitabilityCertificateDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('HabitabilityCertificateDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('HabitabilityCertificateDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('HabitabilityCertificateDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('HabitabilityCertificateDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('HabitabilityCertificateDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('HabitabilityCertificateDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadHabitabilityCertificate" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadHabitabilityCertificate" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('HabitabilityCertificate')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('HabitabilityCertificate').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('HabitabilityCertificate')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
           <!-- Certificato idoneità statica -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Certificato di idoneità statica</h4>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('StructuralIntegrityCertificateDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('StructuralIntegrityCertificateDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('StructuralIntegrityCertificateDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('StructuralIntegrityCertificateDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('StructuralIntegrityCertificateDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('StructuralIntegrityCertificateDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('StructuralIntegrityCertificateDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadStructuralIntegrityCertificate" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadStructuralIntegrityCertificate" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('StructuralIntegrityCertificate')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('StructuralIntegrityCertificate').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('StructuralIntegrityCertificate')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
           <!-- Relazione Tecnica -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Relazione Tecnica Integrata di Conformità Edilizia e Catastale</h4>
             <p class="text-muted fs-6 mb-3">(comprenderà dati catastali completi, descrizione, titolarità, situazione edilizia con riepilogo dei titoli abilitanti, informazioni sull'agibilità/abitabilità, conformità edilizia e catastale, informazioni circa l'esistenza di un interesse culturale del bene ai sensi del D. Lgs. 42/04 ed attestazione conclusiva. Saranno allegati visura catastale e planimetria catastale)</p>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('BuildingCadastralComplianceReportDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('BuildingCadastralComplianceReportDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('BuildingCadastralComplianceReportDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('BuildingCadastralComplianceReportDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('BuildingCadastralComplianceReportDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('BuildingCadastralComplianceReportDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('BuildingCadastralComplianceReportDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadBuildingCadastralComplianceReport" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadBuildingCadastralComplianceReport" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('BuildingCadastralComplianceReport')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('BuildingCadastralComplianceReport').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('BuildingCadastralComplianceReport')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
           <!-- Catasto -->
           <div class="document-item mb-5">
@@ -490,169 +676,232 @@
             
             <div class="ps-5 mb-4">
               <h5 class="fw-semibold text-dark mb-1">- visura e planimetria</h5>
-              <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('LandRegistryDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
+              <div class="mb-3">
                 <button 
                   type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('LandRegistryDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('LandRegistryDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('LandRegistryDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('LandRegistryDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('LandRegistryDocumentId')"
+                  class="btn btn-sm btn-light-primary" 
+                  title="Carica documenti" 
+                  data-document-type="UploadLandRegistry" 
+                  @click="triggerFileInput" 
                   :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
+                  <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                  Carica documenti
                 </button>
-                <button v-if="!hasDocument('LandRegistryDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadLandRegistry" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+              </div>
+              <div v-if="hasSpecificDocuments('LandRegistry')" class="documents-list-container">
+                <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('LandRegistry').length }})</label>
+                <div class="documents-list">
+                  <div v-for="doc in getSpecificDocsForType('LandRegistry')" :key="doc.Id" class="document-item-generic">
+                    <div class="document-info-generic">
+                      <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                      <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                    </div>
+                    <div class="document-actions-generic">
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-primary me-2" 
+                        @click="downloadSpecificDoc(doc)"
+                        title="Scarica documento">
+                        <i class="bi bi-download"></i>
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-danger" 
+                        @click="deleteSpecificDoc(doc)"
+                        title="Elimina documento">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
             </div>
 
             <div class="ps-5 mb-4">
               <h5 class="fw-semibold text-dark mb-1">- estratto di mappa</h5>
-              <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('CadastralMapExtractDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
+              <div class="mb-3">
                 <button 
                   type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('CadastralMapExtractDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('CadastralMapExtractDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('CadastralMapExtractDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('CadastralMapExtractDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('CadastralMapExtractDocumentId')"
+                  class="btn btn-sm btn-light-primary" 
+                  title="Carica documenti" 
+                  data-document-type="UploadCadastralMapExtract" 
+                  @click="triggerFileInput" 
                   :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
+                  <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                  Carica documenti
                 </button>
-                <button v-if="!hasDocument('CadastralMapExtractDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadCadastralMapExtract" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+              </div>
+              <div v-if="hasSpecificDocuments('CadastralMapExtract')" class="documents-list-container">
+                <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('CadastralMapExtract').length }})</label>
+                <div class="documents-list">
+                  <div v-for="doc in getSpecificDocsForType('CadastralMapExtract')" :key="doc.Id" class="document-item-generic">
+                    <div class="document-info-generic">
+                      <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                      <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                    </div>
+                    <div class="document-actions-generic">
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-primary me-2" 
+                        @click="downloadSpecificDoc(doc)"
+                        title="Scarica documento">
+                        <i class="bi bi-download"></i>
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-danger" 
+                        @click="deleteSpecificDoc(doc)"
+                        title="Elimina documento">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
             </div>
 
             <div class="ps-5 mb-4">
               <h5 class="fw-semibold text-dark mb-1">- elaborato planimetrico con elenco subalterni</h5>
-              <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('FloorPlanWithSubsidiaryUnitsDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
+              <div class="mb-3">
                 <button 
                   type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('FloorPlanWithSubsidiaryUnitsDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('FloorPlanWithSubsidiaryUnitsDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('FloorPlanWithSubsidiaryUnitsDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('FloorPlanWithSubsidiaryUnitsDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('FloorPlanWithSubsidiaryUnitsDocumentId')"
+                  class="btn btn-sm btn-light-primary" 
+                  title="Carica documenti" 
+                  data-document-type="UploadFloorPlanWithSubsidiaryUnits" 
+                  @click="triggerFileInput" 
                   :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
+                  <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                  Carica documenti
                 </button>
-                <button v-if="!hasDocument('FloorPlanWithSubsidiaryUnitsDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadFloorPlanWithSubsidiaryUnits" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+              </div>
+              <div v-if="hasSpecificDocuments('FloorPlanWithSubsidiaryUnits')" class="documents-list-container">
+                <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('FloorPlanWithSubsidiaryUnits').length }})</label>
+                <div class="documents-list">
+                  <div v-for="doc in getSpecificDocsForType('FloorPlanWithSubsidiaryUnits')" :key="doc.Id" class="document-item-generic">
+                    <div class="document-info-generic">
+                      <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                      <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                    </div>
+                    <div class="document-actions-generic">
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-primary me-2" 
+                        @click="downloadSpecificDoc(doc)"
+                        title="Scarica documento">
+                        <i class="bi bi-download"></i>
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-danger" 
+                        @click="deleteSpecificDoc(doc)"
+                        title="Elimina documento">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
             </div>
           </div>
           <!-- APE -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Attestato di Certificazione/Prestazione Energetica (laddove previsto per legge)</h4>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('EnergyPerformanceCertificateDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('EnergyPerformanceCertificateDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('EnergyPerformanceCertificateDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('EnergyPerformanceCertificateDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('EnergyPerformanceCertificateDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('EnergyPerformanceCertificateDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('EnergyPerformanceCertificateDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadEnergyPerformanceCertificate" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadEnergyPerformanceCertificate" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('EnergyPerformanceCertificate')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('EnergyPerformanceCertificate').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('EnergyPerformanceCertificate')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
           <!-- Visura ipocatastale -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Visura ipocatastale</h4>
             <p class="text-muted fs-6 mb-3">(a verifica della titolarità immobiliare ed eventuali gravami)</p>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('MortgageLienRegistrySearchDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('MortgageLienRegistrySearchDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('MortgageLienRegistrySearchDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('MortgageLienRegistrySearchDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('MortgageLienRegistrySearchDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('MortgageLienRegistrySearchDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('MortgageLienRegistrySearchDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadMortgageLienRegistrySearch" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadMortgageLienRegistrySearch" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('MortgageLienRegistrySearch')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('MortgageLienRegistrySearch').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('MortgageLienRegistrySearch')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
           <!-- Condominio -->
           <div class="document-item mb-5">
@@ -660,569 +909,804 @@
             
             <div class="ps-5 mb-4">
               <h5 class="fw-semibold text-dark mb-1">- regolamento</h5>
-              <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('CondominiumBylawsDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
+              <div class="mb-3">
                 <button 
                   type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('CondominiumBylawsDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('CondominiumBylawsDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('CondominiumBylawsDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('CondominiumBylawsDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('CondominiumBylawsDocumentId')"
+                  class="btn btn-sm btn-light-primary" 
+                  title="Carica documenti" 
+                  data-document-type="UploadCondominiumBylaws" 
+                  @click="triggerFileInput" 
                   :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
+                  <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                  Carica documenti
                 </button>
-                <button v-if="!hasDocument('CondominiumBylawsDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadCondominiumBylaws" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+              </div>
+              <div v-if="hasSpecificDocuments('CondominiumBylaws')" class="documents-list-container">
+                <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('CondominiumBylaws').length }})</label>
+                <div class="documents-list">
+                  <div v-for="doc in getSpecificDocsForType('CondominiumBylaws')" :key="doc.Id" class="document-item-generic">
+                    <div class="document-info-generic">
+                      <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                      <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                    </div>
+                    <div class="document-actions-generic">
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-primary me-2" 
+                        @click="downloadSpecificDoc(doc)"
+                        title="Scarica documento">
+                        <i class="bi bi-download"></i>
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-danger" 
+                        @click="deleteSpecificDoc(doc)"
+                        title="Elimina documento">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
             </div>
 
             <div class="ps-5 mb-4">
               <h5 class="fw-semibold text-dark mb-1">- tabelle millesimali</h5>
-              <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('MillesimalTablesDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
+              <div class="mb-3">
                 <button 
                   type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('MillesimalTablesDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('MillesimalTablesDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('MillesimalTablesDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('MillesimalTablesDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('MillesimalTablesDocumentId')"
+                  class="btn btn-sm btn-light-primary" 
+                  title="Carica documenti" 
+                  data-document-type="UploadMillesimalTables" 
+                  @click="triggerFileInput" 
                   :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
+                  <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                  Carica documenti
                 </button>
-                <button v-if="!hasDocument('MillesimalTablesDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadMillesimalTables" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+              </div>
+              <div v-if="hasSpecificDocuments('MillesimalTables')" class="documents-list-container">
+                <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('MillesimalTables').length }})</label>
+                <div class="documents-list">
+                  <div v-for="doc in getSpecificDocsForType('MillesimalTables')" :key="doc.Id" class="document-item-generic">
+                    <div class="document-info-generic">
+                      <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                      <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                    </div>
+                    <div class="document-actions-generic">
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-primary me-2" 
+                        @click="downloadSpecificDoc(doc)"
+                        title="Scarica documento">
+                        <i class="bi bi-download"></i>
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-danger" 
+                        @click="deleteSpecificDoc(doc)"
+                        title="Elimina documento">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
             </div>
 
             <div class="ps-5 mb-4">
               <h5 class="fw-semibold text-dark mb-1">- ultimo bilancio consuntivo e preventivo</h5>
-              <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('LatestFinancialStatementAndBudgetDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
+              <div class="mb-3">
                 <button 
                   type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('LatestFinancialStatementAndBudgetDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('LatestFinancialStatementAndBudgetDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('LatestFinancialStatementAndBudgetDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('LatestFinancialStatementAndBudgetDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('LatestFinancialStatementAndBudgetDocumentId')"
+                  class="btn btn-sm btn-light-primary" 
+                  title="Carica documenti" 
+                  data-document-type="UploadLatestFinancialStatementAndBudget" 
+                  @click="triggerFileInput" 
                   :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
+                  <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                  Carica documenti
                 </button>
-                <button v-if="!hasDocument('LatestFinancialStatementAndBudgetDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadLatestFinancialStatementAndBudget" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+              </div>
+              <div v-if="hasSpecificDocuments('LatestFinancialStatementAndBudget')" class="documents-list-container">
+                <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('LatestFinancialStatementAndBudget').length }})</label>
+                <div class="documents-list">
+                  <div v-for="doc in getSpecificDocsForType('LatestFinancialStatementAndBudget')" :key="doc.Id" class="document-item-generic">
+                    <div class="document-info-generic">
+                      <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                      <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                    </div>
+                    <div class="document-actions-generic">
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-primary me-2" 
+                        @click="downloadSpecificDoc(doc)"
+                        title="Scarica documento">
+                        <i class="bi bi-download"></i>
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-danger" 
+                        @click="deleteSpecificDoc(doc)"
+                        title="Elimina documento">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
             </div>
 
             <div class="ps-5 mb-4">
               <h5 class="fw-semibold text-dark mb-1">- ultimi due verbali dell'assemblea condominiale</h5>
-              <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('LastTwoCondominiumMeetingMinutesDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
+              <div class="mb-3">
                 <button 
                   type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('LastTwoCondominiumMeetingMinutesDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('LastTwoCondominiumMeetingMinutesDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('LastTwoCondominiumMeetingMinutesDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('LastTwoCondominiumMeetingMinutesDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('LastTwoCondominiumMeetingMinutesDocumentId')"
+                  class="btn btn-sm btn-light-primary" 
+                  title="Carica documenti" 
+                  data-document-type="UploadLastTwoCondominiumMeetingMinutes" 
+                  @click="triggerFileInput" 
                   :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
+                  <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                  Carica documenti
                 </button>
-                <button v-if="!hasDocument('LastTwoCondominiumMeetingMinutesDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadLastTwoCondominiumMeetingMinutes" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+              </div>
+              <div v-if="hasSpecificDocuments('LastTwoCondominiumMeetingMinutes')" class="documents-list-container">
+                <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('LastTwoCondominiumMeetingMinutes').length }})</label>
+                <div class="documents-list">
+                  <div v-for="doc in getSpecificDocsForType('LastTwoCondominiumMeetingMinutes')" :key="doc.Id" class="document-item-generic">
+                    <div class="document-info-generic">
+                      <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                      <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                    </div>
+                    <div class="document-actions-generic">
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-primary me-2" 
+                        @click="downloadSpecificDoc(doc)"
+                        title="Scarica documento">
+                        <i class="bi bi-download"></i>
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-danger" 
+                        @click="deleteSpecificDoc(doc)"
+                        title="Elimina documento">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
             </div>
 
             <div class="ps-5 mb-4">
               <h5 class="fw-semibold text-dark mb-1">- dichiarazione scritta e firmata dall'amministratore attestante l'avvenuto pagamento di tutte le spese condominiali e indicazione delle eventuali spese straordinarie deliberate e delle liti in corso</h5>
-              <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('SignedStatementFromAdministratorDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
+              <div class="mb-3">
                 <button 
                   type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('SignedStatementFromAdministratorDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('SignedStatementFromAdministratorDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('SignedStatementFromAdministratorDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('SignedStatementFromAdministratorDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('SignedStatementFromAdministratorDocumentId')"
+                  class="btn btn-sm btn-light-primary" 
+                  title="Carica documenti" 
+                  data-document-type="UploadSignedStatementFromAdministrator" 
+                  @click="triggerFileInput" 
                   :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
+                  <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                  Carica documenti
                 </button>
-                <button v-if="!hasDocument('SignedStatementFromAdministratorDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadSignedStatementFromAdministrator" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+              </div>
+              <div v-if="hasSpecificDocuments('SignedStatementFromAdministrator')" class="documents-list-container">
+                <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('SignedStatementFromAdministrator').length }})</label>
+                <div class="documents-list">
+                  <div v-for="doc in getSpecificDocsForType('SignedStatementFromAdministrator')" :key="doc.Id" class="document-item-generic">
+                    <div class="document-info-generic">
+                      <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                      <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                    </div>
+                    <div class="document-actions-generic">
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-primary me-2" 
+                        @click="downloadSpecificDoc(doc)"
+                        title="Scarica documento">
+                        <i class="bi bi-download"></i>
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-light-danger" 
+                        @click="deleteSpecificDoc(doc)"
+                        title="Elimina documento">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
             </div>
           </div>
           <!-- Visura camerale -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Visura camerale</h4>
             <p class="text-muted fs-6 mb-3">(solo se persona giuridica)</p>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('ChamberOfCommerceBusinessRegistrySearchDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('ChamberOfCommerceBusinessRegistrySearchDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('ChamberOfCommerceBusinessRegistrySearchDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('ChamberOfCommerceBusinessRegistrySearchDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('ChamberOfCommerceBusinessRegistrySearchDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('ChamberOfCommerceBusinessRegistrySearchDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('ChamberOfCommerceBusinessRegistrySearchDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadChamberOfCommerceBusinessRegistrySearch" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadChamberOfCommerceBusinessRegistrySearch" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('ChamberOfCommerceBusinessRegistrySearch')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('ChamberOfCommerceBusinessRegistrySearch').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('ChamberOfCommerceBusinessRegistrySearch')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
           <!-- Procura -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Procura speciale o generale</h4>
             <p class="text-muted fs-6 mb-3">(solo in presenza di procuratore)</p>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('PowerOfAttorneyDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('PowerOfAttorneyDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('PowerOfAttorneyDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('PowerOfAttorneyDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('PowerOfAttorneyDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('PowerOfAttorneyDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('PowerOfAttorneyDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadPowerOfAttorney" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadPowerOfAttorney" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('PowerOfAttorney')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('PowerOfAttorney').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('PowerOfAttorney')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
           <!-- Certificato Urbanistico -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Certificato di Destinazione Urbanistica</h4>
             <p class="text-muted fs-6 mb-3">(solo in presenza di terreni)</p>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('UrbanPlanningComplianceCertificateDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('UrbanPlanningComplianceCertificateDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('UrbanPlanningComplianceCertificateDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('UrbanPlanningComplianceCertificateDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('UrbanPlanningComplianceCertificateDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('UrbanPlanningComplianceCertificateDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('UrbanPlanningComplianceCertificateDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadUrbanPlanningComplianceCertificate" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadUrbanPlanningComplianceCertificate" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('UrbanPlanningComplianceCertificate')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('UrbanPlanningComplianceCertificate').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('UrbanPlanningComplianceCertificate')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
           <!-- Contratto locazione -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Copia del contratto di locazione</h4>
             <p class="text-muted fs-6 mb-3">(solo nell'ipotesi di immobile locato)</p>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('LeaseAgreementDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('LeaseAgreementDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('LeaseAgreementDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('LeaseAgreementDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('LeaseAgreementDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('LeaseAgreementDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('LeaseAgreementDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadLeaseAgreement" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadLeaseAgreement" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('LeaseAgreement')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('LeaseAgreement').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('LeaseAgreement')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
           <!-- Mutuo -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Ricevuta di pagamento ultima rata del mutuo con indicazione del capitale residuo</h4>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('LastMortgagePaymentReceiptDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('LastMortgagePaymentReceiptDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('LastMortgagePaymentReceiptDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('LastMortgagePaymentReceiptDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('LastMortgagePaymentReceiptDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('LastMortgagePaymentReceiptDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('LastMortgagePaymentReceiptDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadLastMortgagePaymentReceipt" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadLastMortgagePaymentReceipt" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('LastMortgagePaymentReceipt')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('LastMortgagePaymentReceipt').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('LastMortgagePaymentReceipt')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
           <!-- Detrazioni fiscali -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Documentazione inerente la detrazione fiscale ancora in godimento e da trasferire</h4>
             <p class="text-muted fs-6 mb-3">(per lavori eseguiti sull'immobile e/o su parti comuni)</p>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('TaxDeductionDocumentationDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('TaxDeductionDocumentationDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('TaxDeductionDocumentationDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('TaxDeductionDocumentationDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('TaxDeductionDocumentationDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('TaxDeductionDocumentationDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('TaxDeductionDocumentationDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadTaxDeductionDocumentation" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadTaxDeductionDocumentation" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('TaxDeductionDocumentation')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('TaxDeductionDocumentation').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('TaxDeductionDocumentation')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
            <!-- Proposta D'Acquisto -->
            <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Proposta D'Acquisto</h4>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('PurchaseOfferDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('PurchaseOfferDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('PurchaseOfferDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('PurchaseOfferDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('PurchaseOfferDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('PurchaseOfferDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('PurchaseOfferDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadPurchaseOffer" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadPurchaseOffer" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('PurchaseOffer')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('PurchaseOffer').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('PurchaseOffer')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
            <!-- Allegato Provvigionale -->
            <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Allegato Provvigionale</h4>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('CommissionAgreementDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('CommissionAgreementDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('CommissionAgreementDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('CommissionAgreementDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('CommissionAgreementDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('CommissionAgreementDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('CommissionAgreementDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadCommissionAgreement" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadCommissionAgreement" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('CommissionAgreement')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('CommissionAgreement').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('CommissionAgreement')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
           <!-- Preliminare Compravendita -->
           <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Preliminare Compravendita</h4>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('PreliminarySaleAgreementDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('PreliminarySaleAgreementDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('PreliminarySaleAgreementDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('PreliminarySaleAgreementDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('PreliminarySaleAgreementDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('PreliminarySaleAgreementDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('PreliminarySaleAgreementDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadPreliminarySaleAgreement" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadPreliminarySaleAgreement" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('PreliminarySaleAgreement')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('PreliminarySaleAgreement').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('PreliminarySaleAgreement')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
            <!-- Atto di Vendita -->
            <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Atto di Vendita</h4>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('DeedOfSaleDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('DeedOfSaleDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('DeedOfSaleDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('DeedOfSaleDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('DeedOfSaleDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('DeedOfSaleDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('DeedOfSaleDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadDeedOfSale" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadDeedOfSale" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('DeedOfSale')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('DeedOfSale').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('DeedOfSale')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
            <!-- Atto di Mutuo -->
            <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Atto di Mutuo</h4>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('MortgageDeedDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('MortgageDeedDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('MortgageDeedDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('MortgageDeedDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('MortgageDeedDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('MortgageDeedDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('MortgageDeedDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadMortgageDeed" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadMortgageDeed" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('MortgageDeed')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('MortgageDeed').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('MortgageDeed')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
            <!-- Documenti Vari -->
            <div class="document-item mb-5">
             <h4 class="fw-bold text-dark mb-1">Documenti Vari</h4>
-            <div class="d-flex align-items-center gap-2">
-                <span v-if="hasDocument('MiscellaneousDocumentsDocumentId')" class="badge badge-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-1"></i> Caricato
-                </span>
-                <span v-else class="badge badge-light d-flex align-items-center">
-                    <i class="fas fa-times-circle me-1"></i> Non caricato
-                </span>
-                <button 
-                  type="button" 
-                  class="btn btn-icon btn-sm pdf-view-btn" 
-                  :class="hasDocument('MiscellaneousDocumentsDocumentId') ? 'btn-success' : 'btn-light'"
-                  title="Visualizza documento" 
-                  :disabled="!hasDocument('MiscellaneousDocumentsDocumentId')"
-                  @click="() => downloadSpecificDocument(getDocumentId('MiscellaneousDocumentsDocumentId'))">
-                <i class="fas fa-file-pdf fs-4"></i>
-                </button>
-                <button 
-                  v-if="hasDocument('MiscellaneousDocumentsDocumentId')"
-                  type="button" 
-                  class="btn btn-icon btn-sm btn-danger me-2" 
-                  title="Elimina documento" 
-                  @click="() => deleteSpecificDocument('MiscellaneousDocumentsDocumentId')"
-                  :disabled="loading">
-                <i class="fas fa-trash fs-4"></i>
-                </button>
-                <button v-if="!hasDocument('MiscellaneousDocumentsDocumentId')" type="button" class="btn btn-icon btn-sm btn-light me-2 pdf-upload-btn" title="Carica documento" data-document-type="UploadMiscellaneousDocuments" @click="triggerFileInput" :disabled="loading">
-                <i :class="loading ? 'fas fa-spinner fa-spin fs-4' : 'fas fa-upload fs-4'"></i>
-                </button>
-          </div>
+            
+            <!-- Upload Button -->
+            <div class="mb-3">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-light-primary" 
+                title="Carica documenti" 
+                data-document-type="UploadMiscellaneousDocuments" 
+                @click="triggerFileInput" 
+                :disabled="loading">
+                <i :class="loading ? 'fas fa-spinner fa-spin me-2' : 'fas fa-upload me-2'"></i>
+                Carica documenti
+              </button>
+            </div>
+
+            <!-- Documents List -->
+            <div v-if="hasSpecificDocuments('MiscellaneousDocuments')" class="documents-list-container">
+              <label class="form-label fw-semibold mb-2">Documenti caricati ({{ getSpecificDocsForType('MiscellaneousDocuments').length }})</label>
+              <div class="documents-list">
+                <div v-for="doc in getSpecificDocsForType('MiscellaneousDocuments')" :key="doc.Id" class="document-item-generic">
+                  <div class="document-info-generic">
+                    <i class="bi bi-file-earmark-text fs-3 me-2"></i>
+                    <span class="document-name-generic">{{ getDocumentName(doc.FileName) }}</span>
+                  </div>
+                  <div class="document-actions-generic">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-primary me-2" 
+                      @click="downloadSpecificDoc(doc)"
+                      title="Scarica documento">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-light-danger" 
+                      @click="deleteSpecificDoc(doc)"
+                      title="Elimina documento">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="text-muted fst-italic">Nessun documento caricato</div>
           </div>
 
           <!-- Documenti Generici -->
@@ -1310,7 +1794,12 @@ import {
   getDocumentDownloadUrl,
   deletePropertyDocument,
   getDocumentById,
-  Documentation
+  Documentation,
+  SpecificDocumentation,
+  uploadSpecificDocument,
+  getSpecificDocumentsByRealEstatePropertyId,
+  getSpecificDocumentsByRealEstatePropertyIdAndType,
+  deleteSpecificDocument
 } from "@/core/data/properties";
 import ApiService from "@/core/services/ApiService";
 
@@ -1328,211 +1817,44 @@ export default defineComponent({
     const documentInputRef = ref<HTMLInputElement | null>(null);
     const specificDocumentInputRef = ref<HTMLInputElement | null>(null);
     const currentDocumentType = ref<string>('');
-    const documentsTabId = ref<number | null>(null);
-    const documentsTab = ref<any>(null);
     const loading = ref(false);
+    
+    // Ref per memorizzare tutti i documenti specifici per tipo
+    const specificDocuments = ref<{ [key: string]: SpecificDocumentation[] }>({});
 
     onMounted(async () => {
       modalElement.value = document.getElementById('kt_modal_scheda');
       if (props.realEstatePropertyId) {
         // Rimossa chiamata a loadDocuments() per evitare chiamate duplicate API
         // I documenti vengono già caricati dal componente padre Update.vue
-        await loadOrCreateDocumentsTab();
+        await loadAllSpecificDocuments();
       }
     });
 
-    const loadOrCreateDocumentsTab = async () => {
+    const loadAllSpecificDocuments = async () => {
+      if (!props.realEstatePropertyId) return;
+      
       try {
-        const response = await ApiService.get(
-          `DocumentsTabs/GetOrCreateByRealEstatePropertyId?realEstatePropertyId=${props.realEstatePropertyId}`,
-          ""
-        );
-        if (response.data) {
-          documentsTabId.value = response.data.Id;
-          documentsTab.value = response.data;
-        }
-      } catch (error) {
-        console.error('Errore nel caricamento di DocumentsTab:', error);
-        // Fallback: prova a usare realEstatePropertyId come documentsTabId
-        documentsTabId.value = props.realEstatePropertyId;
-      }
-    };
-
-    const downloadSpecificDocument = async (documentId: number | null | undefined) => {
-      if (!documentId) {
-        Swal.fire({
-          text: "Nessun documento disponibile per il download.",
-          icon: "warning",
-          buttonsStyling: false,
-          confirmButtonText: "Ok",
-          heightAuto: false,
-          customClass: {
-            confirmButton: "btn btn-primary",
-          },
-        });
-        return;
-      }
-
-      try {
-        const document = await getDocumentById(documentId);
-        if (document && document.FileName) {
-          // I documenti specifici sono nel container privato, quindi usiamo SAS token
-          const urlWithSas = await getDocumentDownloadUrl(document.FileName);
-          if (urlWithSas) {
-            window.open(urlWithSas, '_blank');
-          } else {
-            throw new Error('Impossibile generare il link di download');
+        const allDocs = await getSpecificDocumentsByRealEstatePropertyId(props.realEstatePropertyId);
+        
+        // Organizza i documenti per tipo
+        const docsByType: { [key: string]: SpecificDocumentation[] } = {};
+        allDocs.forEach(doc => {
+          if (!docsByType[doc.DocumentType]) {
+            docsByType[doc.DocumentType] = [];
           }
-        } else {
-          throw new Error('Documento non trovato');
-        }
+          docsByType[doc.DocumentType].push(doc);
+        });
+        
+        specificDocuments.value = docsByType;
       } catch (error) {
-        Swal.fire({
-          text: "Errore durante il download del documento.",
-          icon: "error",
-          buttonsStyling: false,
-          confirmButtonText: "Ok",
-          heightAuto: false,
-          customClass: {
-            confirmButton: "btn btn-primary",
-          },
-        });
+        console.error('Errore nel caricamento dei documenti specifici:', error);
       }
     };
 
-    const hasDocument = (documentIdField: string): boolean => {
-      if (!documentsTab.value) return false;
-      const documentId = documentsTab.value[documentIdField];
-      return documentId != null && documentId !== undefined;
-    };
 
-    const getDocumentId = (documentIdField: string): number | null | undefined => {
-      if (!documentsTab.value) return null;
-      return documentsTab.value[documentIdField];
-    };
 
-    // Mappa i tipi di documento ai loro endpoint di eliminazione
-    const getDeleteEndpoint = (documentIdField: string): string | null => {
-      const endpointMap: { [key: string]: string } = {
-        'IdentificationDocumentDocumentId': 'DeleteIdentificationDocumentDocument',
-        'TaxCodeOrHealthCardDocumentId': 'DeleteTaxCodeOrHealthCard',
-        'MarriageCertificateSummaryDocumentId': 'DeleteMarriageCertificateSummary',
-        'DeedOfOriginDocumentId': 'DeleteDeedOfOrigin',
-        'ElectricalElectronicSystemDocumentId': 'DeleteElectricalElectronicSystem',
-        'PlumbingSanitarySystemDocumentId': 'DeletePlumbingSanitarySystem',
-        'GasSystemDocumentId': 'DeleteGasSystem',
-        'HeatingAirConditioningSystemDocumentId': 'DeleteHeatingAirConditioningSystem',
-        'LiftingSystemDocumentId': 'DeleteLiftingSystem',
-        'FireSafetySystemDocumentId': 'DeleteFireSafetySystem',
-        'BoilerMaintenanceLogDocumentId': 'DeleteBoilerMaintenanceLog',
-        'HabitabilityCertificateDocumentId': 'DeleteHabitabilityCertificate',
-        'StructuralIntegrityCertificateDocumentId': 'DeleteStructuralIntegrityCertificate',
-        'BuildingCadastralComplianceReportDocumentId': 'DeleteBuildingCadastralComplianceReport',
-        'LandRegistryDocumentId': 'DeleteLandRegistry',
-        'CadastralMapExtractDocumentId': 'DeleteCadastralMapExtract',
-        'FloorPlanWithSubsidiaryUnitsDocumentId': 'DeleteFloorPlanWithSubsidiaryUnits',
-        'EnergyPerformanceCertificateDocumentId': 'DeleteEnergyPerformanceCertificate',
-        'MortgageLienRegistrySearchDocumentId': 'DeleteMortgageLienRegistrySearch',
-        'CondominiumBylawsDocumentId': 'DeleteCondominiumBylaws',
-        'MillesimalTablesDocumentId': 'DeleteMillesimalTables',
-        'LatestFinancialStatementAndBudgetDocumentId': 'DeleteLatestFinancialStatementAndBudget',
-        'LastTwoCondominiumMeetingMinutesDocumentId': 'DeleteLastTwoCondominiumMeetingMinutes',
-        'SignedStatementFromAdministratorDocumentId': 'DeleteSignedStatementFromAdministrator',
-        'ChamberOfCommerceBusinessRegistrySearchDocumentId': 'DeleteChamberOfCommerceBusinessRegistrySearch',
-        'PowerOfAttorneyDocumentId': 'DeletePowerOfAttorney',
-        'UrbanPlanningComplianceCertificateDocumentId': 'DeleteUrbanPlanningComplianceCertificate',
-        'LeaseAgreementDocumentId': 'DeleteLeaseAgreement',
-        'LastMortgagePaymentReceiptDocumentId': 'DeleteLastMortgagePaymentReceipt',
-        'TaxDeductionDocumentationDocumentId': 'DeleteTaxDeductionDocumentation',
-        'PurchaseOfferDocumentId': 'DeletePurchaseOffer',
-        'CommissionAgreementDocumentId': 'DeleteCommissionAgreement',
-        'PreliminarySaleAgreementDocumentId': 'DeletePreliminarySaleAgreement',
-        'DeedOfSaleDocumentId': 'DeleteDeedOfSale',
-        'MortgageDeedDocumentId': 'DeleteMortgageDeed',
-        'MiscellaneousDocumentsDocumentId': 'DeleteMiscellaneousDocuments'
-      };
-      return endpointMap[documentIdField] || null;
-    };
 
-    const deleteSpecificDocument = async (documentIdField: string) => {
-      if (!documentsTabId.value) {
-        Swal.fire({
-          text: "Errore: impossibile identificare il documento da eliminare.",
-          icon: "error",
-          buttonsStyling: false,
-          confirmButtonText: "Ok",
-          heightAuto: false,
-          customClass: {
-            confirmButton: "btn btn-primary",
-          },
-        });
-        return;
-      }
-
-      const deleteEndpoint = getDeleteEndpoint(documentIdField);
-      if (!deleteEndpoint) {
-        Swal.fire({
-          text: "Errore: endpoint di eliminazione non trovato per questo tipo di documento.",
-          icon: "error",
-          buttonsStyling: false,
-          confirmButtonText: "Ok",
-          heightAuto: false,
-          customClass: {
-            confirmButton: "btn btn-primary",
-          },
-        });
-        return;
-      }
-
-      const result = await Swal.fire({
-        text: "Sei sicuro di voler eliminare questo documento?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Elimina",
-        cancelButtonText: "Annulla",
-        heightAuto: false,
-        customClass: {
-          confirmButton: "btn btn-danger",
-          cancelButton: "btn btn-secondary"
-        },
-      });
-
-      if (result.isConfirmed) {
-        loading.value = true;
-        try {
-          await ApiService.delete(`DocumentsTabs/${deleteEndpoint}?id=${documentsTabId.value}`);
-          
-          // Ricarica DocumentsTab per aggiornare lo stato
-          await loadOrCreateDocumentsTab();
-          
-          Swal.fire({
-            text: "Documento eliminato con successo!",
-            icon: "success",
-            buttonsStyling: false,
-            confirmButtonText: "Ok",
-            heightAuto: false,
-            timer: 2000,
-            timerProgressBar: true,
-            customClass: {
-              confirmButton: "btn btn-primary",
-            },
-          });
-        } catch (error: any) {
-          Swal.fire({
-            text: error?.response?.data?.Message || "Errore durante l'eliminazione del documento.",
-            icon: "error",
-            buttonsStyling: false,
-            confirmButtonText: "Ok",
-            heightAuto: false,
-            customClass: {
-              confirmButton: "btn btn-primary",
-            },
-          });
-        } finally {
-          loading.value = false;
-        }
-      }
-    };
 
     const loadDocuments = async () => {
       if (props.realEstatePropertyId) {
@@ -1657,80 +1979,85 @@ export default defineComponent({
       return parts[parts.length - 1];
     };
 
+    // Helper function to convert data-document-type to DocumentType
+    const getDocumentTypeFromDataAttribute = (dataType: string): string => {
+      // Remove "Upload" prefix if present
+      return dataType.startsWith('Upload') ? dataType.substring(6) : dataType;
+    };
+
     const triggerFileInput = (event: Event) => {
       const button = event.currentTarget as HTMLElement;
       const documentType = button.getAttribute('data-document-type');
       if (documentType && specificDocumentInputRef.value) {
-        currentDocumentType.value = documentType;
+        // Convert data-document-type to DocumentType format
+        currentDocumentType.value = getDocumentTypeFromDataAttribute(documentType);
+        // Abilita selezione multipla
+        specificDocumentInputRef.value.setAttribute('multiple', 'multiple');
         specificDocumentInputRef.value.click();
       }
+    };
+    
+    // Helper functions for specific documents
+    const getSpecificDocsForType = (documentType: string): SpecificDocumentation[] => {
+      return specificDocuments.value[documentType] || [];
+    };
+
+    const hasSpecificDocuments = (documentType: string): boolean => {
+      return getSpecificDocsForType(documentType).length > 0;
     };
 
     const onSpecificDocumentChanged = async (event: Event) => {
       const target = event.target as HTMLInputElement;
       if (target.files && target.files.length > 0 && currentDocumentType.value) {
-        const file = target.files[0];
-        
-        // Validazione dimensione file (max 50MB)
-        const maxSize = 50 * 1024 * 1024; // 50MB
-        if (file.size > maxSize) {
-          Swal.fire({
-            text: "Il file è troppo grande. Dimensione massima consentita: 50MB",
-            icon: "warning",
-            buttonsStyling: false,
-            confirmButtonText: "Ok",
-            heightAuto: false,
-            customClass: {
-              confirmButton: "btn btn-primary",
-            },
-          });
-          target.value = '';
-          currentDocumentType.value = '';
-          return;
-        }
-
         loading.value = true;
         
-        // Mostra notifica di caricamento
-        const loadingToast = Swal.fire({
-          title: 'Caricamento in corso...',
-          text: `Caricamento di ${file.name}`,
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          showConfirmButton: false,
-          didOpen: () => {
-            Swal.showLoading();
-          }
-        });
-        
         try {
-          // Prima recupera o crea DocumentsTab
-          if (!documentsTabId.value) {
-            await loadOrCreateDocumentsTab();
+          // Validazione dimensione file (max 50MB per file)
+          const maxSize = 50 * 1024 * 1024; // 50MB
+          const filesToUpload = Array.from(target.files);
+          
+          for (const file of filesToUpload) {
+            if (file.size > maxSize) {
+              Swal.fire({
+                text: `Il file "${file.name}" è troppo grande. Dimensione massima consentita: 50MB`,
+                icon: "warning",
+                buttonsStyling: false,
+                confirmButtonText: "Ok",
+                heightAuto: false,
+                customClass: {
+                  confirmButton: "btn btn-primary",
+                },
+              });
+              continue;
+            }
+            
+            // Mostra notifica di caricamento per ogni file
+            Swal.fire({
+              title: 'Caricamento in corso...',
+              text: `Caricamento di ${file.name}`,
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+              showConfirmButton: false,
+              didOpen: () => {
+                Swal.showLoading();
+              }
+            });
+            
+            // Carica il file usando la nuova API
+            await uploadSpecificDocument(file, props.realEstatePropertyId, currentDocumentType.value);
           }
-
-          if (!documentsTabId.value) {
-            throw new Error('Impossibile recuperare DocumentsTab per questa proprietà');
-          }
-
-          const formData = new FormData();
-          formData.append('File', file);
-          formData.append('FolderName', `${props.realEstatePropertyId}`);
-
-          await ApiService.post(
-            `DocumentsTabs/${currentDocumentType.value}?documentsTabId=${documentsTabId.value}`,
-            formData
-          );
-
+          
           Swal.close();
           
-          // Ricarica DocumentsTab per aggiornare i bottoni di download
-          await loadOrCreateDocumentsTab();
+          // Ricarica tutti i documenti specifici
+          await loadAllSpecificDocuments();
 
           const error = store.errors;
           if (!error) {
             Swal.fire({
-              text: "Documento caricato con successo!",
+              text: filesToUpload.length > 1 
+                ? `${filesToUpload.length} documenti caricati con successo!` 
+                : "Documento caricato con successo!",
               icon: "success",
               buttonsStyling: false,
               confirmButtonText: "Ok",
@@ -1781,6 +2108,60 @@ export default defineComponent({
           currentDocumentType.value = '';
         }
       }
+    };
+
+    const downloadSpecificDoc = async (doc: SpecificDocumentation) => {
+      try {
+        const urlWithSas = await getDocumentDownloadUrl(doc.FileName);
+        if (urlWithSas) {
+          window.open(urlWithSas, '_blank');
+        }
+      } catch (error) {
+        Swal.fire({
+          text: "Errore durante il download del documento.",
+          icon: "error",
+          buttonsStyling: false,
+          confirmButtonText: "Ok",
+          heightAuto: false,
+          customClass: {
+            confirmButton: "btn btn-primary",
+          },
+        });
+      }
+    };
+
+    const deleteSpecificDoc = async (doc: SpecificDocumentation) => {
+      Swal.fire({
+        text: "Confermare l'eliminazione del documento?",
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Elimina",
+        cancelButtonText: "Annulla",
+        heightAuto: false,
+        customClass: {
+          confirmButton: "btn btn-danger",
+          cancelButton: "btn btn-secondary"
+        },
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          loading.value = true;
+          await deleteSpecificDocument(doc.Id);
+          await loadAllSpecificDocuments();
+          loading.value = false;
+          
+          Swal.fire({
+            text: "Documento eliminato con successo!",
+            icon: "success",
+            buttonsStyling: false,
+            confirmButtonText: "Ok",
+            heightAuto: false,
+            customClass: {
+              confirmButton: "btn btn-primary",
+            },
+          });
+        }
+      });
     };
 
     const resetModal = () => {
@@ -1884,7 +2265,7 @@ export default defineComponent({
       documentInputRef,
       specificDocumentInputRef,
       loading,
-      documentsTab,
+      specificDocuments,
       onDocumentChanged,
       downloadDocument,
       deleteDocument,
@@ -1893,10 +2274,10 @@ export default defineComponent({
       printWithBrowser,
       triggerFileInput,
       onSpecificDocumentChanged,
-      downloadSpecificDocument,
-      hasDocument,
-      getDocumentId,
-      deleteSpecificDocument
+      getSpecificDocsForType,
+      hasSpecificDocuments,
+      downloadSpecificDoc,
+      deleteSpecificDoc
     };
   }
 });
