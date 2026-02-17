@@ -112,6 +112,14 @@ export class Documentation {
   RealEstatePropertyId?: number;
 }
 
+export class SpecificDocumentation {
+  Id: number;
+  DocumentType: string;
+  FileName: string;
+  FileUrl: string;
+  RealEstatePropertyId: number;
+}
+
 const getRealEstateProperties = (agencyId: string, filterRequest: string, contract?: string, priceFrom?: number, priceTo?: number, category?: string, typologie?: string, town?: string[]) : Promise<Array<RealEstateProperty>> => {
    return ApiService.get(
     `RealEstateProperty/Get?currentPage=0&agencyId=${agencyId}&filterRequest=${filterRequest}&contract=${contract}&priceFrom=${priceFrom}&priceTo=${priceTo}&category=${category}&typologie=${typologie}&town=${town}`,
@@ -418,6 +426,65 @@ const getDocumentById = (id: number): Promise<Documentation> => {
     });
 };
 
+// API functions for SpecificDocumentation
+const uploadSpecificDocument = async (file: File, realEstatePropertyId: number, documentType: string) => {
+  const formData = new FormData();
+  formData.append("File", file);
+  formData.append("FolderName", realEstatePropertyId.toString());
+
+  return await ApiService.post(
+    `SpecificDocumentations/Upload?realEstatePropertyId=${realEstatePropertyId}&documentType=${documentType}`,
+    formData
+  )
+    .then(({ data }) => data as SpecificDocumentation)
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
+
+const getSpecificDocumentsByRealEstatePropertyId = (realEstatePropertyId: number): Promise<Array<SpecificDocumentation>> => {
+  return ApiService.get(
+    `SpecificDocumentations/GetByRealEstatePropertyId?realEstatePropertyId=${realEstatePropertyId}`,
+    ""
+  )
+    .then(({ data }) => {
+      return data as Array<SpecificDocumentation>;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return [];
+    });
+};
+
+const getSpecificDocumentsByRealEstatePropertyIdAndType = (
+  realEstatePropertyId: number,
+  documentType: string
+): Promise<Array<SpecificDocumentation>> => {
+  return ApiService.get(
+    `SpecificDocumentations/GetByRealEstatePropertyIdAndType?realEstatePropertyId=${realEstatePropertyId}&documentType=${documentType}`,
+    ""
+  )
+    .then(({ data }) => {
+      return data as Array<SpecificDocumentation>;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return [];
+    });
+};
+
+const deleteSpecificDocument = async (id: number) => {
+  return await ApiService.delete(`SpecificDocumentations/Delete?id=${id}`)
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(({ response }) => {
+      store.setError(response.data.Message, response.status);
+      return undefined;
+    });
+};
+
 export { 
   getRealEstateProperties, 
   getRealEstatePropertiesList,
@@ -435,5 +502,9 @@ export {
   getPropertyDocuments,
   getDocumentDownloadUrl,
   deletePropertyDocument,
-  getDocumentById
+  getDocumentById,
+  uploadSpecificDocument,
+  getSpecificDocumentsByRealEstatePropertyId,
+  getSpecificDocumentsByRealEstatePropertyIdAndType,
+  deleteSpecificDocument
 }
